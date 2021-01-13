@@ -64,8 +64,8 @@ void win_init_font(const win_env_t *e, const char *fontstr)
 
 void win_alloc_color(const win_env_t *e, const char *name, XftColor *col)
 {
-	if (!XftColorAllocName(e->dpy, DefaultVisual(e->dpy, e->scr),
-	                       DefaultColormap(e->dpy, e->scr), name, col))
+	if (!XftColorAllocName(e->dpy, e->vis,
+	                       e->cmap, name, col))
 	{
 		error(EXIT_FAILURE, 0, "Error allocating color '%s'", name);
 	}
@@ -95,6 +95,9 @@ void win_init(win_t *win)
 	const char *bg, *fg, *f;
 	char *res_man;
 	XrmDatabase db;
+	XVisualInfo vis;
+	XWindowAttributes attr;
+	Window parent;
 
 	memset(win, 0, sizeof(win_t));
 
@@ -105,9 +108,19 @@ void win_init(win_t *win)
 	e->scr = DefaultScreen(e->dpy);
 	e->scrw = DisplayWidth(e->dpy, e->scr);
 	e->scrh = DisplayHeight(e->dpy, e->scr);
-	e->vis = DefaultVisual(e->dpy, e->scr);
-	e->cmap = DefaultColormap(e->dpy, e->scr);
-	e->depth = DefaultDepth(e->dpy, e->scr);
+
+	parent = options->embed != 0 ? options->embed : RootWindow(e->dpy, e->scr);
+
+	if (options->embed == 0) {
+		e->depth = DefaultDepth(e->dpy, e->scr);
+	} else {
+		XGetWindowAttributes(e->dpy, parent, &attr);
+		e->depth = attr.depth;
+	}
+
+	XMatchVisualInfo(e->dpy, e->scr, e->depth, TrueColor, &vis);
+	e->vis = vis.visual;
+	e->cmap = XCreateColormap(e->dpy, parent, e->vis, None);
 
 	if (setlocale(LC_CTYPE, "") == NULL || XSupportsLocale() == 0)
 		error(0, 0, "No locale support");
@@ -209,7 +222,7 @@ void win_open(win_t *win)
 		if (i != CURSOR_NONE)
 			cursors[i].icon = XCreateFontCursor(e->dpy, cursors[i].name);
 	}
-	if (XAllocNamedColor(e->dpy, DefaultColormap(e->dpy, e->scr), "black",
+	if (XAllocNamedColor(e->dpy, e->cmap, "black",
 	                     &col, &col) == 0)
 	{
 		error(EXIT_FAILURE, 0, "Error allocating color 'black'");
@@ -394,8 +407,8 @@ void win_draw_bar(win_t *win)
 	e = &win->env;
 	y = win->h + font->ascent + V_TEXT_PAD;
 	w = win->w - 2*H_TEXT_PAD;
-	d = XftDrawCreate(e->dpy, win->buf.pm, DefaultVisual(e->dpy, e->scr),
-	                  DefaultColormap(e->dpy, e->scr));
+	d = XftDrawCreate(e->dpy, win->buf.pm, e->vis,
+	                  e->cmap);
 
 	XSetForeground(e->dpy, gc, win->fg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->h, win->w, win->bar.h);
