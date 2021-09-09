@@ -30,18 +30,18 @@ ldlibs = $(LDLIBS) -lImlib2 -lX11 -lXft -lfontconfig \
 objs = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
-all: sxiv
+all: nsxiv
 
 .PHONY: all clean install uninstall
 .SUFFIXES:
 .SUFFIXES: .c .o
 $(V).SILENT:
 
-sxiv: $(objs)
+nsxiv: $(objs)
 	@echo "LINK $@"
 	$(CC) $(LDFLAGS) -o $@ $(objs) $(ldlibs)
 
-$(objs): Makefile sxiv.h commands.lst config.h
+$(objs): Makefile nsxiv.h commands.lst config.h
 options.o: version.h
 window.o: icon/data.h
 
@@ -61,28 +61,28 @@ version.h: Makefile .git/index
 .git/index:
 
 clean:
-	rm -f *.o sxiv
+	rm -f *.o nsxiv
 
 install: all
-	@echo "INSTALL bin/sxiv"
+	@echo "INSTALL bin/nsxiv"
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp sxiv $(DESTDIR)$(PREFIX)/bin/
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/sxiv
-	@echo "INSTALL sxiv.1"
+	cp nsxiv $(DESTDIR)$(PREFIX)/bin/
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/nsxiv
+	@echo "INSTALL nsxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(version)!g" sxiv.1 \
-		>$(DESTDIR)$(MANPREFIX)/man1/sxiv.1
-	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/sxiv.1
-	@echo "INSTALL share/sxiv/"
-	mkdir -p $(DESTDIR)$(PREFIX)/share/sxiv/exec
-	cp exec/* $(DESTDIR)$(PREFIX)/share/sxiv/exec/
-	chmod 755 $(DESTDIR)$(PREFIX)/share/sxiv/exec/*
+	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(version)!g" nsxiv.1 \
+		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
+	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
+	@echo "INSTALL share/nsxiv/"
+	mkdir -p $(DESTDIR)$(PREFIX)/share/nsxiv/exec
+	cp exec/* $(DESTDIR)$(PREFIX)/share/nsxiv/exec/
+	chmod 755 $(DESTDIR)$(PREFIX)/share/nsxiv/exec/*
 
 uninstall:
-	@echo "REMOVE bin/sxiv"
-	rm -f $(DESTDIR)$(PREFIX)/bin/sxiv
-	@echo "REMOVE sxiv.1"
-	rm -f $(DESTDIR)$(MANPREFIX)/man1/sxiv.1
-	@echo "REMOVE share/sxiv/"
-	rm -rf $(DESTDIR)$(PREFIX)/share/sxiv
+	@echo "REMOVE bin/nsxiv"
+	rm -f $(DESTDIR)$(PREFIX)/bin/nsxiv
+	@echo "REMOVE nsxiv.1"
+	rm -f $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
+	@echo "REMOVE share/nsxiv/"
+	rm -rf $(DESTDIR)$(PREFIX)/share/nsxiv
 

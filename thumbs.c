@@ -1,6 +1,6 @@
 /* Copyright 2011 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file was originally a part of sxiv.
  *
  * sxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
@@ -14,9 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * nsxiv is distributed under the same conditions.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _THUMBS_CONFIG
 #include "config.h"
 
@@ -174,7 +176,7 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel,
 		free(cache_dir);
 		len = strlen(homedir) + strlen(dsuffix) + 6;
 		cache_dir = (char*) emalloc(len);
-		snprintf(cache_dir, len, "%s%s/sxiv", homedir, dsuffix);
+		snprintf(cache_dir, len, "%s%s/nsxiv", homedir, dsuffix);
 	} else {
 		error(0, 0, "Cache directory not found");
 	}
@@ -271,7 +273,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 			ExifContent *ifd;
 			ExifByteOrder byte_order;
 			int tmpfd;
-			char tmppath[] = "/tmp/sxiv-XXXXXX";
+			char tmppath[] = "/tmp/nsxiv-XXXXXX";
 			Imlib_Image tmpim;
 
 			if ((ed = exif_data_new_from_file(file->path)) != NULL) {

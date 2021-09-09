@@ -1,6 +1,6 @@
 /* Copyright 2011-2013 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file was originally a part of sxiv.
  *
  * sxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
@@ -14,9 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * nsxiv is distributed under the same conditions.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _WINDOW_CONFIG
 #include "config.h"
 #include "icon/data.h"
@@ -29,7 +31,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-#define RES_CLASS "Sxiv"
+#define RES_CLASS "Nsxiv"
 
 enum {
 	H_TEXT_PAD = 5,
@@ -238,10 +240,10 @@ void win_open(win_t *win)
 	}
 	free(icon_data);
 
-	win_set_title(win, "sxiv");
+	win_set_title(win, "nsxiv");
 
 	classhint.res_class = RES_CLASS;
-	classhint.res_name = options->res_name != NULL ? options->res_name : "sxiv";
+	classhint.res_name = options->res_name != NULL ? options->res_name : "nsxiv";
 	XSetClassHint(e->dpy, win->xwin, &classhint);
 
 	XSetWMProtocols(e->dpy, win->xwin, &atoms[ATOM_WM_DELETE_WINDOW], 1);

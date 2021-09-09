@@ -1,6 +1,6 @@
 /* Copyright 2011, 2012 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file was originally a part of sxiv.
  *
  * sxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
@@ -14,9 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * nsxiv is distributed under the same conditions.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _IMAGE_CONFIG
 #include "config.h"
 

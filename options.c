@@ -1,6 +1,6 @@
 /* Copyright 2011 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file was originally a part of sxiv.
  *
  * sxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
@@ -14,9 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * nsxiv is distributed under the same conditions.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _IMAGE_CONFIG
 #include "config.h"
 #include "version.h"
@@ -30,14 +32,14 @@ const opt_t *options = (const opt_t*) &_options;
 
 void print_usage(void)
 {
-	printf("usage: sxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+	printf("usage: nsxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
 	       "[-g GEOMETRY] [-N NAME] [-n NUM] [-S DELAY] [-s MODE] [-z ZOOM] "
 	       "FILES...\n");
 }
 
 void print_version(void)
 {
-	puts("sxiv " VERSION);
+	puts("nsxiv " VERSION);
 }
 
 void parse_options(int argc, char **argv)
