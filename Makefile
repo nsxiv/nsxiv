@@ -24,7 +24,7 @@ lib_exif_0 =
 lib_exif_1 = -lexif
 lib_gif_0 =
 lib_gif_1 = -lgif
-ldlibs = $(LDLIBS) -lImlib2 -lX11 -lXft -lfontconfig -lXrender\
+ldlibs = $(LDLIBS) -lImlib2 -lX11 -lXft -lfontconfig \
   $(lib_exif_$(HAVE_LIBEXIF)) $(lib_gif_$(HAVE_GIFLIB))
 
 objs = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
