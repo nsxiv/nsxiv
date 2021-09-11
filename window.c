@@ -282,6 +282,10 @@ void win_open(win_t *win)
 	}
 	free(icon_data);
 
+	/* These two atoms won't change and thus only need to be set once. */
+	XStoreName(win->env.dpy, win->xwin, "sxiv");
+	XSetIconName(win->env.dpy, win->xwin, "sxiv");
+
 	classhint.res_class = RES_CLASS;
 	classhint.res_name = options->res_name != NULL ? options->res_name : "sxiv";
 	XSetClassHint(e->dpy, win->xwin, &classhint);
@@ -493,7 +497,6 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 void win_set_title(win_t *win, const char *path)
 {
 	char *title, *suffix="";
-	static bool first_time = true;
 
 	/* Return if window is not ready yet, otherwise we get an X fault. */
 	if (win->xwin == None)
@@ -535,13 +538,6 @@ void win_set_title(win_t *win, const char *path)
 	                PropModeReplace, (unsigned char *)title, strlen(title));
 	free(title);
 	free(suffix);
-
-	/* These two atoms won't change and thus only need to be set once. */
-	if (first_time) {
-		XStoreName(win->env.dpy, win->xwin, "sxiv");
-		XSetIconName(win->env.dpy, win->xwin, "sxiv");
-		first_time = false;
-	}
 }
 
 void win_set_cursor(win_t *win, cursor_t cursor)
