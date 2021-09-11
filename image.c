@@ -402,6 +402,9 @@ bool img_fit(img_t *img)
 	zh = (float) img->win->h / (float) img->h;
 
 	switch (img->scalemode) {
+		case SCALE_FILL:
+			z = MAX(zw, zh);
+			break;
 		case SCALE_WIDTH:
 			z = zw;
 			break;
@@ -479,7 +482,7 @@ void img_render(img_t *img)
 		if ((bg = imlib_create_image(dw, dh)) == NULL)
 			error(EXIT_FAILURE, ENOMEM, NULL);
 		imlib_context_set_image(bg);
-		imlib_image_set_has_alpha(0);
+		imlib_image_set_has_alpha(1);
 
 		if (img->alpha) {
 			int i, c, r;
@@ -507,6 +510,7 @@ void img_render(img_t *img)
 		imlib_free_image();
 		imlib_context_set_color_modifier(img->cmod);
 	} else {
+		imlib_image_set_has_alpha(1);
 		imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh, dx, dy, dw, dh);
 	}
 	img->dirty = false;
