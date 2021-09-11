@@ -60,7 +60,7 @@ version.h: Makefile .git/index
 .git/index:
 
 clean:
-	rm -f *.o sxiv
+	$(RM) *.o sxiv
 
 install: all
 	@echo "INSTALL bin/sxiv"
