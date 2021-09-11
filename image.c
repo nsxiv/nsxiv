@@ -145,7 +145,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 	if (img->multi.cap == 0) {
 		img->multi.cap = 8;
 		img->multi.frames = (img_frame_t*)
-							emalloc(sizeof(img_frame_t) * img->multi.cap);
+		                    emalloc(sizeof(img_frame_t) * img->multi.cap);
 	}
 	img->multi.cnt = img->multi.sel = 0;
 	img->multi.length = 0;
@@ -220,10 +220,10 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 			for (i = 0; i < sh; i++) {
 				for (j = 0; j < sw; j++) {
 					if (i < y || i >= y + h || j < x || j >= x + w ||
-						rows[i-y][j-x] == transp)
+					    rows[i-y][j-x] == transp)
 					{
 						if (prev_frame != NULL && (prev_disposal != 2 ||
-							i < py || i >= py + ph || j < px || j >= px + pw))
+						    i < py || i >= py + ph || j < px || j >= px + pw))
 						{
 							*ptr = prev_frame[i * sw + j];
 						} else {
@@ -264,8 +264,8 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 			if (img->multi.cnt == img->multi.cap) {
 				img->multi.cap *= 2;
 				img->multi.frames = (img_frame_t*)
-									erealloc(img->multi.frames,
-											 img->multi.cap * sizeof(img_frame_t));
+				                    erealloc(img->multi.frames,
+				                             img->multi.cap * sizeof(img_frame_t));
 			}
 			img->multi.frames[img->multi.cnt].im = im;
 			delay = img->multi.framedelay > 0 ? img->multi.framedelay : delay;
@@ -505,7 +505,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 	Imlib_Image im = NULL;
 
 	if (access(file->path, R_OK) == 0 &&
-		stat(file->path, &st) == 0 && S_ISREG(st.st_mode))
+	    stat(file->path, &st) == 0 && S_ISREG(st.st_mode))
 	{
 #if HAVE_LIBWEBP
 		im = load_webp_firstframe_im(file);
@@ -663,8 +663,8 @@ void img_render(img_t *img)
 		return;
 
 	/* calculate source and destination offsets:
-	 *	 - part of image drawn on full window, or
-	 *	 - full image drawn on part of window
+	 *   - part of image drawn on full window, or
+	 *   - full image drawn on part of window
 	 */
 	if (img->x <= 0) {
 		sx = -img->x / img->zoom + 0.5;
