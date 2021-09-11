@@ -156,6 +156,8 @@ void win_open(win_t *win)
 	Pixmap none;
 	int gmask;
 	XSizeHints sizehints;
+	pid_t pid;
+	char hostname[255];
 
 	e = &win->env;
 	parent = options->embed != 0 ? options->embed : RootWindow(e->dpy, e->scr);
@@ -204,13 +206,12 @@ void win_open(win_t *win)
 		error(EXIT_FAILURE, 0, "Error creating X window");
 
   // set the _NET_WM_PID
-  pid_t pid = getpid();
+  pid = getpid();
   XChangeProperty(e->dpy, win->xwin,
                   atoms[ATOM__NET_WM_PID], XA_CARDINAL, sizeof(pid_t) * 8,
                   PropModeReplace, (unsigned char *) &pid, 1);
 
   // set the WM_CLIENT_MACHINE
-  char hostname[255];
   if (gethostname(hostname, sizeof(hostname)) == 0) {
       XTextProperty tp;
       tp.value = (unsigned char *)hostname;
