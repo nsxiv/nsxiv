@@ -14,13 +14,11 @@ HAVE_LIBGIF ?= 0
 # enable features requiring libexif (-lexif)
 HAVE_LIBEXIF ?= 0
 
-ifndef OPTIONAL_LIBS
-	ifeq ($(HAVE_LIBEXIF), 1)
-		OPTIONAL_LIBS += -lexif
-	endif
-	ifeq ($(HAVE_LIBGIF), 1)
-		OPTIONAL_LIBS += -lgif
-	endif
+ifeq ($(HAVE_LIBEXIF), 1)
+	OPTIONAL_LIBS += -lexif
+endif
+ifeq ($(HAVE_LIBGIF), 1)
+	OPTIONAL_LIBS += -lgif
 endif
 
 CFLAGS ?= -std=c99 -Wall -pedantic
