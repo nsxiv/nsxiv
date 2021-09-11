@@ -41,7 +41,7 @@ all: sxiv
 
 sxiv: $(objs)
 	@echo "LINK $@"
-	$(CC) -o $@ $^ $(LDLIBS)
+	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 $(objs): Makefile sxiv.h commands.lst config.h
 options.o: version.h
