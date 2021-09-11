@@ -135,7 +135,7 @@ void win_init(win_t *win)
 	win_init_font(e, f);
 
 	const char *title_prefix = win_res(db, RES_CLASS ".title.prefix", NULL);
-	const char *title_suffixmode = win_res(db, RES_CLASS ".title.suffix", NULL);
+	const char *title_suffixmode = win_res(db, RES_CLASS ".title.suffixmode", NULL);
 
 	if (options->title_prefix != NULL) {
 		win->title_prefix = options->title_prefix;
