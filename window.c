@@ -134,10 +134,24 @@ void win_init(win_t *win)
 	f = win_res(db, RES_CLASS ".font", "monospace-8");
 	win_init_font(e, f);
 
-	win->title_prefix = win_res(db, RES_CLASS ".title.prefix", "sxiv");
-	win->title_suffixmode = strtol(win_res(db, RES_CLASS ".title.suffix", "0"),
-	                         NULL, 10) % SUFFIXMODE_COUNT;
+	const char *title_prefix = win_res(db, RES_CLASS ".title.prefix", NULL);
+	const char *title_suffixmode = win_res(db, RES_CLASS ".title.suffix", NULL);
 
+	if (options->title_prefix != NULL) {
+		win->title_prefix = options->title_prefix;
+	} else if (title_prefix != NULL) {
+		win->title_prefix = title_prefix;
+	} else {
+		win->title_prefix = TITLE_PREFIX;
+	}
+
+	if (options->title_suffixmode != NULL) {
+		win->title_suffixmode = strtol(options->title_suffixmode, NULL, 10) % SUFFIXMODE_COUNT;
+	} else if (title_suffixmode != NULL) {
+		win->title_suffixmode = strtol(title_suffixmode, NULL, 10) % SUFFIXMODE_COUNT;
+	} else {
+		win->title_suffixmode = TITLE_SUFFIXMODE % SUFFIXMODE_COUNT;
+	}
 
 	win_bg = win_res(db, RES_CLASS ".window.background", "white");
 	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");

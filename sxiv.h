@@ -290,6 +290,8 @@ struct opt {
 	long embed;
 	char *geometry;
 	char *res_name;
+	char *title_prefix;
+	char *title_suffixmode;
 
 	/* misc flags: */
 	bool quiet;
