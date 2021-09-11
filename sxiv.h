@@ -116,6 +116,16 @@ typedef enum {
 	FF_TN_INIT = 4
 } fileflags_t;
 
+typedef enum {
+	BASE_CFILE,
+	BASE_CDIR,
+	CFILE,
+	CDIR,
+	EMPTY,
+
+	SUFFIXMODE_COUNT,
+} suffixmode_t;
+
 typedef struct {
 	const char *name; /* as given by user */
 	const char *path; /* always absolute */
@@ -413,6 +423,10 @@ struct win {
 	XftColor win_fg;
 	XftColor bar_bg;
 	XftColor bar_fg;
+
+	suffixmode_t title_suffixmode;
+	const char   *title_prefix;
+	const char   *title_suffix;
 
 	int x;
 	int y;

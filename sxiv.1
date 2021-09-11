@@ -393,6 +393,20 @@ Color of the bar background. Defaults to window.foreground
 .B bar.foreground
 Color of the bar foreground. Defaults to window.background
 .TP
+.B title.prefix
+Any string literal to be used as the window title prefix. Defaults to "sxiv"
+.TP
+.B title.suffix
+The format of the window title suffix.
+.EX
+    Value  Format
+    0      Basename of file
+    1      Basename of directory
+    2      Full path to file
+    3      Full path to directory
+    4      Empty string
+.EE
+.TP
 .B font
 Name of Xft bar font
 .TP
