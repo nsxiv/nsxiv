@@ -407,10 +407,10 @@ struct win {
 	Window xwin;
 	win_env_t env;
 
-	XftColor bg_color;
-	XftColor fg_color;
-	XftColor bar_color;
-	XftColor text_color;
+	XftColor win_bg;
+	XftColor win_fg;
+	XftColor bar_bg;
+	XftColor bar_fg;
 
 	int x;
 	int y;
