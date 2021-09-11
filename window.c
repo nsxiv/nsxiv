@@ -532,10 +532,10 @@ void win_set_title(win_t *win, const char *path)
 	sprintf(title, "%s%s%s", win->title_prefix, separator, win->title_suffix);
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
-	                PropModeReplace, (unsigned char *)title, strlen(title));
+	                PropModeReplace, (unsigned char *) title, strlen(title));
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_ICON_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
-	                PropModeReplace, (unsigned char *)title, strlen(title));
+	                PropModeReplace, (unsigned char *) title, strlen(title));
 	free(title);
 	free(suffix);
 }
