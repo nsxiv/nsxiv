@@ -145,12 +145,15 @@ void win_init(win_t *win)
 		win->title_prefix = TITLE_PREFIX;
 	}
 
-	if (options->title_suffixmode != NULL) {
-		win->title_suffixmode = strtol(options->title_suffixmode, NULL, 10) % SUFFIXMODE_COUNT;
-	} else if (title_suffixmode != NULL) {
-		win->title_suffixmode = strtol(title_suffixmode, NULL, 10) % SUFFIXMODE_COUNT;
-	} else {
+	if (options->title_suffixmode == NULL && title_suffixmode == NULL) {
 		win->title_suffixmode = TITLE_SUFFIXMODE % SUFFIXMODE_COUNT;
+	} else {
+		char *endptr;
+		const char *nptr = options->title_suffixmode != NULL
+						 ? options->title_suffixmode : title_suffixmode;
+		win->title_suffixmode = strtol(nptr, &endptr, 10) % SUFFIXMODE_COUNT;
+		if (nptr == endptr)
+			fputs("sxiv: invalid suffixmode, assuming 0\n", stderr);
 	}
 
 	win_bg = win_res(db, RES_CLASS ".window.background", "white");
