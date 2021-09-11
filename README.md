@@ -42,8 +42,8 @@ sxiv requires the following software to be installed:
   * Xft
   * freetype2
   * fontconfig
-  * giflib (optional, disabled with `HAVE_GIFLIB=0`)
-  * libexif (optional, disabled with `HAVE_LIBEXIF=0`)
+  * giflib (optional, enabled with `HAVE_LIBGIF=1`)
+  * libexif (optional, enabled with `HAVE_LIBEXIF=1`)
 
 Please make sure to install the corresponding development packages in case that
 you want to build sxiv on a distribution with separate runtime and development
@@ -55,6 +55,7 @@ Building
 
 sxiv is built using the commands:
 
+    $ ./configure # (optional) to determine what optional deps are already installed
     $ make
     # make install
 
