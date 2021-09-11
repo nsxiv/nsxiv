@@ -381,11 +381,17 @@ Zoom out.
 .SH CONFIGURATION
 The following X resources are supported:
 .TP
-.B background
-Color of the window background and bar foreground
+.B window.background
+Color of the window background
 .TP
-.B foreground
-Color of the window foreground and bar background
+.B window.foreground
+Color of the window foreground
+.TP
+.B bar.background
+Color of the bar background. Defaults to window.foreground
+.TP
+.B bar.foreground
+Color of the bar foreground. Defaults to window.background
 .TP
 .B font
 Name of Xft bar font
