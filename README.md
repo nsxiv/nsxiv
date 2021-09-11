@@ -1,8 +1,8 @@
-![sxiv](http://muennich.github.com/sxiv/img/logo.png "sxiv")
+![nsxiv](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png "nsxiv")
 
-**Simple X Image Viewer**
+**Neo Simple X Image Viewer**
 
-The sole purpose of sxiv is to be the perfect image viewer for me. It is free
+The sole purpose of nsxiv is to be the perfect image viewer for me. It is free
 software so that you can use it and modify it for your needs. Please file a bug
 report if something does not work as documented or expected. Contributions are
 welcome but there is no guarantee that they will be incorporated.
@@ -25,17 +25,17 @@ Screenshots
 
 **Image mode:**
 
-![Image](http://muennich.github.com/sxiv/img/image.png "Image mode")
+![Image](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/image.png "Image mode")
 
 **Thumbnail mode:**
 
-![Thumb](http://muennich.github.com/sxiv/img/thumb.png "Thumb mode")
+![Thumb](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/thumb.png "Thumb mode")
 
 
 Dependencies
 ------------
 
-sxiv requires the following software to be installed:
+nsxiv requires the following software to be installed:
 
   * Imlib2
   * X11
@@ -46,21 +46,21 @@ sxiv requires the following software to be installed:
   * libexif (optional, automatically enabled if installed)
 
 Please make sure to install the corresponding development packages in case that
-you want to build sxiv on a distribution with separate runtime and development
+you want to build nsxiv on a distribution with separate runtime and development
 packages (e.g. *-dev on Debian).
 
 
 Building
 --------
 
-sxiv is built using the commands:
+nsxiv is built using the commands:
 
     $ make
     # make install
 
 Please note, that the latter one requires root privileges.
-By default, sxiv is installed using the prefix "/usr/local", so the full path
-of the executable will be "/usr/local/bin/sxiv".
+By default, nsxiv is installed using the prefix "/usr/local", so the full path
+of the executable will be "/usr/local/bin/nsxiv".
 
 Running make will automatically detect if libexif and libgif are available and
 enable them if so. CLI arguments will override any automatic detection.
@@ -76,7 +76,7 @@ command to:
 
     # make PREFIX="/your/dir" install
 
-The build-time specific settings of sxiv can be found in the file *config.h*.
+The build-time specific settings of nsxiv can be found in the file *config.h*.
 Please check and change them, so that they fit your needs.
 If the file *config.h* does not already exist, then you have to create it with
 the following command:
@@ -87,8 +87,10 @@ the following command:
 Usage
 -----
 
-Please see the [man page](http://muennich.github.com/sxiv/sxiv.1.html) for
-information on how to use sxiv.
+Please see man page for information on how to use nsxiv. To do so, execute the
+following after the installation:
+
+    $ man nsxiv
 
 
 Download & Changelog
