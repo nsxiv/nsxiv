@@ -134,8 +134,8 @@ void parse_options(int argc, char **argv)
 					optarg = NULL;
 				}
 
-				char *seccond = strtok(optarg, ";");
-				if (seccond != NULL) _options.title_suffixmode = seccond;
+				char *second = strtok(optarg, ";");
+				if (second != NULL) _options.title_suffixmode = second;
 				break;
 			case 'o':
 				_options.to_stdout = true;
