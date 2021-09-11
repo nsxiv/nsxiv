@@ -139,8 +139,8 @@ void win_init(win_t *win)
 	INIT_ATOM_(_NET_WM_ICON_NAME);
 	INIT_ATOM_(_NET_WM_ICON);
 	INIT_ATOM_(_NET_WM_STATE);
-	INIT_ATOM_(_NET_WM_STATE_FULLSCREEN);
 	INIT_ATOM_(_NET_WM_PID);
+	INIT_ATOM_(_NET_WM_STATE_FULLSCREEN);
 }
 
 void win_open(win_t *win)
