@@ -219,22 +219,21 @@ void win_open(win_t *win)
 	if (win->xwin == None)
 		error(EXIT_FAILURE, 0, "Error creating X window");
 
-  // set the _NET_WM_PID
-  pid = getpid();
-  XChangeProperty(e->dpy, win->xwin,
-                  atoms[ATOM__NET_WM_PID], XA_CARDINAL, sizeof(pid_t) * 8,
-                  PropModeReplace, (unsigned char *) &pid, 1);
+	/* set the _NET_WM_PID */
+	pid = getpid();
+	XChangeProperty(e->dpy, win->xwin,
+	                atoms[ATOM__NET_WM_PID], XA_CARDINAL, sizeof(pid_t) * 8,
+	                PropModeReplace, (unsigned char *) &pid, 1);
 
-  // set the WM_CLIENT_MACHINE
-  if (gethostname(hostname, sizeof(hostname)) == 0) {
-      XTextProperty tp;
-      tp.value = (unsigned char *)hostname;
-      tp.nitems = strnlen(hostname, sizeof(hostname));
-      tp.encoding = XA_STRING;
-      tp.format = 8;
-      XSetWMClientMachine(e->dpy, win->xwin, &tp);
-  }
-
+	/* set the _NET_WM_PID */
+	if (gethostname(hostname, sizeof(hostname)) == 0) {
+		XTextProperty tp;
+		tp.value = (unsigned char *)hostname;
+		tp.nitems = strnlen(hostname, sizeof(hostname));
+		tp.encoding = XA_STRING;
+		tp.format = 8;
+		XSetWMClientMachine(e->dpy, win->xwin, &tp);
+	}
 
 	XSelectInput(e->dpy, win->xwin,
 	             ButtonReleaseMask | ButtonPressMask | KeyPressMask |
