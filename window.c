@@ -214,7 +214,7 @@ void win_open(win_t *win)
   if (gethostname(hostname, sizeof(hostname)) == 0) {
       XTextProperty tp;
       tp.value = (unsigned char *)hostname;
-      tp.nitems = strlen(hostname);
+      tp.nitems = strnlen(hostname, sizeof(hostname));
       tp.encoding = XA_STRING;
       tp.format = 8;
       XSetWMClientMachine(e->dpy, win->xwin, &tp);
