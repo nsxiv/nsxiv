@@ -93,7 +93,7 @@ const char* win_res(XrmDatabase db, const char *name, const char *def)
 void win_init(win_t *win)
 {
 	win_env_t *e;
-	const char *bg, *fg, *f;
+	const char *win_bg, *win_fg, *bar_bg, *bar_fg, *f;
 	char *res_man;
 	XrmDatabase db;
 	XVisualInfo vis;
@@ -133,10 +133,14 @@ void win_init(win_t *win)
 	f = win_res(db, RES_CLASS ".font", "monospace-8");
 	win_init_font(e, f);
 
-	bg = win_res(db, RES_CLASS ".background", "white");
-	fg = win_res(db, RES_CLASS ".foreground", "black");
-	win_alloc_color(e, bg, &win->bg);
-	win_alloc_color(e, fg, &win->fg);
+	win_bg = win_res(db, RES_CLASS ".window.background", "white");
+	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");
+	bar_bg = win_res(db, RES_CLASS ".bar.background", win_bg);
+	bar_fg = win_res(db, RES_CLASS ".bar.foreground", win_fg);
+	win_alloc_color(e, win_bg, &win->win_bg);
+	win_alloc_color(e, win_fg, &win->win_fg);
+	win_alloc_color(e, bar_bg, &win->bar_bg);
+	win_alloc_color(e, bar_fg, &win->bar_fg);
 
 	win->bar.l.size = BAR_L_LEN;
 	win->bar.r.size = BAR_R_LEN;
@@ -297,7 +301,7 @@ void win_open(win_t *win)
 	win->buf.h = e->scrh;
 	win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
 	                            win->buf.w, win->buf.h, e->depth);
-	XSetForeground(e->dpy, gc, win->bg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
 
@@ -379,7 +383,7 @@ void win_clear(win_t *win)
 		win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
 		                            win->buf.w, win->buf.h, e->depth);
 	}
-	XSetForeground(e->dpy, gc, win->bg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 }
 
@@ -436,23 +440,23 @@ void win_draw_bar(win_t *win)
 	d = XftDrawCreate(e->dpy, win->buf.pm, e->vis,
 	                  e->cmap);
 
-	XSetForeground(e->dpy, gc, win->fg.pixel);
+	XSetForeground(e->dpy, gc, win->bar_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->h, win->w, win->bar.h);
 
-	XSetForeground(e->dpy, gc, win->bg.pixel);
-	XSetBackground(e->dpy, gc, win->fg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
+	XSetBackground(e->dpy, gc, win->bar_bg.pixel);
 
 	if ((len = strlen(r->buf)) > 0) {
 		if ((tw = TEXTWIDTH(win, r->buf, len)) > w)
 			return;
 		x = win->w - tw - H_TEXT_PAD;
 		w -= tw;
-		win_draw_text(win, d, &win->bg, x, y, r->buf, len, tw);
+		win_draw_text(win, d, &win->bar_fg, x, y, r->buf, len, tw);
 	}
 	if ((len = strlen(l->buf)) > 0) {
 		x = H_TEXT_PAD;
 		w -= 2 * H_TEXT_PAD; /* gap between left and right parts */
-		win_draw_text(win, d, &win->bg, x, y, l->buf, len, w);
+		win_draw_text(win, d, &win->bar_fg, x, y, l->buf, len, w);
 	}
 	XftDrawDestroy(d);
 }
