@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <unistd.h>
 #include <X11/cursorfont.h>
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
@@ -151,6 +152,7 @@ void win_init(win_t *win)
 	INIT_ATOM_(_NET_WM_ICON_NAME);
 	INIT_ATOM_(_NET_WM_ICON);
 	INIT_ATOM_(_NET_WM_STATE);
+	INIT_ATOM_(_NET_WM_PID);
 	INIT_ATOM_(_NET_WM_STATE_FULLSCREEN);
 }
 
@@ -168,6 +170,8 @@ void win_open(win_t *win)
 	int gmask;
 	XSizeHints sizehints;
 	XWMHints hints;
+	pid_t pid;
+	char hostname[255];
 
 	e = &win->env;
 	parent = options->embed != 0 ? options->embed : RootWindow(e->dpy, e->scr);
@@ -214,6 +218,22 @@ void win_open(win_t *win)
 	                          e->depth, InputOutput, e->vis, 0, NULL);
 	if (win->xwin == None)
 		error(EXIT_FAILURE, 0, "Error creating X window");
+
+	/* set the _NET_WM_PID */
+	pid = getpid();
+	XChangeProperty(e->dpy, win->xwin,
+	                atoms[ATOM__NET_WM_PID], XA_CARDINAL, sizeof(pid_t) * 8,
+	                PropModeReplace, (unsigned char *) &pid, 1);
+
+	/* set the _NET_WM_PID */
+	if (gethostname(hostname, sizeof(hostname)) == 0) {
+		XTextProperty tp;
+		tp.value = (unsigned char *)hostname;
+		tp.nitems = strnlen(hostname, sizeof(hostname));
+		tp.encoding = XA_STRING;
+		tp.format = 8;
+		XSetWMClientMachine(e->dpy, win->xwin, &tp);
+	}
 
 	XSelectInput(e->dpy, win->xwin,
 	             ButtonReleaseMask | ButtonPressMask | KeyPressMask |
