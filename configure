@@ -2,8 +2,8 @@
 
 :> options.mk
 for lib in exif gif; do
-    if printf "int main(){}\n" | ${CC:-cc} -l"$lib" -o /dev/null -x c - 2>/dev/null; then
-        printf "HAVE_LIB%s=1\n" "$lib" | tr '[:lower:]' '[:upper:]' >> options.mk
-        printf "OPTIONAL_LIBS+=-l%s\n" "$lib" >> options.mk
+    if echo "int main(){}" | ${CC:-cc} -l$lib -o /dev/null -x c - 2>/dev/null ; then
+        echo "HAVE_LIB$lib=1" | tr '[:lower:]' '[:upper:]' >> options.mk
+        echo "OPTIONAL_LIBS+=-l$lib" >> options.mk
     fi
 done
