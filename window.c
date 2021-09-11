@@ -121,8 +121,8 @@ void win_init(win_t *win)
 
 	win_bg = win_res(db, RES_CLASS ".window.background", "white");
 	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");
-	bar_bg = win_res(db, RES_CLASS ".bar.background", win_fg);
-	bar_fg = win_res(db, RES_CLASS ".bar.foreground", win_bg);
+	bar_bg = win_res(db, RES_CLASS ".bar.background", win_bg);
+	bar_fg = win_res(db, RES_CLASS ".bar.foreground", win_fg);
 	win_alloc_color(e, win_bg, &win->win_bg);
 	win_alloc_color(e, win_fg, &win->win_fg);
 	win_alloc_color(e, bar_bg, &win->bar_bg);
