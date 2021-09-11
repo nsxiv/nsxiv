@@ -118,9 +118,7 @@ typedef enum {
 
 typedef enum {
 	BASE_CFILE,
-	BASE_CDIR,
 	CFILE,
-	CDIR,
 	EMPTY,
 
 	SUFFIXMODE_COUNT,

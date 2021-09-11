@@ -525,12 +525,6 @@ void win_set_title(win_t *win, const char *path)
 		case BASE_CFILE:
 			win->title_suffix = basename(suffix);
 			break;
-		case CDIR:
-			win->title_suffix = dirname(suffix);
-			break;
-		case BASE_CDIR:
-			win->title_suffix = basename(dirname(suffix));
-			break;
 		case SUFFIXMODE_COUNT: // Never happens
 		case EMPTY:
 			win->title_suffix = "";
