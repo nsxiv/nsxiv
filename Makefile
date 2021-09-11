@@ -3,7 +3,7 @@
 
 version = 26
 
-PREFIX = /usr/local
+PREFIX ?= /usr/local
 MANPREFIX = $(PREFIX)/share/man
 
 # autoreload backend: inotify/nop
@@ -28,7 +28,7 @@ CFLAGS += -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
 
-LDFLAGS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
+LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 
 objs = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
@@ -41,7 +41,7 @@ all: sxiv
 
 sxiv: $(objs)
 	@echo "LINK $@"
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDLIBS)
 
 $(objs): Makefile sxiv.h commands.lst config.h
 options.o: version.h
