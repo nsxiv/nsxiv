@@ -130,12 +130,14 @@ void parse_options(int argc, char **argv)
 			case 'T': ;
 				if (*optarg != ';') {
 					char *first = strtok(optarg, ";");
-					if (first != NULL) _options.title_prefix = first;
+					if (first != NULL) _options.title_suffixmode = first;
 					optarg = NULL;
+				} else {
+					optarg++;
 				}
 
-				char *second = strtok(optarg, ";");
-				if (second != NULL) _options.title_suffixmode = second;
+				char *second = strtok(optarg, "");
+				if (second != NULL) _options.title_prefix = second;
 				break;
 			case 'o':
 				_options.to_stdout = true;
