@@ -127,20 +127,6 @@ void parse_options(int argc, char **argv)
 			case 'N':
 				_options.res_name = optarg;
 				break;
-			case 'T':
-				if (*optarg == ';') {
-					_options.title_prefix = ++optarg;
-				} else {
-					if ((s = strchr(optarg, ';'))) {
-						s[0] = '\0';
-						_options.title_prefix = ++s;
-					}
-					n = strtol(optarg, &end, 0);
-					if (*end != '\0')
-						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", optarg);
-					_options.title_suffixmode = n;
-				}
-				break;
 			case 'o':
 				_options.to_stdout = true;
 				break;
@@ -164,6 +150,20 @@ void parse_options(int argc, char **argv)
 				if (s == NULL || *s == '\0' || strlen(optarg) != 1)
 					error(EXIT_FAILURE, 0, "Invalid argument for option -s: %s", optarg);
 				_options.scalemode = s - scalemodes;
+				break;
+			case 'T':
+				if (*optarg == ';') {
+					_options.title_prefix = ++optarg;
+				} else {
+					if ((s = strchr(optarg, ';'))) {
+						s[0] = '\0';
+						_options.title_prefix = ++s;
+					}
+					n = strtol(optarg, &end, 0);
+					if (*end != '\0')
+						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", optarg);
+					_options.title_suffixmode = n;
+				}
 				break;
 			case 't':
 				_options.thumb_mode = true;
