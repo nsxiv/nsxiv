@@ -490,18 +490,16 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 
 void win_set_title(win_t *win, const char *path)
 {
-	const int title_max = strlen(path) + strlen(options->title_prefix) + 1;
+	const unsigned int title_max = strlen(path) + strlen(options->title_prefix) + 1;
 	char title[title_max];
-	const char *basename = strrchr(path, '/');
+	const char *basename = strrchr(path, '/') + 1;
 
-	/* Return if window is not ready yet, otherwise we get an X fault. */
+	/* Return if window is not ready yet */
 	if (win->xwin == None)
 		return;
 
-	/* Some ancient WM's that don't comply to EMWH (e.g. mwm) only use WM_NAME for
-	 * the window title, which is set by XStoreName below. */
 	snprintf(title, title_max, "%s%s", options->title_prefix,
-	        (options->title_suffixmode == SUFFIX_BASENAME) ? basename+1 : path);
+	        (options->title_suffixmode == SUFFIX_BASENAME) ? basename : path);
 	if (options->title_suffixmode == SUFFIX_EMPTY)
 		*(title+strlen(options->title_prefix)) = '\0';
 

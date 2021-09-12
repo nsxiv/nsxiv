@@ -154,7 +154,7 @@ void parse_options(int argc, char **argv)
 				break;
 			case 'T':
 				if ((s = strrchr(optarg, ';')) != NULL) {
-					s[0] = '\0';
+					*s = '\0';
 					n = strtol(++s, &end, 0);
 					if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
 						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", s);
