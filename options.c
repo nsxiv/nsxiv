@@ -153,18 +153,14 @@ void parse_options(int argc, char **argv)
 				_options.scalemode = s - scalemodes;
 				break;
 			case 'T':
-				if (*optarg == ';') {
-					_options.title_prefix = ++optarg;
-				} else {
-					if ((s = strrchr(optarg, ';')) != NULL) {
-						s[0] = '\0';
-						n = strtol(++s, &end, 0);
-						if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
-							error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", s);
-						_options.title_suffixmode = n;
-					}
-					_options.title_prefix = optarg;
+				if ((s = strrchr(optarg, ';')) != NULL) {
+					s[0] = '\0';
+					n = strtol(++s, &end, 0);
+					if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
+						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", s);
+					_options.title_suffixmode = n;
 				}
+				_options.title_prefix = optarg;
 				break;
 			case 't':
 				_options.thumb_mode = true;
