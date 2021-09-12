@@ -26,19 +26,11 @@ LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
-all: config.mk sxiv
+all: sxiv
 
 .PHONY: all clean install uninstall
 .SUFFIXES:
 .SUFFIXES: .c .o
-
-config.mk:
-	:> config.mk
-	for lib in exif gif; do \
-		if echo "int main(){}" | $(CC) "-l$$lib" -o /dev/null -x c - 2>/dev/null ; then \
-			echo "HAVE_LIB$$lib=1" | tr '[:lower:]' '[:upper:]' >> config.mk ; \
-		fi \
-	done
 
 sxiv: $(OBJS)
 	@echo "LINK $@"
@@ -48,6 +40,13 @@ $(OBJS): Makefile sxiv.h commands.lst config.h config.mk
 options.o: version.h
 window.o: icon/data.h
 
+config.mk:
+	:> config.mk
+	for lib in exif gif; do \
+		if echo "int main(){}" | $(CC) "-l$$lib" -o /dev/null -x c - 2>/dev/null ; then \
+			echo "HAVE_LIB$$lib=1" | tr '[:lower:]' '[:upper:]' >> config.mk ; \
+		fi \
+	done
 
 config.h:
 	@echo "GEN $@"
