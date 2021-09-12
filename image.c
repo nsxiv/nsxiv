@@ -70,7 +70,7 @@ void img_init(img_t *img, win_t *win)
 
 	img->cmod = imlib_create_color_modifier();
 	imlib_context_set_color_modifier(img->cmod);
-	img->gamma = MIN(MAX(options->gamma, -GAMMA_RANGE), GAMMA_RANGE);
+	img_change_gamma(img, options->gamma);
 
 	img->ss.on = options->slideshow > 0;
 	img->ss.delay = options->slideshow > 0 ? options->slideshow : SLIDESHOW_DELAY * 10;
