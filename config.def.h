@@ -6,10 +6,6 @@ enum {
 	WIN_HEIGHT = 600
 };
 
-/* default title prefix and suffix mode */
-static const char *TITLE_PREFIX = "sxiv";
-static const int TITLE_SUFFIXMODE = 0;
-
 /* colors and font are configured with 'background', 'foreground' and
  * 'font' X resource properties.
  * See X(7) section Resources and xrdb(1) for more information.

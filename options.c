@@ -66,8 +66,8 @@ void parse_options(int argc, char **argv)
 	_options.hide_bar = false;
 	_options.geometry = NULL;
 	_options.res_name = NULL;
-	_options.title_prefix = NULL;
-	_options.title_suffixmode = NULL;
+	_options.title_prefix = "sxiv - ";
+	_options.title_suffixmode = SUFFIX_BASENAME;
 
 	_options.quiet = false;
 	_options.thumb_mode = false;
@@ -127,17 +127,18 @@ void parse_options(int argc, char **argv)
 			case 'N':
 				_options.res_name = optarg;
 				break;
-			case 'T': ;
-				char *sep;
+			case 'T':
 				if (*optarg == ';') {
-					puts("1");
 					_options.title_prefix = ++optarg;
-				} else if ((sep = strchr(optarg, ';'))) {
-					sep[0] = '\0';
-					_options.title_suffixmode = optarg;
-					_options.title_prefix = ++sep;
 				} else {
-					_options.title_suffixmode = optarg;
+					if ((s = strchr(optarg, ';'))) {
+						s[0] = '\0';
+						_options.title_prefix = ++s;
+					}
+					n = strtol(optarg, &end, 0);
+					if (*end != '\0')
+						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", optarg);
+					_options.title_suffixmode = n;
 				}
 				break;
 			case 'o':

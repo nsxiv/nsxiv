@@ -67,8 +67,14 @@ more information on GEOMETRY argument.
 Set the resource name of sxiv's X window to NAME.
 .TP
 .BI "\-T " TITLE
-Set the window title to TITLE. Use the format `suffixmode;prefix'. See title
-entries in section CONFIGURATION for more information.
+Set the window title to TITLE. Use the format `suffixmode;prefix'. Any string
+literal is accepted for prefix, and the format of suffixmode is:
+.EX
+    Value  Format
+    0      Empty
+    1      Basename of file
+    2      Full path to file
+.EE
 .TP
 .BI "\-n " NUM
 Start at picture number NUM.
@@ -398,18 +404,6 @@ Color of the bar background. Defaults to window.foreground
 .TP
 .B bar.foreground
 Color of the bar foreground. Defaults to window.background
-.TP
-.B title.prefix
-Any string literal to be used as the window title prefix. Defaults to "sxiv"
-.TP
-.B title.suffixmode
-The format of the window title suffixmode.
-.EX
-    Value  Format
-    0      Basename of file
-    1      Full path to file
-    2      Empty string
-.EE
 .TP
 .B font
 Name of Xft bar font

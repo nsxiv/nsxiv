@@ -134,28 +134,6 @@ void win_init(win_t *win)
 	f = win_res(db, RES_CLASS ".font", "monospace-8");
 	win_init_font(e, f);
 
-	const char *title_prefix = win_res(db, RES_CLASS ".title.prefix", NULL);
-	const char *title_suffixmode = win_res(db, RES_CLASS ".title.suffixmode", NULL);
-
-	if (options->title_prefix != NULL) {
-		win->title_prefix = options->title_prefix;
-	} else if (title_prefix != NULL) {
-		win->title_prefix = title_prefix;
-	} else {
-		win->title_prefix = TITLE_PREFIX;
-	}
-
-	if (options->title_suffixmode == NULL && title_suffixmode == NULL) {
-		win->title_suffixmode = TITLE_SUFFIXMODE % SUFFIXMODE_COUNT;
-	} else {
-		char *endptr;
-		const char *nptr = options->title_suffixmode != NULL
-						 ? options->title_suffixmode : title_suffixmode;
-		win->title_suffixmode = strtol(nptr, &endptr, 10) % SUFFIXMODE_COUNT;
-		if (nptr == endptr)
-			fputs("sxiv: invalid suffixmode, assuming 0\n", stderr);
-	}
-
 	win_bg = win_res(db, RES_CLASS ".window.background", "white");
 	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");
 	bar_bg = win_res(db, RES_CLASS ".bar.background", win_bg);
@@ -513,34 +491,33 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 
 void win_set_title(win_t *win, const char *path)
 {
-	char *title, *suffix="";
+	char *title, *suffix, *tmp;
 
 	/* Return if window is not ready yet, otherwise we get an X fault. */
 	if (win->xwin == None)
 		return;
 
-	/* Get title suffix type from X-resources. Default: BASE_CDIR. */
-	suffix = estrdup(path);
-	switch (win->title_suffixmode) {
-		case CFILE:
-			win->title_suffix = suffix;
+	/* Get title suffix type from X-resources. Default: SUFFIX_BASENAME. */
+	switch (options->title_suffixmode) {
+		case SUFFIX_EMPTY:
+			suffix = "";
 			break;
-		case BASE_CFILE:
-			win->title_suffix = basename(suffix);
+		case SUFFIX_BASENAME:
+			tmp = estrdup(path);
+			suffix = basename(tmp);
+			free(tmp);
 			break;
-		case SUFFIXMODE_COUNT: // Never happens
-		case EMPTY:
-			win->title_suffix = "";
+		case SUFFIX_FULLPATH:
+			suffix = estrdup(path);
 			break;
 	}
 
 	/* Some ancient WM's that don't comply to EMWH (e.g. mwm) only use WM_NAME for
 	 * the window title, which is set by XStoreName below. */
-	size_t prefixLen = strlen(win->title_prefix);
-	size_t suffixLen = strlen(win->title_suffix);
-	const char *separator = (suffixLen == 0 || prefixLen == 0) ? "" : " - ";
-	title = emalloc(prefixLen + strlen(separator) + suffixLen + 1);
-	sprintf(title, "%s%s%s", win->title_prefix, separator, win->title_suffix);
+	size_t prefixLen = strlen(options->title_prefix);
+	size_t suffixLen = strlen(suffix);
+	title = emalloc(prefixLen + suffixLen + 1);
+	sprintf(title, "%s%s", options->title_prefix, suffix);
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
 	                PropModeReplace, (unsigned char *) title, strlen(title));
@@ -548,7 +525,9 @@ void win_set_title(win_t *win, const char *path)
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
 	                PropModeReplace, (unsigned char *) title, strlen(title));
 	free(title);
-	free(suffix);
+	if (options->title_suffixmode == SUFFIX_FULLPATH) {
+		free(suffix);
+	}
 }
 
 void win_set_cursor(win_t *win, cursor_t cursor)

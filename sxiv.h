@@ -117,11 +117,9 @@ typedef enum {
 } fileflags_t;
 
 typedef enum {
-	BASE_CFILE,
-	CFILE,
-	EMPTY,
-
-	SUFFIXMODE_COUNT,
+	SUFFIX_EMPTY,
+	SUFFIX_BASENAME,
+	SUFFIX_FULLPATH,
 } suffixmode_t;
 
 typedef struct {
@@ -289,7 +287,7 @@ struct opt {
 	char *geometry;
 	char *res_name;
 	char *title_prefix;
-	char *title_suffixmode;
+	suffixmode_t title_suffixmode;
 
 	/* misc flags: */
 	bool quiet;
@@ -423,10 +421,6 @@ struct win {
 	XftColor win_fg;
 	XftColor bar_bg;
 	XftColor bar_fg;
-
-	suffixmode_t title_suffixmode;
-	const char   *title_prefix;
-	const char   *title_suffix;
 
 	int x;
 	int y;
