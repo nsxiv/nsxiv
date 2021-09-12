@@ -286,7 +286,7 @@ struct opt {
 	long embed;
 	char *geometry;
 	char *res_name;
-	char *title_prefix;
+	const char *title_prefix;
 	suffixmode_t title_suffixmode;
 
 	/* misc flags: */

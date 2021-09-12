@@ -18,6 +18,8 @@
 
 #include "sxiv.h"
 #define _IMAGE_CONFIG
+#define _WINDOW_CONFIG
+#define _OPTION_DEFAULTS
 #include "config.h"
 #include "version.h"
 
@@ -66,8 +68,8 @@ void parse_options(int argc, char **argv)
 	_options.hide_bar = false;
 	_options.geometry = NULL;
 	_options.res_name = NULL;
-	_options.title_prefix = "sxiv - ";
-	_options.title_suffixmode = SUFFIX_BASENAME;
+	_options.title_prefix = TITLE_PREFIX;
+	_options.title_suffixmode = TITLE_SUFFIXMODE;
 
 	_options.quiet = false;
 	_options.thumb_mode = false;
