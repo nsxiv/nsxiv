@@ -18,8 +18,7 @@
 
 #include "sxiv.h"
 #define _IMAGE_CONFIG
-#define _WINDOW_CONFIG
-#define _OPTION_DEFAULTS
+#define _TITLE_CONFIG
 #include "config.h"
 #include "version.h"
 

@@ -6,18 +6,27 @@ enum {
 	WIN_HEIGHT = 600
 };
 
-#ifdef _OPTION_DEFAULTS
-/* default title prefix and suffix mode */
-static const char *TITLE_PREFIX = "sxiv - ";
-static const int TITLE_SUFFIXMODE = 1;
-#endif
-
 /* colors and font are configured with 'background', 'foreground' and
  * 'font' X resource properties.
  * See X(7) section Resources and xrdb(1) for more information.
  */
 
 #endif
+
+#ifdef _TITLE_CONFIG
+
+/* default title prefix */
+static const char *TITLE_PREFIX = "sxiv - ";
+
+/* default title suffixmode, available options are:
+ * SUFFIX_EMPTY
+ * SUFFIX_BASENAME
+ * SUFFIX_FULLPATH
+ */
+static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
+
+#endif
+
 #ifdef _IMAGE_CONFIG
 
 /* levels (in percent) to use when zooming via '-' and '+':
