@@ -9,11 +9,6 @@ MANPREFIX = $(PREFIX)/share/man
 # autoreload backend: inotify/nop
 AUTORELOAD = inotify
 
-# enable features requiring giflib (-lgif)
-HAVE_LIBGIF ?= 0
-# enable features requiring libexif (-lexif)
-HAVE_LIBEXIF ?= 0
-
 ifeq ($(HAVE_LIBEXIF), 1)
 	OPTIONAL_LIBS += -lexif
 endif
@@ -49,7 +44,7 @@ sxiv: $(OBJS)
 	@echo "LINK $@"
 	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-$(OBJS): Makefile sxiv.h commands.lst config.h
+$(OBJS): Makefile sxiv.h commands.lst config.h config.mk
 options.o: version.h
 window.o: icon/data.h
 
