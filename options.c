@@ -127,7 +127,7 @@ void parse_options(int argc, char **argv)
 			case 'N':
 				_options.res_name = optarg;
 				break;
-			case 'T':
+			case 'T': ;
 				char *sep;
 				if (*optarg == ';') {
 					puts("1");
