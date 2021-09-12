@@ -1,4 +1,4 @@
-# Include configure options if configure was run
+# Include configure options
 ifneq (clean,$(filter clean,$(MAKECMDGOALS)))
 -include config.mk
 endif
