@@ -497,7 +497,6 @@ void win_set_title(win_t *win, const char *path)
 	if (win->xwin == None)
 		return;
 
-	/* Get title suffix type from X-resources. Default: SUFFIX_BASENAME. */
 	switch (options->title_suffixmode) {
 		case SUFFIX_EMPTY:
 			suffix = "";
