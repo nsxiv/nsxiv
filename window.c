@@ -24,7 +24,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <libgen.h>
 #include <locale.h>
 #include <unistd.h>
 #include <X11/cursorfont.h>
@@ -491,42 +490,26 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 
 void win_set_title(win_t *win, const char *path)
 {
-	char *title, *suffix, *tmp;
+	char title[PATH_MAX];
+	const char *basename = strrchr(path, '/');
 
 	/* Return if window is not ready yet, otherwise we get an X fault. */
-	if (win->xwin == None)
+	if (win->xwin == None || basename == NULL)
 		return;
-
-	switch (options->title_suffixmode) {
-		case SUFFIX_EMPTY:
-			suffix = "";
-			break;
-		case SUFFIX_BASENAME:
-			tmp = estrdup(path);
-			suffix = basename(tmp);
-			free(tmp);
-			break;
-		case SUFFIX_FULLPATH:
-			suffix = estrdup(path);
-			break;
-	}
 
 	/* Some ancient WM's that don't comply to EMWH (e.g. mwm) only use WM_NAME for
 	 * the window title, which is set by XStoreName below. */
-	size_t prefixLen = strlen(options->title_prefix);
-	size_t suffixLen = strlen(suffix);
-	title = emalloc(prefixLen + suffixLen + 1);
-	sprintf(title, "%s%s", options->title_prefix, suffix);
+	snprintf(title, PATH_MAX, "%s%s", options->title_prefix,
+	        (options->title_suffixmode == SUFFIX_BASENAME) ? basename+1 : path);
+	if (options->title_suffixmode == SUFFIX_EMPTY)
+		*(title+strlen(options->title_prefix)) = '\0';
+
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
 	                PropModeReplace, (unsigned char *) title, strlen(title));
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_ICON_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
 	                PropModeReplace, (unsigned char *) title, strlen(title));
-	free(title);
-	if (options->title_suffixmode == SUFFIX_FULLPATH) {
-		free(suffix);
-	}
 }
 
 void win_set_cursor(win_t *win, cursor_t cursor)
