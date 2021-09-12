@@ -276,7 +276,9 @@ void win_open(win_t *win)
 	}
 	free(icon_data);
 
-	win_set_title(win, "sxiv");
+	/* These two atoms won't change and thus only need to be set once. */
+	XStoreName(win->env.dpy, win->xwin, "sxiv");
+	XSetIconName(win->env.dpy, win->xwin, "sxiv");
 
 	classhint.res_class = RES_CLASS;
 	classhint.res_name = options->res_name != NULL ? options->res_name : "sxiv";
@@ -486,10 +488,20 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
 }
 
-void win_set_title(win_t *win, const char *title)
+void win_set_title(win_t *win, const char *path)
 {
-	XStoreName(win->env.dpy, win->xwin, title);
-	XSetIconName(win->env.dpy, win->xwin, title);
+	const unsigned int title_max = strlen(path) + strlen(options->title_prefix) + 1;
+	char title[title_max];
+	const char *basename = strrchr(path, '/') + 1;
+
+	/* Return if window is not ready yet */
+	if (win->xwin == None)
+		return;
+
+	snprintf(title, title_max, "%s%s", options->title_prefix,
+	        (options->title_suffixmode == SUFFIX_BASENAME) ? basename : path);
+	if (options->title_suffixmode == SUFFIX_EMPTY)
+		*(title+strlen(options->title_prefix)) = '\0';
 
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,

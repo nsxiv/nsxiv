@@ -14,6 +14,8 @@ sxiv \- Simple X Image Viewer
 .IR GEOMETRY ]
 .RB [ \-N
 .IR NAME ]
+.RB [ \-T
+.IR TITLE ]
 .RB [ \-n
 .IR NUM ]
 .RB [ \-S
@@ -63,6 +65,19 @@ more information on GEOMETRY argument.
 .TP
 .BI "\-N " NAME
 Set the resource name of sxiv's X window to NAME.
+.TP
+.BI "\-T " TITLE
+Set the window title to TITLE. Use the format `prefix:suffixmode'. Any string
+literal is accepted for prefix, and the format of suffixmode is:
+
+.EX
+    Value  Format
+    0      Empty
+    1      Basename of file
+    2      Full path to file
+.EE
+
+By defualt, prefix is set to "sxiv - " and suffixmode is set to 1 (basename).
 .TP
 .BI "\-n " NUM
 Start at picture number NUM.
