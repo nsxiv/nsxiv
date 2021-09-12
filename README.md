@@ -42,8 +42,8 @@ sxiv requires the following software to be installed:
   * Xft
   * freetype2
   * fontconfig
-  * giflib (optional, enabled with `HAVE_LIBGIF=1`)
-  * libexif (optional, enabled with `HAVE_LIBEXIF=1`)
+  * giflib (optional, automatically enabled if installed)
+  * libexif (optional, automatically enabled if installed)
 
 Please make sure to install the corresponding development packages in case that
 you want to build sxiv on a distribution with separate runtime and development
@@ -69,6 +69,7 @@ For example:
 	$ make HAVE_LIBGIF=0
 
 will always disable libgif.
+Alternatively, they can be disabled via editing `config.mk`.
 
 You can install sxiv into a directory of your choice by changing the second
 command to:

@@ -36,15 +36,15 @@ all: sxiv
 
 sxiv: $(OBJS)
 	@echo "LINK $@"
-	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 $(OBJS): Makefile sxiv.h commands.lst config.h config.mk
 options.o: version.h
 window.o: icon/data.h
 
 config.mk:
-	:> config.mk
-	for lib in exif gif; do \
+	@:> config.mk
+	@for lib in exif gif; do \
 		if echo "int main(){}" | $(CC) "-l$$lib" -o /dev/null -x c - 2>/dev/null ; then \
 			echo "HAVE_LIB$$lib=1" | tr '[:lower:]' '[:upper:]' >> config.mk ; \
 		fi \
