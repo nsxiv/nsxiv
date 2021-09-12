@@ -116,6 +116,12 @@ typedef enum {
 	FF_TN_INIT = 4
 } fileflags_t;
 
+typedef enum {
+	SUFFIX_EMPTY,
+	SUFFIX_BASENAME,
+	SUFFIX_FULLPATH,
+} suffixmode_t;
+
 typedef struct {
 	const char *name; /* as given by user */
 	const char *path; /* always absolute */
@@ -280,6 +286,8 @@ struct opt {
 	long embed;
 	char *geometry;
 	char *res_name;
+	const char *title_prefix;
+	suffixmode_t title_suffixmode;
 
 	/* misc flags: */
 	bool quiet;

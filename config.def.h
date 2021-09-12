@@ -12,6 +12,21 @@ enum {
  */
 
 #endif
+
+#ifdef _TITLE_CONFIG
+
+/* default title prefix */
+static const char *TITLE_PREFIX = "sxiv - ";
+
+/* default title suffixmode, available options are:
+ * SUFFIX_EMPTY
+ * SUFFIX_BASENAME
+ * SUFFIX_FULLPATH
+ */
+static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
+
+#endif
+
 #ifdef _IMAGE_CONFIG
 
 /* levels (in percent) to use when zooming via '-' and '+':
