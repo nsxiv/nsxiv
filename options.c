@@ -156,14 +156,14 @@ void parse_options(int argc, char **argv)
 				if (*optarg == ';') {
 					_options.title_prefix = ++optarg;
 				} else {
-					if ((s = strchr(optarg, ';'))) {
+					if ((s = strrchr(optarg, ';')) != NULL) {
 						s[0] = '\0';
-						_options.title_prefix = ++s;
+						n = strtol(++s, &end, 0);
+						if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
+							error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", s);
+						_options.title_suffixmode = n;
 					}
-					n = strtol(optarg, &end, 0);
-					if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
-						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", optarg);
-					_options.title_suffixmode = n;
+					_options.title_prefix = optarg;
 				}
 				break;
 			case 't':
