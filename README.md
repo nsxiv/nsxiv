@@ -55,13 +55,20 @@ Building
 
 sxiv is built using the commands:
 
-    $ ./configure # (optional) to determine what optional deps are already installed
     $ make
     # make install
 
 Please note, that the latter one requires root privileges.
 By default, sxiv is installed using the prefix "/usr/local", so the full path
 of the executable will be "/usr/local/bin/sxiv".
+
+Running make will automatically detect if libexif and libgif are available and
+enable them if so. CLI arguments will override any automatic detection.
+For example:
+
+	$ make HAVE_LIBGIF=0
+
+will always disable libgif.
 
 You can install sxiv into a directory of your choice by changing the second
 command to:
