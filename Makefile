@@ -58,25 +58,19 @@ version.h: Makefile .git/index
 	v="$$(git describe 2>/dev/null)"; \
 	echo "#define VERSION \"$${v:-$(version)}\"" >$@
 
-.git/index:
-
 clean:
 	$(RM) *.o sxiv
 
 install: all
 	@echo "INSTALL bin/sxiv"
-	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp sxiv $(DESTDIR)$(PREFIX)/bin/
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/sxiv
+	install -Dt $(DESTDIR)$(PREFIX)/bin sxiv
 	@echo "INSTALL sxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
 	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(version)!g" sxiv.1 \
 		>$(DESTDIR)$(MANPREFIX)/man1/sxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/sxiv.1
 	@echo "INSTALL share/sxiv/"
-	mkdir -p $(DESTDIR)$(PREFIX)/share/sxiv/exec
-	cp exec/* $(DESTDIR)$(PREFIX)/share/sxiv/exec/
-	chmod 755 $(DESTDIR)$(PREFIX)/share/sxiv/exec/*
+	install -Dt $(DESTDIR)$(PREFIX)/share/sxiv/exec exec/*
 
 uninstall:
 	@echo "REMOVE bin/sxiv"
