@@ -161,7 +161,7 @@ void parse_options(int argc, char **argv)
 						_options.title_prefix = ++s;
 					}
 					n = strtol(optarg, &end, 0);
-					if (*end != '\0')
+					if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
 						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", optarg);
 					_options.title_suffixmode = n;
 				}
