@@ -3,4 +3,4 @@ version.h
 *.d
 *.o
 sxiv
-options.mk
+config.mk

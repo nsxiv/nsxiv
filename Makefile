@@ -1,5 +1,5 @@
 # Include configure options if configure was run
--include options.mk
+-include config.mk
 
 version = 26
 
@@ -31,11 +31,14 @@ LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
-all: sxiv
+all: config.mk sxiv
 
 .PHONY: all clean install uninstall
 .SUFFIXES:
 .SUFFIXES: .c .o
+
+config.mk:
+	./configure
 
 sxiv: $(OBJS)
 	@echo "LINK $@"

@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-:> options.mk
+:> config.mk
 for lib in exif gif; do
     if echo "int main(){}" | ${CC:-cc} -l$lib -o /dev/null -x c - 2>/dev/null ; then
-        echo "HAVE_LIB$lib=1" | tr '[:lower:]' '[:upper:]' >> options.mk
+        echo "HAVE_LIB$lib=1" | tr '[:lower:]' '[:upper:]' >> config.mk
     fi
 done
