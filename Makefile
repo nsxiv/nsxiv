@@ -1,5 +1,7 @@
 # Include configure options if configure was run
+ifneq (clean,$(filter clean,$(MAKECMDGOALS)))
 -include config.mk
+endif
 
 version = 26
 
