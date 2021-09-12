@@ -153,7 +153,7 @@ void parse_options(int argc, char **argv)
 				_options.scalemode = s - scalemodes;
 				break;
 			case 'T':
-				if ((s = strrchr(optarg, ';')) != NULL) {
+				if ((s = strrchr(optarg, ':')) != NULL) {
 					*s = '\0';
 					n = strtol(++s, &end, 0);
 					if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
