@@ -3,13 +3,18 @@ ifneq (clean,$(filter clean,$(MAKECMDGOALS)))
 -include config.mk
 endif
 
-version = 26
+# sxiv version
+VERSION = 26
 
+# PREFIX for install
 PREFIX ?= /usr/local
 MANPREFIX = $(PREFIX)/share/man
 
 # autoreload backend: inotify/nop
 AUTORELOAD = inotify
+
+# CFLAGS, any optimization flags goes here
+CFLAGS ?= -std=c99 -Wall -pedantic
 
 ifeq ($(HAVE_LIBEXIF), 1)
 	OPTIONAL_LIBS += -lexif
@@ -22,8 +27,7 @@ else
 	HAVE_LIBGIF = 0
 endif
 
-CFLAGS ?= -std=c99 -Wall -pedantic
-CFLAGS += -D_XOPEN_SOURCE=700 \
+CPPFLAGS = -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
 
@@ -32,14 +36,13 @@ LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
-all: sxiv
-
 .PHONY: all clean install uninstall
 .SUFFIXES:
 .SUFFIXES: .c .o
 
+all: sxiv
+
 sxiv: $(OBJS)
-	@echo "LINK $@"
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 $(OBJS): Makefile sxiv.h commands.lst config.h config.mk
@@ -55,13 +58,11 @@ config.mk:
 	done
 
 config.h:
-	@echo "GEN $@"
 	cp config.def.h $@
 
 version.h: Makefile .git/index
-	@echo "GEN $@"
 	v="$$(git describe 2>/dev/null)"; \
-	echo "#define VERSION \"$${v:-$(version)}\"" >$@
+	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
 clean:
 	$(RM) *.o sxiv
@@ -71,7 +72,7 @@ install: all
 	install -Dt $(DESTDIR)$(PREFIX)/bin sxiv
 	@echo "INSTALL sxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(version)!g" sxiv.1 \
+	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" sxiv.1 \
 		>$(DESTDIR)$(MANPREFIX)/man1/sxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/sxiv.1
 	@echo "INSTALL share/sxiv/"
