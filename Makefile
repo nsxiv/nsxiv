@@ -28,7 +28,7 @@ CFLAGS += -D_XOPEN_SOURCE=700 \
 
 LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 
-objs = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
+OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
 all: sxiv
@@ -37,11 +37,11 @@ all: sxiv
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-sxiv: $(objs)
+sxiv: $(OBJS)
 	@echo "LINK $@"
 	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
-$(objs): Makefile sxiv.h commands.lst config.h
+$(OBJS): Makefile sxiv.h commands.lst config.h
 options.o: version.h
 window.o: icon/data.h
 
