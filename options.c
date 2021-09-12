@@ -128,16 +128,17 @@ void parse_options(int argc, char **argv)
 				_options.res_name = optarg;
 				break;
 			case 'T': ;
-				if (*optarg != ';') {
-					char *first = strtok(optarg, ";");
-					if (first != NULL) _options.title_suffixmode = first;
-					optarg = NULL;
+			    char *sep;
+				if (*optarg == ';') {
+					puts("1");
+					_options.title_prefix = ++optarg;
+				} else if ((sep = strchr(optarg, ';'))) {
+					sep[0] = '\0';
+					_options.title_suffixmode = optarg;
+					_options.title_prefix = ++sep;
 				} else {
-					optarg++;
+					_options.title_suffixmode = optarg;
 				}
-
-				char *second = strtok(optarg, "");
-				if (second != NULL) _options.title_prefix = second;
 				break;
 			case 'o':
 				_options.to_stdout = true;
