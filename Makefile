@@ -13,9 +13,13 @@ AUTORELOAD = inotify
 
 ifeq ($(HAVE_LIBEXIF), 1)
 	OPTIONAL_LIBS += -lexif
+else
+	HAVE_LIBEXIF = 0
 endif
 ifeq ($(HAVE_LIBGIF), 1)
 	OPTIONAL_LIBS += -lgif
+else
+	HAVE_LIBGIF = 0
 endif
 
 CFLAGS ?= -std=c99 -Wall -pedantic
