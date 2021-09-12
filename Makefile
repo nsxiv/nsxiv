@@ -47,7 +47,7 @@ options.o: version.h
 window.o: icon/data.h
 
 config.mk:
-	@:> config.mk
+	@echo "# 0 = disable, 1 = enable" > config.mk
 	@for lib in exif gif; do \
 		if echo "int main(){}" | $(CC) "-l$$lib" -o /dev/null -x c - 2>/dev/null ; then \
 			echo "HAVE_LIB$$lib=1" | tr '[:lower:]' '[:upper:]' >> config.mk ; \
