@@ -43,13 +43,19 @@ OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
 all: sxiv
 
 sxiv: $(OBJS)
+	@echo "LINK $@"
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+
+.c.o:
+	@echo "CC $@"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJS): Makefile sxiv.h commands.lst config.h config.mk
 options.o: version.h
 window.o: icon/data.h
 
 config.mk:
+	@echo "GEN $@"
 	@echo "# 0 = disable, 1 = enable" > config.mk
 	@for lib in exif gif; do \
 		if echo "int main(){}" | $(CC) "-l$$lib" -o /dev/null -x c - 2>/dev/null ; then \
@@ -58,9 +64,11 @@ config.mk:
 	done
 
 config.h:
+	@echo "GEN $@"
 	cp config.def.h $@
 
 version.h: Makefile .git/index
+	@echo "GEN $@"
 	v="$$(git describe 2>/dev/null)"; \
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
