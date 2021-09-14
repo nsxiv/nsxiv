@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Example for $XDG_CONFIG_HOME/sxiv/exec/image-info
-# Called by sxiv(1) whenever an image gets loaded.
-# The output is displayed in sxiv's status bar.
+# Example for $XDG_CONFIG_HOME/nsxiv/exec/image-info
+# Called by nsxiv(1) whenever an image gets loaded.
+# The output is displayed in nsxiv's status bar.
 # Arguments:
 #   $1: path to image file
 #   $2: image width

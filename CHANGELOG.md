@@ -1,10 +1,27 @@
-Download & Changelog
---------------------
+nsxiv
+-----
 
-You can [browse](https://github.com/nsxiv/nsxiv) the source code repository
-on GitHub or get a copy using git with the following command:
+**Stable releases**
 
-    git clone https://github.com/nsxiv/nsxiv.git
+**[v27](https://github.com/nsxiv/nsxiv/archive/v27.tar.gz)**
+*(September 14, 2021)*
+
+  * Re-release under the name nsxiv
+  * Break previous Xresources configs
+  * Implement fill scale mode (#2)
+  * Bug fix: Prevent crash when embedded into transparent window (#3)
+  * Rework the build system (#19)
+  * Update documentation
+  * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
+  * Support custom bar colors (#19)
+  * Toggle animation playback with Ctrl-a (#33)
+  * Bug fix: Set gamma with `-G` (#31)
+  * Add editorconfig (#40)
+  * Bug fix: Prevent crash when showing some GIFs (#41)
+
+
+sxiv
+----
 
 **Stable releases**
 

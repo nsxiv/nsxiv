@@ -16,7 +16,7 @@
  * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _IMAGE_CONFIG
 #include "config.h"
 

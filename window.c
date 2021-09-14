@@ -16,7 +16,7 @@
  * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _WINDOW_CONFIG
 #include "config.h"
 #include "icon/data.h"
@@ -30,7 +30,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-#define RES_CLASS "Sxiv"
+#define RES_CLASS "Nsxiv"
 
 enum {
 	H_TEXT_PAD = 5,
@@ -277,11 +277,11 @@ void win_open(win_t *win)
 	free(icon_data);
 
 	/* These two atoms won't change and thus only need to be set once. */
-	XStoreName(win->env.dpy, win->xwin, "sxiv");
-	XSetIconName(win->env.dpy, win->xwin, "sxiv");
+	XStoreName(win->env.dpy, win->xwin, "nsxiv");
+	XSetIconName(win->env.dpy, win->xwin, "nsxiv");
 
 	classhint.res_class = RES_CLASS;
-	classhint.res_name = options->res_name != NULL ? options->res_name : "sxiv";
+	classhint.res_name = options->res_name != NULL ? options->res_name : "nsxiv";
 	XSetClassHint(e->dpy, win->xwin, &classhint);
 
 	XSetWMProtocols(e->dpy, win->xwin, &atoms[ATOM_WM_DELETE_WINDOW], 1);

@@ -16,7 +16,7 @@
  * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _IMAGE_CONFIG
 #define _TITLE_CONFIG
 #include "config.h"
@@ -31,14 +31,14 @@ const opt_t *options = (const opt_t*) &_options;
 
 void print_usage(void)
 {
-	printf("usage: sxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+	printf("usage: nsxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
 	       "[-g GEOMETRY] [-N NAME] [-T TITLE] [-n NUM] [-S DELAY] [-s MODE] "
 	       "[-z ZOOM] FILES...\n");
 }
 
 void print_version(void)
 {
-	puts("sxiv " VERSION);
+	puts("nsxiv " VERSION);
 }
 
 void parse_options(int argc, char **argv)

@@ -16,7 +16,7 @@
  * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 
 #include <errno.h>
 #include <stdlib.h>

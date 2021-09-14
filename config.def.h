@@ -16,7 +16,7 @@ enum {
 #ifdef _TITLE_CONFIG
 
 /* default title prefix */
-static const char *TITLE_PREFIX = "sxiv - ";
+static const char *TITLE_PREFIX = "nsxiv - ";
 
 /* default title suffixmode, available options are:
  * SUFFIX_EMPTY

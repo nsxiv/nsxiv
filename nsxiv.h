@@ -16,8 +16,8 @@
  * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SXIV_H
-#define SXIV_H
+#ifndef NSXIV_H
+#define NSXIV_H
 
 #include <stdarg.h>
 #include <stdbool.h>
@@ -456,5 +456,5 @@ void win_set_title(win_t*, const char*);
 void win_set_cursor(win_t*, cursor_t);
 void win_cursor_pos(win_t*, int*, int*);
 
-#endif /* SXIV_H */
+#endif /* NSXIV_H */
 
