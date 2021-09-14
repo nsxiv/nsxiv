@@ -52,7 +52,7 @@ nsxiv requires the following software to be installed:
 
 Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development
-packages (e.g. *-dev on Debian).
+packages (e.g. \*-dev on Debian).
 
 
 Building
@@ -96,6 +96,22 @@ Please see man page for information on how to use nsxiv. To do so, execute the
 following after the installation:
 
     $ man nsxiv
+
+
+F.A.Q
+-----
+
+* Can I open remote urls with nsxiv? <br>
+Yes, see [nsxiv-url](https://github.com/nsxiv/nsxiv/wiki/nsxiv-url)
+
+* Can I open all the images in a directory? <br>
+Yes, see [nsxiv-rifle](https://github.com/nsxiv/nsxiv/wiki/nsxiv-rifle)
+
+* Can I set default arguments for nsxiv? <br>
+Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv/wiki/nsxiv-env)
+
+* Can I pipe images into nsxiv? <br>
+No, not yet. See https://github.com/nsxiv/nsxiv/issues/32
 
 
 Download
