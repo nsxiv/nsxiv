@@ -20,4 +20,4 @@ If your contribution is not suitable for general use, it will not be included in
 For changes that are very much up to preference, such as changing values in config.h,
 please do not open a pull request unless you have an objective explanation.
 
-You may see [TODO.md](TODO.md) or the open issues on GitHub to find something to work on.
+See [TODO.md](TODO.md) or the [open issues](https://github.com/nsxiv/nsxiv/issues) to find something to work on.
