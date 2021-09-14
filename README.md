@@ -42,8 +42,8 @@ sxiv requires the following software to be installed:
   * Xft
   * freetype2
   * fontconfig
-  * giflib (optional, disabled with `HAVE_GIFLIB=0`)
-  * libexif (optional, disabled with `HAVE_LIBEXIF=0`)
+  * giflib (optional, automatically enabled if installed)
+  * libexif (optional, automatically enabled if installed)
 
 Please make sure to install the corresponding development packages in case that
 you want to build sxiv on a distribution with separate runtime and development
@@ -61,6 +61,15 @@ sxiv is built using the commands:
 Please note, that the latter one requires root privileges.
 By default, sxiv is installed using the prefix "/usr/local", so the full path
 of the executable will be "/usr/local/bin/sxiv".
+
+Running make will automatically detect if libexif and libgif are available and
+enable them if so. CLI arguments will override any automatic detection.
+For example:
+
+	$ make HAVE_LIBGIF=0
+
+will always disable libgif.
+Alternatively, they can be disabled via editing `config.mk`.
 
 You can install sxiv into a directory of your choice by changing the second
 command to:

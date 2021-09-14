@@ -31,7 +31,7 @@
 #include <libexif/exif-data.h>
 #endif
 
-#if HAVE_GIFLIB
+#if HAVE_LIBGIF
 #include <gif_lib.h>
 enum { DEF_GIF_DELAY = 75 };
 #endif
@@ -115,7 +115,7 @@ void exif_auto_orientate(const fileinfo_t *file)
 }
 #endif
 
-#if HAVE_GIFLIB
+#if HAVE_LIBGIF
 bool img_load_gif(img_t *img, const fileinfo_t *file)
 {
 	GifFileType *gif;
@@ -295,7 +295,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 	return !err;
 }
-#endif /* HAVE_GIFLIB */
+#endif /* HAVE_LIBGIF */
 
 Imlib_Image img_open(const fileinfo_t *file)
 {
@@ -333,7 +333,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 #endif
 
 	if ((fmt = imlib_image_format()) != NULL) {
-#if HAVE_GIFLIB
+#if HAVE_LIBGIF
 		if (STREQ(fmt, "gif"))
 			img_load_gif(img, file);
 #endif
