@@ -303,11 +303,12 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 #if HAVE_LIBWEBP
 /* Function to check if a file is a valid WebP image. Reads the minimum possible amount of the file
  * so as to speed up this check, as this will be called on any file without an extension. */
-bool file_is_webp(const fileinfo_t *file) {
+bool file_is_webp(const fileinfo_t *file)
+{
 	/* The size (in bytes) of the smallest possible WebP header. */
-	const uint32_t WEBP_MINIMUM_HEADER_SIZE = 20;
+	const unsigned int min_size = 20;
 	/* The size (in bytes) of the largest amount of data required to verify a WebP image. */
-	const uint32_t WEBP_MAXIMUM_HEADER_SIZE = 30;
+	const unsigned int max_size = 30;
 	/* TODO: test that this works with a wide range of WebP files.
 	 * I have tested with:
 	 * - Animated
@@ -320,10 +321,8 @@ bool file_is_webp(const fileinfo_t *file) {
 	 * Not yet tested:
 	 * - Minimum size file (20 bytes) */
 	FILE *f;
-	uint32_t data_size = WEBP_MAXIMUM_HEADER_SIZE;
-	const uint8_t data[WEBP_MAXIMUM_HEADER_SIZE];
-	uint32_t file_size;
-	bool result;
+	const uint8_t data[max_size];
+	unsigned int file_size;
 
 	if ((f = fopen(file->path, "rb")) == NULL) {
 		error(0, 0, "%s: Error opening file", file->name);
@@ -331,18 +330,16 @@ bool file_is_webp(const fileinfo_t *file) {
 	}
 	/* Get the file size */
 	fseek(f, 0L, SEEK_END);
-	if ((file_size = ftell(f)) < WEBP_MINIMUM_HEADER_SIZE)
+	if ((file_size = ftell(f)) < min_size)
 		return false;
 	rewind(f);
 	/* If the file isn't large enough for a maximum-sized webp header, then we read the whole
 	 * file. */
-	data_size = (file_size >= data_size) ? data_size : file_size;
-	if (fread((uint8_t*)data, 1, data_size, f) != data_size) {
+	if (fread((uint8_t*)data, 1, max_size, f) != max_size) {
 		error(0, 0, "%s: Error reading file header", file->name);
 		return false;
 	}
-	result = WebPGetInfo(data, data_size, NULL, NULL);
-	return result;
+	return WebPGetInfo(data, max_size, NULL, NULL);
 }
 
 Imlib_Image *load_webp_frames(const fileinfo_t *file, bool all_frames) {
