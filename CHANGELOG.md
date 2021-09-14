@@ -10,15 +10,17 @@ Changes:
   * Re-release under the name nsxiv
   * Sxiv.foreground and Sxiv.background changed to Nsxiv.win.foreground and Nsxiv.win.background
   * Rework the build system (#19)
-  * Update documentation
 Added:
-  * Implement fill scale mode (#2)
-  * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
-  * Support custom bar colors (#19)
+  * Fill scale mode (#2)
+  * Configurable X window title (#23)
+  * Support custom bar colors via Xresources (#19)
   * Toggle animation playback with Ctrl-a (#33)
+  * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
 Fixes:
+  * Cli flag `-G` not initially setting gamma (#31)
+  * Wrong keybinding description in the manpage (#14)
+  * .desktop entry not advertising webp support (#15)
   * Prevent crash when embedded into transparent window (#3)
-  * Set gamma with `-G` (#31)
   * Rare crash when showing some GIFs (#41)
 
 
