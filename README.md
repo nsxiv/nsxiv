@@ -101,7 +101,7 @@ following after the installation:
 Download
 --------
 
-You can [browse](https://github.com/muennich/sxiv) the source code repository
+You can [browse](https://github.com/nsxiv/nsxiv) the source code repository
 on GitHub or get a copy using git with the following command:
 
     git clone https://github.com/nsxiv/nsxiv.git
