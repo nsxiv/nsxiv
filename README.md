@@ -3,9 +3,9 @@
 **Neo Simple X Image Viewer**
 -----------------------------
 
-nsxiv is a fork of sxiv with the purpose of trying to make sxiv
-suitable for general use, and to maintain it as sxiv is no more updated.
-It is free software so that you can use it and modify it for your needs.
+nsxiv is a fork of now unmaintained [sxiv](https://github.com/muennich/sxiv)
+with the purpose of maintaining it and adding simple, sensible features.
+nsxiv is free software licensed under GPLv2 and aims to be easy to modify and customize.
 
 Please file a bug report if something does not work as documented or
 expected in *this* repository, after making sure you are using the latest
