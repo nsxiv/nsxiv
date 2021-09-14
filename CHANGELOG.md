@@ -6,18 +6,20 @@ nsxiv
 **[v27](https://github.com/nsxiv/nsxiv/archive/v27.tar.gz)**
 *(September 14, 2021)*
 
+Changes:
   * Re-release under the name nsxiv
-  * Break previous Xresources configs
-  * Implement fill scale mode (#2)
-  * Bug fix: Prevent crash when embedded into transparent window (#3)
+  * Sxiv.foreground and Sxiv.background changed to Nsxiv.win.foreground and Nsxiv.win.background
   * Rework the build system (#19)
   * Update documentation
+Added:
+  * Implement fill scale mode (#2)
   * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
   * Support custom bar colors (#19)
   * Toggle animation playback with Ctrl-a (#33)
-  * Bug fix: Set gamma with `-G` (#31)
-  * Add editorconfig (#40)
-  * Bug fix: Prevent crash when showing some GIFs (#41)
+Fixes:
+  * Prevent crash when embedded into transparent window (#3)
+  * Set gamma with `-G` (#31)
+  * Rare crash when showing some GIFs (#41)
 
 
 sxiv
