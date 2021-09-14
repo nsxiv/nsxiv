@@ -40,7 +40,6 @@ enum { DEF_GIF_DELAY = 75 };
 #include <webp/decode.h>
 #include <webp/demux.h>
 enum { DEF_WEBP_DELAY = 75 };
-Imlib_Image load_webp_firstframe_im(const fileinfo_t *file);
 #endif
 
 float zoom_min;
@@ -302,6 +301,59 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 
 #if HAVE_LIBWEBP
+/* Function to check if a file is a valid WebP image. Reads the minimum possible amount of the file
+ * so as to speed up this check, as this will be called on any file without an extension. */
+bool file_is_webp(const fileinfo_t *file) {
+	/* The size (in bytes) of the smallest possible WebP header. */
+	const uint32_t WEBP_MINIMUM_HEADER_SIZE = 20;
+	/* The size (in bytes) of the largest amount of data required to verify a WebP image. */
+	const uint32_t WEBP_MAXIMUM_HEADER_SIZE = 30;
+	/* TODO: test that this works with a wide range of WebP files.
+	 * I have tested with:
+	 * - Animated
+	 * - Animated (no file extension)
+	 * - Lossless
+	 * - Lossless with alpha
+	 * - Flat webp (simple)
+	 * - Flat webp with alpha
+	 * - Flat webp (no file extension)
+	 * Not yet tested:
+	 * - Minimum size file (20 bytes) */
+	FILE *f;
+	const uint8_t *data;
+	uint32_t data_size = WEBP_MAXIMUM_HEADER_SIZE;
+	uint32_t file_size;
+	bool result;
+
+	if ((f = fopen(file->path, "rb")) == NULL) {
+		error(0, 0, "%s: Error opening file", file->name);
+		return false;
+	}
+	/* Get the file size */
+	fseek(f, 0L, SEEK_END);
+	if ((file_size = ftell(f)) < WEBP_MINIMUM_HEADER_SIZE)
+		return false;
+	rewind(f);
+	/* If the file isn't large enough for a maximum-sized webp header, then we read the whole
+	 * file. */
+	data_size = (file_size >= data_size) ? data_size : file_size;
+	data = emalloc(data_size);
+	if (fread((uint8_t*)data, 1, data_size, f) != data_size) {
+		error(0, 0, "%s: Error reading file header", file->name);
+		free((uint8_t*)data);
+		return false;
+	}
+	result = WebPGetInfo(data, data_size, NULL, NULL);
+	free((uint8_t*)data);
+	return result;
+}
+
+Imlib_Image *load_webp_frames(const fileinfo_t *file, bool all_frames) {
+	return NULL;
+	// TODO: move all the shared code from img_load_webp() and load_webp_firstframe_im() into
+	// this function.
+}
+
 bool img_load_webp(img_t* img, const fileinfo_t* file)
 {
 	bool err = false;
@@ -320,14 +372,9 @@ bool img_load_webp(img_t* img, const fileinfo_t* file)
 	uint32_t flags;
 	uint32_t delay;
 
-	/* Check if file exists (and we are able to read it) */
-	if (access(file->path, R_OK) == -1) {
-		error(0, 0, "%s: Error opening webp image", file->name);
-		return false;
-	}
 	/* Open the file */
 	if ((webp_file = fopen(file->path, "rb")) == NULL) {
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (1)", file->name);
 		return false;
 	}
 	/* Get the file size */
@@ -338,7 +385,7 @@ bool img_load_webp(img_t* img, const fileinfo_t* file)
 	data.bytes = emalloc(file_size);
 	data.size = file_size;
 	if (fread((uint8_t*)data.bytes, 1, file_size, webp_file) != file_size) {
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (2)", file->name);
 		free((uint8_t*)data.bytes);
 		return false;
 	}
@@ -346,7 +393,7 @@ bool img_load_webp(img_t* img, const fileinfo_t* file)
 	/* Setup the WebP Animation Decoder */
 	if (!WebPAnimDecoderOptionsInit(&opts)) {
 		/* Version mismatch in WebP library */
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (3)", file->name);
 		free((uint8_t*)data.bytes);
 		return false;
 	}
@@ -356,12 +403,12 @@ bool img_load_webp(img_t* img, const fileinfo_t* file)
 	opts.use_threads = true;
 	if ((dec = WebPAnimDecoderNew(&data, &opts)) == NULL) {
 		/* Parsing error, invalid operation, or memory error */
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (4)", file->name);
 		free((uint8_t*)data.bytes);
 		return false;
 	}
 	if (!WebPAnimDecoderGetInfo(dec, &info)) {
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (5)", file->name);
 		WebPAnimDecoderDelete(dec);
 		free((uint8_t*)data.bytes);
 		return false;
@@ -417,15 +464,6 @@ bool img_load_webp(img_t* img, const fileinfo_t* file)
 
 Imlib_Image load_webp_firstframe_im(const fileinfo_t *file)
 {
-	struct stat st;
-
-	if (!file->name || !file->path)
-		return NULL;
-	if (!STREQ(strrchr(file->path, '.'), ".webp"))
-		return NULL;
-	if (access(file->path, R_OK) != 0 || stat(file->path, &st) != 0 || !S_ISREG(st.st_mode))
-		return NULL;
-
 	FILE *webp_file;
 	size_t file_size;
 	WebPData data;
@@ -439,7 +477,7 @@ Imlib_Image load_webp_firstframe_im(const fileinfo_t *file)
 
 	/* Open the file */
 	if ((webp_file = fopen(file->path, "rb")) == NULL) {
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (6)", file->name);
 		return NULL;
 	}
 	/* Get the file size */
@@ -449,7 +487,7 @@ Imlib_Image load_webp_firstframe_im(const fileinfo_t *file)
 	/* Read the whole file into memory */
 	data.bytes = emalloc(file_size);
 	if (fread((uint8_t*)data.bytes, 1, file_size, webp_file) != file_size) {
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (7)", file->name);
 		free((uint8_t*)data.bytes);
 		return NULL;
 	}
@@ -458,7 +496,7 @@ Imlib_Image load_webp_firstframe_im(const fileinfo_t *file)
 	/* Setup the WebP Animation Decoder */
 	if (!WebPAnimDecoderOptionsInit(&opts)) {
 		/* Version mismatch in WebP library */
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (8)", file->name);
 		free((uint8_t*)data.bytes);
 		return NULL;
 	}
@@ -466,14 +504,10 @@ Imlib_Image load_webp_firstframe_im(const fileinfo_t *file)
 	/* This could cause problems on some systems and will require more testing */
 	/* than I can do (multithreaded decoding) */
 	opts.use_threads = true;
-	if ((dec = WebPAnimDecoderNew(&data, &opts)) == NULL) {
-		/* Parsing error, invalid operation, or memory error */
-		error(0, 0, "%s: Error opening webp image", file->name);
-		free((uint8_t*)data.bytes);
-		return NULL;
-	}
+	dec = WebPAnimDecoderNew(&data, &opts);
+
 	if (!WebPAnimDecoderGetInfo(dec, &info)) {
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (9)", file->name);
 		WebPAnimDecoderDelete(dec);
 		free((uint8_t*)data.bytes);
 		return NULL;
@@ -481,7 +515,7 @@ Imlib_Image load_webp_firstframe_im(const fileinfo_t *file)
 
 	/* Get the first frame */
 	if (!WebPAnimDecoderGetNext(dec, &buf, &ts)) {
-		error(0, 0, "%s: Error opening webp image", file->name);
+		error(0, 0, "%s: Error opening webp image (10)", file->name);
 		WebPAnimDecoderDelete(dec);
 		free((uint8_t*)data.bytes);
 		return NULL;
@@ -507,20 +541,20 @@ Imlib_Image img_open(const fileinfo_t *file)
 	if (access(file->path, R_OK) == 0 &&
 	    stat(file->path, &st) == 0 && S_ISREG(st.st_mode))
 	{
-#if HAVE_LIBWEBP
-		im = load_webp_firstframe_im(file);
-		if (im != NULL) {
-			if (imlib_image_get_data_for_reading_only() == NULL) {
-				imlib_free_image();
-				im = NULL;
-			}
-		}
-		if (im != NULL) return im;
-#endif
 		im = imlib_load_image(file->path);
+#if HAVE_LIBWEBP
+		if (im == NULL && file_is_webp(file))
+			im = load_webp_firstframe_im(file);
+#endif
 		if (im != NULL) {
 			imlib_context_set_image(im);
+#if HAVE_LIBWEBP
+			const char *fmt;
+			if ((fmt = imlib_image_format()) != NULL && !STREQ(fmt, "webp") &&
+					imlib_image_get_data_for_reading_only() == NULL) {
+#else
 			if (imlib_image_get_data_for_reading_only() == NULL) {
+#endif
 				imlib_free_image();
 				im = NULL;
 			}
