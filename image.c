@@ -301,14 +301,12 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 
 #if HAVE_LIBWEBP
-/* Function to check if a file is a valid WebP image. Reads the minimum possible amount of the file
- * so as to speed up this check, as this will be called on any file without an extension. */
-bool file_is_webp(const fileinfo_t *file)
+bool is_webp(const fileinfo_t *file)
 {
 	/* The size (in bytes) of the largest amount of data required to verify a WebP image. */
 	const unsigned int max_size = 30;
-	FILE *f;
 	const uint8_t data[max_size];
+	FILE *f;
 
 	if ((f = fopen(file->path, "rb")) == NULL) {
 		error(0, 0, "%s: Error opening file", file->name);
@@ -319,8 +317,7 @@ bool file_is_webp(const fileinfo_t *file)
 	if (ftell(f) < max_size)
 		return false;
 	rewind(f);
-	/* If the file isn't large enough for a maximum-sized webp header, then we read the whole
-	 * file. */
+
 	if (fread((uint8_t*)data, 1, max_size, f) != max_size) {
 		error(0, 0, "%s: Error reading file header", file->name);
 		return false;
@@ -458,17 +455,6 @@ unsigned int load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t
 	free((uint8_t*)data.bytes);
 	return img->multi.cnt;
 }
-
-bool img_load_webp(img_t* img, const fileinfo_t* file)
-{
-	bool err = false;
-	unsigned int frames_count;
-
-	frames_count = load_webp_frames(file, NULL, img);
-	if (frames_count == 0)
-		err = true;
-	return !err;
-}
 #endif /* HAVE_LIBWEBP */
 
 Imlib_Image img_open(const fileinfo_t *file)
@@ -481,7 +467,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 	{
 		im = imlib_load_image(file->path);
 #if HAVE_LIBWEBP
-		if (im == NULL && file_is_webp(file))
+		if (im == NULL && is_webp(file))
 			load_webp_frames(file, &im, NULL);
 #endif
 		if (im != NULL) {
@@ -523,7 +509,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 #endif
 #if HAVE_LIBWEBP
 		if (STREQ(fmt, "webp"))
-			img_load_webp(img, file);
+			load_webp_frames(file, NULL, img);
 #endif
 	}
 	img->w = imlib_image_get_width();
