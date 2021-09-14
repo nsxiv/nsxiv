@@ -76,7 +76,7 @@ For example:
 will always disable libgif.
 Alternatively, they can be disabled via editing `config.mk`.
 
-You can install sxiv into a directory of your choice by changing the second
+You can install nsxiv into a directory of your choice by changing the second
 command to:
 
     # make PREFIX="/your/dir" install
