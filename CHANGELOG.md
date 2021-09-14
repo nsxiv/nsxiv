@@ -8,7 +8,7 @@ nsxiv
 
 Changes:
   * Re-release under the name nsxiv
-  * Sxiv.foreground and Sxiv.background changed to Nsxiv.win.foreground and Nsxiv.win.background
+  * Sxiv.foreground and Sxiv.background changed to Nsxiv.window.foreground and Nsxiv.window.background
   * Rework the build system (#19)
 Added:
   * Fill scale mode (#2)
