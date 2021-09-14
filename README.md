@@ -1,23 +1,28 @@
 ![nsxiv](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png "nsxiv")
 
 **Neo Simple X Image Viewer**
+-----------------------------
 
-The sole purpose of nsxiv is to be the perfect image viewer for me. It is free
-software so that you can use it and modify it for your needs. Please file a bug
-report if something does not work as documented or expected. Contributions are
-welcome but there is no guarantee that they will be incorporated.
+nsxiv is a fork of sxiv with the purpose of trying to make sxiv
+suitable for general use, and to maintain it as sxiv is no more updated.
+It is free software so that you can use it and modify it for your needs.
+
+Please file a bug report if something does not work as documented or
+expected in *this* repository, after making sure you are using the latest
+release of nsxiv. Contributions are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md)
+for details.
 
 
 Features
 --------
 
 * Basic image operations, e.g. zooming, panning, rotating
-* Customizable key and mouse button mappings (in *config.h*)
+* Customizable key and mouse button mappings (in [*config.h*](config.h))
 * Thumbnail mode: grid of selectable previews of all images
 * Ability to cache thumbnails for fast re-loading
 * Basic support for multi-frame images
-* Load all frames from GIF files and play GIF animations
-* Display image information in status bar
+* Play GIF animations
+* Display image information in status bar and in X title
 
 
 Screenshots
@@ -93,8 +98,8 @@ following after the installation:
     $ man nsxiv
 
 
-Download & Changelog
---------------------
+Download
+--------
 
 You can [browse](https://github.com/muennich/sxiv) the source code repository
 on GitHub or get a copy using git with the following command:
