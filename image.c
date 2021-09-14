@@ -320,7 +320,6 @@ bool file_is_webp(const fileinfo_t *file) {
 	 * Not yet tested:
 	 * - Minimum size file (20 bytes) */
 	FILE *f;
-	const uint8_t *data;
 	uint32_t data_size = WEBP_MAXIMUM_HEADER_SIZE;
 	uint32_t file_size;
 	bool result;
@@ -337,14 +336,12 @@ bool file_is_webp(const fileinfo_t *file) {
 	/* If the file isn't large enough for a maximum-sized webp header, then we read the whole
 	 * file. */
 	data_size = (file_size >= data_size) ? data_size : file_size;
-	data = emalloc(data_size);
+	const uint8_t data[data_size];
 	if (fread((uint8_t*)data, 1, data_size, f) != data_size) {
 		error(0, 0, "%s: Error reading file header", file->name);
-		free((uint8_t*)data);
 		return false;
 	}
 	result = WebPGetInfo(data, data_size, NULL, NULL);
-	free((uint8_t*)data);
 	return result;
 }
 
