@@ -305,24 +305,10 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
  * so as to speed up this check, as this will be called on any file without an extension. */
 bool file_is_webp(const fileinfo_t *file)
 {
-	/* The size (in bytes) of the smallest possible WebP header. */
-	const unsigned int min_size = 20;
 	/* The size (in bytes) of the largest amount of data required to verify a WebP image. */
 	const unsigned int max_size = 30;
-	/* TODO: test that this works with a wide range of WebP files.
-	 * I have tested with:
-	 * - Animated
-	 * - Animated (no file extension)
-	 * - Lossless
-	 * - Lossless with alpha
-	 * - Flat webp (simple)
-	 * - Flat webp with alpha
-	 * - Flat webp (no file extension)
-	 * Not yet tested:
-	 * - Minimum size file (20 bytes) */
 	FILE *f;
 	const uint8_t data[max_size];
-	unsigned int file_size;
 
 	if ((f = fopen(file->path, "rb")) == NULL) {
 		error(0, 0, "%s: Error opening file", file->name);
@@ -330,7 +316,7 @@ bool file_is_webp(const fileinfo_t *file)
 	}
 	/* Get the file size */
 	fseek(f, 0L, SEEK_END);
-	if ((file_size = ftell(f)) < min_size)
+	if (ftell(f) < max_size)
 		return false;
 	rewind(f);
 	/* If the file isn't large enough for a maximum-sized webp header, then we read the whole
