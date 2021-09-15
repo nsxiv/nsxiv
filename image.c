@@ -455,11 +455,12 @@ Imlib_Image img_open(const fileinfo_t *file)
 	if (access(file->path, R_OK) == 0 &&
 	    stat(file->path, &st) == 0 && S_ISREG(st.st_mode))
 	{
-		im = imlib_load_image(file->path);
 #if HAVE_LIBWEBP
-		if (im == NULL && is_webp(file->path))
+		if (is_webp(file->path))
 			load_webp_frames(file, &im, NULL);
+		else
 #endif
+			im = imlib_load_image(file->path);
 		if (im != NULL) {
 			imlib_context_set_image(im);
 #if HAVE_LIBWEBP
