@@ -12,7 +12,7 @@ Changes:
   * Rework the build system (#19). Now by default we'll build with only optional dependencies that are already installed
 Added:
   * Fill scale mode (#2)
-  * Configurable X window title with the `-T` flag (#23)
+  * Configurable X window title (via `config.h` and the `-T` flag) (#23)
   * Support custom bar colors via Xresources (#19)
   * Toggle animation playback with Ctrl-a (#33)
   * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
