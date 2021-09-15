@@ -62,11 +62,6 @@ Building
 nsxiv is built using the commands:
 
     $ make
-    # make install
-
-Please note, that the latter one requires root privileges.
-By default, nsxiv is installed using the prefix "/usr/local", so the full path
-of the executable will be "/usr/local/bin/nsxiv".
 
 Running make will automatically detect if libexif and libgif are available and
 enable them if so. CLI arguments will override any automatic detection.
@@ -76,6 +71,14 @@ For example:
 
 will always disable libgif.
 Alternatively, they can be disabled via editing `config.mk`.
+
+Installing nsxiv:
+
+    # make install
+
+Please note, that this requires root privileges.
+By default, nsxiv is installed using the prefix "/usr/local", so the full path
+of the executable will be "/usr/local/bin/nsxiv".
 
 You can install nsxiv into a directory of your choice by changing the second
 command to:
