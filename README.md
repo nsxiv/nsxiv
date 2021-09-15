@@ -1,7 +1,7 @@
 ![nsxiv](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png "nsxiv")
 
-**Neo Simple X Image Viewer**
------------------------------
+**Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
+--------------------------------------------------------------------
 
 nsxiv is a fork of now unmaintained [sxiv](https://github.com/muennich/sxiv)
 with the purpose of maintaining it and adding simple, sensible features.
