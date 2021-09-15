@@ -767,6 +767,9 @@ void run(void)
 				if ((Atom) ev.xclient.data.l[0] == atoms[ATOM_WM_DELETE_WINDOW])
 					cmds[g_quit].func(0);
 				break;
+			case DestroyNotify:
+				exit(EXIT_FAILURE);
+				break;
 			case ConfigureNotify:
 				if (win_configure(&win, &ev.xconfigure)) {
 					if (mode == MODE_IMAGE) {
