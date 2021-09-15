@@ -918,7 +918,7 @@ int main(int argc, char **argv)
 		const char *name[] = { "image-info", "key-handler" };
 
 		for (i = 0; i < ARRLEN(cmd); i++) {
-			n = strlen(homedir) + strlen(dsuffix) + strlen(name[i]) + 12;
+			n = strlen(homedir) + strlen(dsuffix) + strlen(name[i]) + 13;
 			cmd[i]->cmd = (char*) emalloc(n);
 			snprintf(cmd[i]->cmd, n, "%s%s/nsxiv/exec/%s", homedir, dsuffix, name[i]);
 			if (access(cmd[i]->cmd, X_OK) != 0)
