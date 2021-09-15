@@ -33,7 +33,7 @@ Screenshots
 
 ![Image](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/image.png "Image mode")
 
-**Thumbnail mode:**
+**Thumbnail mode and different configurations:**
 
 ![Thumb](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/thumb.png "Thumb mode")
 
