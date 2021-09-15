@@ -80,8 +80,7 @@ Please note, that this requires root privileges.
 By default, nsxiv is installed using the prefix "/usr/local", so the full path
 of the executable will be "/usr/local/bin/nsxiv".
 
-You can install nsxiv into a directory of your choice by changing the second
-command to:
+You can install nsxiv into a directory of your choice by changing this command to:
 
     $ make PREFIX="/your/dir" install
 
