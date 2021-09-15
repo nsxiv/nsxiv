@@ -301,28 +301,18 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 
 #if HAVE_LIBWEBP
-bool is_webp(const fileinfo_t *file)
+bool is_webp(const char *path)
 {
 	/* The size (in bytes) of the largest amount of data required to verify a WebP image. */
-	const unsigned int max_size = 30;
-	const uint8_t data[max_size];
+	const unsigned int max = 30;
+	const unsigned char data[max];
 	FILE *f;
 
-	if ((f = fopen(file->path, "rb")) == NULL) {
-		error(0, 0, "%s: Error opening file", file->name);
+	if ((f = fopen(path, "rb")) == NULL)
 		return false;
-	}
-	/* Get the file size */
-	fseek(f, 0L, SEEK_END);
-	if (ftell(f) < max_size)
+	if (fread((unsigned char *) data, 1, max, f) != max)
 		return false;
-	rewind(f);
-
-	if (fread((uint8_t*)data, 1, max_size, f) != max_size) {
-		error(0, 0, "%s: Error reading file header", file->name);
-		return false;
-	}
-	return WebPGetInfo(data, max_size, NULL, NULL);
+	return WebPGetInfo(data, max, NULL, NULL);
 }
 
 /* Function to load one or all frames of a WebP image.
@@ -467,7 +457,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 	{
 		im = imlib_load_image(file->path);
 #if HAVE_LIBWEBP
-		if (im == NULL && is_webp(file))
+		if (im == NULL && is_webp(file->path))
 			load_webp_frames(file, &im, NULL);
 #endif
 		if (im != NULL) {
