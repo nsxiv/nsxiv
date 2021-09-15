@@ -23,7 +23,7 @@ Fixes:
   * .desktop entry not advertising webp support (#15)
   * Prevent crash when embedded into transparent window (#3)
   * Rare crash when showing some GIFs (#41)
-  * Exit when window is destroyed (#53)
+  * Rare event when nsxiv wouldn't close after window being destroyed (#53)
 
 
 sxiv
