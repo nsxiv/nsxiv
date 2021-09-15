@@ -34,7 +34,7 @@ CPPFLAGS = -D_XOPEN_SOURCE=700 \
 LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 
 OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
-  thumbs.o util.o window.o
+  thumbs.o util.o window.o $(EXTRA_OBJS)
 
 .PHONY: all clean install uninstall
 .SUFFIXES:
@@ -56,12 +56,13 @@ window.o: icon/data.h
 
 config.mk:
 	@echo "GEN $@"
-	@echo "# 0 = disable, 1 = enable" > config.mk
+	@echo "# 0 = disable, 1 = enable" > $@
 	@for lib in exif gif; do \
 		if echo "int main(){}" | $(CC) "-l$$lib" -o /dev/null -x c - 2>/dev/null ; then \
-			echo "HAVE_LIB$$lib=1" | tr '[:lower:]' '[:upper:]' >> config.mk ; \
+			echo "HAVE_LIB$$lib=1" | tr '[:lower:]' '[:upper:]' >> $@ ; \
 		fi \
 	done
+	[ -f config.c ] && echo EXTRA_OBJS += config.o >> $@ || true
 
 config.h:
 	@echo "GEN $@"

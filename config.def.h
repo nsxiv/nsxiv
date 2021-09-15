@@ -1,8 +1,8 @@
 #ifdef _WINDOW_CONFIG
 
 /* default window dimensions (overwritten via -g option): */
-static const int WIN_WIDTH  = 800;
-static const int WIN_HEIGHT = 600;
+int WIN_WIDTH  = 800;
+int WIN_HEIGHT = 600;
 
 /* colors and font are configured with 'background', 'foreground' and
  * 'font' X resource properties.
@@ -13,14 +13,14 @@ static const int WIN_HEIGHT = 600;
 #ifdef _TITLE_CONFIG
 
 /* default title prefix */
-static const char *TITLE_PREFIX = "nsxiv - ";
+char *TITLE_PREFIX = "nsxiv - ";
 
 /* default title suffixmode, available options are:
  * SUFFIX_EMPTY
  * SUFFIX_BASENAME
  * SUFFIX_FULLPATH
  */
-static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
+suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
 
 #endif
 #ifdef _IMAGE_CONFIG
@@ -28,47 +28,47 @@ static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
 /* levels (in percent) to use when zooming via '-' and '+':
  * (first/last value is used as min/max zoom level)
  */
-static const float zoom_levels[] = {
+float zoom_levels[] = {
 	 12.5,  25.0,  50.0,  75.0,
 	100.0, 150.0, 200.0, 400.0, 800.0
 };
 
 /* default slideshow delay (in sec, overwritten via -S option): */
-static const int SLIDESHOW_DELAY = 5;
+int SLIDESHOW_DELAY = 5;
 
 /* gamma correction: the user-visible ranges [-GAMMA_RANGE, 0] and
  * (0, GAMMA_RANGE] are mapped to the ranges [0, 1], and (1, GAMMA_MAX].
  * */
-static const double GAMMA_MAX   = 10.0;
-static const int    GAMMA_RANGE = 32;
+double GAMMA_MAX   = 10.0;
+int    GAMMA_RANGE = 32;
 
 /* command i_scroll pans image 1/PAN_FRACTION of screen width/height */
-static const int PAN_FRACTION = 5;
+int PAN_FRACTION = 5;
 
 /* if false, pixelate images at zoom level != 100%,
  * toggled with 'a' key binding
  */
-static const bool ANTI_ALIAS = true;
+bool ANTI_ALIAS = true;
 
 /* if true, use a checkerboard background for alpha layer,
  * toggled with 'A' key binding
  */
-static const bool ALPHA_LAYER = false;
+bool ALPHA_LAYER = false;
 
 #endif
 #ifdef _THUMBS_CONFIG
 
 /* thumbnail sizes in pixels (width == height): */
-static const int thumb_sizes[] = { 32, 64, 96, 128, 160 };
+int thumb_sizes[] = { 32, 64, 96, 128, 160 };
 
 /* thumbnail size at startup, index into thumb_sizes[]: */
-static const int THUMB_SIZE = 3;
+int THUMB_SIZE = 3;
 
 #endif
 #ifdef _MAPPINGS_CONFIG
 
 /* keyboard mappings for image and thumbnail mode: */
-static const keymap_t keys[] = {
+keymap_t keys[] = {
 	/* modifiers    key               function              argument */
 	{ 0,            XK_q,             g_quit,               None },
 	{ 0,            XK_Return,        g_switch_mode,        None },
@@ -153,7 +153,7 @@ static const keymap_t keys[] = {
 };
 
 /* mouse button mappings for image mode: */
-static const button_t buttons[] = {
+button_t buttons[] = {
 	/* modifiers    button            function              argument */
 	{ 0,            1,                i_cursor_navigate,    None },
 	{ 0,            2,                i_drag,               DRAG_ABSOLUTE },
