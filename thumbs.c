@@ -172,10 +172,11 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel,
 		dsuffix = "/.cache";
 	}
 	if (homedir != NULL) {
+		const char *s = "/nsxiv";
 		free(cache_dir);
-		len = strlen(homedir) + strlen(dsuffix) + 6;
+		len = strlen(homedir) + strlen(dsuffix) + strlen(s) + 1;
 		cache_dir = (char*) emalloc(len);
-		snprintf(cache_dir, len, "%s%s/nsxiv", homedir, dsuffix);
+		snprintf(cache_dir, len, "%s%s%s", homedir, dsuffix, s);
 	} else {
 		error(0, 0, "Cache directory not found");
 	}
