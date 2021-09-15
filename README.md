@@ -62,7 +62,7 @@ Building
 nsxiv is built using the commands:
 
     $ make
-    # make install
+    $ make install
 
 Please note, that the latter one requires root privileges.
 By default, nsxiv is installed using the prefix "/usr/local", so the full path
@@ -80,7 +80,7 @@ Alternatively, they can be disabled via editing `config.mk`.
 You can install nsxiv into a directory of your choice by changing the second
 command to:
 
-    # make PREFIX="/your/dir" install
+    $ make PREFIX="/your/dir" install
 
 The build-time specific settings of nsxiv can be found in the file *config.h*.
 Please check and change them, so that they fit your needs.
@@ -121,4 +121,4 @@ Download
 You can [browse](https://github.com/nsxiv/nsxiv) the source code repository
 on GitHub or get a copy using git with the following command:
 
-    git clone https://github.com/nsxiv/nsxiv.git
+    $ git clone https://github.com/nsxiv/nsxiv.git
