@@ -1,4 +1,4 @@
-![sxiv](http://muennich.github.com/sxiv/img/logo.png "sxiv")
+![sxiv](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png "sxiv")
 
 **Simple X Image Viewer**
 
@@ -25,11 +25,11 @@ Screenshots
 
 **Image mode:**
 
-![Image](http://muennich.github.com/sxiv/img/image.png "Image mode")
+![Image](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/image.png "Image mode")
 
 **Thumbnail mode:**
 
-![Thumb](http://muennich.github.com/sxiv/img/thumb.png "Thumb mode")
+![Thumb](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/thumb.png "Thumb mode")
 
 
 Dependencies
