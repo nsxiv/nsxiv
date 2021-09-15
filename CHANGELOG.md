@@ -9,13 +9,14 @@ nsxiv
 Changes:
   * Re-release under the name nsxiv
   * Sxiv.foreground and Sxiv.background changed to Nsxiv.window.foreground and Nsxiv.window.background
-  * Rework the build system (#19)
+  * Rework the build system (#19). Now by default we'll build with only optional dependencies that are already installed
 Added:
   * Fill scale mode (#2)
   * Configurable X window title (#23)
   * Support custom bar colors via Xresources (#19)
   * Toggle animation playback with Ctrl-a (#33)
   * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
+  * Set ICCCM WM manager hints (#12)
 Fixes:
   * Cli flag `-G` not initially setting gamma (#31)
   * Wrong keybinding description in the manpage (#14)
