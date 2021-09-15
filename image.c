@@ -306,13 +306,15 @@ bool is_webp(const char *path)
 	/* The size (in bytes) of the largest amount of data required to verify a WebP image. */
 	const unsigned int max = 30;
 	const unsigned char fmt[max];
+	bool ret = false;
 	FILE *f;
 
 	if ((f = fopen(path, "rb")) == NULL)
 		return false;
-	if (fread((unsigned char *) fmt, 1, max, f) != max)
-		return false;
-	return WebPGetInfo(fmt, max, NULL, NULL);
+	if (fread((unsigned char *) fmt, 1, max, f) == max)
+		ret = WebPGetInfo(fmt, max, NULL, NULL);
+	fclose(f);
+	return ret;
 }
 
 /* Function to load one or all frames of a WebP image.
