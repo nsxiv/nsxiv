@@ -22,7 +22,8 @@ Features
 * Ability to cache thumbnails for fast re-loading
 * Basic support for multi-frame images
 * Play GIF animations
-* Display image information in status bar and in X title
+* Display image information in status bar
+* Display image name/path in X title
 
 
 Screenshots
