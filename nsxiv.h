@@ -1,23 +1,23 @@
 /* Copyright 2011 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file is a part of nsxiv.
  *
- * sxiv is free software; you can redistribute it and/or modify
+ * nsxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * sxiv is distributed in the hope that it will be useful,
+ * nsxiv is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SXIV_H
-#define SXIV_H
+#ifndef NSXIV_H
+#define NSXIV_H
 
 #include <stdarg.h>
 #include <stdbool.h>
@@ -456,5 +456,5 @@ void win_set_title(win_t*, const char*);
 void win_set_cursor(win_t*, cursor_t);
 void win_cursor_pos(win_t*, int*, int*);
 
-#endif /* SXIV_H */
+#endif /* NSXIV_H */
 

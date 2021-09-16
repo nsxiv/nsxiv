@@ -3,8 +3,8 @@ ifneq (clean,$(filter clean,$(MAKECMDGOALS)))
 -include config.mk
 endif
 
-# sxiv version
-VERSION = 26
+# nsxiv version
+VERSION = 27
 
 # PREFIX for install
 PREFIX ?= /usr/local
@@ -40,9 +40,9 @@ OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-all: sxiv
+all: nsxiv
 
-sxiv: $(OBJS)
+nsxiv: $(OBJS)
 	@echo "LINK $@"
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
@@ -50,7 +50,7 @@ sxiv: $(OBJS)
 	@echo "CC $@"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
-$(OBJS): Makefile sxiv.h commands.lst config.h config.mk
+$(OBJS): Makefile nsxiv.h commands.lst config.h config.mk
 options.o: version.h
 window.o: icon/data.h
 
@@ -73,24 +73,24 @@ version.h: Makefile .git/index
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
 clean:
-	$(RM) *.o sxiv
+	$(RM) *.o nsxiv
 
 install: all
-	@echo "INSTALL bin/sxiv"
-	install -Dt $(DESTDIR)$(PREFIX)/bin sxiv
-	@echo "INSTALL sxiv.1"
+	@echo "INSTALL bin/nsxiv"
+	install -Dt $(DESTDIR)$(PREFIX)/bin nsxiv
+	@echo "INSTALL nsxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" sxiv.1 \
-		>$(DESTDIR)$(MANPREFIX)/man1/sxiv.1
-	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/sxiv.1
-	@echo "INSTALL share/sxiv/"
-	install -Dt $(DESTDIR)$(PREFIX)/share/sxiv/exec exec/*
+	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" nsxiv.1 \
+		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
+	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
+	@echo "INSTALL share/nsxiv/"
+	install -Dt $(DESTDIR)$(PREFIX)/share/nsxiv/exec exec/*
 
 uninstall:
-	@echo "REMOVE bin/sxiv"
-	rm -f $(DESTDIR)$(PREFIX)/bin/sxiv
-	@echo "REMOVE sxiv.1"
-	rm -f $(DESTDIR)$(MANPREFIX)/man1/sxiv.1
-	@echo "REMOVE share/sxiv/"
-	rm -rf $(DESTDIR)$(PREFIX)/share/sxiv
+	@echo "REMOVE bin/nsxiv"
+	rm -f $(DESTDIR)$(PREFIX)/bin/nsxiv
+	@echo "REMOVE nsxiv.1"
+	rm -f $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
+	@echo "REMOVE share/nsxiv/"
+	rm -rf $(DESTDIR)$(PREFIX)/share/nsxiv
 

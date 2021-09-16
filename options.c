@@ -1,22 +1,22 @@
 /* Copyright 2011 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file is a part of nsxiv.
  *
- * sxiv is free software; you can redistribute it and/or modify
+ * nsxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * sxiv is distributed in the hope that it will be useful,
+ * nsxiv is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _IMAGE_CONFIG
 #define _TITLE_CONFIG
 #include "config.h"
@@ -31,14 +31,14 @@ const opt_t *options = (const opt_t*) &_options;
 
 void print_usage(void)
 {
-	printf("usage: sxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+	printf("usage: nsxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
 	       "[-g GEOMETRY] [-N NAME] [-T TITLE] [-n NUM] [-S DELAY] [-s MODE] "
 	       "[-z ZOOM] FILES...\n");
 }
 
 void print_version(void)
 {
-	puts("sxiv " VERSION);
+	puts("nsxiv " VERSION);
 }
 
 void parse_options(int argc, char **argv)
