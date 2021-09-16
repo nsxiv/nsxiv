@@ -9,7 +9,7 @@ nsxiv
 Changes:
   * Re-release under the name nsxiv
   * Sxiv.foreground and Sxiv.background changed to Nsxiv.window.foreground and Nsxiv.window.background
-  * Sxiv.font changed to Nsxiv.bar.font
+  * `Sxiv.font` changed to `Nsxiv.bar.font`
   * Rework the build system (#19). Now by default we'll build with only optional dependencies that are already installed
 Added:
   * Fill scale mode (#2)
