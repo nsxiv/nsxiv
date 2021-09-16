@@ -1,31 +1,36 @@
 nsxiv
 -----
 
-**Stable releases**
+**[git](https://github.com/nsxiv/nsxiv)**
+*(September 16, 2021)*
 
-**[v27](https://github.com/nsxiv/nsxiv/archive/v27.tar.gz)**
-*(September 14, 2021)*
+* Changes:
 
-Changes:
   * Re-release under the name nsxiv
-  * Sxiv.foreground and Sxiv.background changed to Nsxiv.window.foreground and Nsxiv.window.background
-  * `Sxiv.font` changed to `Nsxiv.bar.font`
-  * Rework the build system (#19). Now by default we'll build with only optional dependencies that are already installed
-Added:
+  * Xresources `Sxiv.foreground` and `Sxiv.background` changed
+    to `Nsxiv.window.foreground` and `Nsxiv.window.background`
+  * Xresources `Sxiv.font` changed to `Nsxiv.bar.font`
+  * Rework the build system (#19). Now by default we'll build
+    with only optional dependencies that are already installed
+
+* Added:
+
   * Fill scale mode (#2)
   * Configurable X window title (via `config.h` and the `-T` flag) (#23)
   * Support custom bar colors via Xresources (#19)
-  * Toggle animation playback with Ctrl-a (#33)
+  * Toggle animation playback with <kbd>Ctrl-a</kbd> (#33)
   * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
-  * Set ICCCM WM manager hints (#12)
-Fixes:
+  * Set `ICCCM WM manager` hints (#12)
+
+* Fixes:
+
   * Cli flag `-G` not initially setting gamma (#31)
   * Wrong keybinding description in the manpage (#14)
   * .desktop entry not advertising webp support (#15)
   * Prevent crash when embedded into transparent window (#3)
   * Small memory leak (#57)
   * Rare crash when showing some GIFs (#41)
-  * Rare event when nsxiv wouldn't close after window being destroyed (#53)
+  * Rare event where nsxiv wouldn't close after window being destroyed (#53)
 
 
 sxiv
