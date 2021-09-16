@@ -1,10 +1,8 @@
 #ifdef _WINDOW_CONFIG
 
 /* default window dimensions (overwritten via -g option): */
-enum {
-	WIN_WIDTH  = 800,
-	WIN_HEIGHT = 600
-};
+static const int WIN_WIDTH  = 800;
+static const int WIN_HEIGHT = 600;
 
 /* colors and font are configured with 'background', 'foreground' and
  * 'font' X resource properties.
@@ -12,7 +10,6 @@ enum {
  */
 
 #endif
-
 #ifdef _TITLE_CONFIG
 
 /* default title prefix */
@@ -26,7 +23,6 @@ static const char *TITLE_PREFIX = "nsxiv - ";
 static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
 
 #endif
-
 #ifdef _IMAGE_CONFIG
 
 /* levels (in percent) to use when zooming via '-' and '+':
@@ -38,7 +34,7 @@ static const float zoom_levels[] = {
 };
 
 /* default slideshow delay (in sec, overwritten via -S option): */
-enum { SLIDESHOW_DELAY = 5 };
+static const int SLIDESHOW_DELAY = 5;
 
 /* gamma correction: the user-visible ranges [-GAMMA_RANGE, 0] and
  * (0, GAMMA_RANGE] are mapped to the ranges [0, 1], and (1, GAMMA_MAX].
