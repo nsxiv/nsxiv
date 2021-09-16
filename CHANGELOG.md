@@ -18,6 +18,7 @@ nsxiv
   * Fill scale mode (#2)
   * Configurable X window title (via `config.h` and the `-T` flag) (#23)
   * Support custom bar colors via Xresources (#19)
+  * Support custom mark color via Xresources (#51)
   * Toggle animation playback with <kbd>Ctrl-a</kbd> (#33)
   * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
   * Set `ICCCM WM manager` hints (#12)
