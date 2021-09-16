@@ -1,6 +1,14 @@
 nsxiv
 -----
 
+**[v27.1](https://github.com/nsxiv/nsxiv/archive/v27.1.tar.gz)**
+*(September 16, 2021)*
+
+* Fixes:
+
+  * Source tarball failing build ([#66](https://github.com/nsxiv/nsxiv/pull/66))
+
+
 **[v27](https://github.com/nsxiv/nsxiv/archive/v27.tar.gz)**
 *(September 16, 2021)*
 

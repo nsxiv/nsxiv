@@ -4,7 +4,7 @@ ifneq (clean,$(filter clean,$(MAKECMDGOALS)))
 endif
 
 # nsxiv version
-VERSION = 27
+VERSION = 27.1
 
 # PREFIX for install
 PREFIX ?= /usr/local
