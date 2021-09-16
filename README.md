@@ -29,11 +29,11 @@ Features
 Screenshots
 -----------
 
-**Image mode:**
+**Image mode: (Default colors)**
 
 ![Image](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/image.png "Image mode")
 
-**Thumbnail mode and different configurations:**
+**Thumbnail mode: (Custom colors)**
 
 ![Thumb](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/thumb.png "Thumb mode")
 
