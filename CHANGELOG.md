@@ -10,28 +10,28 @@ nsxiv
   * Xresources `Sxiv.foreground` and `Sxiv.background` changed
     to `Nsxiv.window.foreground` and `Nsxiv.window.background`
   * Xresources `Sxiv.font` changed to `Nsxiv.bar.font`
-  * Rework the build system (#19). Now by default we'll build
+  * Rework the build system ([#19](https://github.com/nsxiv/nsxiv/pull/19)). Now by default we'll build
     with only optional dependencies that are already installed
 
 * Added:
 
-  * Fill scale mode (#2)
-  * Configurable X window title (via `config.h` and the `-T` flag) (#23)
-  * Support custom bar colors via Xresources (#19)
-  * Support custom mark color via Xresources (#51)
-  * Toggle animation playback with <kbd>Ctrl-a</kbd> (#33)
-  * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
-  * Set `ICCCM WM manager` hints (#12)
+  * Fill scale mode ([#2](https://github.com/nsxiv/nsxiv/pull/2))
+  * Configurable X window title (via `config.h` and the `-T` flag) ([#23](https://github.com/nsxiv/nsxiv/pull/23))
+  * Support custom bar colors via Xresources ([#19](https://github.com/nsxiv/nsxiv/pull/19))
+  * Support custom mark color via Xresources ([#51](https://github.com/nsxiv/nsxiv/pull/51))
+  * Toggle animation playback with <kbd>Ctrl-a</kbd> ([#33](https://github.com/nsxiv/nsxiv/pull/33))
+  * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties ([#13](https://github.com/nsxiv/nsxiv/pull/13))
+  * Set `ICCCM WM manager` hints ([#12](https://github.com/nsxiv/nsxiv/pull/12))
 
 * Fixes:
 
-  * Cli flag `-G` not initially setting gamma (#31)
-  * Wrong keybinding description in the manpage (#14)
-  * .desktop entry not advertising webp support (#15)
-  * Prevent crash when embedded into transparent window (#3)
-  * Small memory leak (#57)
-  * Rare crash when showing some GIFs (#41)
-  * Rare event where nsxiv wouldn't close after window being destroyed (#53)
+  * Cli flag `-G` not initially setting gamma ([#31](https://github.com/nsxiv/nsxiv/pull/31))
+  * Wrong keybinding description in the manpage ([#14](https://github.com/nsxiv/nsxiv/pull/14))
+  * .desktop entry not advertising webp support ([#15](https://github.com/nsxiv/nsxiv/pull/15))
+  * Prevent crash when embedded into transparent window ([#3](https://github.com/nsxiv/nsxiv/pull/3))
+  * Small memory leak ([#57](https://github.com/nsxiv/nsxiv/pull/57))
+  * Rare crash when showing some GIFs ([#41](https://github.com/nsxiv/nsxiv/pull/41))
+  * Rare event where nsxiv wouldn't close after window being destroyed ([#53](https://github.com/nsxiv/nsxiv/pull/53))
 
 
 sxiv
