@@ -1,22 +1,22 @@
 /* Copyright 2011-2013 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file is a part of nsxiv.
  *
- * sxiv is free software; you can redistribute it and/or modify
+ * nsxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * sxiv is distributed in the hope that it will be useful,
+ * nsxiv is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _WINDOW_CONFIG
 #include "config.h"
 #include "icon/data.h"
@@ -30,7 +30,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-#define RES_CLASS "Sxiv"
+#define RES_CLASS "Nsxiv"
 
 enum {
 	H_TEXT_PAD = 5,
@@ -277,11 +277,11 @@ void win_open(win_t *win)
 	free(icon_data);
 
 	/* These two atoms won't change and thus only need to be set once. */
-	XStoreName(win->env.dpy, win->xwin, "sxiv");
-	XSetIconName(win->env.dpy, win->xwin, "sxiv");
+	XStoreName(win->env.dpy, win->xwin, "nsxiv");
+	XSetIconName(win->env.dpy, win->xwin, "nsxiv");
 
 	classhint.res_class = RES_CLASS;
-	classhint.res_name = options->res_name != NULL ? options->res_name : "sxiv";
+	classhint.res_name = options->res_name != NULL ? options->res_name : "nsxiv";
 	XSetClassHint(e->dpy, win->xwin, &classhint);
 
 	XSetWMProtocols(e->dpy, win->xwin, &atoms[ATOM_WM_DELETE_WINDOW], 1);

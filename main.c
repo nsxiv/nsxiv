@@ -1,22 +1,22 @@
 /* Copyright 2011-2013 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file is a part of nsxiv.
  *
- * sxiv is free software; you can redistribute it and/or modify
+ * nsxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * sxiv is distributed in the hope that it will be useful,
+ * nsxiv is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _MAPPINGS_CONFIG
 #include "config.h"
 
@@ -136,7 +136,7 @@ void remove_file(int n, bool manual)
 
 	if (filecnt == 1) {
 		if (!manual)
-			fprintf(stderr, "sxiv: no more files to display, aborting\n");
+			fprintf(stderr, "nsxiv: no more files to display, aborting\n");
 		exit(manual ? EXIT_SUCCESS : EXIT_FAILURE);
 	}
 	if (files[n].flags & FF_MARK)
@@ -919,11 +919,12 @@ int main(int argc, char **argv)
 	if (homedir != NULL) {
 		extcmd_t *cmd[] = { &info.f, &keyhandler.f };
 		const char *name[] = { "image-info", "key-handler" };
+		const char *s = "/nsxiv/exec/";
 
 		for (i = 0; i < ARRLEN(cmd); i++) {
-			n = strlen(homedir) + strlen(dsuffix) + strlen(name[i]) + 12;
+			n = strlen(homedir) + strlen(dsuffix) + strlen(name[i]) + strlen(s) + 1;
 			cmd[i]->cmd = (char*) emalloc(n);
-			snprintf(cmd[i]->cmd, n, "%s%s/sxiv/exec/%s", homedir, dsuffix, name[i]);
+			snprintf(cmd[i]->cmd, n, "%s%s%s%s", homedir, dsuffix, s, name[i]);
 			if (access(cmd[i]->cmd, X_OK) != 0)
 				cmd[i]->err = errno;
 		}
