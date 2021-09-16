@@ -1,7 +1,7 @@
 nsxiv
 -----
 
-**[git](https://github.com/nsxiv/nsxiv)**
+**[v27](https://github.com/nsxiv/nsxiv/archive/v27.tar.gz)**
 *(September 16, 2021)*
 
 * Changes:
