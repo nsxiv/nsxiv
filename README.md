@@ -17,7 +17,7 @@ Features
 --------
 
 * Basic image operations, e.g. zooming, panning, rotating
-* Customizable key and mouse button mappings (in [*config.h*](config.h))
+* Customizable key and mouse button mappings (in *config.h*)
 * Thumbnail mode: grid of selectable previews of all images
 * Ability to cache thumbnails for fast re-loading
 * Basic support for multi-frame images
