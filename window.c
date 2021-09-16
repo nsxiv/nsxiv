@@ -61,6 +61,7 @@ void win_init_font(const win_env_t *e, const char *fontstr)
 	fontheight = font->ascent + font->descent;
 	FcPatternGetDouble(font->pattern, FC_SIZE, 0, &fontsize);
 	barheight = fontheight + 2 * V_TEXT_PAD;
+	XftFontClose(e->dpy, font);
 }
 
 void win_alloc_color(const win_env_t *e, const char *name, XftColor *col)
