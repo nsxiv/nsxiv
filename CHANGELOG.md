@@ -6,19 +6,24 @@ nsxiv
 **[git](https://github.com/nsxiv/nsxiv/tree/dev)**
 *(September 16, 2021)*
 
-Changes:
+* Changes:
+
   * Re-release under the name nsxiv
   * Sxiv.foreground and Sxiv.background changed to Nsxiv.window.foreground and Nsxiv.window.background
   * `Sxiv.font` changed to `Nsxiv.bar.font`
   * Rework the build system (#19). Now by default we'll build with only optional dependencies that are already installed
-Added:
+
+* Added:
+
   * Fill scale mode (#2)
   * Configurable X window title (via `config.h` and the `-T` flag) (#23)
   * Support custom bar colors via Xresources (#19)
   * Toggle animation playback with Ctrl-a (#33)
   * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
   * Set ICCCM WM manager hints (#12)
-Fixes:
+
+* Fixes:
+
   * Cli flag `-G` not initially setting gamma (#31)
   * Wrong keybinding description in the manpage (#14)
   * .desktop entry not advertising webp support (#15)
