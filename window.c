@@ -94,7 +94,7 @@ const char* win_res(XrmDatabase db, const char *name, const char *def)
 void win_init(win_t *win)
 {
 	win_env_t *e;
-	const char *win_bg, *win_fg, *bar_bg, *bar_fg, *f;
+	const char *win_bg, *win_fg, *bar_bg, *bar_fg, *mrk_fg, *f;
 	char *res_man;
 	XrmDatabase db;
 	XVisualInfo vis;
@@ -138,10 +138,12 @@ void win_init(win_t *win)
 	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");
 	bar_bg = win_res(db, RES_CLASS ".bar.background", win_bg);
 	bar_fg = win_res(db, RES_CLASS ".bar.foreground", win_fg);
+	mrk_fg = win_res(db, RES_CLASS ".mark.foreground", win_fg);
 	win_alloc_color(e, win_bg, &win->win_bg);
 	win_alloc_color(e, win_fg, &win->win_fg);
 	win_alloc_color(e, bar_bg, &win->bar_bg);
 	win_alloc_color(e, bar_fg, &win->bar_fg);
+	win_alloc_color(e, mrk_fg, &win->mrk_fg);
 
 	win->bar.l.size = BAR_L_LEN;
 	win->bar.r.size = BAR_R_LEN;

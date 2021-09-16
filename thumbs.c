@@ -478,7 +478,7 @@ void tns_mark(tns_t *tns, int n, bool mark)
 		win_draw_rect(win, x + 1, y - 1, tns->bw, 1, true, 1, col);
 
 		if (mark)
-			col = win->win_fg.pixel;
+			col = win->mrk_fg.pixel;
 
 		win_draw_rect(win, x, y, tns->bw + 2, tns->bw + 2, true, 1, col);
 

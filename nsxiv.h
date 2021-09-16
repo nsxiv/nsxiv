@@ -421,6 +421,7 @@ struct win {
 	XftColor win_fg;
 	XftColor bar_bg;
 	XftColor bar_fg;
+	XftColor mrk_fg;
 
 	int x;
 	int y;
