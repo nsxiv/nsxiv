@@ -72,6 +72,8 @@ version.h: Makefile .git/index
 	v="$$(git describe 2>/dev/null)"; \
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
+.git/index:
+
 clean:
 	$(RM) *.o nsxiv
 
