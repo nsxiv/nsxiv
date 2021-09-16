@@ -7,18 +7,19 @@ nsxiv
 * Changes:
 
   * Re-release under the name nsxiv
-  * Sxiv.foreground and Sxiv.background changed to Nsxiv.window.foreground and Nsxiv.window.background
-  * `Sxiv.font` changed to `Nsxiv.bar.font`
-  * Rework the build system (#19). Now by default we'll build with only optional dependencies that are already installed
+  * `Sxiv.foreground` and `Sxiv.background` Xresources changed
+    to `Nsxiv.window.foreground` and `Nsxiv.window.background`
+  * Rework the build system (#19). Now by default we'll build
+    with only optional dependencies that are already installed
 
 * Added:
 
   * Fill scale mode (#2)
   * Configurable X window title (via `config.h` and the `-T` flag) (#23)
   * Support custom bar colors via Xresources (#19)
-  * Toggle animation playback with Ctrl-a (#33)
+  * Toggle animation playback with <kbd>Ctrl-a</kbd> (#33)
   * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties (#13)
-  * Set ICCCM WM manager hints (#12)
+  * Set `ICCCM WM manager` hints (#12)
 
 * Fixes:
 
@@ -27,7 +28,7 @@ nsxiv
   * .desktop entry not advertising webp support (#15)
   * Prevent crash when embedded into transparent window (#3)
   * Rare crash when showing some GIFs (#41)
-  * Rare event when nsxiv wouldn't close after window being destroyed (#53)
+  * Rare event where nsxiv wouldn't close after window being destroyed (#53)
 
 
 sxiv
