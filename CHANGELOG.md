@@ -23,6 +23,7 @@ Fixes:
   * Wrong keybinding description in the manpage (#14)
   * .desktop entry not advertising webp support (#15)
   * Prevent crash when embedded into transparent window (#3)
+  * Small memory leak (#57)
   * Rare crash when showing some GIFs (#41)
   * Rare event when nsxiv wouldn't close after window being destroyed (#53)
 
