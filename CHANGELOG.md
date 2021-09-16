@@ -3,8 +3,8 @@ nsxiv
 
 **Stable releases**
 
-**[git](https://github.com/nsxiv/nsxiv/tree/dev)**
-*(September 16, 2021)*
+**[v27](https://github.com/nsxiv/nsxiv/archive/v27.tar.gz)**
+*(September 14, 2021)*
 
 * Changes:
 
