@@ -267,6 +267,7 @@ struct opt {
 	/* file list: */
 	char **filenames;
 	bool from_stdin;
+	bool dmenu;
 	bool to_stdout;
 	bool recursive;
 	int filecnt;

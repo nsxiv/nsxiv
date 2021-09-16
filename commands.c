@@ -207,6 +207,8 @@ bool cg_reverse_marks(arg_t _)
 {
 	int i;
 
+	if (options->dmenu)
+		return false;
 	for (i = 0; i < filecnt; i++) {
 		files[i].flags ^= FF_MARK;
 		markcnt += files[i].flags & FF_MARK ? 1 : -1;
@@ -230,6 +232,8 @@ bool cg_unmark_all(arg_t _)
 {
 	int i;
 
+	if (options->dmenu)
+		return false;
 	for (i = 0; i < filecnt; i++)
 		files[i].flags &= ~FF_MARK;
 	markcnt = 0;
