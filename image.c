@@ -397,6 +397,9 @@ unsigned int load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t
 		imlib_context_set_image(*fframe);
 		imlib_image_set_format("webp");
 		imlib_image_set_has_alpha(WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS) & ALPHA_FLAG);
+
+		WebPAnimDecoderDelete(dec);
+		free((uint8_t*)data.bytes);
 		return 1;
 	}
 	/* Otherwise, we want all frames. */
