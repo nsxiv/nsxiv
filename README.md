@@ -124,3 +124,5 @@ You can [browse](https://github.com/nsxiv/nsxiv) the source code repository
 on GitHub or get a copy using git with the following command:
 
     $ git clone https://github.com/nsxiv/nsxiv.git
+
+You can view the changelog [here](CHANGELOG.md)
