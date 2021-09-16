@@ -1,8 +1,6 @@
 nsxiv
 -----
 
-**Stable releases**
-
 **[git](https://github.com/nsxiv/nsxiv/tree/dev)**
 *(September 16, 2021)*
 
