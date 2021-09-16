@@ -114,7 +114,7 @@ Yes, see [nsxiv-rifle](https://github.com/nsxiv/nsxiv/wiki/nsxiv-rifle)
 Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv/wiki/nsxiv-env)
 
 * Can I pipe images into nsxiv? <br>
-No, not yet. See https://github.com/nsxiv/nsxiv/issues/32
+No, not yet. See #32
 
 
 Download
