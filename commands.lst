@@ -1,5 +1,6 @@
 G_CMD(quit)
 G_CMD(switch_mode)
+G_CMD(pick_quit)
 G_CMD(toggle_fullscreen)
 G_CMD(toggle_bar)
 G_CMD(prefix_external)

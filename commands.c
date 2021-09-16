@@ -85,6 +85,12 @@ bool cg_switch_mode(arg_t _)
 	return true;
 }
 
+bool cg_pick_quit(arg_t _)
+{
+	printf("%s\n", files[fileidx].name);
+	exit(EXIT_SUCCESS);
+}
+
 bool cg_toggle_fullscreen(arg_t _)
 {
 	win_toggle_fullscreen(&win);
