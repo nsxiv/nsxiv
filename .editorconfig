@@ -1,0 +1,28 @@
+# EditorConfig
+
+# apply to all files
+[*]
+
+# top-most EditorConfig file
+root = true
+
+# Set default charset
+charset = utf-8
+
+# Indentation
+# indent with tabs
+indent_style = tab
+# same tab size as kernel style
+indent_size = 8
+
+# no trailing spaces
+trim_trailing_whitespace = true
+
+# line lenght, same as kernel stipulated
+max_line_length = 100
+
+# all files have a final line
+insert_final_newline = true
+
+# end of line
+end_of_line = lf

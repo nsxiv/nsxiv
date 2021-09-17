@@ -1,8 +1,8 @@
-.TH SXIV 1 sxiv\-VERSION
+.TH NSXIV 1 nsxiv\-VERSION
 .SH NAME
-sxiv \- Simple X Image Viewer
+nsxiv \- Simple X Image Viewer
 .SH SYNOPSIS
-.B sxiv
+.B nsxiv
 .RB [ \-abcfhiopqrtvZ ]
 .RB [ \-A
 .IR FRAMERATE ]
@@ -14,6 +14,8 @@ sxiv \- Simple X Image Viewer
 .IR GEOMETRY ]
 .RB [ \-N
 .IR NAME ]
+.RB [ \-T
+.IR TITLE ]
 .RB [ \-n
 .IR NUM ]
 .RB [ \-S
@@ -24,7 +26,7 @@ sxiv \- Simple X Image Viewer
 .IR ZOOM ]
 .IR FILE ...
 .SH DESCRIPTION
-sxiv is a simple image viewer for X.
+nsxiv is a simple image viewer for X.
 .P
 It has two modes of operation: image and thumbnail mode. The default is image
 mode, in which only the current image is shown. In thumbnail mode a grid of 
@@ -48,21 +50,34 @@ Do not show info bar on bottom of window.
 Remove all orphaned cache files from the thumbnail cache directory and exit.
 .TP
 .BI "\-e " WID
-Embed sxiv's window into window whose ID is
+Embed nsxiv's window into window whose ID is
 .IR WID .
 .TP
 .B \-f
 Start in fullscreen mode.
 .TP
 .BI "\-G " GAMMA
-Set image gamma to GAMMA (-32..32).
+Set image gamma to GAMMA (\-32..32).
 .TP
 .BI "\-g " GEOMETRY
 Set window position and size. See section GEOMETRY SPECIFICATIONS of X(7) for
 more information on GEOMETRY argument.
 .TP
 .BI "\-N " NAME
-Set the resource name of sxiv's X window to NAME.
+Set the resource name of nsxiv's X window to NAME.
+.TP
+.BI "\-T " TITLE
+Set the window title to TITLE. Use the format `prefix:suffixmode'. Any string
+literal is accepted for prefix, and the format of suffixmode is:
+
+.EX
+    Value  Format
+    0      Empty
+    1      Basename of file
+    2      Full path to file
+.EE
+
+By defualt, prefix is set to "nsxiv - " and suffixmode is set to 1 (basename).
 .TP
 .BI "\-n " NUM
 Start at picture number NUM.
@@ -77,10 +92,10 @@ Read names of files to open from standard input. Also done if FILE is `-'.
 Write list of all marked files to standard output when quitting. In combination
 with
 .B \-i
-sxiv can be used as a visual filter/pipe.
+nsxiv can be used as a visual filter/pipe.
 .TP
 .B \-p
-Enable private mode, in which sxiv does not write any cache or temporary files.
+Enable private mode, in which nsxiv does not write any cache or temporary files.
 .TP
 .B \-q
 Be quiet, disable warnings to standard error stream.
@@ -97,7 +112,7 @@ may be a floating point number.
 .TP
 .BI "\-s " MODE
 Set scale mode according to MODE character. Supported modes are: [d]own, 
-[f]it, [w]idth, [h]eight.
+[f]it, [F]ill, [w]idth, [h]eight.
 .TP
 .B \-t
 Start in thumbnail mode.
@@ -119,7 +134,7 @@ Prefix the next command with a number (denoted via
 .IR count ).
 .TP
 .B q
-Quit sxiv.
+Quit nsxiv.
 .TP
 .B Return
 Switch to thumbnail mode / open selected image in image mode.
@@ -169,13 +184,13 @@ Zoom out.
 Mark/unmark the current image.
 .TP
 .B M
-Reverse all image marks.
-.TP
-.B Ctrl-M
 Repeat last mark action on all images from the last marked/unmarked up to the
 current one.
 .TP
 .B Ctrl-m
+Reverse all image marks.
+.TP
+.B Ctrl-u
 Remove all image marks.
 .TP
 .B N
@@ -262,7 +277,7 @@ Go
 .I count
 frames of a multi-frame image backward.
 .TP
-.B Ctrl-Space
+.BR Ctrl-a ", " Ctrl-Space
 Play/stop animations of multi-frame images.
 .TP
 Panning:
@@ -310,6 +325,9 @@ Set zoom level to 100%, but fit large images into window.
 .TP
 .B W
 Fit image to window.
+.TP
+.B F
+Fill image to window.
 .TP
 .B e
 Fit image to window width.
@@ -378,47 +396,56 @@ Zoom out.
 .SH CONFIGURATION
 The following X resources are supported:
 .TP
-.B background
-Color of the window background and bar foreground
+.B window.background
+Color of the window background
 .TP
-.B foreground
-Color of the window foreground and bar background
+.B window.foreground
+Color of the window foreground
 .TP
-.B font
+.B bar.font
 Name of Xft bar font
+.TP
+.B bar.background
+Color of the bar background. Defaults to window.foreground
+.TP
+.B bar.foreground
+Color of the bar foreground. Defaults to window.background
+.TP
+.B mark.foreground
+Color of the mark foreground. Defaults to window.foreground
 .TP
 Please see xrdb(1) on how to change them.
 .SH STATUS BAR
 The information displayed on the left side of the status bar can be replaced
-with the output of a user-provided script, which is called by sxiv whenever an
+with the output of a user-provided script, which is called by nsxiv whenever an
 image gets loaded. The path of this script is
-.I $XDG_CONFIG_HOME/sxiv/exec/image-info
+.I $XDG_CONFIG_HOME/nsxiv/exec/image-info
 and the arguments given to it are: 1) path to image file, 2) image width,
 3) image height.
 .P
-There is also an example script installed together with sxiv as
-.IR PREFIX/share/sxiv/exec/image-info .
+There is also an example script installed together with nsxiv as
+.IR PREFIX/share/nsxiv/exec/image-info .
 .SH EXTERNAL KEY HANDLER
 Additional external keyboard commands can be defined using a handler program
 located in
-.IR $XDG_CONFIG_HOME/sxiv/exec/key-handler .
+.IR $XDG_CONFIG_HOME/nsxiv/exec/key-handler .
 The handler is invoked by pressing
 .BR Ctrl-x .
 The next key combo is passed as its first argument. Passed via stdin are the
 images to act upon, one path per line: all marked images, if in thumbnail mode
 and at least one image has been marked, otherwise the current image.
-sxiv(1) will block until the handler terminates. It then checks which images
+nsxiv(1) will block until the handler terminates. It then checks which images
 have been modified and reloads them.
 
 The key combo argument has the following form: "[C-][M-][S-]KEY",
 where C/M/S indicate Ctrl/Meta(Alt)/Shift modifier states and KEY is the X
 keysym as listed in /usr/include/X11/keysymdef.h without the "XK_" prefix.
 
-There is also an example script installed together with sxiv as
-.IR PREFIX/share/sxiv/exec/key-handler .
+There is also an example script installed together with nsxiv as
+.IR PREFIX/share/nsxiv/exec/key-handler .
 .SH THUMBNAIL CACHING
-sxiv stores all thumbnails under
-.IR $XDG_CACHE_HOME/sxiv/ .
+nsxiv stores all thumbnails under
+.IR $XDG_CACHE_HOME/nsxiv/ .
 .P
 Use the command line option
 .I \-c
@@ -428,20 +455,35 @@ afterwards inside the cache directory to remove empty subdirectories:
 .RS
 find . \-depth \-type d \-empty ! \-name '.' \-exec rmdir {} \\;
 .RE
-.SH AUTHOR
+.SH ORIGINAL AUTHOR
 .EX
-Bert Muennich   <ber.t at posteo.de>
+Bert Muennich          <ber.t at posteo.de>
+.EE
+.SH CURRENT MAINTAINERS
+.EX
+Anupam Ashish Minz 
+Berke Kocaoğlu         <berke.kocaoglu at metu.edu.tr>
+Guilherme Freire
+Kian Kasad             <kian at kasad.com>
+N-R-K                  <nrk at disroot.org>
+Stein Gunnar Bakkeby   <bakkeby at gmail.com>
+TAAPArthur             <taaparthur at gmail.com>
+explosion-mental       <explosion0mental at gmail.com>
+eylles                 <ed.ylles1997 at gmail.com>
+qsmodo
 .EE
 .SH CONTRIBUTORS
 .EX
-Bastien Dejean  <nihilhill at gmail.com>
-Dave Reisner    <d at falconindy.com>
-Fung SzeTat     <sthorde at gmail.com>
-Max Voit        <mvdev at with-eyes.net>
+Bastien Dejean         <nihilhill at gmail.com>
+Dave Reisner           <d at falconindy.com>
+Fung SzeTat            <sthorde at gmail.com>
+Max Voit               <mvdev at with-eyes.net>
+
+For additional contributors, run `git shortlog -s` in the nsxiv repository.
 .EE
 .SH HOMEPAGE
 .EX
-https://github.com/muennich/sxiv
+https://github.com/nsxiv/nsxiv
 .EE
 .SH SEE ALSO
 .BR X (7),

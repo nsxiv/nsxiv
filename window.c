@@ -1,22 +1,22 @@
 /* Copyright 2011-2013 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file is a part of nsxiv.
  *
- * sxiv is free software; you can redistribute it and/or modify
+ * nsxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * sxiv is distributed in the hope that it will be useful,
+ * nsxiv is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _WINDOW_CONFIG
 #include "config.h"
 #include "icon/data.h"
@@ -25,11 +25,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <unistd.h>
 #include <X11/cursorfont.h>
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-#define RES_CLASS "Sxiv"
+#define RES_CLASS "Nsxiv"
 
 enum {
 	H_TEXT_PAD = 5,
@@ -60,12 +61,13 @@ void win_init_font(const win_env_t *e, const char *fontstr)
 	fontheight = font->ascent + font->descent;
 	FcPatternGetDouble(font->pattern, FC_SIZE, 0, &fontsize);
 	barheight = fontheight + 2 * V_TEXT_PAD;
+	XftFontClose(e->dpy, font);
 }
 
 void win_alloc_color(const win_env_t *e, const char *name, XftColor *col)
 {
-	if (!XftColorAllocName(e->dpy, DefaultVisual(e->dpy, e->scr),
-	                       DefaultColormap(e->dpy, e->scr), name, col))
+	if (!XftColorAllocName(e->dpy, e->vis,
+	                       e->cmap, name, col))
 	{
 		error(EXIT_FAILURE, 0, "Error allocating color '%s'", name);
 	}
@@ -92,9 +94,12 @@ const char* win_res(XrmDatabase db, const char *name, const char *def)
 void win_init(win_t *win)
 {
 	win_env_t *e;
-	const char *bg, *fg, *f;
+	const char *win_bg, *win_fg, *bar_bg, *bar_fg, *mrk_fg, *f;
 	char *res_man;
 	XrmDatabase db;
+	XVisualInfo vis;
+	XWindowAttributes attr;
+	Window parent;
 
 	memset(win, 0, sizeof(win_t));
 
@@ -105,9 +110,19 @@ void win_init(win_t *win)
 	e->scr = DefaultScreen(e->dpy);
 	e->scrw = DisplayWidth(e->dpy, e->scr);
 	e->scrh = DisplayHeight(e->dpy, e->scr);
-	e->vis = DefaultVisual(e->dpy, e->scr);
-	e->cmap = DefaultColormap(e->dpy, e->scr);
-	e->depth = DefaultDepth(e->dpy, e->scr);
+
+	parent = options->embed != 0 ? options->embed : RootWindow(e->dpy, e->scr);
+
+	if (options->embed == 0) {
+		e->depth = DefaultDepth(e->dpy, e->scr);
+	} else {
+		XGetWindowAttributes(e->dpy, parent, &attr);
+		e->depth = attr.depth;
+	}
+
+	XMatchVisualInfo(e->dpy, e->scr, e->depth, TrueColor, &vis);
+	e->vis = vis.visual;
+	e->cmap = XCreateColormap(e->dpy, parent, e->vis, None);
 
 	if (setlocale(LC_CTYPE, "") == NULL || XSupportsLocale() == 0)
 		error(0, 0, "No locale support");
@@ -116,13 +131,19 @@ void win_init(win_t *win)
 	res_man = XResourceManagerString(e->dpy);
 	db = res_man != NULL ? XrmGetStringDatabase(res_man) : None;
 
-	f = win_res(db, RES_CLASS ".font", "monospace-8");
+	f = win_res(db, RES_CLASS ".bar.font", "monospace-8");
 	win_init_font(e, f);
 
-	bg = win_res(db, RES_CLASS ".background", "white");
-	fg = win_res(db, RES_CLASS ".foreground", "black");
-	win_alloc_color(e, bg, &win->bg);
-	win_alloc_color(e, fg, &win->fg);
+	win_bg = win_res(db, RES_CLASS ".window.background", "white");
+	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");
+	bar_bg = win_res(db, RES_CLASS ".bar.background", win_bg);
+	bar_fg = win_res(db, RES_CLASS ".bar.foreground", win_fg);
+	mrk_fg = win_res(db, RES_CLASS ".mark.foreground", win_fg);
+	win_alloc_color(e, win_bg, &win->win_bg);
+	win_alloc_color(e, win_fg, &win->win_fg);
+	win_alloc_color(e, bar_bg, &win->bar_bg);
+	win_alloc_color(e, bar_fg, &win->bar_fg);
+	win_alloc_color(e, mrk_fg, &win->mrk_fg);
 
 	win->bar.l.size = BAR_L_LEN;
 	win->bar.r.size = BAR_R_LEN;
@@ -138,6 +159,7 @@ void win_init(win_t *win)
 	INIT_ATOM_(_NET_WM_ICON_NAME);
 	INIT_ATOM_(_NET_WM_ICON);
 	INIT_ATOM_(_NET_WM_STATE);
+	INIT_ATOM_(_NET_WM_PID);
 	INIT_ATOM_(_NET_WM_STATE_FULLSCREEN);
 }
 
@@ -154,6 +176,9 @@ void win_open(win_t *win)
 	Pixmap none;
 	int gmask;
 	XSizeHints sizehints;
+	XWMHints hints;
+	pid_t pid;
+	char hostname[255];
 
 	e = &win->env;
 	parent = options->embed != 0 ? options->embed : RootWindow(e->dpy, e->scr);
@@ -201,6 +226,22 @@ void win_open(win_t *win)
 	if (win->xwin == None)
 		error(EXIT_FAILURE, 0, "Error creating X window");
 
+	/* set the _NET_WM_PID */
+	pid = getpid();
+	XChangeProperty(e->dpy, win->xwin,
+	                atoms[ATOM__NET_WM_PID], XA_CARDINAL, sizeof(pid_t) * 8,
+	                PropModeReplace, (unsigned char *) &pid, 1);
+
+	/* set the _NET_WM_PID */
+	if (gethostname(hostname, sizeof(hostname)) == 0) {
+		XTextProperty tp;
+		tp.value = (unsigned char *)hostname;
+		tp.nitems = strnlen(hostname, sizeof(hostname));
+		tp.encoding = XA_STRING;
+		tp.format = 8;
+		XSetWMClientMachine(e->dpy, win->xwin, &tp);
+	}
+
 	XSelectInput(e->dpy, win->xwin,
 	             ButtonReleaseMask | ButtonPressMask | KeyPressMask |
 	             PointerMotionMask | StructureNotifyMask);
@@ -209,7 +250,7 @@ void win_open(win_t *win)
 		if (i != CURSOR_NONE)
 			cursors[i].icon = XCreateFontCursor(e->dpy, cursors[i].name);
 	}
-	if (XAllocNamedColor(e->dpy, DefaultColormap(e->dpy, e->scr), "black",
+	if (XAllocNamedColor(e->dpy, e->cmap, "black",
 	                     &col, &col) == 0)
 	{
 		error(EXIT_FAILURE, 0, "Error allocating color 'black'");
@@ -238,10 +279,12 @@ void win_open(win_t *win)
 	}
 	free(icon_data);
 
-	win_set_title(win, "sxiv");
+	/* These two atoms won't change and thus only need to be set once. */
+	XStoreName(win->env.dpy, win->xwin, "nsxiv");
+	XSetIconName(win->env.dpy, win->xwin, "nsxiv");
 
 	classhint.res_class = RES_CLASS;
-	classhint.res_name = options->res_name != NULL ? options->res_name : "sxiv";
+	classhint.res_name = options->res_name != NULL ? options->res_name : "nsxiv";
 	XSetClassHint(e->dpy, win->xwin, &classhint);
 
 	XSetWMProtocols(e->dpy, win->xwin, &atoms[ATOM_WM_DELETE_WINDOW], 1);
@@ -252,13 +295,18 @@ void win_open(win_t *win)
 	sizehints.y = win->y;
 	XSetWMNormalHints(win->env.dpy, win->xwin, &sizehints);
 
+	hints.flags = InputHint | StateHint;
+	hints.input = 1;
+	hints.initial_state = NormalState;
+	XSetWMHints(win->env.dpy, win->xwin, &hints);
+
 	win->h -= win->bar.h;
 
 	win->buf.w = e->scrw;
 	win->buf.h = e->scrh;
 	win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
 	                            win->buf.w, win->buf.h, e->depth);
-	XSetForeground(e->dpy, gc, win->bg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
 
@@ -340,7 +388,7 @@ void win_clear(win_t *win)
 		win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
 		                            win->buf.w, win->buf.h, e->depth);
 	}
-	XSetForeground(e->dpy, gc, win->bg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 }
 
@@ -394,26 +442,26 @@ void win_draw_bar(win_t *win)
 	e = &win->env;
 	y = win->h + font->ascent + V_TEXT_PAD;
 	w = win->w - 2*H_TEXT_PAD;
-	d = XftDrawCreate(e->dpy, win->buf.pm, DefaultVisual(e->dpy, e->scr),
-	                  DefaultColormap(e->dpy, e->scr));
+	d = XftDrawCreate(e->dpy, win->buf.pm, e->vis,
+	                  e->cmap);
 
-	XSetForeground(e->dpy, gc, win->fg.pixel);
+	XSetForeground(e->dpy, gc, win->bar_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->h, win->w, win->bar.h);
 
-	XSetForeground(e->dpy, gc, win->bg.pixel);
-	XSetBackground(e->dpy, gc, win->fg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
+	XSetBackground(e->dpy, gc, win->bar_bg.pixel);
 
 	if ((len = strlen(r->buf)) > 0) {
 		if ((tw = TEXTWIDTH(win, r->buf, len)) > w)
 			return;
 		x = win->w - tw - H_TEXT_PAD;
 		w -= tw;
-		win_draw_text(win, d, &win->bg, x, y, r->buf, len, tw);
+		win_draw_text(win, d, &win->bar_fg, x, y, r->buf, len, tw);
 	}
 	if ((len = strlen(l->buf)) > 0) {
 		x = H_TEXT_PAD;
 		w -= 2 * H_TEXT_PAD; /* gap between left and right parts */
-		win_draw_text(win, d, &win->bg, x, y, l->buf, len, w);
+		win_draw_text(win, d, &win->bar_fg, x, y, l->buf, len, w);
 	}
 	XftDrawDestroy(d);
 }
@@ -443,10 +491,20 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
 }
 
-void win_set_title(win_t *win, const char *title)
+void win_set_title(win_t *win, const char *path)
 {
-	XStoreName(win->env.dpy, win->xwin, title);
-	XSetIconName(win->env.dpy, win->xwin, title);
+	const unsigned int title_max = strlen(path) + strlen(options->title_prefix) + 1;
+	char title[title_max];
+	const char *basename = strrchr(path, '/') + 1;
+
+	/* Return if window is not ready yet */
+	if (win->xwin == None)
+		return;
+
+	snprintf(title, title_max, "%s%s", options->title_prefix,
+	        (options->title_suffixmode == SUFFIX_BASENAME) ? basename : path);
+	if (options->title_suffixmode == SUFFIX_EMPTY)
+		*(title+strlen(options->title_prefix)) = '\0';
 
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,

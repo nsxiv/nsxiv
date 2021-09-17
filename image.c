@@ -1,22 +1,22 @@
 /* Copyright 2011, 2012 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file is a part of nsxiv.
  *
- * sxiv is free software; you can redistribute it and/or modify
+ * nsxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * sxiv is distributed in the hope that it will be useful,
+ * nsxiv is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _IMAGE_CONFIG
 #include "config.h"
 
@@ -31,7 +31,7 @@
 #include <libexif/exif-data.h>
 #endif
 
-#if HAVE_GIFLIB
+#if HAVE_LIBGIF
 #include <gif_lib.h>
 enum { DEF_GIF_DELAY = 75 };
 #endif
@@ -76,7 +76,7 @@ void img_init(img_t *img, win_t *win)
 
 	img->cmod = imlib_create_color_modifier();
 	imlib_context_set_color_modifier(img->cmod);
-	img->gamma = MIN(MAX(options->gamma, -GAMMA_RANGE), GAMMA_RANGE);
+	img_change_gamma(img, options->gamma);
 
 	img->ss.on = options->slideshow > 0;
 	img->ss.delay = options->slideshow > 0 ? options->slideshow : SLIDESHOW_DELAY * 10;
@@ -121,7 +121,7 @@ void exif_auto_orientate(const fileinfo_t *file)
 }
 #endif
 
-#if HAVE_GIFLIB
+#if HAVE_LIBGIF
 bool img_load_gif(img_t *img, const fileinfo_t *file)
 {
 	GifFileType *gif;
@@ -211,6 +211,10 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 			ptr = data = (DATA32*) emalloc(sizeof(DATA32) * sw * sh);
 			cmap = gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap;
+			if (bg >= cmap->ColorCount) {
+				err = true;
+				break;
+			}
 			r = cmap->Colors[bg].Red;
 			g = cmap->Colors[bg].Green;
 			b = cmap->Colors[bg].Blue;
@@ -297,7 +301,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 	return !err;
 }
-#endif /* HAVE_GIFLIB */
+#endif /* HAVE_LIBGIF */
 
 
 #if HAVE_LIBWEBP
@@ -499,7 +503,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 #endif
 
 	if ((fmt = imlib_image_format()) != NULL) {
-#if HAVE_GIFLIB
+#if HAVE_LIBGIF
 		if (STREQ(fmt, "gif"))
 			img_load_gif(img, file);
 #endif
@@ -576,6 +580,9 @@ bool img_fit(img_t *img)
 	zh = (float) img->win->h / (float) img->h;
 
 	switch (img->scalemode) {
+		case SCALE_FILL:
+			z = MAX(zw, zh);
+			break;
 		case SCALE_WIDTH:
 			z = zw;
 			break;
@@ -653,7 +660,7 @@ void img_render(img_t *img)
 		if ((bg = imlib_create_image(dw, dh)) == NULL)
 			error(EXIT_FAILURE, ENOMEM, NULL);
 		imlib_context_set_image(bg);
-		imlib_image_set_has_alpha(0);
+		imlib_image_set_has_alpha(1);
 
 		if (img->alpha) {
 			int i, c, r;
@@ -671,7 +678,7 @@ void img_render(img_t *img)
 			}
 			imlib_image_put_back_data(data);
 		} else {
-			c = win->bg.pixel;
+			c = win->win_bg.pixel;
 			imlib_context_set_color(c >> 16 & 0xFF, c >> 8 & 0xFF, c & 0xFF, 0xFF);
 			imlib_image_fill_rectangle(0, 0, dw, dh);
 		}
@@ -681,6 +688,7 @@ void img_render(img_t *img)
 		imlib_free_image();
 		imlib_context_set_color_modifier(img->cmod);
 	} else {
+		imlib_image_set_has_alpha(1);
 		imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh, dx, dy, dw, dh);
 	}
 	img->dirty = false;

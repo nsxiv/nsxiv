@@ -1,22 +1,22 @@
 /* Copyright 2011 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file is a part of nsxiv.
  *
- * sxiv is free software; you can redistribute it and/or modify
+ * nsxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * sxiv is distributed in the hope that it will be useful,
+ * nsxiv is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _THUMBS_CONFIG
 #include "config.h"
 
@@ -35,6 +35,7 @@ void exif_auto_orientate(const fileinfo_t*);
 Imlib_Image img_open(const fileinfo_t*);
 
 static char *cache_dir;
+extern const int fileidx;
 
 char* tns_cache_filepath(const char *filepath)
 {
@@ -171,10 +172,11 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel,
 		dsuffix = "/.cache";
 	}
 	if (homedir != NULL) {
+		const char *s = "/nsxiv";
 		free(cache_dir);
-		len = strlen(homedir) + strlen(dsuffix) + 6;
+		len = strlen(homedir) + strlen(dsuffix) + strlen(s) + 1;
 		cache_dir = (char*) emalloc(len);
-		snprintf(cache_dir, len, "%s%s/sxiv", homedir, dsuffix);
+		snprintf(cache_dir, len, "%s%s%s", homedir, dsuffix, s);
 	} else {
 		error(0, 0, "Cache directory not found");
 	}
@@ -271,7 +273,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 			ExifContent *ifd;
 			ExifByteOrder byte_order;
 			int tmpfd;
-			char tmppath[] = "/tmp/sxiv-XXXXXX";
+			char tmppath[] = "/tmp/nsxiv-XXXXXX";
 			Imlib_Image tmpim;
 
 			if ((ed = exif_data_new_from_file(file->path)) != NULL) {
@@ -469,14 +471,14 @@ void tns_mark(tns_t *tns, int n, bool mark)
 	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im != NULL) {
 		win_t *win = tns->win;
 		thumb_t *t = &tns->thumbs[n];
-		unsigned long col = win->bg.pixel;
+		unsigned long col = win->win_bg.pixel;
 		int x = t->x + t->w, y = t->y + t->h;
 
 		win_draw_rect(win, x - 1, y + 1, 1, tns->bw, true, 1, col);
 		win_draw_rect(win, x + 1, y - 1, tns->bw, 1, true, 1, col);
 
 		if (mark)
-			col = win->fg.pixel;
+			col = win->mrk_fg.pixel;
 
 		win_draw_rect(win, x, y, tns->bw + 2, tns->bw + 2, true, 1, col);
 
@@ -490,7 +492,7 @@ void tns_highlight(tns_t *tns, int n, bool hl)
 	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im != NULL) {
 		win_t *win = tns->win;
 		thumb_t *t = &tns->thumbs[n];
-		unsigned long col = hl ? win->fg.pixel : win->bg.pixel;
+		unsigned long col = hl ? win->win_fg.pixel : win->win_bg.pixel;
 		int oxy = (tns->bw + 1) / 2 + 1, owh = tns->bw + 2;
 
 		win_draw_rect(win, t->x - oxy, t->y - oxy, t->w + owh, t->h + owh,
@@ -531,6 +533,7 @@ bool tns_move_selection(tns_t *tns, direction_t dir, int cnt)
 		if (!tns->dirty)
 			tns_highlight(tns, *tns->sel, true);
 	}
+	win_set_title(tns->win, tns->files[fileidx].path);
 	return *tns->sel != old;
 }
 

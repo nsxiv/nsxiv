@@ -1,15 +1,26 @@
 #ifdef _WINDOW_CONFIG
 
 /* default window dimensions (overwritten via -g option): */
-enum {
-	WIN_WIDTH  = 800,
-	WIN_HEIGHT = 600
-};
+static const int WIN_WIDTH  = 800;
+static const int WIN_HEIGHT = 600;
 
 /* colors and font are configured with 'background', 'foreground' and
  * 'font' X resource properties.
  * See X(7) section Resources and xrdb(1) for more information.
  */
+
+#endif
+#ifdef _TITLE_CONFIG
+
+/* default title prefix */
+static const char *TITLE_PREFIX = "nsxiv - ";
+
+/* default title suffixmode, available options are:
+ * SUFFIX_EMPTY
+ * SUFFIX_BASENAME
+ * SUFFIX_FULLPATH
+ */
+static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
 
 #endif
 #ifdef _IMAGE_CONFIG
@@ -23,7 +34,7 @@ static const float zoom_levels[] = {
 };
 
 /* default slideshow delay (in sec, overwritten via -S option): */
-enum { SLIDESHOW_DELAY = 5 };
+static const int SLIDESHOW_DELAY = 5;
 
 /* gamma correction: the user-visible ranges [-GAMMA_RANGE, 0] and
  * (0, GAMMA_RANGE] are mapped to the ranges [0, 1], and (1, GAMMA_MAX].
@@ -112,6 +123,7 @@ static const keymap_t keys[] = {
 	{ ControlMask,  XK_n,             i_navigate_frame,     +1 },
 	{ ControlMask,  XK_p,             i_navigate_frame,     -1 },
 	{ ControlMask,  XK_space,         i_toggle_animation,   None },
+	{ ControlMask,  XK_a,             i_toggle_animation,   None },
 	{ 0,            XK_h,             i_scroll,             DIR_LEFT },
 	{ 0,            XK_Left,          i_scroll,             DIR_LEFT },
 	{ 0,            XK_j,             i_scroll,             DIR_DOWN },
@@ -127,6 +139,7 @@ static const keymap_t keys[] = {
 	{ 0,            XK_equal,         i_set_zoom,           100 },
 	{ 0,            XK_w,             i_fit_to_win,         SCALE_DOWN },
 	{ 0,            XK_W,             i_fit_to_win,         SCALE_FIT },
+	{ 0,            XK_F,             i_fit_to_win,         SCALE_FILL },
 	{ 0,            XK_e,             i_fit_to_win,         SCALE_WIDTH },
 	{ 0,            XK_E,             i_fit_to_win,         SCALE_HEIGHT },
 	{ 0,            XK_less,          i_rotate,             DEGREE_270 },

@@ -1,23 +1,24 @@
 /* Copyright 2011 Bert Muennich
  *
- * This file is part of sxiv.
+ * This file is a part of nsxiv.
  *
- * sxiv is free software; you can redistribute it and/or modify
+ * nsxiv is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * sxiv is distributed in the hope that it will be useful,
+ * nsxiv is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with sxiv.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nsxiv.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sxiv.h"
+#include "nsxiv.h"
 #define _IMAGE_CONFIG
+#define _TITLE_CONFIG
 #include "config.h"
 #include "version.h"
 
@@ -30,21 +31,21 @@ const opt_t *options = (const opt_t*) &_options;
 
 void print_usage(void)
 {
-	printf("usage: sxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
-	       "[-g GEOMETRY] [-N NAME] [-n NUM] [-S DELAY] [-s MODE] [-z ZOOM] "
-	       "FILES...\n");
+	printf("usage: nsxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+	       "[-g GEOMETRY] [-N NAME] [-T TITLE] [-n NUM] [-S DELAY] [-s MODE] "
+	       "[-z ZOOM] FILES...\n");
 }
 
 void print_version(void)
 {
-	puts("sxiv " VERSION);
+	puts("nsxiv " VERSION);
 }
 
 void parse_options(int argc, char **argv)
 {
 	int n, opt;
 	char *end, *s;
-	const char *scalemodes = "dfwh";
+	const char *scalemodes = "dfFwh";
 
 	progname = strrchr(argv[0], '/');
 	progname = progname ? progname + 1 : argv[0];
@@ -66,13 +67,15 @@ void parse_options(int argc, char **argv)
 	_options.hide_bar = false;
 	_options.geometry = NULL;
 	_options.res_name = NULL;
+	_options.title_prefix = TITLE_PREFIX;
+	_options.title_suffixmode = TITLE_SUFFIXMODE;
 
 	_options.quiet = false;
 	_options.thumb_mode = false;
 	_options.clean_cache = false;
 	_options.private_mode = false;
 
-	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:opqrS:s:tvZz:")) != -1) {
+	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:opqrS:s:T:tvZz:")) != -1) {
 		switch (opt) {
 			case '?':
 				print_usage();
@@ -148,6 +151,16 @@ void parse_options(int argc, char **argv)
 				if (s == NULL || *s == '\0' || strlen(optarg) != 1)
 					error(EXIT_FAILURE, 0, "Invalid argument for option -s: %s", optarg);
 				_options.scalemode = s - scalemodes;
+				break;
+			case 'T':
+				if ((s = strrchr(optarg, ':')) != NULL) {
+					*s = '\0';
+					n = strtol(++s, &end, 0);
+					if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
+						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", s);
+					_options.title_suffixmode = n;
+				}
+				_options.title_prefix = optarg;
 				break;
 			case 't':
 				_options.thumb_mode = true;
