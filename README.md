@@ -49,11 +49,16 @@ nsxiv requires the following software to be installed:
   * freetype2
   * fontconfig
 
-The following libraries are optional. They are automatically enabled if installed.
+The following dependencies are optional.
 
+  * inotify : Used for auto-reloading images on change.
+    Disabled via `HAVE_INOTIFY=0`
   * giflib : Used for animated gif playback.
+    Disabled via `HAVE_LIBGIF=0`.
   * libexif : Used for auto-orientation and exif thumbnails.
+    Disable via `HAVE_LIBEXIF=0`
   * libwebp : Used for animated webp playback.
+    Disabled via `HAVE_LIBWEBP=0`.
 
 Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development
@@ -67,14 +72,14 @@ nsxiv is built using the commands:
 
     $ make
 
-Running make will automatically detect if libexif and libgif are available and
-enable them if so. CLI arguments will override any automatic detection.
+You can pass `HAVE_X=0` to `make` to disable an optional dependency.
 For example:
 
-    $ make HAVE_LIBGIF=0
+    $ make HAVE_LIBEXIF=0
 
-will always disable libgif.
-Alternatively, they can be disabled via editing `config.mk`.
+will disable `libexif` support. Alternatively they can be disabled via editing
+the `Makefile` directly. `OPT_DEP_DEFAULT=0` can be used to disable all
+optional dependencies.
 
 Installing nsxiv:
 
@@ -102,9 +107,9 @@ You can install nsxiv into a directory of your choice by changing this command t
 
     $ make PREFIX="/your/dir" install
 
-Example scripts are installed using `DOCPREFIX` which defaults to
-`/usr/local/share/doc/nsxiv`. You can change `DOCPREFIX` the same way you can
-change `PREFIX` shown above.
+Example scripts are installed using `EGPREFIX` which defaults to
+`/usr/local/share/doc/nsxiv/examples`. You can change `EGPREFIX` the same way
+you can change `PREFIX` shown above.
 
 The build-time specific settings of nsxiv can be found in the file *config.h*.
 Please check and change them, so that they fit your needs.
