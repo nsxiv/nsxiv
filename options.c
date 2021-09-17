@@ -52,6 +52,7 @@ void parse_options(int argc, char **argv)
 
 	_options.from_stdin = false;
 	_options.to_stdout = false;
+	_options.stdout_seperator = '\n';
 	_options.recursive = false;
 	_options.startnum = 0;
 
@@ -75,7 +76,7 @@ void parse_options(int argc, char **argv)
 	_options.clean_cache = false;
 	_options.private_mode = false;
 
-	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:opqrS:s:T:tvZz:")) != -1) {
+	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:0opqrS:s:T:tvZz:")) != -1) {
 		switch (opt) {
 			case '?':
 				print_usage();
@@ -128,6 +129,10 @@ void parse_options(int argc, char **argv)
 			case 'N':
 				_options.res_name = optarg;
 				break;
+			case '0':
+				_options.stdout_seperator = '\0';
+				/* -0 implies -o */
+				/* fall through */
 			case 'o':
 				_options.to_stdout = true;
 				break;

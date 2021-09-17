@@ -268,6 +268,7 @@ struct opt {
 	char **filenames;
 	bool from_stdin;
 	bool to_stdout;
+	char stdout_seperator;
 	bool recursive;
 	int filecnt;
 	int startnum;
