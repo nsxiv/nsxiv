@@ -60,6 +60,7 @@ typedef enum {
 } byteorder_t;
 
 typedef enum {
+	MODE_ALL,
 	MODE_IMAGE,
 	MODE_THUMB
 } appmode_t;
@@ -162,35 +163,24 @@ bool arl_handle(arl_t*);
 typedef int arg_t;
 typedef bool (*cmd_f)(arg_t);
 
-#define G_CMD(c) g_##c,
-#define I_CMD(c) i_##c,
-#define T_CMD(c) t_##c,
-
-typedef enum {
-#include "commands.lst"
-	CMD_COUNT
-} cmd_id_t;
-
 typedef struct {
-	int mode;
 	cmd_f func;
+	appmode_t mode;
 } cmd_t;
 
 typedef struct {
 	unsigned int mask;
 	KeySym ksym;
-	cmd_id_t cmd;
+	cmd_t cmd;
 	arg_t arg;
 } keymap_t;
 
 typedef struct {
 	unsigned int mask;
 	unsigned int button;
-	cmd_id_t cmd;
+	cmd_t cmd;
 	arg_t arg;
 } button_t;
-
-extern const cmd_t cmds[CMD_COUNT];
 
 
 /* image.c */

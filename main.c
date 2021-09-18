@@ -17,6 +17,7 @@
  */
 
 #include "nsxiv.h"
+#include "commands.h"
 #define _MAPPINGS_CONFIG
 #include "config.h"
 
@@ -613,10 +614,10 @@ void on_keypress(XKeyEvent *kev)
 	} else for (i = 0; i < ARRLEN(keys); i++) {
 		if (keys[i].ksym == ksym &&
 		    MODMASK(keys[i].mask | sh) == MODMASK(kev->state) &&
-		    keys[i].cmd >= 0 && keys[i].cmd < CMD_COUNT &&
-		    (cmds[keys[i].cmd].mode < 0 || cmds[keys[i].cmd].mode == mode))
+		    keys[i].cmd.func &&
+		    (keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
 		{
-			if (cmds[keys[i].cmd].func(keys[i].arg))
+			if (keys[i].cmd.func(keys[i].arg))
 				dirty = true;
 		}
 	}
@@ -638,10 +639,10 @@ void on_buttonpress(XButtonEvent *bev)
 		for (i = 0; i < ARRLEN(buttons); i++) {
 			if (buttons[i].button == bev->button &&
 			    MODMASK(buttons[i].mask) == MODMASK(bev->state) &&
-			    buttons[i].cmd >= 0 && buttons[i].cmd < CMD_COUNT &&
-			    (cmds[buttons[i].cmd].mode < 0 || cmds[buttons[i].cmd].mode == mode))
+			    buttons[i].cmd.func &&
+			    (buttons[i].cmd.mode == MODE_ALL || buttons[i].cmd.mode == mode))
 			{
-				if (cmds[buttons[i].cmd].func(buttons[i].arg))
+				if (buttons[i].cmd.func(buttons[i].arg))
 					dirty = true;
 			}
 		}
@@ -778,7 +779,7 @@ void run(void)
 				break;
 			case ClientMessage:
 				if ((Atom) ev.xclient.data.l[0] == atoms[ATOM_WM_DELETE_WINDOW])
-					cmds[g_quit].func(0);
+					cg_quit();
 				break;
 			case DestroyNotify:
 				exit(EXIT_FAILURE);
