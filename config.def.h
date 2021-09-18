@@ -67,8 +67,9 @@ static const int THUMB_SIZE = 3;
 #endif
 #ifdef _MAPPINGS_CONFIG
 
-/* Ignore NumLock modifier for keybindings */
-static const int filter_mask = Mod2Mask;
+/* Bitmask of modifiers whose presence in key events/keybindings are ignored */
+static const int ignore_mask = Mod2Mask | LockMask;
+
 /* keyboard mappings for image and thumbnail mode: */
 static const keymap_t keys[] = {
 	/* modifiers    key               function              argument */

@@ -566,7 +566,7 @@ end:
 	redraw();
 }
 
-#define MODMASK(mask) ((mask) & (~filter_mask))
+#define MODMASK(mask) ((mask) & (~ignore_mask))
 
 void on_keypress(XKeyEvent *kev)
 {
