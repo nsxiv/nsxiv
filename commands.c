@@ -436,15 +436,3 @@ bool ct_reload_all(arg_t _)
 	tns.dirty = true;
 	return true;
 }
-
-
-#undef  G_CMD
-#define G_CMD(c) { -1, cg_##c },
-#undef  I_CMD
-#define I_CMD(c) { MODE_IMAGE, ci_##c },
-#undef  T_CMD
-#define T_CMD(c) { MODE_THUMB, ct_##c },
-
-const cmd_t cmds[CMD_COUNT] = {
-#include "commands.lst"
-};
