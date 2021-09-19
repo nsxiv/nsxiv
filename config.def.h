@@ -67,7 +67,7 @@ static const int THUMB_SIZE = 3;
 #endif
 #ifdef _MAPPINGS_CONFIG
 
-/* Bitmask of modifiers whose presence in key events/keybindings are ignored */
+/* Following modifiers (NumLock | CapsLock) will be ignored when processing keybindings */
 static const int ignore_mask = Mod2Mask | LockMask;
 
 /* keyboard mappings for image and thumbnail mode: */
