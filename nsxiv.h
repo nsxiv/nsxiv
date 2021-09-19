@@ -383,7 +383,9 @@ int r_mkdir(char*);
 /* window.c */
 
 #include <X11/Xutil.h>
+#if HAVE_LIBFONTS
 #include <X11/Xft/Xft.h>
+#endif
 
 enum {
 	BAR_L_LEN = 512,
@@ -420,11 +422,13 @@ struct win {
 	Window xwin;
 	win_env_t env;
 
-	XftColor win_bg;
-	XftColor win_fg;
+	unsigned long win_bg;
+	unsigned long win_fg;
+	unsigned long mrk_fg;
+#if HAVE_LIBFONTS
 	XftColor bar_bg;
 	XftColor bar_fg;
-	XftColor mrk_fg;
+#endif
 
 	int x;
 	int y;

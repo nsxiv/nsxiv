@@ -20,7 +20,6 @@
 #define _WINDOW_CONFIG
 #include "config.h"
 #include "icon/data.h"
-#include "utf8.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +28,12 @@
 #include <X11/cursorfont.h>
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
+
+#if HAVE_LIBFONTS
+#include "utf8.h"
+static XftFont *font;
+static double fontsize;
+#endif
 
 #define RES_CLASS "Nsxiv"
 
@@ -47,15 +52,14 @@ static struct {
 
 static GC gc;
 
-static XftFont *font;
-static int fontheight;
-static double fontsize;
 static int barheight;
 
 Atom atoms[ATOM_COUNT];
 
+#if HAVE_LIBFONTS
 void win_init_font(const win_env_t *e, const char *fontstr)
 {
+	int fontheight = 0;
 	if ((font = XftFontOpenName(e->dpy, e->scr, fontstr)) == NULL)
 		error(EXIT_FAILURE, 0, "Error loading font '%s'", fontstr);
 	fontheight = font->ascent + font->descent;
@@ -64,13 +68,19 @@ void win_init_font(const win_env_t *e, const char *fontstr)
 	XftFontClose(e->dpy, font);
 }
 
-void win_alloc_color(const win_env_t *e, const char *name, XftColor *col)
+void xft_alloc_color(const win_env_t *e, const char *name, XftColor *col)
 {
-	if (!XftColorAllocName(e->dpy, e->vis,
-	                       e->cmap, name, col))
-	{
+	if (!XftColorAllocName(e->dpy, e->vis, e->cmap, name, col))
 		error(EXIT_FAILURE, 0, "Error allocating color '%s'", name);
-	}
+}
+#endif /* HAVE_LIBFONTS */
+
+void win_alloc_color(const win_env_t *e, const char *name, unsigned long *pixel)
+{
+	XColor screen, exact;
+	if (!XAllocNamedColor(e->dpy, e->cmap, name, &screen, &exact))
+		error(EXIT_FAILURE, 0, "Error allocating color '%s'", name);
+	*pixel = exact.pixel;
 }
 
 const char* win_res(XrmDatabase db, const char *name, const char *def)
@@ -94,7 +104,10 @@ const char* win_res(XrmDatabase db, const char *name, const char *def)
 void win_init(win_t *win)
 {
 	win_env_t *e;
-	const char *win_bg, *win_fg, *bar_bg, *bar_fg, *mrk_fg, *f;
+	const char *win_bg, *win_fg, *mrk_fg;
+#if HAVE_LIBFONTS
+	const char *bar_fg, *bar_bg, *f;
+#endif
 	char *res_man;
 	XrmDatabase db;
 	XVisualInfo vis;
@@ -131,19 +144,21 @@ void win_init(win_t *win)
 	res_man = XResourceManagerString(e->dpy);
 	db = res_man != NULL ? XrmGetStringDatabase(res_man) : None;
 
-	f = win_res(db, RES_CLASS ".bar.font", "monospace-8");
-	win_init_font(e, f);
-
 	win_bg = win_res(db, RES_CLASS ".window.background", "white");
 	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");
-	bar_bg = win_res(db, RES_CLASS ".bar.background", win_bg);
-	bar_fg = win_res(db, RES_CLASS ".bar.foreground", win_fg);
 	mrk_fg = win_res(db, RES_CLASS ".mark.foreground", win_fg);
 	win_alloc_color(e, win_bg, &win->win_bg);
 	win_alloc_color(e, win_fg, &win->win_fg);
-	win_alloc_color(e, bar_bg, &win->bar_bg);
-	win_alloc_color(e, bar_fg, &win->bar_fg);
 	win_alloc_color(e, mrk_fg, &win->mrk_fg);
+
+#if HAVE_LIBFONTS
+	bar_bg = win_res(db, RES_CLASS ".bar.background", win_bg);
+	bar_fg = win_res(db, RES_CLASS ".bar.foreground", win_fg);
+	xft_alloc_color(e, bar_bg, &win->bar_bg);
+	xft_alloc_color(e, bar_fg, &win->bar_fg);
+
+	f = win_res(db, RES_CLASS ".bar.font", "monospace-8");
+	win_init_font(e, f);
 
 	win->bar.l.size = BAR_L_LEN;
 	win->bar.r.size = BAR_R_LEN;
@@ -153,6 +168,7 @@ void win_init(win_t *win)
 	win->bar.r.buf = emalloc(win->bar.r.size + 3);
 	win->bar.r.buf[0] = '\0';
 	win->bar.h = options->hide_bar ? 0 : barheight;
+#endif /* HAVE_LIBFONTS */
 
 	INIT_ATOM_(WM_DELETE_WINDOW);
 	INIT_ATOM_(_NET_WM_NAME);
@@ -306,7 +322,7 @@ void win_open(win_t *win)
 	win->buf.h = e->scrh;
 	win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
 	                            win->buf.w, win->buf.h, e->depth);
-	XSetForeground(e->dpy, gc, win->win_bg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
 
@@ -388,10 +404,11 @@ void win_clear(win_t *win)
 		win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
 		                            win->buf.w, win->buf.h, e->depth);
 	}
-	XSetForeground(e->dpy, gc, win->win_bg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 }
 
+#if HAVE_LIBFONTS
 #define TEXTWIDTH(win, text, len) \
 	win_draw_text(win, NULL, NULL, 0, 0, text, len, 0)
 
@@ -448,7 +465,7 @@ void win_draw_bar(win_t *win)
 	XSetForeground(e->dpy, gc, win->bar_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->h, win->w, win->bar.h);
 
-	XSetForeground(e->dpy, gc, win->win_bg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg);
 	XSetBackground(e->dpy, gc, win->bar_bg.pixel);
 
 	if ((len = strlen(r->buf)) > 0) {
@@ -465,6 +482,9 @@ void win_draw_bar(win_t *win)
 	}
 	XftDrawDestroy(d);
 }
+#else
+void win_draw_bar(win_t *win){}
+#endif /* HAVE_LIBFONTS */
 
 void win_draw(win_t *win)
 {
