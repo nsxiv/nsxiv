@@ -493,7 +493,7 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 
 void win_set_title(win_t *win, const char *path)
 {
-	const unsigned int title_max = strlen(path) + strlen(options->title_prefix) + 1;
+	enum { title_max = 512 };
 	char title[title_max];
 	const char *basename = strrchr(path, '/') + 1;
 
