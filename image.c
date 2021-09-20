@@ -337,12 +337,12 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	struct WebPAnimDecoderOptions opts;
 	WebPAnimDecoder *dec;
 	struct WebPAnimInfo info;
-	uint8_t *buf = NULL;
+	unsigned char *buf = NULL;
 	int ts;
 	const WebPDemuxer *demux;
 	WebPIterator iter;
-	uint32_t flags;
-	uint32_t delay;
+	unsigned long flags;
+	unsigned int delay;
 	bool err = false;
 
 	if (fframe == NULL && img == NULL)
@@ -356,7 +356,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	data.size = ftell(webp_file);
 	rewind(webp_file);
 	data.bytes = emalloc(data.size);
-	if ((err = fread((uint8_t*)data.bytes, 1, data.size, webp_file) != data.size)) {
+	if ((err = fread((unsigned char *)data.bytes, 1, data.size, webp_file) != data.size)) {
 		error(0, 0, "%s: Error reading webp image", file->name);
 		goto fail;
 	}
@@ -440,7 +440,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	imlib_image_set_format("webp");
 
 fail:
-	free((uint8_t*)data.bytes);
+	free((unsigned char *)data.bytes);
 	return !err;
 }
 #endif /* HAVE_LIBWEBP */
