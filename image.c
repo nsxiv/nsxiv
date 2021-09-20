@@ -328,7 +328,6 @@ bool is_webp(const char *path)
 bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 {
 	FILE *webp_file;
-	size_t file_size;
 	WebPData data;
 
 	Imlib_Image im = NULL;
@@ -353,12 +352,11 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	}
 	/* Get the file size */
 	fseek(webp_file, 0L, SEEK_END);
-	file_size = ftell(webp_file);
+	data.size = ftell(webp_file);
 	rewind(webp_file);
 	/* Read the whole file into memory */
-	data.bytes = emalloc(file_size);
-	data.size = file_size;
-	if (fread((uint8_t*)data.bytes, 1, file_size, webp_file) != file_size) {
+	data.bytes = emalloc(data.size);
+	if (fread((uint8_t*)data.bytes, 1, data.size, webp_file) != data.size) {
 		error(0, 0, "%s: Error reading webp image", file->name);
 		free((uint8_t*)data.bytes);
 		return false;
