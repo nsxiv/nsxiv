@@ -59,7 +59,7 @@ bool cg_quit(arg_t _)
 	if (options->to_stdout && markcnt > 0) {
 		for (i = 0; i < filecnt; i++) {
 			if (files[i].flags & FF_MARK)
-				printf("%s%c", files[i].name, options->stdout_seperator);
+				printf("%s%c", files[i].name, options->stdout_separator);
 		}
 	}
 	exit(EXIT_SUCCESS);
