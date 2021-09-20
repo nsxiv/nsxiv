@@ -313,11 +313,11 @@ bool is_webp(const char *path)
 	bool ret = false;
 	FILE *f;
 
-	if ((f = fopen(path, "rb")) == NULL)
-		return false;
-	if (fread((unsigned char *) fmt, 1, max, f) == max)
-		ret = WebPGetInfo(fmt, max, NULL, NULL);
-	fclose(f);
+	if ((f = fopen(path, "rb")) != NULL) {
+		if (fread((unsigned char *) fmt, 1, max, f) == max)
+			ret = WebPGetInfo(fmt, max, NULL, NULL);
+		fclose(f);
+	}
 	return ret;
 }
 
