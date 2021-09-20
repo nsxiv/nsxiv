@@ -18,7 +18,7 @@
 
 #include "nsxiv.h"
 #define _THUMBS_CONFIG
-#include "config.h"
+#include "../config.h"
 
 #include <errno.h>
 #include <stdlib.h>
@@ -44,7 +44,7 @@ char* tns_cache_filepath(const char *filepath)
 
 	if (*filepath != '/')
 		return NULL;
-	
+
 	if (strncmp(filepath, cache_dir, strlen(cache_dir)) != 0) {
 		/* don't cache images inside the cache directory! */
 		len = strlen(cache_dir) + strlen(filepath) + 2;

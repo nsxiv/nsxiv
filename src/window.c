@@ -18,8 +18,8 @@
 
 #include "nsxiv.h"
 #define _WINDOW_CONFIG
-#include "config.h"
-#include "icon/data.h"
+#include "../config.h"
+#include "../icon/data.h"
 #include "utf8.h"
 
 #include <stdlib.h>

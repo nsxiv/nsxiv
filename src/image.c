@@ -18,7 +18,7 @@
 
 #include "nsxiv.h"
 #define _IMAGE_CONFIG
-#include "config.h"
+#include "../config.h"
 
 #include <errno.h>
 #include <stdlib.h>

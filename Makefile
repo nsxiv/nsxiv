@@ -33,8 +33,8 @@ CPPFLAGS = -D_XOPEN_SOURCE=700 \
 
 LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 
-OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
-  thumbs.o util.o window.o
+OBJS = src/autoreload_$(AUTORELOAD).o src/commands.o src/image.o src/main.o src/options.o \
+  src/thumbs.o src/util.o src/window.o
 
 .PHONY: all clean install uninstall
 .SUFFIXES:
@@ -44,13 +44,13 @@ all: nsxiv
 
 nsxiv: $(OBJS)
 	@echo "LINK $@"
-	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $(patsubst src/%, obj/%, $^) $(LDLIBS)
 
 .c.o:
 	@echo "CC $@"
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $(patsubst src/%, obj/%, $@) $<
 
-$(OBJS): Makefile nsxiv.h commands.lst config.h config.mk
+$(OBJS): Makefile src/nsxiv.h commands.lst config.h config.mk
 options.o: version.h
 window.o: icon/data.h
 
@@ -75,7 +75,7 @@ version.h: Makefile .git/index
 .git/index:
 
 clean:
-	$(RM) *.o nsxiv
+	$(RM) obj/*.o nsxiv
 
 install: all
 	@echo "INSTALL bin/nsxiv"
