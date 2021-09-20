@@ -322,9 +322,11 @@ bool is_webp(const char *path)
 }
 
 /* Function to load one or all frames of a WebP image.
- * If fframe is not NULL and img is NULL, we load the first frame only as an Imlib_Image.
- * If img is not NULL, we load all frames into img->multi.
- * If both are NULL we do nothing. */
+ * fframe   img
+ * NULL     NULL  = do nothing
+ * x        NULL  = load the first frame as an Imlib_Image
+ * NULL     x     = load all frames into img->multi.
+ */
 bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 {
 	FILE *webp_file;
@@ -343,20 +345,16 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	uint32_t delay;
 	bool err = false;
 
-	/* Only continue if at least one of fframe and img is not null. */
 	if (fframe == NULL && img == NULL)
 		return false;
 
-	/* Open the file */
 	if ((webp_file = fopen(file->path, "rb")) == NULL) {
 		error(0, 0, "%s: Error opening webp image", file->name);
 		return false;
 	}
-	/* Get the file size */
 	fseek(webp_file, 0L, SEEK_END);
 	data.size = ftell(webp_file);
 	rewind(webp_file);
-	/* Read the whole file into memory */
 	data.bytes = emalloc(data.size);
 	if ((err = fread((uint8_t*)data.bytes, 1, data.size, webp_file) != data.size)) {
 		error(0, 0, "%s: Error reading webp image", file->name);
@@ -365,7 +363,6 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 
 	/* Setup the WebP Animation Decoder */
 	if ((err = !WebPAnimDecoderOptionsInit(&opts))) {
-		/* Version mismatch in WebP library */
 		error(0, 0, "%s: WebP library version mismatch", file->name);
 		goto fail;
 	}
@@ -374,7 +371,6 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	/* than I can do (multithreaded decoding) */
 	opts.use_threads = true;
 	if ((err = (dec = WebPAnimDecoderNew(&data, &opts)) == NULL)) {
-		/* Parsing error, invalid operation, or memory error */
 		error(0, 0, "%s: WebP parsing or memory error (file is corrupt?)", file->name);
 		goto fail;
 	}
