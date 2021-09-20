@@ -1,7 +1,7 @@
 PREFIX = /usr/local
 ICONS  = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
 
-all:
+.PHONY: install uninstall
 
 install:
 	for f in $(ICONS); do \
@@ -9,4 +9,10 @@ install:
 		mkdir -p "$$dir"; \
 		cp "$$f" "$$dir/nsxiv.png"; \
 		chmod 644 "$$dir/nsxiv.png"; \
+	done
+
+uninstall:
+	for f in $(ICONS); do \
+		dir="$(DESTDIR)$(PREFIX)/share/icons/hicolor/$${f%.png}/apps"; \
+		rm -f "$$dir/nsxiv.png"; \
 	done
