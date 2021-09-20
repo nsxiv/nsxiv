@@ -392,8 +392,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		imlib_image_set_has_alpha(WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS) & ALPHA_FLAG);
 
 		WebPAnimDecoderDelete(dec);
-		free((uint8_t*)data.bytes);
-		return true;
+		goto fail;
 	}
 	/* Otherwise, we want all frames. */
 
@@ -442,10 +441,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 
 fail:
 	free((uint8_t*)data.bytes);
-	if (err)
-		return false;
-	else
-		return img->multi.cnt;
+	return !err;
 }
 #endif /* HAVE_LIBWEBP */
 
