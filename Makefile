@@ -33,8 +33,10 @@ CPPFLAGS = -D_XOPEN_SOURCE=700 \
 
 LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 
-OBJS = src/autoreload_$(AUTORELOAD).o src/commands.o src/image.o src/main.o src/options.o \
-  src/thumbs.o src/util.o src/window.o
+SRCS = src/autoreload_$(AUTORELOAD).c src/commands.c src/image.c src/main.c src/options.c \
+  src/thumbs.c src/util.c src/window.c
+
+OBJS = $(patsubst src/%.c, obj/%.o, $(SRCS))
 
 .PHONY: all clean install uninstall
 .SUFFIXES:
@@ -44,11 +46,11 @@ all: nsxiv
 
 nsxiv: $(OBJS)
 	@echo "LINK $@"
-	$(CC) $(LDFLAGS) -o $@ $(patsubst src/%, obj/%, $^) $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-.c.o:
+obj/%.o: src/%.c
 	@echo "CC $@"
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $(patsubst src/%, obj/%, $@) $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJS): Makefile src/nsxiv.h commands.lst config.h config.mk
 options.o: version.h
