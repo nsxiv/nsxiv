@@ -385,8 +385,8 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 			error(0, 0, "%s: Error loading first frame", file->name);
 			goto fail;
 		}
-		*fframe = imlib_create_image_using_copied_data(info.canvas_width,
-				info.canvas_height, (DATA32*)buf);
+		*fframe = imlib_create_image_using_copied_data(
+		          info.canvas_width, info.canvas_height, (DATA32*)buf);
 		imlib_context_set_image(*fframe);
 		imlib_image_set_format("webp");
 		imlib_image_set_has_alpha(WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS) & ALPHA_FLAG);
@@ -410,8 +410,8 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	/* have only 1 frame) */
 	img->multi.cnt = 0;
 	while (WebPAnimDecoderGetNext(dec, &buf, &ts)) {
-		im = imlib_create_image_using_copied_data( info.canvas_width,
-				info.canvas_height, (DATA32*)buf);
+		im = imlib_create_image_using_copied_data(
+		     info.canvas_width, info.canvas_height, (DATA32*)buf);
 		imlib_context_set_image(im);
 		imlib_image_set_format("webp");
 		/* Get an iterator of this frame - used for frame info (duration, etc.) */
