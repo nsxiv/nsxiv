@@ -86,7 +86,8 @@ install: all
 		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "INSTALL nsxiv.desktop"
-	install -Dt $(DESTDIR)$(PREFIX)/share/applications nsxiv.desktop
+	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
+	cp nsxiv.desktop $(DESTDIR)$(PREFIX)/share/applications
 	@echo "INSTALL share/nsxiv/"
 	install -Dt $(DESTDIR)$(PREFIX)/share/nsxiv/exec exec/*
 
