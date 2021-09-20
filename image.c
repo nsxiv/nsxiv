@@ -370,13 +370,11 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	/* This could cause problems on some systems and will require more testing */
 	/* than I can do (multithreaded decoding) */
 	opts.use_threads = true;
-	if ((err = (dec = WebPAnimDecoderNew(&data, &opts)) == NULL)) {
+	dec = WebPAnimDecoderNew(&data, &opts);
+	if ((err = (dec == NULL) || !WebPAnimDecoderGetInfo(dec, &info))) {
 		error(0, 0, "%s: WebP parsing or memory error (file is corrupt?)", file->name);
-		goto fail;
-	}
-	if ((err = !WebPAnimDecoderGetInfo(dec, &info))) {
-		error(0, 0, "%s: WebP animation decoding error (file is corrupt?)", file->name);
-		WebPAnimDecoderDelete(dec);
+		if (dec != NULL)
+			WebPAnimDecoderDelete(dec);
 		goto fail;
 	}
 	demux = WebPAnimDecoderGetDemuxer(dec);
