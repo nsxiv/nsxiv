@@ -329,6 +329,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 {
 	FILE *webp_file;
 	WebPData data;
+	data.bytes = NULL;
 
 	Imlib_Image im = NULL;
 	struct WebPAnimDecoderOptions opts;
@@ -340,6 +341,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	WebPIterator iter;
 	uint32_t flags;
 	uint32_t delay;
+	bool err = false;
 
 	/* Only continue if at least one of fframe and img is not null. */
 	if (fframe == NULL && img == NULL)
@@ -356,43 +358,38 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	rewind(webp_file);
 	/* Read the whole file into memory */
 	data.bytes = emalloc(data.size);
-	if (fread((uint8_t*)data.bytes, 1, data.size, webp_file) != data.size) {
+	if ((err = fread((uint8_t*)data.bytes, 1, data.size, webp_file) != data.size)) {
 		error(0, 0, "%s: Error reading webp image", file->name);
-		free((uint8_t*)data.bytes);
-		return false;
+		goto fail;
 	}
 
 	/* Setup the WebP Animation Decoder */
-	if (!WebPAnimDecoderOptionsInit(&opts)) {
+	if ((err = !WebPAnimDecoderOptionsInit(&opts))) {
 		/* Version mismatch in WebP library */
 		error(0, 0, "%s: WebP library version mismatch", file->name);
-		free((uint8_t*)data.bytes);
-		return false;
+		goto fail;
 	}
 	opts.color_mode = MODE_BGRA;
 	/* This could cause problems on some systems and will require more testing */
 	/* than I can do (multithreaded decoding) */
 	opts.use_threads = true;
-	if ((dec = WebPAnimDecoderNew(&data, &opts)) == NULL) {
+	if ((err = (dec = WebPAnimDecoderNew(&data, &opts)) == NULL)) {
 		/* Parsing error, invalid operation, or memory error */
 		error(0, 0, "%s: WebP parsing or memory error (file is corrupt?)", file->name);
-		free((uint8_t*)data.bytes);
-		return false;
+		goto fail;
 	}
-	if (!WebPAnimDecoderGetInfo(dec, &info)) {
+	if ((err = !WebPAnimDecoderGetInfo(dec, &info))) {
 		error(0, 0, "%s: WebP animation decoding error (file is corrupt?)", file->name);
 		WebPAnimDecoderDelete(dec);
-		free((uint8_t*)data.bytes);
-		return false;
+		goto fail;
 	}
 	demux = WebPAnimDecoderGetDemuxer(dec);
 
 	if (img == NULL) {
 		/* Only get the first frame and put it into fframe. */
-		if (!WebPAnimDecoderGetNext(dec, &buf, &ts)) {
+		if ((err = !WebPAnimDecoderGetNext(dec, &buf, &ts))) {
 			error(0, 0, "%s: Error loading first frame", file->name);
-			free((uint8_t*)data.bytes);
-			return false;
+			goto fail;
 		}
 		*fframe = imlib_create_image_using_copied_data(info.canvas_width,
 				info.canvas_height, (DATA32*)buf);
@@ -449,8 +446,12 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	imlib_context_set_image(img->im);
 	imlib_image_set_format("webp");
 
+fail:
 	free((uint8_t*)data.bytes);
-	return img->multi.cnt;
+	if (err)
+		return false;
+	else
+		return img->multi.cnt;
 }
 #endif /* HAVE_LIBWEBP */
 
