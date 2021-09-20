@@ -76,9 +76,13 @@ Installing nsxiv:
 
     # make install
 
-Please note, that this requires root privileges.
+Installing icons:
+
+	# make -C icon install
+
+Please note, that these requires root privileges.
 By default, nsxiv is installed using the prefix "/usr/local", so the full path
-of the executable will be "/usr/local/bin/nsxiv".
+of the executable will be "/usr/local/bin/nsxiv" and the icon path will be "/usr/local/share/icons/hicolor/{size}/apps/nsxiv.png".
 
 You can install nsxiv into a directory of your choice by changing this command to:
 

@@ -87,8 +87,6 @@ install: all
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "INSTALL nsxiv.desktop"
 	install -Dt $(DESTDIR)$(PREFIX)/share/applications nsxiv.desktop
-	@echo "INSTALL icon"
-	$(MAKE) PREFIX="$(PREFIX)" -C icon/ install
 	@echo "INSTALL share/nsxiv/"
 	install -Dt $(DESTDIR)$(PREFIX)/share/nsxiv/exec exec/*
 
@@ -99,8 +97,6 @@ uninstall:
 	rm -f $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "REMOVE nsxiv.desktop"
 	rm -f $(DESTDIR)$(PREFIX)/share/applications/nsxiv.desktop
-	@echo "REMOVE icon"
-	$(MAKE) PREFIX="$(PREFIX)" -C icon/ uninstall
 	@echo "REMOVE share/nsxiv/"
 	rm -rf $(DESTDIR)$(PREFIX)/share/nsxiv
 
