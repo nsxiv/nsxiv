@@ -86,7 +86,7 @@ install: all
 		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "INSTALL share/nsxiv/"
-	install -Dt $(DESTDIR)$(PREFIX)/share/nsxiv/exec exec/*
+	install -Dt $(DESTDIR)$(PREFIX)/share/doc/nsxiv/examples examples/*
 
 uninstall:
 	@echo "REMOVE bin/nsxiv"
