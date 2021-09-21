@@ -373,8 +373,6 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	dec = WebPAnimDecoderNew(&data, &opts);
 	if ((err = (dec == NULL) || !WebPAnimDecoderGetInfo(dec, &info))) {
 		error(0, 0, "%s: WebP parsing or memory error (file is corrupt?)", file->name);
-		if (dec != NULL)
-			WebPAnimDecoderDelete(dec);
 		goto fail;
 	}
 	demux = WebPAnimDecoderGetDemuxer(dec);
@@ -390,8 +388,6 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		imlib_context_set_image(*fframe);
 		imlib_image_set_format("webp");
 		imlib_image_set_has_alpha(WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS) & ALPHA_FLAG);
-
-		WebPAnimDecoderDelete(dec);
 		goto fail;
 	}
 	/* Otherwise, we want all frames. */
@@ -423,7 +419,6 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		img->multi.length += img->multi.frames[img->multi.cnt].delay;
 		img->multi.cnt++;
 	}
-	WebPAnimDecoderDelete(dec);
 	WebPDemuxReleaseIterator(&iter);
 
 	if (img->multi.cnt > 1) {
@@ -440,6 +435,8 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	imlib_image_set_format("webp");
 
 fail:
+	if (dec != NULL)
+		WebPAnimDecoderDelete(dec);
 	free((unsigned char *)data.bytes);
 	return !err;
 }
