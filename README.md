@@ -87,6 +87,10 @@ You can install nsxiv into a directory of your choice by changing this command t
 
     $ make PREFIX="/your/dir" install
 
+Example scripts are installed using `DOCPREFIX` which defaults to
+`/usr/local/share/doc/nsxiv`. You can change `DOCPREFIX` the same way you can
+change `PREFIX` shown above.
+
 The build-time specific settings of nsxiv can be found in the file *config.h*.
 Please check and change them, so that they fit your needs.
 If the file *config.h* does not already exist, then you have to create it with
