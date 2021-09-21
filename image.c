@@ -377,8 +377,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	}
 	demux = WebPAnimDecoderGetDemuxer(dec);
 
-	if (img == NULL) {
-		/* Only get the first frame and put it into fframe. */
+	if (img == NULL) { /* Only get the first frame and put it into fframe. */
 		if ((err = !WebPAnimDecoderGetNext(dec, &buf, &ts))) {
 			error(0, 0, "%s: Error loading first frame", file->name);
 			goto fail;
@@ -388,52 +387,49 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		imlib_context_set_image(*fframe);
 		imlib_image_set_format("webp");
 		imlib_image_set_has_alpha(WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS) & ALPHA_FLAG);
-		goto fail;
-	}
-	/* Otherwise, we want all frames. */
+	} else { /* Otherwise, we want all frames. */
+		/* Get global information for the image */
+		flags = WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS);
+		img->w = WebPDemuxGetI(demux, WEBP_FF_CANVAS_WIDTH);
+		img->h = WebPDemuxGetI(demux, WEBP_FF_CANVAS_HEIGHT);
+		img->alpha = ALPHA_LAYER;
+		img->multi.cap = info.frame_count;
+		img->multi.sel = 0;
+		img->multi.frames = emalloc(info.frame_count * sizeof(img_frame_t));
 
-	/* Get global information for the image */
-	flags = WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS);
-	img->w = WebPDemuxGetI(demux, WEBP_FF_CANVAS_WIDTH);
-	img->h = WebPDemuxGetI(demux, WEBP_FF_CANVAS_HEIGHT);
-	img->alpha = ALPHA_LAYER;
-	img->multi.cap = info.frame_count;
-	img->multi.sel = 0;
-	img->multi.frames = emalloc(info.frame_count * sizeof(img_frame_t));
-
-	/* Load (and decode) the frames of the image (also works with images that */
-	/* have only 1 frame) */
-	img->multi.cnt = 0;
-	while (WebPAnimDecoderGetNext(dec, &buf, &ts)) {
-		im = imlib_create_image_using_copied_data(
-		     info.canvas_width, info.canvas_height, (DATA32*)buf);
-		imlib_context_set_image(im);
-		imlib_image_set_format("webp");
-		/* Get an iterator of this frame - used for frame info (duration, etc.) */
-		WebPDemuxGetFrame(demux, img->multi.cnt+1, &iter);
-		imlib_image_set_has_alpha((flags & ALPHA_FLAG) > 0);
-		/* Store info for this frame */
-		img->multi.frames[img->multi.cnt].im = im;
-		delay = iter.duration > 0 ? iter.duration : DEF_WEBP_DELAY;
-		img->multi.frames[img->multi.cnt].delay = delay;
-		img->multi.length += img->multi.frames[img->multi.cnt].delay;
-		img->multi.cnt++;
-	}
-	WebPDemuxReleaseIterator(&iter);
-
-	if (img->multi.cnt > 1) {
-		imlib_context_set_image(img->im);
-		imlib_free_image();
-		img->im = img->multi.frames[0].im;
-	} else if (img->multi.cnt == 1) {
-		imlib_context_set_image(img->multi.frames[0].im);
-		imlib_free_image();
+		/* Load (and decode) the frames of the image (also works with images that */
+		/* have only 1 frame) */
 		img->multi.cnt = 0;
+		while (WebPAnimDecoderGetNext(dec, &buf, &ts)) {
+			im = imlib_create_image_using_copied_data(
+			     info.canvas_width, info.canvas_height, (DATA32*)buf);
+			imlib_context_set_image(im);
+			imlib_image_set_format("webp");
+			/* Get an iterator of this frame - used for frame info (duration, etc.) */
+			WebPDemuxGetFrame(demux, img->multi.cnt+1, &iter);
+			imlib_image_set_has_alpha((flags & ALPHA_FLAG) > 0);
+			/* Store info for this frame */
+			img->multi.frames[img->multi.cnt].im = im;
+			delay = iter.duration > 0 ? iter.duration : DEF_WEBP_DELAY;
+			img->multi.frames[img->multi.cnt].delay = delay;
+			img->multi.length += img->multi.frames[img->multi.cnt].delay;
+			img->multi.cnt++;
+		}
+		WebPDemuxReleaseIterator(&iter);
+
+		if (img->multi.cnt > 1) {
+			imlib_context_set_image(img->im);
+			imlib_free_image();
+			img->im = img->multi.frames[0].im;
+		} else if (img->multi.cnt == 1) {
+			imlib_context_set_image(img->multi.frames[0].im);
+			imlib_free_image();
+			img->multi.cnt = 0;
+		}
+
+		imlib_context_set_image(img->im);
+		imlib_image_set_format("webp");
 	}
-
-	imlib_context_set_image(img->im);
-	imlib_image_set_format("webp");
-
 fail:
 	if (dec != NULL)
 		WebPAnimDecoderDelete(dec);
