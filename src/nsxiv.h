@@ -170,7 +170,7 @@ typedef bool (*cmd_f)(arg_t);
 #define T_CMD(c) t_##c,
 
 typedef enum {
-#include "../commands.lst"
+#include "commands.lst"
 	CMD_COUNT
 } cmd_id_t;
 

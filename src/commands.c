@@ -450,6 +450,6 @@ bool ct_reload_all(arg_t _)
 #define T_CMD(c) { MODE_THUMB, ct_##c },
 
 const cmd_t cmds[CMD_COUNT] = {
-#include "../commands.lst"
+#include "commands.lst"
 };
 
