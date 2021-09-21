@@ -9,6 +9,7 @@ VERSION = 27.1
 # PREFIX for install
 PREFIX ?= /usr/local
 MANPREFIX = $(PREFIX)/share/man
+DOCPREFIX = $(PREFIX)/share/doc/nsxiv
 
 # autoreload backend: inotify/nop
 AUTORELOAD = inotify
@@ -86,7 +87,7 @@ install: all
 		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "INSTALL share/nsxiv/"
-	install -Dt $(DESTDIR)$(PREFIX)/share/doc/nsxiv/examples examples/*
+	install -Dt $(DESTDIR)$(DOCPREFIX)/examples examples/*
 
 uninstall:
 	@echo "REMOVE bin/nsxiv"
@@ -94,5 +95,5 @@ uninstall:
 	@echo "REMOVE nsxiv.1"
 	rm -f $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "REMOVE share/nsxiv/"
-	rm -rf $(DESTDIR)$(PREFIX)/share/nsxiv
+	rm -rf $(DESTDIR)$(DOCPREFIX)
 
