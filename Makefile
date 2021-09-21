@@ -53,7 +53,7 @@ obj/%.o: src/%.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJS): Makefile src/nsxiv.h src/commands.lst config.h config.mk
-obj/options.o: version.h
+obj/options.o: src/version.h
 obj/window.o: icon/data.h
 
 config.mk:
@@ -69,7 +69,7 @@ config.h:
 	@echo "GEN $@"
 	cp config.def.h $@
 
-version.h: Makefile .git/index
+src/version.h: Makefile .git/index
 	@echo "GEN $@"
 	v="$$(git describe 2>/dev/null)"; \
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
