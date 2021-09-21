@@ -3,7 +3,7 @@
 nsxiv \- Simple X Image Viewer
 .SH SYNOPSIS
 .B nsxiv
-.RB [ \-abcfhiopqrtvZ ]
+.RB [ \-abcfhiopqrtvZ0 ]
 .RB [ \-A
 .IR FRAMERATE ]
 .RB [ \-e
@@ -125,6 +125,10 @@ The same as `\-z 100'.
 .TP
 .BI "\-z " ZOOM
 Set zoom level to ZOOM percent.
+.TP
+.B \-0
+Same as \-o, however the marked files are NULL separated. This option implies
+\-o.
 .SH KEYBOARD COMMANDS
 .SS General
 The following keyboard commands are available in both image and thumbnail mode:
