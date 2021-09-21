@@ -385,7 +385,6 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		*fframe = imlib_create_image_using_copied_data(
 		          info.canvas_width, info.canvas_height, (DATA32*)buf);
 		imlib_context_set_image(*fframe);
-		imlib_image_set_format("webp");
 		imlib_image_set_has_alpha(WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS) & ALPHA_FLAG);
 	} else { /* Otherwise, we want all frames. */
 		/* Get global information for the image */
@@ -426,10 +425,9 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 			imlib_free_image();
 			img->multi.cnt = 0;
 		}
-
 		imlib_context_set_image(img->im);
-		imlib_image_set_format("webp");
 	}
+	imlib_image_set_format("webp");
 fail:
 	if (dec != NULL)
 		WebPAnimDecoderDelete(dec);
