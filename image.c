@@ -308,7 +308,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 bool is_webp(const char *path)
 {
 	/* The size (in bytes) of the largest amount of data required to verify a WebP image. */
-	const unsigned int max = 30;
+	enum { max = 30 };
 	const unsigned char fmt[max];
 	bool ret = false;
 	FILE *f;
