@@ -48,8 +48,11 @@ nsxiv requires the following software to be installed:
   * Xft
   * freetype2
   * fontconfig
-  * giflib (optional, automatically enabled if installed)
-  * libexif (optional, automatically enabled if installed)
+
+The following libraries are optional. They are automatically enabled if installed.
+
+  * giflib : Used for animated gif playback.
+  * libexif : Used for auto-orientation and exif thumbnails.
 
 Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development
