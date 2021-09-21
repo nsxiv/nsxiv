@@ -53,8 +53,8 @@ obj/%.o: src/%.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJS): Makefile src/nsxiv.h src/commands.lst config.h config.mk
-options.o: version.h
-window.o: icon/data.h
+obj/options.o: version.h
+obj/window.o: icon/data.h
 
 config.mk:
 	@echo "GEN $@"
