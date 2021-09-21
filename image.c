@@ -334,7 +334,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 
 	Imlib_Image im = NULL;
 	struct WebPAnimDecoderOptions opts;
-	WebPAnimDecoder *dec;
+	WebPAnimDecoder *dec = NULL;
 	struct WebPAnimInfo info;
 	unsigned char *buf = NULL;
 	int ts;
