@@ -321,8 +321,7 @@ bool is_webp(const char *path)
 	return ret;
 }
 
-/* Function to load one or all frames of a WebP image.
- * fframe   img
+/* fframe   img
  * NULL     NULL  = do nothing
  * x        NULL  = load the first frame as an Imlib_Image
  * NULL     x     = load all frames into img->multi.
@@ -367,8 +366,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		goto fail;
 	}
 	opts.color_mode = MODE_BGRA;
-	/* This could cause problems on some systems and will require more testing */
-	/* than I can do (multithreaded decoding) */
+	/* NOTE: Multi-threaded decoding may cause problems on some system */
 	opts.use_threads = true;
 	dec = WebPAnimDecoderNew(&data, &opts);
 	if ((err = (dec == NULL) || !WebPAnimDecoderGetInfo(dec, &info))) {
@@ -386,7 +384,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		          info.canvas_width, info.canvas_height, (DATA32*)buf);
 		imlib_context_set_image(*fframe);
 		imlib_image_set_has_alpha(WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS) & ALPHA_FLAG);
-	} else { /* Otherwise, we want all frames. */
+	} else {
 		/* Get global information for the image */
 		flags = WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS);
 		img->w = WebPDemuxGetI(demux, WEBP_FF_CANVAS_WIDTH);
@@ -396,8 +394,7 @@ bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		img->multi.sel = 0;
 		img->multi.frames = emalloc(info.frame_count * sizeof(img_frame_t));
 
-		/* Load (and decode) the frames of the image (also works with images that */
-		/* have only 1 frame) */
+		/* Load and decode frames (also works on images with only 1 frame) */
 		img->multi.cnt = 0;
 		while (WebPAnimDecoderGetNext(dec, &buf, &ts)) {
 			im = imlib_create_image_using_copied_data(
