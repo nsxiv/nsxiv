@@ -83,7 +83,7 @@ install: all
 	install -Dt $(DESTDIR)$(PREFIX)/bin nsxiv
 	@echo "INSTALL nsxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" nsxiv.1 \
+	sed "s!DOCPREFIX!$(DOCPREFIX)!g; s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" nsxiv.1 \
 		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "INSTALL share/nsxiv/"
