@@ -344,12 +344,12 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	unsigned int delay;
 	bool err = false;
 
-	if (fframe == NULL && img == NULL)
-		return false;
+	if ((err = fframe == NULL && img == NULL))
+		goto fail;
 
-	if ((webp_file = fopen(file->path, "rb")) == NULL) {
+	if ((err = (webp_file = fopen(file->path, "rb")) == NULL)) {
 		error(0, 0, "%s: Error opening webp image", file->name);
-		return false;
+		goto fail;
 	}
 	fseek(webp_file, 0L, SEEK_END);
 	data.size = ftell(webp_file);
