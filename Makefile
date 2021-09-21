@@ -52,7 +52,7 @@ obj/%.o: src/%.c
 	@echo "CC $@"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
-$(OBJS): Makefile src/nsxiv.h commands.lst config.h config.mk
+$(OBJS): Makefile src/nsxiv.h src/commands.lst config.h config.mk
 options.o: version.h
 window.o: icon/data.h
 
