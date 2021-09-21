@@ -31,7 +31,7 @@ const opt_t *options = (const opt_t*) &_options;
 
 void print_usage(void)
 {
-	printf("usage: nsxiv [-abcfhiopqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+	printf("usage: nsxiv [-abcfhi0opqrtvZ] [-A FRAMERATE] [-e WID] [-G GAMMA] "
 	       "[-g GEOMETRY] [-N NAME] [-T TITLE] [-n NUM] [-S DELAY] [-s MODE] "
 	       "[-z ZOOM] FILES...\n");
 }
