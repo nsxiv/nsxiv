@@ -3,7 +3,7 @@
 nsxiv \- Simple X Image Viewer
 .SH SYNOPSIS
 .B nsxiv
-.RB [ \-abcfhiopqrtvZ ]
+.RB [ \-abcfhi0opqrtvZ ]
 .RB [ \-A
 .IR FRAMERATE ]
 .RB [ \-e
@@ -87,6 +87,10 @@ Print brief usage information to standard output and exit.
 .TP
 .B \-i
 Read names of files to open from standard input. Also done if FILE is `-'.
+.TP
+.B \-0
+Same as \-o, however the marked files are NULL separated. This option implies
+\-o.
 .TP
 .B \-o
 Write list of all marked files to standard output when quitting. In combination
