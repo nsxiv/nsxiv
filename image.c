@@ -326,7 +326,7 @@ bool is_webp(const char *path)
  * x        NULL  = load the first frame as an Imlib_Image
  * NULL     x     = load all frames into img->multi.
  */
-bool load_webp_frames(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
+bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 {
 	FILE *webp_file;
 	WebPData data;
@@ -443,7 +443,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 	{
 #if HAVE_LIBWEBP
 		if (is_webp(file->path))
-			load_webp_frames(file, &im, NULL);
+			img_load_webp(file, &im, NULL);
 		else
 #endif
 			im = imlib_load_image(file->path);
@@ -486,7 +486,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 #endif
 #if HAVE_LIBWEBP
 		if (STREQ(fmt, "webp"))
-			load_webp_frames(file, NULL, img);
+			img_load_webp(file, NULL, img);
 #endif
 	}
 	img->w = imlib_image_get_width();
