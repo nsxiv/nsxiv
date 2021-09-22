@@ -77,6 +77,11 @@ version.h: Makefile .git/index
 clean:
 	$(RM) *.o nsxiv
 
+desktop:
+	@echo "INSTALL nsxiv.desktop"
+	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
+	cp nsxiv.desktop $(DESTDIR)$(PREFIX)/share/applications
+
 install: all
 	@echo "INSTALL bin/nsxiv"
 	install -Dt $(DESTDIR)$(PREFIX)/bin nsxiv
@@ -85,9 +90,6 @@ install: all
 	sed "s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" nsxiv.1 \
 		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
-	@echo "INSTALL nsxiv.desktop"
-	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
-	cp nsxiv.desktop $(DESTDIR)$(PREFIX)/share/applications
 	@echo "INSTALL share/nsxiv/"
 	install -Dt $(DESTDIR)$(PREFIX)/share/nsxiv/exec exec/*
 
