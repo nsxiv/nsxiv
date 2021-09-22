@@ -452,7 +452,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 #if HAVE_LIBWEBP
 			const char *fmt;
 			if ((fmt = imlib_image_format()) != NULL && !STREQ(fmt, "webp") &&
-					imlib_image_get_data_for_reading_only() == NULL) {
+			    imlib_image_get_data_for_reading_only() == NULL) {
 #else
 			if (imlib_image_get_data_for_reading_only() == NULL) {
 #endif
