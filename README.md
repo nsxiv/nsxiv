@@ -76,6 +76,10 @@ Installing nsxiv:
 
     # make install
 
+Installing desktop entry:
+
+    # make desktop
+
 Installing icons:
 
     # make -C icon install
