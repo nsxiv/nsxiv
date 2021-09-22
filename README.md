@@ -78,7 +78,7 @@ Installing nsxiv:
 
 Installing icons:
 
-	# make -C icon install
+    # make -C icon install
 
 Please note, that these requires root privileges.
 By default, nsxiv is installed using the prefix "/usr/local", so the full path
