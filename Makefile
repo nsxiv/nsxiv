@@ -33,10 +33,11 @@ CPPFLAGS = -D_XOPEN_SOURCE=700 \
 
 LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 
-SRCS = src/autoreload_$(AUTORELOAD).c src/commands.c src/image.c src/main.c src/options.c \
-  src/thumbs.c src/util.c src/window.c
+SRCS = autoreload_$(AUTORELOAD) commands image main options \
+  thumbs util window
 
-OBJS = $(patsubst src/%.c, obj/%.o, $(SRCS))
+OBJS = obj/autoreload_$(AUTORELOAD).o obj/commands.o obj/image.o obj/main.o obj/options.o \
+  obj/thumbs.o obj/util.o obj/window.o
 
 .PHONY: all clean install uninstall
 .SUFFIXES:
@@ -48,11 +49,11 @@ nsxiv: $(OBJS)
 	@echo "LINK $@"
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-obj/%.o: src/%.c
-	@echo "CC $@"
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+$(SRCS):
+	@echo "CC src/$@.c"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o obj/$@.o src/$@.c
 
-$(OBJS): Makefile src/nsxiv.h src/commands.lst config.h config.mk
+$(OBJS): Makefile src/nsxiv.h src/commands.lst config.h config.mk $(SRCS)
 obj/options.o: src/version.h
 obj/window.o: icon/data.h
 
