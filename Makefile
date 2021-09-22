@@ -33,9 +33,6 @@ CPPFLAGS = -D_XOPEN_SOURCE=700 \
 
 LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 
-SRCS = autoreload_$(AUTORELOAD) commands image main options \
-  thumbs util window
-
 OBJS = obj/autoreload_$(AUTORELOAD).o obj/commands.o obj/image.o obj/main.o obj/options.o \
   obj/thumbs.o obj/util.o obj/window.o
 
@@ -49,11 +46,11 @@ nsxiv: $(OBJS)
 	@echo "LINK $@"
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-$(SRCS):
-	@echo "CC src/$@.c"
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o obj/$@.o src/$@.c
+$(OBJS):
+	@echo "CC $@"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ src/$$(basename $@ .o).c
 
-$(OBJS): Makefile src/nsxiv.h src/commands.lst config.h config.mk $(SRCS)
+$(OBJS): Makefile src/nsxiv.h src/commands.lst config.h config.mk
 obj/options.o: src/version.h
 obj/window.o: icon/data.h
 
