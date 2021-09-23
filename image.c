@@ -389,7 +389,6 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		flags = WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS);
 		img->w = WebPDemuxGetI(demux, WEBP_FF_CANVAS_WIDTH);
 		img->h = WebPDemuxGetI(demux, WEBP_FF_CANVAS_HEIGHT);
-		img->alpha = ALPHA_LAYER;
 		img->multi.cap = info.frame_count;
 		img->multi.sel = 0;
 		img->multi.frames = emalloc(info.frame_count * sizeof(img_frame_t));
