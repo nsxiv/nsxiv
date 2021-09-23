@@ -16,6 +16,9 @@ AUTORELOAD = inotify
 # CFLAGS, any optimization flags goes here
 CFLAGS ?= -std=c99 -Wall -pedantic
 
+# icons that will be installed via `make icon`
+ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
+
 ifeq ($(HAVE_LIBEXIF), 1)
 	OPTIONAL_LIBS += -lexif
 else
@@ -36,7 +39,7 @@ LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
-.PHONY: all clean install uninstall
+.PHONY: all clean install uninstall icon
 .SUFFIXES:
 .SUFFIXES: .c .o
 
@@ -82,6 +85,22 @@ desktop:
 	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
 	cp nsxiv.desktop $(DESTDIR)$(PREFIX)/share/applications
 
+icon:
+	@echo "INSTALL icon"
+	for f in $(ICONS); do \
+		dir="$(DESTDIR)$(PREFIX)/share/icons/hicolor/$${f%.png}/apps"; \
+		mkdir -p "$$dir"; \
+		cp "icon/$$f" "$$dir/nsxiv.png"; \
+		chmod 644 "$$dir/nsxiv.png"; \
+	done
+
+icon_cleanup:
+	@echo "REMOVE icon"
+	for f in $(ICONS); do \
+		dir="$(DESTDIR)$(PREFIX)/share/icons/hicolor/$${f%.png}/apps"; \
+		rm -f "$$dir/nsxiv.png"; \
+	done
+
 install: all
 	@echo "INSTALL bin/nsxiv"
 	install -Dt $(DESTDIR)$(PREFIX)/bin nsxiv
@@ -93,7 +112,7 @@ install: all
 	@echo "INSTALL share/nsxiv/"
 	install -Dt $(DESTDIR)$(PREFIX)/share/nsxiv/exec exec/*
 
-uninstall:
+uninstall: icon_cleanup
 	@echo "REMOVE bin/nsxiv"
 	rm -f $(DESTDIR)$(PREFIX)/bin/nsxiv
 	@echo "REMOVE nsxiv.1"

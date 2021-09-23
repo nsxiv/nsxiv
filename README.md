@@ -82,7 +82,7 @@ Installing desktop entry:
 
 Installing icons:
 
-    # make -C icon install
+    # make icon
 
 Please note, that these requires root privileges.
 By default, nsxiv is installed using the prefix "/usr/local", so the full path
