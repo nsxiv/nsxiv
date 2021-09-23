@@ -403,7 +403,7 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 			imlib_image_set_format("webp");
 			/* Get an iterator of this frame - used for frame info (duration, etc.) */
 			WebPDemuxGetFrame(demux, img->multi.cnt+1, &iter);
-			imlib_image_set_has_alpha(flags & ALPHA_FLAG);
+			imlib_image_set_has_alpha((flags & ALPHA_FLAG) == ALPHA_FLAG);
 			/* Store info for this frame */
 			img->multi.frames[img->multi.cnt].im = im;
 			delay = iter.duration > 0 ? iter.duration : DEF_WEBP_DELAY;
