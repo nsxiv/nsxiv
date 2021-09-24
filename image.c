@@ -560,7 +560,6 @@ bool img_fit(img_t *img)
 	}
 	z = MIN(z, img->scalemode == SCALE_DOWN ? 1.0 : ZOOM_MAX);
 
-
 	if (ABS(img->zoom - z) > 1.0/MAX(img->w, img->h)) {
 		img->zoom = z;
 		img->dirty = true;
