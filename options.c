@@ -33,7 +33,7 @@ void print_usage(void)
 {
 	printf("usage: nsxiv [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
 	       "[-g GEOMETRY] [-N NAME] [-T TITLE] [-n NUM] [-S DELAY] [-s MODE] "
-	       "[-z ZOOM:STEP] FILES...\n");
+	       "[-z ZOOM] FILES...\n");
 }
 
 void print_version(void)

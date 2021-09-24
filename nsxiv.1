@@ -23,7 +23,7 @@ nsxiv \- Simple X Image Viewer
 .RB [ \-s
 .IR MODE ]
 .RB [ \-z
-.IR ZOOM:STEP ]
+.IR ZOOM ]
 .IR FILE ...
 .SH DESCRIPTION
 nsxiv is a simple image viewer for X.
@@ -123,10 +123,8 @@ Print version information to standard output and exit.
 .B \-Z
 The same as `\-z 100'.
 .TP
-.BI "\-z " ZOOM:STEP
-Set zoom level to ZOOM percent and zoom step to STEP. STEP is multiplicative.
-ZOOM or :STEP can be omitted, in which case the compile-time defaults will be
-used.
+.BI "\-z " ZOOM
+Set zoom level to ZOOM percent.
 .TP
 .B \-0
 Same as \-o, however the marked files are NULL separated. This option implies
