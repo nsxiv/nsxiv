@@ -249,7 +249,7 @@ bool img_load(img_t*, const fileinfo_t*);
 CLEANUP void img_close(img_t*, bool);
 void img_render(img_t*);
 bool img_fit_win(img_t*, scalemode_t);
-bool img_zoom(img_t*, int);
+bool img_zoom(img_t*, int, float);
 bool img_pos(img_t*, float, float);
 bool img_move(img_t*, float, float);
 bool img_pan(img_t*, direction_t, int);
