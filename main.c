@@ -607,7 +607,7 @@ void on_keypress(XKeyEvent *kev)
 		handle_key_handler(false);
 	} else if (extprefix) {
 		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
-		extprefix = False;
+		extprefix = false;
 	} else if (key >= '0' && key <= '9') {
 		/* number prefix for commands */
 		prefix = prefix * 10 + (int) (key - '0');
