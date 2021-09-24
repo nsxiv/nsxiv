@@ -25,7 +25,6 @@ static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
 #endif
 #ifdef _IMAGE_CONFIG
 
-/* zoom level of 1.0 means 100% */
 static const float ZOOM_MIN  = 0.01;
 static const float ZOOM_MAX  = 20.0;
 static const float ZOOM_STEP = 1.2599210498948732; /* 2^(1/3) */
