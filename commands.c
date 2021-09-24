@@ -233,7 +233,7 @@ bool cg_navigate_marked(arg_t n)
 {
 	int d, i;
 	int new = fileidx;
-	
+
 	if (prefix > 0)
 		n *= prefix;
 	d = n > 0 ? 1 : -1;
@@ -337,9 +337,8 @@ bool ci_drag(arg_t mode)
 
 	if ((int)(img.w * img.zoom) <= win.w && (int)(img.h * img.zoom) <= win.h)
 		return false;
-	
-	win_set_cursor(&win, CURSOR_DRAG);
 
+	win_set_cursor(&win, CURSOR_DRAG);
 	win_cursor_pos(&win, &x, &y);
 	ox = x;
 	oy = y;
