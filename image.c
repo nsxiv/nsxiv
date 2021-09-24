@@ -683,16 +683,10 @@ bool img_zoom(img_t *img, int d)
 	 * d = 0: reset zoom
 	 * d > 0: increase zoom by * ZOOM_STEP
 	 */
-	float z;
-
-	if (d == 0)
-		z = 1;
-	else
-		z = img->zoom * (d > 0 ? ZOOM_STEP : 1 / ZOOM_STEP);
+	int x, y;
+	float z = (d == 0) ? 1.0 : img->zoom * (d > 0 ? ZOOM_STEP : 1/ZOOM_STEP);
 
 	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
-		int x, y;
-
 		win_cursor_pos(img->win, &x, &y);
 		if (x < 0 || x >= img->win->w || y < 0 || y >= img->win->h) {
 			x = img->win->w / 2;
