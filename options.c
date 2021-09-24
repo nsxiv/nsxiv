@@ -179,7 +179,6 @@ void parse_options(int argc, char **argv)
 				if ((s = strrchr(optarg, ':')) != NULL) {
 					*s = '\0';
 					f = strtof(++s, &end);
-					printf("%f\n", f);
 					if (*end != '\0' || f <= 1)
 						error(EXIT_FAILURE, 0, "Invalid argument for option -z step: %s", s);
 					_options.zoom_step = f;
