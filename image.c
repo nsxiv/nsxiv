@@ -676,15 +676,9 @@ bool img_fit_win(img_t *img, scalemode_t sm)
 	}
 }
 
-bool img_zoom(img_t *img, int d)
+bool img_zoom(img_t *img, float z)
 {
-	/* d < 0: decrease zoom by * 1/ZOOM_STEP
-	 * d = 0: reset zoom
-	 * d > 0: increase zoom by * ZOOM_STEP
-	 */
 	int x, y;
-	const float z = (d == 0) ? 1.0 : img->zoom * (d > 0 ? options->zoom_step : 1/options->zoom_step);
-
 	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
 		win_cursor_pos(img->win, &x, &y);
 		if (x < 0 || x >= img->win->w || y < 0 || y >= img->win->h) {
@@ -701,6 +695,12 @@ bool img_zoom(img_t *img, int d)
 	} else {
 		return false;
 	}
+}
+
+bool img_zoom_increment(img_t *img, int d)
+{
+	const float z = img->zoom * (d > 0 ? options->zoom_step : 1/options->zoom_step);
+	return img_zoom(img, z);
 }
 
 bool img_pos(img_t *img, float x, float y)

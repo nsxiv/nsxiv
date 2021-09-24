@@ -185,7 +185,7 @@ bool cg_zoom(arg_t d)
 	if (mode == MODE_THUMB)
 		return tns_zoom(&tns, d);
 	else
-		return img_zoom(&img, d);
+		return img_zoom_increment(&img, d);
 }
 
 bool cg_toggle_image_mark(arg_t _)
