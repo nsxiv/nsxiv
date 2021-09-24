@@ -53,6 +53,7 @@ The following libraries are optional. They are automatically enabled if installe
 
   * giflib : Used for animated gif playback.
   * libexif : Used for auto-orientation and exif thumbnails.
+  * libwebp : Used for animated webp playback.
 
 Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development

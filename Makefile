@@ -30,9 +30,15 @@ ifeq ($(HAVE_LIBGIF), 1)
 else
 	HAVE_LIBGIF = 0
 endif
+ifeq ($(HAVE_LIBWEBP), 1)
+	OPTIONAL_LIBS += -lwebpdemux -lwebp
+else
+	HAVE_LIBWEBP = 0
+endif
 
 CPPFLAGS = -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
+  -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) \
   -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
 
 LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
@@ -61,7 +67,7 @@ window.o: icon/data.h
 config.mk:
 	@echo "GEN $@"
 	@echo "# 0 = disable, 1 = enable" > config.mk
-	@for lib in exif gif; do \
+	@for lib in exif gif webp; do \
 		if echo "int main(){}" | $(CC) "-l$$lib" -o /dev/null -x c - 2>/dev/null ; then \
 			echo "HAVE_LIB$$lib=1" | tr '[:lower:]' '[:upper:]' >> config.mk ; \
 		fi \
