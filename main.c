@@ -34,6 +34,9 @@
 #include <X11/keysym.h>
 #include <X11/XF86keysym.h>
 
+#define MODMASK(mask) ((mask) & ~ignore_mask)
+#define BAR_SEP "  "
+
 typedef struct {
 	struct timeval when;
 	bool active;
@@ -346,8 +349,6 @@ void bar_put(win_bar_t *bar, const char *fmt, ...)
 	va_end(ap);
 }
 
-#define BAR_SEP "  "
-
 void update_info(void)
 {
 	unsigned int i, fn, fw;
@@ -581,8 +582,6 @@ end:
 	reset_cursor();
 	redraw();
 }
-
-#define MODMASK(mask) ((mask) & ~ignore_mask)
 
 void on_keypress(XKeyEvent *kev)
 {
