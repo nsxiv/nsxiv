@@ -247,8 +247,6 @@ void win_open(win_t *win)
 	XChangeProperty(e->dpy, win->xwin,
 	                atoms[ATOM__NET_WM_PID], XA_CARDINAL, sizeof(pid_t) * 8,
 	                PropModeReplace, (unsigned char *) &pid, 1);
-
-	/* set the _NET_WM_PID */
 	if (gethostname(hostname, sizeof(hostname)) == 0) {
 		XTextProperty tp;
 		tp.value = (unsigned char *)hostname;
