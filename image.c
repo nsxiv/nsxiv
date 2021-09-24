@@ -699,7 +699,7 @@ bool img_zoom(img_t *img, float z)
 
 bool img_zoom_increment(img_t *img, int d)
 {
-	const float z = img->zoom * (d > 0 ? options->zoom_step : 1/options->zoom_step);
+	const float z = img->zoom * (d > 0 ? ZOOM_STEP : 1/ZOOM_STEP);
 	return img_zoom(img, z);
 }
 
