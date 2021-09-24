@@ -39,8 +39,8 @@
 #ifndef MAX
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 #endif
-#ifndef FABS
-#define FABS(a) ((a) > 0 ? (a) : -(a))
+#ifndef ABS
+#define ABS(a) ((a) > 0 ? (a) : -(a))
 #endif
 
 #define ARRLEN(a) (sizeof(a) / sizeof((a)[0]))
