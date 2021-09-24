@@ -96,6 +96,9 @@ cursor_t imgcursor[3] = {
 	CURSOR_ARROW, CURSOR_ARROW, CURSOR_ARROW
 };
 
+/**************************
+  function implementations
+ **************************/
 void cleanup(void)
 {
 	img_close(&img, false);
