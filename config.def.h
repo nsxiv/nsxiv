@@ -25,13 +25,9 @@ static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
 #endif
 #ifdef _IMAGE_CONFIG
 
-/* levels (in percent) to use when zooming via '-' and '+':
- * (first/last value is used as min/max zoom level)
- */
-static const float zoom_levels[] = {
-	 12.5,  25.0,  50.0,  75.0,
-	100.0, 150.0, 200.0, 400.0, 800.0
-};
+static const float ZOOM_MIN  = 0.01;
+static const float ZOOM_MAX  = 20.0;
+static const float ZOOM_STEP = 1.2599210498948732; /* 2^(1/3) */
 
 /* default slideshow delay (in sec, overwritten via -S option): */
 static const int SLIDESHOW_DELAY = 5;
