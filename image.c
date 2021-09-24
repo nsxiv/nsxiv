@@ -676,7 +676,7 @@ bool img_fit_win(img_t *img, scalemode_t sm)
 	}
 }
 
-bool img_zoom(img_t *img, float z)
+bool img_zoom_to(img_t *img, float z)
 {
 	int x, y;
 	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
@@ -697,10 +697,10 @@ bool img_zoom(img_t *img, float z)
 	}
 }
 
-bool img_zoom_increment(img_t *img, int d)
+bool img_zoom(img_t *img, int d)
 {
 	const float z = img->zoom * (d > 0 ? ZOOM_STEP : 1/ZOOM_STEP);
-	return img_zoom(img, z);
+	return img_zoom_to(img, z);
 }
 
 bool img_pos(img_t *img, float x, float y)

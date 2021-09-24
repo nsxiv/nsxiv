@@ -185,7 +185,7 @@ bool cg_zoom(arg_t d)
 	if (mode == MODE_THUMB)
 		return tns_zoom(&tns, d);
 	else
-		return img_zoom_increment(&img, d);
+		return img_zoom(&img, d);
 }
 
 bool cg_toggle_image_mark(arg_t _)
@@ -376,7 +376,7 @@ bool ci_drag(arg_t mode)
 
 bool ci_set_zoom(arg_t zl)
 {
-	return img_zoom(&img, (prefix ? prefix : zl) / 100.0);
+	return img_zoom_to(&img, (prefix ? prefix : zl) / 100.0);
 }
 
 bool ci_fit_to_win(arg_t sm)
