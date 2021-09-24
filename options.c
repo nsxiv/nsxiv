@@ -44,6 +44,7 @@ void print_version(void)
 void parse_options(int argc, char **argv)
 {
 	int n, opt;
+	float f;
 	char *end, *s;
 	const char *scalemodes = "dfFwh";
 
@@ -58,6 +59,7 @@ void parse_options(int argc, char **argv)
 
 	_options.scalemode = SCALE_DOWN;
 	_options.zoom = 1.0;
+	_options.zoom_step = ZOOM_STEP;
 	_options.animate = false;
 	_options.gamma = 0;
 	_options.slideshow = 0;
@@ -174,11 +176,21 @@ void parse_options(int argc, char **argv)
 				_options.zoom = 1.0;
 				break;
 			case 'z':
-				n = strtol(optarg, &end, 0);
-				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -z: %s", optarg);
-				_options.scalemode = SCALE_ZOOM;
-				_options.zoom = (float) n / 100.0;
+				if ((s = strrchr(optarg, ':')) != NULL) {
+					*s = '\0';
+					f = strtof(++s, &end);
+					printf("%f\n", f);
+					if (*end != '\0' || f <= 1)
+						error(EXIT_FAILURE, 0, "Invalid argument for option -z step: %s", s);
+					_options.zoom_step = f;
+				}
+				if (*optarg != '\0') {
+					n = strtol(optarg, &end, 0);
+					if (*end != '\0' || n <= 0)
+						error(EXIT_FAILURE, 0, "Invalid argument for option -z zoom: %s", optarg);
+					_options.scalemode = SCALE_ZOOM;
+					_options.zoom = (float) n / 100.0;
+				}
 				break;
 			case '0':
 				_options.stdout_separator = '\0';

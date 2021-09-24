@@ -683,7 +683,7 @@ bool img_zoom(img_t *img, int d)
 	 * d > 0: increase zoom by * ZOOM_STEP
 	 */
 	int x, y;
-	const float z = (d == 0) ? 1.0 : img->zoom * (d > 0 ? ZOOM_STEP : 1/ZOOM_STEP);
+	const float z = (d == 0) ? 1.0 : img->zoom * (d > 0 ? options->zoom_step : 1/options->zoom_step);
 
 	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
 		win_cursor_pos(img->win, &x, &y);

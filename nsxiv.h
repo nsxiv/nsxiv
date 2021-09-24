@@ -277,6 +277,7 @@ struct opt {
 	/* image: */
 	scalemode_t scalemode;
 	float zoom;
+	float zoom_step;
 	bool animate;
 	int gamma;
 	int slideshow;
