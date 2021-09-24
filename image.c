@@ -677,11 +677,14 @@ bool img_fit_win(img_t *img, scalemode_t sm)
 	}
 }
 
-bool img_zoom(img_t *img, int direction)
+bool img_zoom(img_t *img, int d)
 {
 	float z;
 
-	z = img->zoom * (direction > 0 ? ZOOM_STEP : 1 / ZOOM_STEP);
+	if (d == 0)
+		z = 1;
+	else
+		z = img->zoom * (d > 0 ? ZOOM_STEP : 1 / ZOOM_STEP);
 
 	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
 		int x, y;
