@@ -312,7 +312,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 						}
 						if (w >= maxwh || h >= maxwh) {
 							if ((im = imlib_create_cropped_image(x, y, w, h)) == NULL)
-								error(0, 0, "error generating thumbnail: %s", file->name);
+								error(0, 0, "%s: error generating thumbnail", file->name);
 						}
 						imlib_free_image_and_decache();
 					}
