@@ -679,6 +679,10 @@ bool img_fit_win(img_t *img, scalemode_t sm)
 
 bool img_zoom(img_t *img, int d)
 {
+	/* d < 0: decrease zoom by * 1/ZOOM_STEP
+	 * d = 0: reset zoom
+	 * d > 0: increase zoom by * ZOOM_STEP
+	 */
 	float z;
 
 	if (d == 0)
