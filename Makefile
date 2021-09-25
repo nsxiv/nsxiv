@@ -87,6 +87,8 @@ version.h: Makefile .git/index
 clean:
 	$(RM) *.o nsxiv
 
+install-all: install install-desktop install-icon
+
 install-desktop:
 	@echo "INSTALL nsxiv.desktop"
 	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
