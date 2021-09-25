@@ -42,19 +42,8 @@ enum { DEF_GIF_DELAY = 75 };
 enum { DEF_WEBP_DELAY = 75 };
 #endif
 
-float zoom_min;
-float zoom_max;
-
-static int zoomdiff(img_t *img, float z)
-{
-	return (int) ((img->w * z - img->w * img->zoom) + (img->h * z - img->h * img->zoom));
-}
-
 void img_init(img_t *img, win_t *win)
 {
-	zoom_min = zoom_levels[0] / 100.0;
-	zoom_max = zoom_levels[ARRLEN(zoom_levels) - 1] / 100.0;
-
 	imlib_context_set_display(win->env.dpy);
 	imlib_context_set_visual(win->env.vis);
 	imlib_context_set_colormap(win->env.cmap);
@@ -63,8 +52,8 @@ void img_init(img_t *img, win_t *win)
 	img->win = win;
 	img->scalemode = options->scalemode;
 	img->zoom = options->zoom;
-	img->zoom = MAX(img->zoom, zoom_min);
-	img->zoom = MIN(img->zoom, zoom_max);
+	img->zoom = MAX(img->zoom, ZOOM_MIN);
+	img->zoom = MIN(img->zoom, ZOOM_MAX);
 	img->checkpan = false;
 	img->dirty = false;
 	img->aa = ANTI_ALIAS;
@@ -569,9 +558,9 @@ bool img_fit(img_t *img)
 			z = MIN(zw, zh);
 			break;
 	}
-	z = MIN(z, img->scalemode == SCALE_DOWN ? 1.0 : zoom_max);
+	z = MIN(z, img->scalemode == SCALE_DOWN ? 1.0 : ZOOM_MAX);
 
-	if (zoomdiff(img, z) != 0) {
+	if (ABS(img->zoom - z) > 1.0/MAX(img->w, img->h)) {
 		img->zoom = z;
 		img->dirty = true;
 		return true;
@@ -687,16 +676,10 @@ bool img_fit_win(img_t *img, scalemode_t sm)
 	}
 }
 
-bool img_zoom(img_t *img, float z)
+bool img_zoom_to(img_t *img, float z)
 {
-	z = MAX(z, zoom_min);
-	z = MIN(z, zoom_max);
-
-	img->scalemode = SCALE_ZOOM;
-
-	if (zoomdiff(img, z) != 0) {
-		int x, y;
-
+	int x, y;
+	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
 		win_cursor_pos(img->win, &x, &y);
 		if (x < 0 || x >= img->win->w || y < 0 || y >= img->win->h) {
 			x = img->win->w / 2;
@@ -705,6 +688,7 @@ bool img_zoom(img_t *img, float z)
 		img->x = x - (x - img->x) * z / img->zoom;
 		img->y = y - (y - img->y) * z / img->zoom;
 		img->zoom = z;
+		img->scalemode = SCALE_ZOOM;
 		img->checkpan = true;
 		img->dirty = true;
 		return true;
@@ -713,30 +697,10 @@ bool img_zoom(img_t *img, float z)
 	}
 }
 
-bool img_zoom_in(img_t *img)
+bool img_zoom(img_t *img, int d)
 {
-	int i;
-	float z;
-
-	for (i = 0; i < ARRLEN(zoom_levels); i++) {
-		z = zoom_levels[i] / 100.0;
-		if (zoomdiff(img, z) > 0)
-			return img_zoom(img, z);
-	}
-	return false;
-}
-
-bool img_zoom_out(img_t *img)
-{
-	int i;
-	float z;
-
-	for (i = ARRLEN(zoom_levels) - 1; i >= 0; i--) {
-		z = zoom_levels[i] / 100.0;
-		if (zoomdiff(img, z) < 0)
-			return img_zoom(img, z);
-	}
-	return false;
+	const float z = img->zoom * (d > 0 ? ZOOM_STEP : 1/ZOOM_STEP);
+	return img_zoom_to(img, z);
 }
 
 bool img_pos(img_t *img, float x, float y)
