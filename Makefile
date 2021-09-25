@@ -87,12 +87,12 @@ version.h: Makefile .git/index
 clean:
 	$(RM) *.o nsxiv
 
-desktop:
+install-desktop:
 	@echo "INSTALL nsxiv.desktop"
 	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
 	cp nsxiv.desktop $(DESTDIR)$(PREFIX)/share/applications
 
-icon:
+install-icon:
 	@echo "INSTALL icon"
 	for f in $(ICONS); do \
 		dir="$(DESTDIR)$(PREFIX)/share/icons/hicolor/$${f%.png}/apps"; \
