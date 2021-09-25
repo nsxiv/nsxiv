@@ -46,7 +46,7 @@ LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
 OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
-.PHONY: all clean install uninstall icon
+.PHONY: all clean install uninstall install-all install-icon uninstall-icon install-desktop
 .SUFFIXES:
 .SUFFIXES: .c .o
 
@@ -87,12 +87,14 @@ version.h: Makefile .git/index
 clean:
 	$(RM) *.o nsxiv
 
-desktop:
+install-all: install install-desktop install-icon
+
+install-desktop:
 	@echo "INSTALL nsxiv.desktop"
 	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
 	cp nsxiv.desktop $(DESTDIR)$(PREFIX)/share/applications
 
-icon:
+install-icon:
 	@echo "INSTALL icon"
 	for f in $(ICONS); do \
 		dir="$(DESTDIR)$(PREFIX)/share/icons/hicolor/$${f%.png}/apps"; \
@@ -101,7 +103,7 @@ icon:
 		chmod 644 "$$dir/nsxiv.png"; \
 	done
 
-icon_cleanup:
+uninstall-icon:
 	@echo "REMOVE icon"
 	for f in $(ICONS); do \
 		dir="$(DESTDIR)$(PREFIX)/share/icons/hicolor/$${f%.png}/apps"; \
@@ -119,7 +121,7 @@ install: all
 	@echo "INSTALL share/nsxiv/"
 	install -Dt $(DESTDIR)$(DOCPREFIX)/examples examples/*
 
-uninstall: icon_cleanup
+uninstall: uninstall-icon
 	@echo "REMOVE bin/nsxiv"
 	rm -f $(DESTDIR)$(PREFIX)/bin/nsxiv
 	@echo "REMOVE nsxiv.1"
