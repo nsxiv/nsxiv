@@ -558,7 +558,7 @@ void run_key_handler(const char *key, unsigned int mask)
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
 			if (stat(files[i].path, &st) != 0 ||
-				  memcmp(&oldst[f].st_mtime, &st.st_mtime, sizeof(st.st_mtime)) != 0)
+			    memcmp(&oldst[f].st_mtime, &st.st_mtime, sizeof(st.st_mtime)) != 0)
 			{
 				if (tns.thumbs != NULL) {
 					tns_unload(&tns, i);
