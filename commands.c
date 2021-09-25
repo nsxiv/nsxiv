@@ -37,6 +37,7 @@ void animate(void);
 void slideshow(void);
 void set_timeout(timeout_f, int, bool);
 void reset_timeout(timeout_f);
+void init_key_handler(void);
 
 extern appmode_t mode;
 extern img_t img;
@@ -114,7 +115,7 @@ bool cg_toggle_bar(arg_t _)
 
 bool cg_prefix_external(arg_t _)
 {
-	extprefix = true;
+	init_key_handler();
 	return false;
 }
 
