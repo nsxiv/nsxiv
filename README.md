@@ -127,13 +127,13 @@ F.A.Q
 -----
 
 * Can I open remote urls with nsxiv? <br>
-Yes, see [nsxiv-url](https://github.com/nsxiv/nsxiv/wiki/nsxiv-url)
+Yes, see [nsxiv-url](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-url)
 
 * Can I open all the images in a directory? <br>
-Yes, see [nsxiv-rifle](https://github.com/nsxiv/nsxiv/wiki/nsxiv-rifle)
+Yes, see [nsxiv-rifle](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-rifle)
 
 * Can I set default arguments for nsxiv? <br>
-Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv/wiki/nsxiv-env)
+Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-env)
 
 * Can I pipe images into nsxiv? <br>
 No, not yet. See [#32](https://github.com/nsxiv/nsxiv/issues/32)
