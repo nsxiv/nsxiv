@@ -139,6 +139,18 @@ Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/ns
 No, not yet. See [#32](https://github.com/nsxiv/nsxiv/issues/32)
 
 
+User patches
+------------
+
+Due to our limited [project scope](CONTRIBUTING.md), certain features or
+customization cannot be merged into nsxiv mainline. Following the spirit of
+suckless software, we host the [nsxiv-extra](https://github.com/nsxiv/nsxiv-extra)
+repo where users are free to submit whatever patches or scripts they wish.
+
+Description on how to use or submit patches can be found on
+[nsxiv-extra's](https://github.com/nsxiv/nsxiv-extra) README.
+
+
 Download
 --------
 
