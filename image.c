@@ -916,4 +916,3 @@ bool img_frame_animate(img_t *img)
 	img->dirty = true;
 	return true;
 }
-

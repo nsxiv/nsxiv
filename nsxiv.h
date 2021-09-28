@@ -459,4 +459,3 @@ void win_set_cursor(win_t*, cursor_t);
 void win_cursor_pos(win_t*, int*, int*);
 
 #endif /* NSXIV_H */
-

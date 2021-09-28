@@ -109,4 +109,3 @@ bool arl_handle(arl_t *arl)
 	}
 	return reload;
 }
-

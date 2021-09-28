@@ -448,4 +448,3 @@ bool ct_reload_all(arg_t _)
 const cmd_t cmds[CMD_COUNT] = {
 #include "commands.lst"
 };
-
