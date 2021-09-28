@@ -319,7 +319,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 				}
 				exif_data_unref(ed);
 			}
-#endif
+#endif /* HAVE_LIBEXIF */
 		}
 	}
 
