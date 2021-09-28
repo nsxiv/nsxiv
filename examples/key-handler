@@ -11,6 +11,8 @@
 # The key combo argument has the following form: "[C-][M-][S-]KEY",
 # where C/M/S indicate Ctrl/Meta(Alt)/Shift modifier states and KEY is the X
 # keysym as listed in /usr/include/X11/keysymdef.h without the "XK_" prefix.
+# If KEY has an uppercase equivalent, S-KEY is resolved into it. For instance,
+# K replaces S-k and Scedilla replaces S-scedilla, but S-Delete is sent as-is.
 
 rotate() {
 	degree="$1"
