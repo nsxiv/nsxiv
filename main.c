@@ -838,7 +838,7 @@ void setup_signal(int sig, void (*handler)(int sig))
 		error(EXIT_FAILURE, errno, "signal %d", sig);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
 	int i, start;
 	size_t n;
