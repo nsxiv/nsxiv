@@ -34,4 +34,3 @@ I_CMD(slideshow)
 
 T_CMD(move_sel)
 T_CMD(reload_all)
-
