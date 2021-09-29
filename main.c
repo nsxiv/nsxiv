@@ -682,13 +682,12 @@ void on_buttonpress(XButtonEvent *bev)
 	prefix = 0;
 }
 
-const struct timespec ten_ms = {0, 10000000};
-
 void run(void)
 {
 	int xfd;
 	fd_set fds;
 	struct timeval timeout;
+	const struct timespec ten_ms = {0, 10000000};
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
 
