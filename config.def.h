@@ -4,9 +4,8 @@
 static const int WIN_WIDTH  = 800;
 static const int WIN_HEIGHT = 600;
 
-/* colors and font are configured with 'background', 'foreground' and
- * 'font' X resource properties.
- * See X(7) section Resources and xrdb(1) for more information.
+/* colors and font are configured via X resource properties.
+ * See nsxiv(1), X(7) section Resources and xrdb(1) for more information.
  */
 
 #endif
