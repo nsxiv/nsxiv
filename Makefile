@@ -112,14 +112,16 @@ uninstall-icon:
 
 install: all
 	@echo "INSTALL bin/nsxiv"
-	install -Dt $(DESTDIR)$(PREFIX)/bin nsxiv
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	install nsxiv $(DESTDIR)$(PREFIX)/bin/nsxiv
 	@echo "INSTALL nsxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
 	sed "s!DOCPREFIX!$(DOCPREFIX)!g; s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" nsxiv.1 \
 		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "INSTALL share/nsxiv/"
-	install -Dt $(DESTDIR)$(DOCPREFIX)/examples examples/*
+	mkdir -p $(DESTDIR)$(DOCPREFIX)/examples
+	install examples/* $(DESTDIR)$(DOCPREFIX)/examples
 
 uninstall: uninstall-icon
 	@echo "REMOVE bin/nsxiv"
