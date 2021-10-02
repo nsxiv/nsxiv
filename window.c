@@ -512,7 +512,7 @@ void win_set_title(win_t *win, const char *path)
 		return;
 
 	snprintf(title, title_max, "%s%s", options->title_prefix,
-	        (options->title_suffixmode == SUFFIX_BASENAME) ? basename : path);
+	         options->title_suffixmode == SUFFIX_BASENAME ? basename : path);
 	if (options->title_suffixmode == SUFFIX_EMPTY)
 		*(title+strlen(options->title_prefix)) = '\0';
 
