@@ -1,7 +1,8 @@
 Contribution Guideline
 ----------------------
 
-The scope and aim of nsxiv are:
+Project Scope
+-------------
 
   * Bug fixes and maintenance
   * Prioritize extensibility and simplicity
@@ -9,7 +10,11 @@ The scope and aim of nsxiv are:
   * Do not add extra dependency (if we do, add compile time switch to disable it)
   * New features may be added if it cannot be achieved (easily) via a shell script,
     doesn't break backwards compatibility and doesn't violate any of the above rules.
-  
+
+
+Contribution Guideline
+----------------------
+
 When contributing, make sure:
 
   * Your contribution falls under nsxiv's scope and aim

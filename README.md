@@ -9,8 +9,8 @@ nsxiv is free software licensed under GPLv2 and aims to be easy to modify and cu
 
 Please file a bug report if something does not work as documented or
 expected in *this* repository, after making sure you are using the latest
-release of nsxiv. Contributions are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md)
-for details.
+release of nsxiv. Contributions are welcome, see
+[CONTRIBUTING.md](CONTRIBUTING.md#Contribution-Guideline) for details.
 
 
 Features
@@ -127,16 +127,28 @@ F.A.Q
 -----
 
 * Can I open remote urls with nsxiv? <br>
-Yes, see [nsxiv-url](https://github.com/nsxiv/nsxiv/wiki/nsxiv-url)
+Yes, see [nsxiv-url](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-url)
 
 * Can I open all the images in a directory? <br>
-Yes, see [nsxiv-rifle](https://github.com/nsxiv/nsxiv/wiki/nsxiv-rifle)
+Yes, see [nsxiv-rifle](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-rifle)
 
 * Can I set default arguments for nsxiv? <br>
-Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv/wiki/nsxiv-env)
+Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-env)
 
 * Can I pipe images into nsxiv? <br>
 No, not yet. See [#32](https://github.com/nsxiv/nsxiv/issues/32)
+
+
+User patches
+------------
+
+Due to our limited [project scope](CONTRIBUTING.md#Project-Scope), certain features or
+customization cannot be merged into nsxiv mainline. Following the spirit of
+suckless software, we host the [nsxiv-extra](https://github.com/nsxiv/nsxiv-extra)
+repo where users are free to submit whatever patches or scripts they wish.
+
+Description on how to use or submit patches can be found on
+[nsxiv-extra's](https://github.com/nsxiv/nsxiv-extra) README.
 
 
 Download
