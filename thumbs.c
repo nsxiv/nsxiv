@@ -143,7 +143,6 @@ void tns_clean_cache(tns_t *tns)
 	r_closedir(&dir);
 }
 
-
 void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *win)
 {
 	int len;
