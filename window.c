@@ -229,24 +229,22 @@ void win_open(win_t *win)
 		if ((gmask & YNegative) != 0) {
 			win->y += e->scrh - win->h;
 			sizehints.win_gravity = sizehints.win_gravity == NorthEastGravity
-			                      ? SouthEastGravity : SouthWestGravity;
+			                        ? SouthEastGravity : SouthWestGravity;
 		}
 		sizehints.flags |= USPosition;
 	} else {
 		win->y = 0;
 	}
 
-	win->xwin = XCreateWindow(e->dpy, parent,
-	                          win->x, win->y, win->w, win->h, 0,
+	win->xwin = XCreateWindow(e->dpy, parent, win->x, win->y, win->w, win->h, 0,
 	                          e->depth, InputOutput, e->vis, 0, NULL);
 	if (win->xwin == None)
 		error(EXIT_FAILURE, 0, "Error creating X window");
 
 	/* set the _NET_WM_PID */
 	pid = getpid();
-	XChangeProperty(e->dpy, win->xwin,
-	                atoms[ATOM__NET_WM_PID], XA_CARDINAL, sizeof(pid_t) * 8,
-	                PropModeReplace, (unsigned char *) &pid, 1);
+	XChangeProperty(e->dpy, win->xwin, atoms[ATOM__NET_WM_PID], XA_CARDINAL,
+	                sizeof(pid_t) * 8, PropModeReplace, (unsigned char *) &pid, 1);
 	if (gethostname(hostname, ARRLEN(hostname)) == 0) {
 		XTextProperty tp;
 		tp.value = (unsigned char *)hostname;
@@ -264,11 +262,9 @@ void win_open(win_t *win)
 		if (i != CURSOR_NONE)
 			cursors[i].icon = XCreateFontCursor(e->dpy, cursors[i].name);
 	}
-	if (XAllocNamedColor(e->dpy, e->cmap, "black",
-	                     &col, &col) == 0)
-	{
+	if (XAllocNamedColor(e->dpy, e->cmap, "black", &col, &col) == 0)
 		error(EXIT_FAILURE, 0, "Error allocating color 'black'");
-	}
+
 	none = XCreateBitmapFromData(e->dpy, win->xwin, none_data, 8, 8);
 	*cnone = XCreatePixmapCursor(e->dpy, none, none, &col, &col, 0, 0);
 
@@ -286,8 +282,7 @@ void win_open(win_t *win)
 			for (c = icons[i].data[j] >> 4; c >= 0; c--)
 				icon_data[n++] = icon_colors[icons[i].data[j] & 0x0F];
 		}
-		XChangeProperty(e->dpy, win->xwin,
-		                atoms[ATOM__NET_WM_ICON], XA_CARDINAL, 32,
+		XChangeProperty(e->dpy, win->xwin, atoms[ATOM__NET_WM_ICON], XA_CARDINAL, 32,
 		                i == 0 ? PropModeReplace : PropModeAppend,
 		                (unsigned char *) icon_data, n);
 	}
@@ -318,9 +313,8 @@ void win_open(win_t *win)
 
 	win->buf.w = e->scrw;
 	win->buf.h = e->scrh;
-	win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
-	                            win->buf.w, win->buf.h, e->depth);
-	XSetForeground(e->dpy, gc, win->win_bg);
+	win->buf.pm = XCreatePixmap(e->dpy, win->xwin, win->buf.w, win->buf.h, e->depth);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
 
