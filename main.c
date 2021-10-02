@@ -478,6 +478,13 @@ void init_key_handler(void)
 	win_draw(&win);
 }
 
+void abort_key_handler(void)
+{
+	extprefix = false;
+	open_info();
+	redraw();
+}
+
 void run_key_handler(const char *key, unsigned int mask)
 {
 	pid_t pid;
@@ -597,9 +604,7 @@ void on_keypress(XKeyEvent *kev)
 	if (IsModifierKey(ksym))
 		return;
 	if (extprefix && ksym == keyhandler_abort && MODMASK(kev->state) == 0) {
-		open_info();
-		redraw();
-		extprefix = False;
+		abort_key_handler();
 	} else if (extprefix) {
 		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
 		extprefix = False;
