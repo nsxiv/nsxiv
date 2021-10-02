@@ -449,8 +449,7 @@ void win_draw_bar(win_t *win)
 	e = &win->env;
 	y = win->h + font->ascent + V_TEXT_PAD;
 	w = win->w - 2*H_TEXT_PAD;
-	d = XftDrawCreate(e->dpy, win->buf.pm, e->vis,
-	                  e->cmap);
+	d = XftDrawCreate(e->dpy, win->buf.pm, e->vis, e->cmap);
 
 	XSetForeground(e->dpy, gc, win->bar_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->h, win->w, win->bar.h);
