@@ -30,7 +30,7 @@ const char *progname;
 void* emalloc(size_t size)
 {
 	void *ptr;
-	
+
 	ptr = malloc(size);
 	if (ptr == NULL)
 		error(EXIT_FAILURE, errno, NULL);
@@ -141,7 +141,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 	struct dirent *dentry;
 	struct stat fstats;
 
-	while (true) {
+	for (;;) {
 		if (rdir->dir != NULL && (dentry = readdir(rdir->dir)) != NULL) {
 			if (dentry->d_name[0] == '.') {
 				if (skip_dotfiles)
@@ -172,7 +172,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 			}
 			return filename;
 		}
-		
+
 		if (rdir->recursive && rdir->stlen > 0) {
 			/* open next subdirectory */
 			closedir(rdir->dir);

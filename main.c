@@ -264,7 +264,7 @@ void read_info(void)
 	ssize_t i, n;
 	char buf[BAR_L_LEN];
 
-	while (true) {
+	for (;;) {
 		n = read(info.fd, buf, sizeof(buf));
 		if (n < 0 && errno == EAGAIN)
 			return;
@@ -709,7 +709,7 @@ void run(void)
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
 
-	while (true) {
+	for (;;) {
 		to_set = check_timeouts(&timeout);
 		init_thumb = mode == MODE_THUMB && tns.initnext < filecnt;
 		load_thumb = mode == MODE_THUMB && tns.loadnext < tns.end;
