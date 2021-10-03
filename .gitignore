@@ -3,4 +3,3 @@ version.h
 *.d
 *.o
 nsxiv
-config.mk

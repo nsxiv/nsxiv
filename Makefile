@@ -1,18 +1,21 @@
-# Include configure options
-ifneq (clean,$(filter clean,$(MAKECMDGOALS)))
--include config.mk
-endif
-
 # nsxiv version
 VERSION = 27.1
 
 # PREFIX for install
 PREFIX ?= /usr/local
-MANPREFIX = $(PREFIX)/share/man
-DOCPREFIX = $(PREFIX)/share/doc/nsxiv
+MANPREFIX ?= $(PREFIX)/share/man
+EGPREFIX ?= $(PREFIX)/share/doc/nsxiv/examples
 
-# autoreload backend: inotify/nop
-AUTORELOAD = inotify
+# default value for optional dependencies. 1 = enabled, 0 = disabled
+OPT_DEP_DEFAULT ?= 1
+
+# autoreload backend: 1 = inotify, 0 = none
+HAVE_INOTIFY ?= $(OPT_DEP_DEFAULT)
+
+# optional dependencies, see README for more info
+HAVE_LIBGIF ?= $(OPT_DEP_DEFAULT)
+HAVE_LIBEXIF ?= $(OPT_DEP_DEFAULT)
+HAVE_LIBWEBP ?= $(OPT_DEP_DEFAULT)
 
 # CFLAGS, any optimization flags goes here
 CFLAGS ?= -std=c99 -Wall -pedantic
@@ -20,30 +23,25 @@ CFLAGS ?= -std=c99 -Wall -pedantic
 # icons that will be installed via `make icon`
 ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
 
-ifeq ($(HAVE_LIBEXIF), 1)
-	OPTIONAL_LIBS += -lexif
-else
-	HAVE_LIBEXIF = 0
-endif
-ifeq ($(HAVE_LIBGIF), 1)
-	OPTIONAL_LIBS += -lgif
-else
-	HAVE_LIBGIF = 0
-endif
-ifeq ($(HAVE_LIBWEBP), 1)
-	OPTIONAL_LIBS += -lwebpdemux -lwebp
-else
-	HAVE_LIBWEBP = 0
-endif
-
 CPPFLAGS = -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) \
   -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
 
-LDLIBS = -lImlib2 -lX11 -lXft -lfontconfig $(OPTIONAL_LIBS)
+lib_exif_0 =
+lib_exif_1 = -lexif
+lib_gif_0 =
+lib_gif_1 = -lgif
+lib_webp_0 =
+lib_webp_1 = -lwebpdemux -lwebp
+autoreload_0 = nop
+autoreload_1 = inotify
+# using += because certain *BSD distros may need to add additional flags
+LDLIBS += -lImlib2 -lX11 -lXft -lfontconfig \
+  $(lib_exif_$(HAVE_LIBEXIF)) $(lib_gif_$(HAVE_LIBGIF)) \
+  $(lib_webp_$(HAVE_LIBWEBP))
 
-OBJS = autoreload_$(AUTORELOAD).o commands.o image.o main.o options.o \
+OBJS = autoreload_$(autoreload_$(HAVE_INOTIFY)).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
 .PHONY: all clean install uninstall install-all install-icon uninstall-icon install-desktop
@@ -60,18 +58,9 @@ nsxiv: $(OBJS)
 	@echo "CC $@"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
-$(OBJS): Makefile nsxiv.h commands.lst config.h config.mk
+$(OBJS): Makefile nsxiv.h commands.lst config.h
 options.o: version.h
 window.o: icon/data.h
-
-config.mk:
-	@echo "GEN $@"
-	@echo "# 0 = disable, 1 = enable" > config.mk
-	@for lib in exif gif webp; do \
-		if echo "int main(){}" | $(CC) "-l$$lib" -o /dev/null -x c - 2>/dev/null ; then \
-			echo "HAVE_LIB$$lib=1" | tr '[:lower:]' '[:upper:]' >> config.mk ; \
-		fi \
-	done
 
 config.h:
 	@echo "GEN $@"
@@ -85,7 +74,7 @@ version.h: Makefile .git/index
 .git/index:
 
 clean:
-	$(RM) *.o nsxiv
+	rm -f *.o nsxiv version.h
 
 install-all: install install-desktop install-icon
 
@@ -112,14 +101,18 @@ uninstall-icon:
 
 install: all
 	@echo "INSTALL bin/nsxiv"
-	install -Dt $(DESTDIR)$(PREFIX)/bin nsxiv
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	cp nsxiv $(DESTDIR)$(PREFIX)/bin/
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/nsxiv
 	@echo "INSTALL nsxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s!DOCPREFIX!$(DOCPREFIX)!g; s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" nsxiv.1 \
+	sed "s!EGPREFIX!$(EGPREFIX)!g; s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" nsxiv.1 \
 		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "INSTALL share/nsxiv/"
-	install -Dt $(DESTDIR)$(DOCPREFIX)/examples examples/*
+	mkdir -p $(DESTDIR)$(EGPREFIX)
+	cp examples/* $(DESTDIR)$(EGPREFIX)
+	chmod 755 $(DESTDIR)$(EGPREFIX)/*
 
 uninstall: uninstall-icon
 	@echo "REMOVE bin/nsxiv"
@@ -129,5 +122,5 @@ uninstall: uninstall-icon
 	@echo "REMOVE nsxiv.desktop"
 	rm -f $(DESTDIR)$(PREFIX)/share/applications/nsxiv.desktop
 	@echo "REMOVE share/nsxiv/"
-	rm -rf $(DESTDIR)$(DOCPREFIX)
+	rm -rf $(DESTDIR)$(EGPREFIX)
 
