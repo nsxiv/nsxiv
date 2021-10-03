@@ -92,10 +92,6 @@ timeout_t timeouts[] = {
 	{ { 0, 0 }, false, clear_resize },
 };
 
-cursor_t imgcursor[3] = {
-	CURSOR_ARROW, CURSOR_ARROW, CURSOR_ARROW
-};
-
 /**************************
   function implementations
  **************************/
@@ -916,14 +912,6 @@ int main(int argc, char *argv[])
 
 	filecnt = fileidx;
 	fileidx = options->startnum < filecnt ? options->startnum : 0;
-
-	for (i = 0; i < ARRLEN(buttons); i++) {
-		if (buttons[i].cmd == i_cursor_navigate) {
-			imgcursor[0] = CURSOR_LEFT;
-			imgcursor[2] = CURSOR_RIGHT;
-			break;
-		}
-	}
 
 	win_init(&win);
 	img_init(&img, &win);
