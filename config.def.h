@@ -164,4 +164,9 @@ static const button_t buttons[] = {
 	{ 0,            5,                g_zoom,               -1 },
 };
 
+/* mouse cursor on left, middle and right part of the window */
+static const cursor_t imgcursor[3] = {
+	CURSOR_LEFT, CURSOR_ARROW, CURSOR_RIGHT
+};
+
 #endif
