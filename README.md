@@ -119,6 +119,16 @@ the following command:
     $ make config.h
 
 
+Installing via package manager
+------------------------------
+
+nsxiv is available on the following distributions/repositories. If you don't see
+your distro listed here, either contact your distro's package maintainer or
+consider packaging it yourself and adding it to the respective community repo.
+
+[![Packaging status](https://repology.org/badge/vertical-allrepos/nsxiv.svg)](https://repology.org/project/nsxiv/versions)
+
+
 Usage
 -----
 
