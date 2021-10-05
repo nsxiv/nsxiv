@@ -245,6 +245,7 @@ void img_toggle_antialias(img_t*);
 bool img_change_gamma(img_t*, int);
 bool img_frame_navigate(img_t*, int);
 bool img_frame_animate(img_t*);
+void render_core(win_t*, int, int, int, int, int, int, int, int, bool);
 
 
 /* options.c */
@@ -409,6 +410,8 @@ struct win {
 	XColor win_bg;
 	XColor win_fg;
 	XColor mrk_fg;
+	XColor win_bg_premul; /* premultiplied alpha */
+	unsigned int win_alpha;
 #if HAVE_LIBFONTS
 	XftColor bar_bg;
 	XftColor bar_fg;

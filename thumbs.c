@@ -447,7 +447,7 @@ void tns_render(tns_t *tns)
 			t->x = x + (thumb_sizes[tns->zl] - t->w) / 2;
 			t->y = y + (thumb_sizes[tns->zl] - t->h) / 2;
 			imlib_context_set_image(t->im);
-			imlib_render_image_on_drawable_at_size(t->x, t->y, t->w, t->h);
+			render_core(win, 0, 0, t->w, t->h, t->x, t->y, t->w, t->h, false);
 			if (tns->files[i].flags & FF_MARK)
 				tns_mark(tns, i, true);
 		} else {
@@ -469,7 +469,7 @@ void tns_mark(tns_t *tns, int n, bool mark)
 	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im != NULL) {
 		win_t *win = tns->win;
 		thumb_t *t = &tns->thumbs[n];
-		unsigned long col = win->win_bg.pixel;
+		unsigned long col = win->win_bg_premul.pixel;
 		int x = t->x + t->w, y = t->y + t->h;
 
 		win_draw_rect(win, x - 1, y + 1, 1, tns->bw, true, 1, col);
@@ -490,7 +490,7 @@ void tns_highlight(tns_t *tns, int n, bool hl)
 	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im != NULL) {
 		win_t *win = tns->win;
 		thumb_t *t = &tns->thumbs[n];
-		unsigned long col = hl ? win->win_fg.pixel : win->win_bg.pixel;
+		unsigned long col = hl ? win->win_fg.pixel : win->win_bg_premul.pixel;
 		int oxy = (tns->bw + 1) / 2 + 1, owh = tns->bw + 2;
 
 		win_draw_rect(win, t->x - oxy, t->y - oxy, t->w + owh, t->h + owh,
