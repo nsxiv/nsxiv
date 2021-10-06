@@ -478,7 +478,7 @@ void handle_key_handler(bool init)
 		close_info();
 		snprintf(win.bar.l.buf, win.bar.l.size, "Getting key handler input "
 		         "(%s to abort)...", XKeysymToString(keyhandler_abort));
-	} else {
+	} else { /* abort */
 		open_info();
 		update_info();
 	}
