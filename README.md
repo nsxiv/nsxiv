@@ -128,6 +128,10 @@ consider packaging it yourself and adding it to the respective community repo.
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/nsxiv.svg)](https://repology.org/project/nsxiv/versions)
 
+Repos not tracked by repology:
+
+* Fedora: Enable the copr repo via `dnf copr enable mamg22/nsxiv`.
+
 
 Usage
 -----
