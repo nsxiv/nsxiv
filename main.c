@@ -469,6 +469,22 @@ Bool is_input_ev(Display *dpy, XEvent *ev, XPointer arg)
 	return ev->type == ButtonPress || ev->type == KeyPress;
 }
 
+void handle_key_handler(bool init)
+{
+	extprefix = init;
+	if (win.bar.h == 0)
+		return;
+	if (init) {
+		close_info();
+		snprintf(win.bar.l.buf, win.bar.l.size, "Getting key handler input "
+		         "(%s to abort)...", XKeysymToString(keyhandler_abort));
+	} else { /* abort */
+		open_info();
+		update_info();
+	}
+	win_draw(&win);
+}
+
 void run_key_handler(const char *key, unsigned int mask)
 {
 	pid_t pid;
@@ -588,7 +604,7 @@ void on_keypress(XKeyEvent *kev)
 	if (IsModifierKey(ksym))
 		return;
 	if (extprefix && ksym == keyhandler_abort && MODMASK(kev->state) == 0) {
-		extprefix = False;
+		handle_key_handler(false);
 	} else if (extprefix) {
 		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
 		extprefix = False;
