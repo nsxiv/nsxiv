@@ -4,9 +4,17 @@
 static const int WIN_WIDTH  = 800;
 static const int WIN_HEIGHT = 600;
 
-/* colors and font are configured via X resource properties.
+/* colors and font can be overwritten via X resource properties.
  * See nsxiv(1), X(7) section Resources and xrdb(1) for more information.
  */
+static const char *DEFAULT_WIN_BG     = "white";
+static const char *DEFAULT_WIN_FG     = "black";
+static const char *DEFAULT_MARK_COLOR = NULL;  /* NULL means it will default to window foreground */
+#if HAVE_LIBFONTS
+static const char *DEFAULT_BAR_BG     = NULL;  /* NULL means it will default to window background */
+static const char *DEFAULT_BAR_FG     = NULL;  /* NULL means it will default to window foreground */
+static const char *DEFAULT_FONT       = "monospace-8";
+#endif
 
 #endif
 #ifdef _TITLE_CONFIG
