@@ -854,7 +854,7 @@ int main(int argc, char *argv[])
 
 	if (options->clean_cache) {
 		tns_init(&tns, NULL, NULL, NULL, NULL);
-		tns_clean_cache(&tns);
+		tns_clean_cache();
 		exit(EXIT_SUCCESS);
 	}
 

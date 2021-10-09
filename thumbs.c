@@ -119,7 +119,7 @@ end:
 	}
 }
 
-void tns_clean_cache(tns_t *tns)
+void tns_clean_cache(void)
 {
 	int dirlen;
 	char *cfile, *filename;
