@@ -316,10 +316,10 @@ void win_open(win_t *win)
 	win->buf.w = e->scrw;
 	win->buf.h = e->scrh;
 	win->buf.pm = XCreatePixmap(e->dpy, win->xwin, win->buf.w, win->buf.h, e->depth);
+
 	XSetForeground(e->dpy, gc, win->win_bg);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
-
 	XMapWindow(e->dpy, win->xwin);
 	XFlush(e->dpy);
 
