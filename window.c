@@ -227,12 +227,11 @@ void win_open(win_t *win)
 	}
 
 	attrs.colormap = e->cmap;
-	attrs.background_pixel = 0;
 	attrs.border_pixel = 0;
 
 	win->xwin = XCreateWindow(e->dpy, parent, win->x, win->y, win->w, win->h, 0,
 	                          e->depth, InputOutput, e->vis,
-	                          CWBackPixel | CWColormap | CWBorderPixel, &attrs);
+	                          CWColormap | CWBorderPixel, &attrs);
 	if (win->xwin == None)
 		error(EXIT_FAILURE, 0, "Error creating X window");
 
