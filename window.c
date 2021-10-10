@@ -121,7 +121,6 @@ void win_init(win_t *win)
 	e->scr = DefaultScreen(e->dpy);
 	e->scrw = DisplayWidth(e->dpy, e->scr);
 	e->scrh = DisplayHeight(e->dpy, e->scr);
-
 	e->depth = DefaultDepth(e->dpy, e->scr);
 	e->vis = DefaultVisual(e->dpy, e->scr);
 	e->cmap = DefaultColormap(e->dpy, e->scr);
