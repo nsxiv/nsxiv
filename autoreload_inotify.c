@@ -87,7 +87,7 @@ bool arl_handle(arl_t *arl)
 	char *ptr;
 	const struct inotify_event *e;
 
-	for (;;) {
+	while (true) {
 		ssize_t len = read(arl->fd, buf.d, sizeof(buf.d));
 
 		if (len == -1) {

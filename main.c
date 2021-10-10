@@ -264,7 +264,7 @@ void read_info(void)
 	ssize_t i, n;
 	char buf[BAR_L_LEN];
 
-	for (;;) {
+	while (true) {
 		n = read(info.fd, buf, sizeof(buf));
 		if (n < 0 && errno == EAGAIN)
 			return;
@@ -677,7 +677,7 @@ void on_buttonpress(XButtonEvent *bev)
 					bool on = !(files[sel].flags & FF_MARK);
 					XEvent e;
 
-					for (;;) {
+					while (true) {
 						if (sel >= 0 && mark_image(sel, on))
 							redraw();
 						XMaskEvent(win.env.dpy,
@@ -709,7 +709,7 @@ void run(void)
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
 
-	for (;;) {
+	while (true) {
 		to_set = check_timeouts(&timeout);
 		init_thumb = mode == MODE_THUMB && tns.initnext < filecnt;
 		load_thumb = mode == MODE_THUMB && tns.loadnext < tns.end;

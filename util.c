@@ -141,7 +141,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 	struct dirent *dentry;
 	struct stat fstats;
 
-	for (;;) {
+	while (true) {
 		if (rdir->dir != NULL && (dentry = readdir(rdir->dir)) != NULL) {
 			if (dentry->d_name[0] == '.') {
 				if (skip_dotfiles)

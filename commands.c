@@ -343,7 +343,7 @@ bool ci_drag(arg_t mode)
 	ox = x;
 	oy = y;
 
-	for (;;) {
+	while (true) {
 		if (mode == DRAG_ABSOLUTE) {
 			px = MIN(MAX(0.0, x - win.w*0.1), win.w*0.8) / (win.w*0.8)
 			   * (win.w - img.w * img.zoom);
