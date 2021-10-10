@@ -416,9 +416,9 @@ struct win {
 	Window xwin;
 	win_env_t env;
 
-	unsigned long win_bg;
-	unsigned long win_fg;
-	unsigned long mrk_fg;
+	XColor win_bg;
+	XColor win_fg;
+	XColor mrk_fg;
 #if HAVE_LIBFONTS
 	XftColor bar_bg;
 	XftColor bar_fg;
