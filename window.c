@@ -33,14 +33,14 @@
 #include "utf8.h"
 static XftFont *font;
 static double fontsize;
+#define TEXTWIDTH(win, text, len) \
+	win_draw_text(win, NULL, NULL, 0, 0, text, len, 0)
 #endif
 
 #define RES_CLASS "Nsxiv"
 
 #define INIT_ATOM_(atom) \
 	atoms[ATOM_##atom] = XInternAtom(e->dpy, #atom, False);
-#define TEXTWIDTH(win, text, len) \
-	win_draw_text(win, NULL, NULL, 0, 0, text, len, 0)
 
 enum {
 	H_TEXT_PAD = 5,
@@ -316,7 +316,7 @@ void win_open(win_t *win)
 	win->buf.w = e->scrw;
 	win->buf.h = e->scrh;
 	win->buf.pm = XCreatePixmap(e->dpy, win->xwin, win->buf.w, win->buf.h, e->depth);
-	XSetForeground(e->dpy, gc, win->win_bg.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
 
@@ -402,6 +402,7 @@ void win_clear(win_t *win)
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 }
 
+#if HAVE_LIBFONTS
 int win_draw_text(win_t *win, XftDraw *d, const XftColor *color, int x, int y,
                   char *text, int len, int w)
 {
