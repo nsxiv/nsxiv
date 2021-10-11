@@ -34,6 +34,9 @@
 #include <X11/keysym.h>
 #include <X11/XF86keysym.h>
 
+#define MODMASK(mask) ((mask) & ~ignore_mask)
+#define BAR_SEP "  "
+
 typedef struct {
 	struct timeval when;
 	bool active;
@@ -93,6 +96,9 @@ cursor_t imgcursor[3] = {
 	CURSOR_ARROW, CURSOR_ARROW, CURSOR_ARROW
 };
 
+/**************************
+  function implementations
+ **************************/
 void cleanup(void)
 {
 	img_close(&img, false);
@@ -346,8 +352,6 @@ void bar_put(win_bar_t *bar, const char *fmt, ...)
 	va_end(ap);
 }
 
-#define BAR_SEP "  "
-
 void update_info(void)
 {
 	unsigned int i, fn, fw;
@@ -554,7 +558,7 @@ void run_key_handler(const char *key, unsigned int mask)
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
 			if (stat(files[i].path, &st) != 0 ||
-				  memcmp(&oldst[f].st_mtime, &st.st_mtime, sizeof(st.st_mtime)) != 0)
+			    memcmp(&oldst[f].st_mtime, &st.st_mtime, sizeof(st.st_mtime)) != 0)
 			{
 				if (tns.thumbs != NULL) {
 					tns_unload(&tns, i);
@@ -582,8 +586,6 @@ end:
 	redraw();
 }
 
-#define MODMASK(mask) ((mask) & ~ignore_mask)
-
 void on_keypress(XKeyEvent *kev)
 {
 	int i;
@@ -607,7 +609,7 @@ void on_keypress(XKeyEvent *kev)
 		handle_key_handler(false);
 	} else if (extprefix) {
 		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
-		extprefix = False;
+		extprefix = false;
 	} else if (key >= '0' && key <= '9') {
 		/* number prefix for commands */
 		prefix = prefix * 10 + (int) (key - '0');
@@ -675,7 +677,7 @@ void on_buttonpress(XButtonEvent *bev)
 					bool on = !(files[sel].flags & FF_MARK);
 					XEvent e;
 
-					for (;;) {
+					while (true) {
 						if (sel >= 0 && mark_image(sel, on))
 							redraw();
 						XMaskEvent(win.env.dpy,
@@ -836,7 +838,7 @@ void setup_signal(int sig, void (*handler)(int sig))
 		error(EXIT_FAILURE, errno, "signal %d", sig);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
 	int i, start;
 	size_t n;

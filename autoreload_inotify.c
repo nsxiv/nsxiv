@@ -24,6 +24,11 @@
 #include <unistd.h>
 #include <sys/inotify.h>
 
+union {
+	char d[4096]; /* aligned buffer */
+	struct inotify_event e;
+} buf;
+
 void arl_init(arl_t *arl)
 {
 	arl->fd = inotify_init1(IN_CLOEXEC | IN_NONBLOCK);
@@ -76,18 +81,13 @@ void arl_setup(arl_t *arl, const char *filepath)
 	}
 }
 
-union {
-	char d[4096]; /* aligned buffer */
-	struct inotify_event e;
-} buf;
-
 bool arl_handle(arl_t *arl)
 {
 	bool reload = false;
 	char *ptr;
 	const struct inotify_event *e;
 
-	for (;;) {
+	while (true) {
 		ssize_t len = read(arl->fd, buf.d, sizeof(buf.d));
 
 		if (len == -1) {
@@ -109,4 +109,3 @@ bool arl_handle(arl_t *arl)
 	}
 	return reload;
 }
-

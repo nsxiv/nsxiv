@@ -39,4 +39,3 @@ bool arl_handle(arl_t *arl)
 	(void) arl;
 	return false;
 }
-

@@ -89,6 +89,7 @@ void exif_auto_orientate(const fileinfo_t *file)
 	switch (orientation) {
 		case 5:
 			imlib_image_orientate(1);
+			/* fall through */
 		case 2:
 			imlib_image_flip_vertical();
 			break;
@@ -97,6 +98,7 @@ void exif_auto_orientate(const fileinfo_t *file)
 			break;
 		case 7:
 			imlib_image_orientate(1);
+			/* fall through */
 		case 4:
 			imlib_image_flip_horizontal();
 			break;
@@ -916,4 +918,3 @@ bool img_frame_animate(img_t *img)
 	img->dirty = true;
 	return true;
 }
-

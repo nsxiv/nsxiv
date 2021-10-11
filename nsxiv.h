@@ -33,15 +33,9 @@
  */
 #define CLEANUP
 
-#ifndef MIN
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
-#endif
-#ifndef MAX
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
-#endif
-#ifndef ABS
 #define ABS(a) ((a) > 0 ? (a) : -(a))
-#endif
 
 #define ARRLEN(a) (sizeof(a) / sizeof((a)[0]))
 
@@ -465,4 +459,3 @@ void win_set_cursor(win_t*, cursor_t);
 void win_cursor_pos(win_t*, int*, int*);
 
 #endif /* NSXIV_H */
-
