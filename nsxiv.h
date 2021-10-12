@@ -98,6 +98,7 @@ typedef enum {
 
 typedef enum {
 	CURSOR_ARROW,
+	CURSOR_PAN,
 	CURSOR_DRAG,
 	CURSOR_WATCH,
 	CURSOR_LEFT,
