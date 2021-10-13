@@ -26,7 +26,7 @@
 #include <string.h>
 #include <unistd.h>
 
-opt_t _options;
+opt_t _options = {0};
 const opt_t *options = (const opt_t*) &_options;
 
 void print_usage(void)
@@ -50,31 +50,11 @@ void parse_options(int argc, char **argv)
 	progname = strrchr(argv[0], '/');
 	progname = progname ? progname + 1 : argv[0];
 
-	_options.from_stdin = false;
-	_options.to_stdout = false;
-	_options.using_null = false;
-	_options.recursive = false;
-	_options.startnum = 0;
+	/* default zoom should be 1, but in case the user changed the initial value, respect that */
+	_options.zoom = _options.zoom ? _options.zoom : 1;
 
-	_options.scalemode = SCALE_DOWN;
-	_options.zoom = 1.0;
-	_options.animate = false;
-	_options.gamma = 0;
-	_options.slideshow = 0;
-	_options.framerate = 0;
-
-	_options.fullscreen = false;
-	_options.embed = 0;
-	_options.hide_bar = false;
-	_options.geometry = NULL;
-	_options.res_name = NULL;
 	_options.title_prefix = TITLE_PREFIX;
 	_options.title_suffixmode = TITLE_SUFFIXMODE;
-
-	_options.quiet = false;
-	_options.thumb_mode = false;
-	_options.clean_cache = false;
-	_options.private_mode = false;
 
 	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:opqrS:s:T:tvZz:0")) != -1) {
 		switch (opt) {
