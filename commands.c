@@ -338,7 +338,7 @@ bool ci_drag(arg_t mode)
 	if ((int)(img.w * img.zoom) <= win.w && (int)(img.h * img.zoom) <= win.h)
 		return false;
 
-	win_set_cursor(&win, mode == DRAG_ABSOLUTE ? CURSOR_PAN : CURSOR_DRAG);
+	win_set_cursor(&win, mode == DRAG_ABSOLUTE ? CURSOR_DRAG_ABSOLUTE : CURSOR_DRAG_RELATIVE);
 	win_cursor_pos(&win, &x, &y);
 	ox = x;
 	oy = y;
