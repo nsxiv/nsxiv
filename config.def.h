@@ -158,6 +158,7 @@ static const keymap_t keys[] = {
 static const button_t buttons[] = {
 	/* modifiers    button            function              argument */
 	{ 0,            1,                i_cursor_navigate,    None },
+	{ 0,            1,                i_drag,               DRAG_RELATIVE },
 	{ 0,            2,                i_drag,               DRAG_ABSOLUTE },
 	{ 0,            3,                g_switch_mode,        None },
 	{ 0,            4,                g_zoom,               +1 },
