@@ -18,8 +18,6 @@
 
 #include "nsxiv.h"
 #include "commands.h"
-#define _MAPPINGS_CONFIG
-#include "config.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -92,6 +90,10 @@ timeout_t timeouts[] = {
 	{ { 0, 0 }, false, slideshow    },
 	{ { 0, 0 }, false, clear_resize },
 };
+
+/* configuration, allows nested code to access above variables */
+#define _MAPPINGS_CONFIG
+#include "config.h"
 
 /**************************
   function implementations
