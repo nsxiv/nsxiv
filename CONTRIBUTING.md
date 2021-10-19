@@ -25,4 +25,4 @@ If your contribution is not suitable for general use, it will not be included in
 For changes that are very much up to preference, such as changing values in config.h,
 please do not open a pull request unless you have an objective explanation.
 
-See [open issues](https://github.com/nsxiv/nsxiv/issues) to find something to work on.
+See the [open issues](https://github.com/nsxiv/nsxiv/issues) to find something to work on.
