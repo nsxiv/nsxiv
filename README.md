@@ -38,6 +38,20 @@ Screenshots
 ![Thumb](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/thumb.png "Thumb mode")
 
 
+Installing via package manager
+------------------------------
+
+nsxiv is available on the following distributions/repositories. If you don't see
+your distro listed here, either contact your distro's package maintainer or
+consider packaging it yourself and adding it to the respective community repo.
+
+[![Packaging status](https://repology.org/badge/vertical-allrepos/nsxiv.svg)](https://repology.org/project/nsxiv/versions)
+
+Repos not tracked by repology:
+
+* Fedora: Enable the copr repo via `dnf copr enable mamg22/nsxiv`.
+
+
 Dependencies
 ------------
 
