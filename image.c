@@ -82,7 +82,7 @@ void exif_auto_orientate(const fileinfo_t *file)
 		return;
 	byte_order = exif_data_get_byte_order(ed);
 	entry = exif_content_get_entry(ed->ifd[EXIF_IFD_0], EXIF_TAG_ORIENTATION);
-	if (entry != NULL)
+	if (entry)
 		orientation = exif_get_short(entry->data, byte_order);
 	exif_data_unref(ed);
 
@@ -216,7 +216,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 					if (i < y || i >= y + h || j < x || j >= x + w ||
 					    rows[i-y][j-x] == transp)
 					{
-						if (prev_frame != NULL && (prev_disposal != 2 ||
+						if (prev_frame && (prev_disposal != 2 ||
 						    i < py || i >= py + ph || j < px || j >= px + pw))
 						{
 							*ptr = prev_frame[i * sw + j];
@@ -304,7 +304,7 @@ bool is_webp(const char *path)
 	bool ret = false;
 	FILE *f;
 
-	if ((f = fopen(path, "rb")) != NULL) {
+	if ((f = fopen(path, "rb"))) {
 		if (fread((unsigned char *) fmt, 1, max, f) == max)
 			ret = WebPGetInfo(fmt, max, NULL, NULL);
 		fclose(f);
@@ -416,7 +416,7 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	}
 	imlib_image_set_format("webp");
 fail:
-	if (dec != NULL)
+	if (dec)
 		WebPAnimDecoderDelete(dec);
 	free((unsigned char *)data.bytes);
 	return !err;
@@ -437,11 +437,11 @@ Imlib_Image img_open(const fileinfo_t *file)
 		else
 #endif
 			im = imlib_load_image(file->path);
-		if (im != NULL) {
+		if (im) {
 			imlib_context_set_image(im);
 #if HAVE_LIBWEBP
 			const char *fmt;
-			if ((fmt = imlib_image_format()) != NULL && !STREQ(fmt, "webp") &&
+			if ((fmt = imlib_image_format()) && !STREQ(fmt, "webp") &&
 			    imlib_image_get_data_for_reading_only() == NULL) {
 #else
 			if (imlib_image_get_data_for_reading_only() == NULL) {
@@ -469,7 +469,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	exif_auto_orientate(file);
 #endif
 
-	if ((fmt = imlib_image_format()) != NULL) {
+	if ((fmt = imlib_image_format())) {
 #if HAVE_LIBGIF
 		if (STREQ(fmt, "gif"))
 			img_load_gif(img, file);
@@ -498,7 +498,7 @@ CLEANUP void img_close(img_t *img, bool decache)
 		}
 		img->multi.cnt = 0;
 		img->im = NULL;
-	} else if (img->im != NULL) {
+	} else if (img->im) {
 		imlib_context_set_image(img->im);
 		if (decache)
 			imlib_free_image_and_decache();
@@ -862,7 +862,7 @@ bool img_change_gamma(img_t *img, int d)
 
 	if (img->gamma != gamma) {
 		imlib_reset_color_modifier();
-		if (gamma != 0) {
+		if (gamma) {
 			range = gamma <= 0 ? 1.0 : GAMMA_MAX - 1.0;
 			imlib_modify_color_modifier_gamma(1.0 + gamma * (range / GAMMA_RANGE));
 		}

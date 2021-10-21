@@ -74,7 +74,7 @@ void arl_setup(arl_t *arl, const char *filepath)
 	free(arl->filename);
 	arl->filename = estrdup(filepath);
 
-	if (base != NULL) {
+	if (base) {
 		arl->filename[++base - filepath] = '\0';
 		add_watch(arl->fd, &arl->wd_dir, arl->filename, IN_CREATE | IN_MOVED_TO);
 		strcpy(arl->filename, base);

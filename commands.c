@@ -145,10 +145,10 @@ bool cg_remove_image(arg_t _)
 
 bool cg_first(arg_t _)
 {
-	if (mode == MODE_IMAGE && fileidx != 0) {
+	if (mode == MODE_IMAGE && fileidx) {
 		load_image(0);
 		return true;
-	} else if (mode == MODE_THUMB && fileidx != 0) {
+	} else if (mode == MODE_THUMB && fileidx) {
 		fileidx = 0;
 		tns.dirty = true;
 		return true;
@@ -237,7 +237,7 @@ bool cg_navigate_marked(arg_t n)
 	if (prefix > 0)
 		n *= prefix;
 	d = n > 0 ? 1 : -1;
-	for (i = fileidx + d; n != 0 && i >= 0 && i < filecnt; i += d) {
+	for (i = fileidx + d; n && i >= 0 && i < filecnt; i += d) {
 		if (files[i].flags & FF_MARK) {
 			n -= d;
 			new = i;

@@ -150,7 +150,7 @@ void remove_file(int n, bool manual)
 	free((void*) files[n].name);
 
 	if (n + 1 < filecnt) {
-		if (tns.thumbs != NULL) {
+		if (tns.thumbs) {
 			memmove(tns.thumbs + n, tns.thumbs + n + 1, (filecnt - n - 1) *
 			        sizeof(*tns.thumbs));
 			memset(tns.thumbs + filecnt - 1, 0, sizeof(*tns.thumbs));
@@ -205,7 +205,7 @@ bool check_timeouts(struct timeval *t)
 			tdiff = TV_DIFF(&timeouts[i].when, &now);
 			if (tdiff <= 0) {
 				timeouts[i].active = false;
-				if (timeouts[i].handler != NULL)
+				if (timeouts[i].handler)
 					timeouts[i].handler();
 				i = tmin = -1;
 			} else if (tmin < 0 || tdiff < tmin) {
@@ -214,7 +214,7 @@ bool check_timeouts(struct timeval *t)
 		}
 		i++;
 	}
-	if (tmin > 0 && t != NULL)
+	if (tmin > 0 && t)
 		TV_SET_MSEC(t, tmin);
 	return tmin > 0;
 }
@@ -233,7 +233,7 @@ void open_info(void)
 	int pfd[2];
 	char w[12], h[12];
 
-	if (info.f.err != 0 || info.fd >= 0 || win.bar.h == 0)
+	if (info.f.err || info.fd >= 0 || win.bar.h == 0)
 		return;
 	win.bar.l.buf[0] = '\0';
 	if (pipe(pfd) < 0)
@@ -373,12 +373,12 @@ void update_info(void)
 	} else {
 		bar_put(r, "%s", mark);
 		if (img.ss.on) {
-			if (img.ss.delay % 10 != 0)
+			if (img.ss.delay % 10)
 				bar_put(r, "%2.1fs" BAR_SEP, (float)img.ss.delay / 10);
 			else
 				bar_put(r, "%ds" BAR_SEP, img.ss.delay / 10);
 		}
-		if (img.gamma != 0)
+		if (img.gamma)
 			bar_put(r, "G%+d" BAR_SEP, img.gamma);
 		bar_put(r, "%3d%%" BAR_SEP, (int) (img.zoom * 100.0));
 		if (img.multi.cnt > 0) {
@@ -498,7 +498,7 @@ void run_key_handler(const char *key, unsigned int mask)
 	struct stat *oldst, st;
 	XEvent dump;
 
-	if (keyhandler.f.err != 0) {
+	if (keyhandler.f.err) {
 		if (!keyhandler.warned) {
 			error(0, keyhandler.f.err, "%s", keyhandler.f.cmd);
 			keyhandler.warned = true;
@@ -554,10 +554,10 @@ void run_key_handler(const char *key, unsigned int mask)
 
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
-			if (stat(files[i].path, &st) != 0 ||
-			    memcmp(&oldst[f].st_mtime, &st.st_mtime, sizeof(st.st_mtime)) != 0)
+			if (stat(files[i].path, &st) ||
+			    memcmp(&oldst[f].st_mtime, &st.st_mtime, sizeof(st.st_mtime)))
 			{
-				if (tns.thumbs != NULL) {
+				if (tns.thumbs) {
 					tns_unload(&tns, i);
 					tns.loadnext = MIN(tns.loadnext, i);
 				}
@@ -689,7 +689,7 @@ void on_buttonpress(XButtonEvent *bev)
 			case Button4:
 			case Button5:
 				if (tns_scroll(&tns, bev->button == Button4 ? DIR_UP : DIR_DOWN,
-				               (bev->state & ControlMask) != 0))
+				               (bev->state & ControlMask)))
 					redraw();
 				break;
 		}
@@ -898,7 +898,7 @@ int main(int argc, char *argv[])
 				continue;
 			}
 			start = fileidx;
-			while ((filename = r_readdir(&dir, true)) != NULL) {
+			while ((filename = r_readdir(&dir, true))) {
 				check_add_file(filename, false);
 				free((void*) filename);
 			}
@@ -922,16 +922,16 @@ int main(int argc, char *argv[])
 		homedir = getenv("HOME");
 		dsuffix = "/.config";
 	}
-	if (homedir != NULL) {
+	if (homedir) {
 		extcmd_t *cmd[] = { &info.f, &keyhandler.f };
 		const char *name[] = { "image-info", "key-handler" };
 		const char *s = "/nsxiv/exec/";
 
 		for (i = 0; i < ARRLEN(cmd); i++) {
 			n = strlen(homedir) + strlen(dsuffix) + strlen(name[i]) + strlen(s) + 1;
-			cmd[i]->cmd = (char*) emalloc(n);
+			cmd[i]->cmd = emalloc(n);
 			snprintf(cmd[i]->cmd, n, "%s%s%s%s", homedir, dsuffix, s, name[i]);
-			if (access(cmd[i]->cmd, X_OK) != 0)
+			if (access(cmd[i]->cmd, X_OK))
 				cmd[i]->err = errno;
 		}
 	} else {

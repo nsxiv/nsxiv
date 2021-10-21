@@ -45,7 +45,7 @@ char* tns_cache_filepath(const char *filepath)
 	if (*filepath != '/')
 		return NULL;
 
-	if (strncmp(filepath, cache_dir, strlen(cache_dir)) != 0) {
+	if (strncmp(filepath, cache_dir, strlen(cache_dir))) {
 		/* don't cache images inside the cache directory! */
 		len = strlen(cache_dir) + strlen(filepath) + 2;
 		cfile = (char*) emalloc(len);
@@ -63,7 +63,7 @@ Imlib_Image tns_cache_load(const char *filepath, bool *outdated)
 	if (stat(filepath, &fstats) < 0)
 		return NULL;
 
-	if ((cfile = tns_cache_filepath(filepath)) != NULL) {
+	if ((cfile = tns_cache_filepath(filepath))) {
 		if (stat(cfile, &cstats) == 0) {
 			if (cstats.st_mtime == fstats.st_mtime)
 				im = imlib_load_image(cfile);
@@ -88,11 +88,11 @@ void tns_cache_write(Imlib_Image im, const char *filepath, bool force)
 	if (stat(filepath, &fstats) < 0)
 		return;
 
-	if ((cfile = tns_cache_filepath(filepath)) != NULL) {
+	if ((cfile = tns_cache_filepath(filepath))) {
 		if (force || stat(cfile, &cstats) < 0 ||
 		    cstats.st_mtime != fstats.st_mtime)
 		{
-			if ((dirend = strrchr(cfile, '/')) != NULL) {
+			if ((dirend = strrchr(cfile, '/'))) {
 				*dirend = '\0';
 				if (r_mkdir(cfile) == -1) {
 					error(0, errno, "%s", cfile);
@@ -132,7 +132,7 @@ void tns_clean_cache(tns_t *tns)
 
 	dirlen = strlen(cache_dir);
 
-	while ((cfile = r_readdir(&dir, false)) != NULL) {
+	while ((cfile = r_readdir(&dir, false))) {
 		filename = cfile + dirlen;
 		if (access(filename, F_OK) < 0) {
 			if (unlink(cfile) < 0)
@@ -148,7 +148,7 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 	int len;
 	const char *homedir, *dsuffix = "";
 
-	if (cnt != NULL && *cnt > 0) {
+	if (cnt && *cnt > 0) {
 		tns->thumbs = (thumb_t*) emalloc(*cnt * sizeof(thumb_t));
 		memset(tns->thumbs, 0, *cnt * sizeof(thumb_t));
 	} else {
@@ -169,7 +169,7 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 		homedir = getenv("HOME");
 		dsuffix = "/.cache";
 	}
-	if (homedir != NULL) {
+	if (homedir) {
 		const char *s = "/nsxiv";
 		free(cache_dir);
 		len = strlen(homedir) + strlen(dsuffix) + strlen(s) + 1;
@@ -184,9 +184,9 @@ CLEANUP void tns_free(tns_t *tns)
 {
 	int i;
 
-	if (tns->thumbs != NULL) {
+	if (tns->thumbs) {
 		for (i = 0; i < *tns->cnt; i++) {
-			if (tns->thumbs[i].im != NULL) {
+			if (tns->thumbs[i].im) {
 				imlib_context_set_image(tns->thumbs[i].im);
 				imlib_free_image();
 			}
@@ -240,19 +240,19 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 
 	t = &tns->thumbs[n];
 
-	if (t->im != NULL) {
+	if (t->im) {
 		imlib_context_set_image(t->im);
 		imlib_free_image();
 		t->im = NULL;
 	}
 
 	if (!force) {
-		if ((im = tns_cache_load(file->path, &force)) != NULL) {
+		if ((im = tns_cache_load(file->path, &force))) {
 			imlib_context_set_image(im);
 			if (imlib_image_get_width() < maxwh &&
 			    imlib_image_get_height() < maxwh)
 			{
-				if ((cfile = tns_cache_filepath(file->path)) != NULL) {
+				if ((cfile = tns_cache_filepath(file->path))) {
 					unlink(cfile);
 					free(cfile);
 				}
@@ -274,21 +274,21 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 			char tmppath[] = "/tmp/nsxiv-XXXXXX";
 			Imlib_Image tmpim;
 
-			if ((ed = exif_data_new_from_file(file->path)) != NULL) {
-				if (ed->data != NULL && ed->size > 0 &&
+			if ((ed = exif_data_new_from_file(file->path))) {
+				if (ed->data && ed->size > 0 &&
 				    (tmpfd = mkstemp(tmppath)) >= 0)
 				{
 					err = write(tmpfd, ed->data, ed->size) != ed->size;
 					close(tmpfd);
 
-					if (!err && (tmpim = imlib_load_image(tmppath)) != NULL) {
+					if (!err && (tmpim = imlib_load_image(tmppath))) {
 						byte_order = exif_data_get_byte_order(ed);
 						ifd = ed->ifd[EXIF_IFD_EXIF];
 						entry = exif_content_get_entry(ifd, EXIF_TAG_PIXEL_X_DIMENSION);
-						if (entry != NULL)
+						if (entry)
 							pw = exif_get_long(entry->data, byte_order);
 						entry = exif_content_get_entry(ifd, EXIF_TAG_PIXEL_Y_DIMENSION);
-						if (entry != NULL)
+						if (entry)
 							ph = exif_get_long(entry->data, byte_order);
 
 						imlib_context_set_image(tmpim);
@@ -352,7 +352,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 	if (n == tns->initnext)
 		while (++tns->initnext < *tns->cnt && ((++file)->flags & FF_TN_INIT));
 	if (n == tns->loadnext && !cache_only)
-		while (++tns->loadnext < tns->end && (++t)->im != NULL);
+		while (++tns->loadnext < tns->end && (++t)->im);
 
 	return true;
 }
@@ -366,7 +366,7 @@ void tns_unload(tns_t *tns, int n)
 
 	t = &tns->thumbs[n];
 
-	if (t->im != NULL) {
+	if (t->im) {
 		imlib_context_set_image(t->im);
 		imlib_free_image();
 		t->im = NULL;
@@ -435,7 +435,7 @@ void tns_render(tns_t *tns)
 	tns->end = tns->first + cnt;
 
 	for (i = tns->r_first; i < tns->r_end; i++) {
-		if ((i < tns->first || i >= tns->end) && tns->thumbs[i].im != NULL)
+		if ((i < tns->first || i >= tns->end) && tns->thumbs[i].im)
 			tns_unload(tns, i);
 	}
 	tns->r_first = tns->first;
@@ -443,7 +443,7 @@ void tns_render(tns_t *tns)
 
 	for (i = tns->first; i < tns->end; i++) {
 		t = &tns->thumbs[i];
-		if (t->im != NULL) {
+		if (t->im) {
 			t->x = x + (thumb_sizes[tns->zl] - t->w) / 2;
 			t->y = y + (thumb_sizes[tns->zl] - t->h) / 2;
 			imlib_context_set_image(t->im);
@@ -466,7 +466,7 @@ void tns_render(tns_t *tns)
 
 void tns_mark(tns_t *tns, int n, bool mark)
 {
-	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im != NULL) {
+	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im) {
 		win_t *win = tns->win;
 		thumb_t *t = &tns->thumbs[n];
 		unsigned long col = win->win_bg.pixel;
@@ -487,7 +487,7 @@ void tns_mark(tns_t *tns, int n, bool mark)
 
 void tns_highlight(tns_t *tns, int n, bool hl)
 {
-	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im != NULL) {
+	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im) {
 		win_t *win = tns->win;
 		thumb_t *t = &tns->thumbs[n];
 		unsigned long col = hl ? win->win_fg.pixel : win->win_bg.pixel;
@@ -544,7 +544,7 @@ bool tns_scroll(tns_t *tns, direction_t dir, bool screen)
 
 	if (dir == DIR_DOWN) {
 		max = *tns->cnt - tns->cols * tns->rows;
-		if (*tns->cnt % tns->cols != 0)
+		if (*tns->cnt % tns->cols)
 			max += tns->cols - *tns->cnt % tns->cols;
 		tns->first = MIN(tns->first + d, max);
 	} else if (dir == DIR_UP) {

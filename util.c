@@ -50,7 +50,12 @@ char* estrdup(const char *s)
 	char *d;
 	size_t n = strlen(s) + 1;
 
-	d = malloc(n);
+	if (n && sizeof(char) > (size_t)-1/n) {
+		errno = ENOMEM;
+		d = NULL;
+	} else
+		d = emalloc(sizeof(char)*n);
+
 	if (d == NULL)
 		error(EXIT_FAILURE, errno, NULL);
 	memcpy(d, s, n);
@@ -67,14 +72,14 @@ void error(int eval, int err, const char* fmt, ...)
 	fflush(stdout);
 	fprintf(stderr, "%s: ", progname);
 	va_start(ap, fmt);
-	if (fmt != NULL)
+	if (fmt)
 		vfprintf(stderr, fmt, ap);
 	va_end(ap);
-	if (err != 0)
-		fprintf(stderr, "%s%s", fmt != NULL ? ": " : "", strerror(err));
+	if (err)
+		fprintf(stderr, "%s%s", fmt ? ": " : "", strerror(err));
 	fputc('\n', stderr);
 
-	if (eval != 0)
+	if (eval)
 		exit(eval);
 }
 
@@ -100,7 +105,7 @@ int r_opendir(r_dir_t *rdir, const char *dirname, bool recursive)
 	}
 
 	rdir->stcap = 512;
-	rdir->stack = (char**) emalloc(rdir->stcap * sizeof(char*));
+	rdir->stack = emalloc(rdir->stcap * sizeof(char*));
 	rdir->stlen = 0;
 
 	rdir->name = (char*) dirname;
@@ -114,19 +119,19 @@ int r_closedir(r_dir_t *rdir)
 {
 	int ret = 0;
 
-	if (rdir->stack != NULL) {
+	if (rdir->stack) {
 		while (rdir->stlen > 0)
 			free(rdir->stack[--rdir->stlen]);
 		free(rdir->stack);
 		rdir->stack = NULL;
 	}
 
-	if (rdir->dir != NULL) {
+	if (rdir->dir) {
 		if ((ret = closedir(rdir->dir)) == 0)
 			rdir->dir = NULL;
 	}
 
-	if (rdir->d != 0) {
+	if (rdir->d) {
 		free(rdir->name);
 		rdir->name = NULL;
 	}
@@ -142,7 +147,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 	struct stat fstats;
 
 	while (true) {
-		if (rdir->dir != NULL && (dentry = readdir(rdir->dir)) != NULL) {
+		if (rdir->dir && (dentry = readdir(rdir->dir))) {
 			if (dentry->d_name[0] == '.') {
 				if (skip_dotfiles)
 					continue;
@@ -153,7 +158,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 			}
 
 			len = strlen(rdir->name) + strlen(dentry->d_name) + 2;
-			filename = (char*) emalloc(len);
+			filename = emalloc(len);
 			snprintf(filename, len, "%s%s%s", rdir->name,
 			         rdir->name[strlen(rdir->name)-1] == '/' ? "" : "/",
 			         dentry->d_name);
@@ -164,7 +169,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 				/* put subdirectory on the stack */
 				if (rdir->stlen == rdir->stcap) {
 					rdir->stcap *= 2;
-					rdir->stack = (char**) erealloc(rdir->stack,
+					rdir->stack = erealloc(rdir->stack,
 					                                rdir->stcap * sizeof(char*));
 				}
 				rdir->stack[rdir->stlen++] = filename;
@@ -176,7 +181,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 		if (rdir->recursive && rdir->stlen > 0) {
 			/* open next subdirectory */
 			closedir(rdir->dir);
-			if (rdir->d != 0)
+			if (rdir->d)
 				free(rdir->name);
 			rdir->name = rdir->stack[--rdir->stlen];
 			rdir->d = 1;

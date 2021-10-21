@@ -130,7 +130,7 @@ void win_init(win_t *win)
 
 	XrmInitialize();
 	res_man = XResourceManagerString(e->dpy);
-	db = res_man != NULL ? XrmGetStringDatabase(res_man) : None;
+	db = res_man ? XrmGetStringDatabase(res_man) : None;
 
 	win_bg = win_res(db, RES_CLASS ".window.background", "white");
 	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");
@@ -186,7 +186,7 @@ void win_open(win_t *win)
 	XSetWindowAttributes attrs;
 
 	e = &win->env;
-	parent = options->embed != 0 ? options->embed : RootWindow(e->dpy, e->scr);
+	parent = options->embed ? options->embed : RootWindow(e->dpy, e->scr);
 
 	sizehints.flags = PWinGravity;
 	sizehints.win_gravity = NorthWestGravity;
@@ -197,16 +197,16 @@ void win_open(win_t *win)
 	else
 		gmask = XParseGeometry(options->geometry, &win->x, &win->y,
 		                       &win->w, &win->h);
-	if ((gmask & WidthValue) != 0)
+	if (gmask & WidthValue)
 		sizehints.flags |= USSize;
 	else
 		win->w = WIN_WIDTH;
-	if ((gmask & HeightValue) != 0)
+	if (gmask & HeightValue)
 		sizehints.flags |= USSize;
 	else
 		win->h = WIN_HEIGHT;
-	if ((gmask & XValue) != 0) {
-		if ((gmask & XNegative) != 0) {
+	if (gmask & XValue) {
+		if (gmask & XNegative) {
 			win->x += e->scrw - win->w;
 			sizehints.win_gravity = NorthEastGravity;
 		}
@@ -214,8 +214,8 @@ void win_open(win_t *win)
 	} else {
 		win->x = 0;
 	}
-	if ((gmask & YValue) != 0) {
-		if ((gmask & YNegative) != 0) {
+	if (gmask & YValue) {
+		if (gmask & YNegative) {
 			win->y += e->scrh - win->h;
 			sizehints.win_gravity = sizehints.win_gravity == NorthEastGravity
 			                        ? SouthEastGravity : SouthWestGravity;
@@ -286,7 +286,7 @@ void win_open(win_t *win)
 	XSetIconName(win->env.dpy, win->xwin, "nsxiv");
 
 	classhint.res_class = RES_CLASS;
-	classhint.res_name = options->res_name != NULL ? options->res_name : "nsxiv";
+	classhint.res_name = options->res_name ? options->res_name : "nsxiv";
 	XSetClassHint(e->dpy, win->xwin, &classhint);
 
 	XSetWMProtocols(e->dpy, win->xwin, &atoms[ATOM_WM_DELETE_WINDOW], 1);
@@ -367,7 +367,7 @@ void win_toggle_fullscreen(win_t *win)
 
 void win_toggle_bar(win_t *win)
 {
-	if (win->bar.h != 0) {
+	if (win->bar.h) {
 		win->h += win->bar.h;
 		win->bar.h = 0;
 	} else {
