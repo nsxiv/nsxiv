@@ -165,7 +165,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 				if (rdir->stlen == rdir->stcap) {
 					rdir->stcap *= 2;
 					rdir->stack = erealloc(rdir->stack,
-					                                rdir->stcap * sizeof(char*));
+					                       rdir->stcap * sizeof(char*));
 				}
 				rdir->stack[rdir->stlen++] = filename;
 				continue;
