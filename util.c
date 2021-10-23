@@ -100,7 +100,7 @@ int r_opendir(r_dir_t *rdir, const char *dirname, bool recursive)
 	}
 
 	rdir->stcap = 512;
-	rdir->stack = (char**) emalloc(rdir->stcap * sizeof(char*));
+	rdir->stack = emalloc(rdir->stcap * sizeof(char*));
 	rdir->stlen = 0;
 
 	rdir->name = (char*) dirname;
@@ -153,7 +153,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 			}
 
 			len = strlen(rdir->name) + strlen(dentry->d_name) + 2;
-			filename = (char*) emalloc(len);
+			filename = emalloc(len);
 			snprintf(filename, len, "%s%s%s", rdir->name,
 			         rdir->name[strlen(rdir->name)-1] == '/' ? "" : "/",
 			         dentry->d_name);
@@ -164,8 +164,8 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 				/* put subdirectory on the stack */
 				if (rdir->stlen == rdir->stcap) {
 					rdir->stcap *= 2;
-					rdir->stack = (char**) erealloc(rdir->stack,
-					                                rdir->stcap * sizeof(char*));
+					rdir->stack = erealloc(rdir->stack,
+					                       rdir->stcap * sizeof(char*));
 				}
 				rdir->stack[rdir->stlen++] = filename;
 				continue;
