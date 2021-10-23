@@ -150,20 +150,20 @@ void win_init(win_t *win)
 	win_alloc_color(e, mrk_fg, &win->mrk_fg);
 
 	/* apply alpha */
+	win->win_bg_postmul = win->win_bg;
 	win_alpha = win_res(db, RES_CLASS ".window.alpha", "1.0");
 	alpha = strtof(win_alpha, NULL);
 	win->win_alpha = 0xFF;
-	win->win_bg_premul = win->win_bg;
 	if (e->depth == 32 && alpha >= 0.0 && alpha < 1.0) {
 		win->win_alpha *= alpha;
-		win->win_bg_premul.red *= alpha;
-		win->win_bg_premul.green *= alpha;
-		win->win_bg_premul.blue *= alpha;
-		win->win_bg_premul.pixel =
-			(((unsigned long) win->win_bg_premul.blue  >> 8) <<  0) |
-			(((unsigned long) win->win_bg_premul.green >> 8) <<  8) |
-			(((unsigned long) win->win_bg_premul.red   >> 8) << 16) |
-			(((unsigned long) win->win_alpha               ) << 24);
+		win->win_bg.red *= alpha;
+		win->win_bg.green *= alpha;
+		win->win_bg.blue *= alpha;
+		win->win_bg.pixel =
+			(((unsigned long) win->win_bg.blue  >> 8) <<  0) |
+			(((unsigned long) win->win_bg.green >> 8) <<  8) |
+			(((unsigned long) win->win_bg.red   >> 8) << 16) |
+			(((unsigned long) win->win_alpha        ) << 24);
 	}
 
 #if HAVE_LIBFONTS
@@ -335,7 +335,7 @@ void win_open(win_t *win)
 	win->buf.h = e->scrh;
 	win->buf.pm = XCreatePixmap(e->dpy, win->xwin, win->buf.w, win->buf.h, e->depth);
 
-	XSetForeground(e->dpy, gc, win->win_bg_premul.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
 	XMapWindow(e->dpy, win->xwin);
@@ -416,7 +416,7 @@ void win_clear(win_t *win)
 		win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
 		                            win->buf.w, win->buf.h, e->depth);
 	}
-	XSetForeground(e->dpy, gc, win->win_bg_premul.pixel);
+	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
 }
 

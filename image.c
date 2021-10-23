@@ -603,7 +603,7 @@ void render_core(win_t* win, int sx, int sy, int sw, int sh, int dx, int dy, int
 			imlib_image_put_back_data(data);
 		} else {
 			imlib_image_clear();
-			c = win->win_bg;
+			c = win->win_bg_postmul;
 			imlib_context_set_color(c.red >> 8, c.green >> 8, c.blue >> 8,
 			                        win->win_alpha);
 			imlib_image_fill_rectangle(0, 0, dw, dh);

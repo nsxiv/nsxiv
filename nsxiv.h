@@ -407,10 +407,10 @@ struct win {
 	Window xwin;
 	win_env_t env;
 
-	XColor win_bg;
+	XColor win_bg; /* pre-multiplied alpha */
+	XColor win_bg_postmul; /* post-multiplied alpha */
 	XColor win_fg;
 	XColor mrk_fg;
-	XColor win_bg_premul; /* premultiplied alpha */
 	unsigned int win_alpha;
 #if HAVE_LIBFONTS
 	XftColor bar_bg;
