@@ -113,6 +113,7 @@ void win_init(win_t *win)
 	XrmDatabase db;
 	XVisualInfo vis;
 	float alpha;
+	char *endptr;
 
 	memset(win, 0, sizeof(win_t));
 
@@ -128,8 +129,7 @@ void win_init(win_t *win)
 		e->depth = 32;
 		e->vis = vis.visual;
 		e->cmap = XCreateColormap(e->dpy, DefaultRootWindow(e->dpy), e->vis, None);
-	}
-	else {
+	} else {
 		e->depth = DefaultDepth(e->dpy, e->scr);
 		e->vis = DefaultVisual(e->dpy, e->scr);
 		e->cmap = DefaultColormap(e->dpy, e->scr);
@@ -152,9 +152,11 @@ void win_init(win_t *win)
 	/* apply alpha */
 	win->win_bg_postmul = win->win_bg;
 	win_alpha = win_res(db, RES_CLASS ".window.alpha", "1.0");
-	alpha = strtof(win_alpha, NULL);
+	alpha = strtof(win_alpha, &endptr);
+	if (!(*endptr == '\0' && alpha >= 0.0 && alpha <= 1.0))
+		error(EXIT_FAILURE, 0, "Error parsing alpha");
 	win->win_alpha = 0xFF;
-	if (e->depth == 32 && alpha >= 0.0 && alpha < 1.0) {
+	if (e->depth == 32 && alpha < 1.0) {
 		win->win_alpha *= alpha;
 		win->win_bg.red *= alpha;
 		win->win_bg.green *= alpha;
