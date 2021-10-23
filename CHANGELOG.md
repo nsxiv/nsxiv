@@ -1,6 +1,43 @@
 nsxiv
 -----
 
+**[git](https://github.com/nsxiv/nsxiv.git)**
+
+Changes will only be documented on stable releases. If you're on git/master then
+there maybe more changes. Please use `git log` to view them.
+
+- - -
+
+**[v28](https://github.com/nsxiv/nsxiv/archive/v28.tar.gz)**
+
+* Changes:
+
+  * Statusbar made optional via `HAVE_LIBFONTS`.
+  * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead.
+  * By default example scripts will now be installed into `EGPREFIX` (see
+    README for more info).
+  * Allow any modifier to be used in keybinding (excluding `ignore_mask`).
+
+* Added:
+
+  * Animated webp support (optional).
+  * Cli flag `-0` for outputting null-seperated list.
+  * `make icon` to install icons.
+  * `make desktop` to install .desktop entry.
+  * `make install-all` to install everything.
+  * `keyhandler_abort` in `config.h`.
+  * Statusbar message upon key-handler activation.
+  * Ability to write functions in `config.h` and use them via keybindings.
+
+* Fixes:
+
+  * Not able to bind <kbd>Escape</kbd> in config.h.
+  * Wrong comments in `config.h` and description in `manpage`.
+  * Removed non-POSIX commands and extensions from `Makefile`.
+  * Regression where nsxiv wouldn't run on non-TrueColor X server.
+
+- - -
+
 **[v27.1](https://github.com/nsxiv/nsxiv/archive/v27.1.tar.gz)**
 *(September 16, 2021)*
 
@@ -8,6 +45,7 @@ nsxiv
 
   * Source tarball failing build ([#66](https://github.com/nsxiv/nsxiv/pull/66))
 
+- - -
 
 **[v27](https://github.com/nsxiv/nsxiv/archive/v27.tar.gz)**
 *(September 16, 2021)*
