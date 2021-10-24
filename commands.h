@@ -27,6 +27,7 @@ bool ci_drag();
 bool ci_fit_to_win();
 bool ci_flip();
 bool ci_navigate();
+bool ci_navigate_and_reset_scroll();
 bool ci_navigate_frame();
 bool ci_rotate();
 bool ci_scroll();
@@ -66,6 +67,7 @@ bool ct_reload_all();
 #define i_fit_to_win { ci_fit_to_win, MODE_IMAGE }
 #define i_flip { ci_flip, MODE_IMAGE }
 #define i_navigate { ci_navigate, MODE_IMAGE }
+#define i_navigate_and_reset_scroll { ci_navigate_and_reset_scroll, MODE_IMAGE }
 #define i_navigate_frame { ci_navigate_frame, MODE_IMAGE }
 #define i_rotate { ci_rotate, MODE_IMAGE }
 #define i_scroll { ci_scroll, MODE_IMAGE }

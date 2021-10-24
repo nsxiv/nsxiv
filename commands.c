@@ -329,6 +329,10 @@ bool ci_scroll_to_edge(arg_t dir)
 	return img_pan_edge(&img, dir);
 }
 
+bool ci_navigate_and_reset_scroll(arg_t dir) {
+    return ci_navigate(dir) && ci_scroll_to_edge(DIR_LEFT | DIR_UP);
+}
+
 bool ci_drag(arg_t mode)
 {
 	int x, y, ox, oy;
