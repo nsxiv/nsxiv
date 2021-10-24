@@ -619,6 +619,8 @@ void on_keypress(XKeyEvent *kev)
 		{
 			if (keys[i].cmd.func(keys[i].arg))
 				dirty = true;
+			if (abort_on_binding_match)
+				break;
 		}
 	}
 	if (dirty)
@@ -644,6 +646,8 @@ void on_buttonpress(XButtonEvent *bev)
 			{
 				if (buttons[i].cmd.func(buttons[i].arg))
 					dirty = true;
+				if (abort_on_binding_match)
+					break;
 			}
 		}
 		if (dirty)

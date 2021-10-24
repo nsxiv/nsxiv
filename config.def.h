@@ -69,6 +69,9 @@ static const int ignore_mask = Mod2Mask | LockMask;
 /* abort the keyhandler */
 static const KeySym keyhandler_abort = XK_Escape;
 
+/* If true, only the first matching key/mouse binding is triggered */
+static const bool abort_on_binding_match = false;
+
 /* keyboard mappings for image and thumbnail mode: */
 static const keymap_t keys[] = {
 	/* modifiers    key               function              argument */
