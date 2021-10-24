@@ -172,17 +172,12 @@ typedef struct {
 
 typedef struct {
 	unsigned int mask;
-	KeySym ksym;
+	KeySym ksym_or_button;
 	cmd_t cmd;
 	arg_t arg;
 } keymap_t;
 
-typedef struct {
-	unsigned int mask;
-	unsigned int button;
-	cmd_t cmd;
-	arg_t arg;
-} button_t;
+typedef keymap_t button_t;
 
 
 /* image.c */
