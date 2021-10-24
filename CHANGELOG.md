@@ -31,7 +31,7 @@ there maybe more changes. Please use `git log` to view them.
 
 * Fixes:
 
-  * Not able to use `ignore_mask` (<kbd>Escape</kbd> by default) in
+  * Not able to use `keyhandler_abort` (<kbd>Escape</kbd> by default) in
     keybindings.
   * Wrong comments in `config.h` and description in `manpage`.
   * Removed non-POSIX commands and extensions from `Makefile`.
