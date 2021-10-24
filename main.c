@@ -596,10 +596,11 @@ end:
 	redraw();
 }
 
-bool process_bindings(const keymap_t *keys, int len, KeySym ksym, int state, bool *dirty) {
-	for (int i = 0; i < len; i++) {
-		if (keys[i].ksym_or_button == ksym &&
-			MODMASK(keys[i].mask) == MODMASK(state) &&
+bool process_bindings(const keymap_t *keys, int len, KeySym ksym, int state, int implict_mod, bool *dirty) {
+	int i;
+	for (i = 0; i < len; i++) {
+		if ((keys[i].ksym_or_button == ksym || keys[i].ksym_or_button == 0) &&
+			(keys[i].mask == AnyModifier || MODMASK(keys[i].mask | implict_mod) == MODMASK(state)) &&
 			keys[i].cmd.func &&
 			(keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
 		{
@@ -638,7 +639,7 @@ void on_keypress(XKeyEvent *kev)
 		prefix = prefix * 10 + (int) (key - '0');
 		return;
 	} else {
-		process_bindings(keys, ARRLEN(keys), ksym, kev->state, &dirty);
+		process_bindings(keys, ARRLEN(keys), ksym, kev->state, sh, &dirty);
 	}
 	if (dirty)
 		redraw();
@@ -654,7 +655,7 @@ void on_buttonpress(XButtonEvent *bev)
 	if (mode == MODE_IMAGE) {
 		set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
 		reset_cursor();
-		process_bindings(buttons, ARRLEN(buttons), bev->button, bev->state, &dirty);
+		process_bindings(buttons, ARRLEN(buttons), bev->button, bev->state, 0, &dirty);
 		if (dirty)
 			redraw();
 	} else {
