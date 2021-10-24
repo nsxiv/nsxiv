@@ -31,7 +31,8 @@ there maybe more changes. Please use `git log` to view them.
 
 * Fixes:
 
-  * Not able to bind <kbd>Escape</kbd> in config.h.
+  * Not able to use `ignore_mask` (<kbd>Escape</kbd> by default) in
+    keybindings.
   * Wrong comments in `config.h` and description in `manpage`.
   * Removed non-POSIX commands and extensions from `Makefile`.
   * Regression where nsxiv wouldn't run on non-TrueColor X server.
