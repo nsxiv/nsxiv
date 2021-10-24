@@ -596,9 +596,22 @@ end:
 	redraw();
 }
 
+bool process_bindings(const keymap_t *keys, int len, KeySym ksym, int state, bool *dirty) {
+	for (int i = 0; i < len; i++) {
+		if (keys[i].ksym_or_button == ksym &&
+			MODMASK(keys[i].mask) == MODMASK(state) &&
+			keys[i].cmd.func &&
+			(keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
+		{
+			if (keys[i].cmd.func(keys[i].arg))
+				*dirty = true;
+		}
+	}
+	return 1;
+}
+
 void on_keypress(XKeyEvent *kev)
 {
-	unsigned int i;
 	unsigned int sh = 0;
 	KeySym ksym, shksym;
 	char dummy, key;
@@ -624,15 +637,8 @@ void on_keypress(XKeyEvent *kev)
 		/* number prefix for commands */
 		prefix = prefix * 10 + (int) (key - '0');
 		return;
-	} else for (i = 0; i < ARRLEN(keys); i++) {
-		if (keys[i].ksym == ksym &&
-		    MODMASK(keys[i].mask | sh) == MODMASK(kev->state) &&
-		    keys[i].cmd.func &&
-		    (keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
-		{
-			if (keys[i].cmd.func(keys[i].arg))
-				dirty = true;
-		}
+	} else {
+		process_bindings(keys, ARRLEN(keys), ksym, kev->state, &dirty);
 	}
 	if (dirty)
 		redraw();
@@ -642,24 +648,13 @@ void on_keypress(XKeyEvent *kev)
 void on_buttonpress(XButtonEvent *bev)
 {
 	int sel;
-	unsigned int i;
 	bool dirty = false;
 	static Time firstclick;
 
 	if (mode == MODE_IMAGE) {
 		set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
 		reset_cursor();
-
-		for (i = 0; i < ARRLEN(buttons); i++) {
-			if (buttons[i].button == bev->button &&
-			    MODMASK(buttons[i].mask) == MODMASK(bev->state) &&
-			    buttons[i].cmd.func &&
-			    (buttons[i].cmd.mode == MODE_ALL || buttons[i].cmd.mode == mode))
-			{
-				if (buttons[i].cmd.func(buttons[i].arg))
-					dirty = true;
-			}
-		}
+		process_bindings(buttons, ARRLEN(buttons), bev->button, bev->state, &dirty);
 		if (dirty)
 			redraw();
 	} else {
