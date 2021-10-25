@@ -380,6 +380,7 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		flags = WebPDemuxGetI(demux, WEBP_FF_FORMAT_FLAGS);
 		img->w = WebPDemuxGetI(demux, WEBP_FF_CANVAS_WIDTH);
 		img->h = WebPDemuxGetI(demux, WEBP_FF_CANVAS_HEIGHT);
+
 		if (img->multi.cap == 0) {
 			img->multi.cap = info.frame_count;
 			img->multi.frames = emalloc(img->multi.cap * sizeof(img_frame_t));
@@ -388,10 +389,9 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 			img->multi.frames = erealloc(img->multi.frames,
 			                             img->multi.cap * sizeof(img_frame_t));
 		}
-		img->multi.sel = 0;
 
 		/* Load and decode frames (also works on images with only 1 frame) */
-		img->multi.cnt = 0;
+		img->multi.cnt = img->multi.sel = 0;
 		while (WebPAnimDecoderGetNext(dec, &buf, &ts)) {
 			im = imlib_create_image_using_copied_data(
 			     info.canvas_width, info.canvas_height, (DATA32*)buf);
