@@ -4,7 +4,7 @@ nsxiv
 **[git](https://github.com/nsxiv/nsxiv.git)**
 
 Changes will only be documented on stable releases. If you're on git/master then
-there maybe more changes. Please use `git log` to view them.
+there may be more changes. Please use `git log` to view them.
 
 - - -
 
