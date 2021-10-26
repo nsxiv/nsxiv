@@ -168,7 +168,7 @@ void remove_file(int n, bool manual)
 
 void set_timeout(timeout_f handler, int time, bool overwrite)
 {
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < ARRLEN(timeouts); i++) {
 		if (timeouts[i].handler == handler) {
@@ -184,7 +184,7 @@ void set_timeout(timeout_f handler, int time, bool overwrite)
 
 void reset_timeout(timeout_f handler)
 {
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < ARRLEN(timeouts); i++) {
 		if (timeouts[i].handler == handler) {
@@ -422,7 +422,8 @@ void redraw(void)
 
 void reset_cursor(void)
 {
-	int c, i;
+	int c;
+	unsigned int i;
 	cursor_t cursor = CURSOR_NONE;
 
 	if (mode == MODE_IMAGE) {
@@ -585,7 +586,7 @@ end:
 
 void on_keypress(XKeyEvent *kev)
 {
-	int i;
+	unsigned int i;
 	unsigned int sh = 0;
 	KeySym ksym, shksym;
 	char dummy, key;
@@ -628,7 +629,8 @@ void on_keypress(XKeyEvent *kev)
 
 void on_buttonpress(XButtonEvent *bev)
 {
-	int i, sel;
+	int sel;
+	unsigned int i;
 	bool dirty = false;
 	static Time firstclick;
 
