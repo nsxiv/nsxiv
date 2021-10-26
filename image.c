@@ -134,8 +134,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 	if (img->multi.cap == 0) {
 		img->multi.cap = 8;
-		img->multi.frames = (img_frame_t*)
-		                    emalloc(sizeof(img_frame_t) * img->multi.cap);
+		img->multi.frames = emalloc(sizeof(img_frame_t) * img->multi.cap);
 	}
 	img->multi.cnt = img->multi.sel = 0;
 	img->multi.length = 0;
@@ -187,9 +186,9 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 			w = gif->Image.Width;
 			h = gif->Image.Height;
 
-			rows = (GifRowType*) emalloc(h * sizeof(GifRowType));
+			rows = emalloc(h * sizeof(GifRowType));
 			for (i = 0; i < h; i++)
-				rows[i] = (GifRowType) emalloc(w * sizeof(GifPixelType));
+				rows[i] = emalloc(w * sizeof(GifPixelType));
 			if (gif->Image.Interlace) {
 				for (i = 0; i < 4; i++) {
 					for (j = intoffset[i]; j < h; j += intjump[i])
@@ -200,7 +199,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 					DGifGetLine(gif, rows[i], w);
 			}
 
-			ptr = data = (DATA32*) emalloc(sizeof(DATA32) * sw * sh);
+			ptr = data = emalloc(sizeof(DATA32) * sw * sh);
 			cmap = gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap;
 			if (bg >= cmap->ColorCount) {
 				err = true;
@@ -257,8 +256,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 			if (img->multi.cnt == img->multi.cap) {
 				img->multi.cap *= 2;
-				img->multi.frames = (img_frame_t*)
-				                    erealloc(img->multi.frames,
+				img->multi.frames = erealloc(img->multi.frames,
 				                             img->multi.cap * sizeof(img_frame_t));
 			}
 			img->multi.frames[img->multi.cnt].im = im;
