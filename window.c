@@ -320,7 +320,7 @@ void win_open(win_t *win)
 
 CLEANUP void win_close(win_t *win)
 {
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < ARRLEN(cursors); i++)
 		XFreeCursor(win->env.dpy, cursors[i].icon);

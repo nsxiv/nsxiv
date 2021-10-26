@@ -81,7 +81,7 @@ void error(int eval, int err, const char* fmt, ...)
 void size_readable(float *size, const char **unit)
 {
 	const char *units[] = { "", "K", "M", "G" };
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < ARRLEN(units) && *size > 1024.0; i++)
 		*size /= 1024.0;
