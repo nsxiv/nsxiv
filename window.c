@@ -358,7 +358,7 @@ void win_toggle_fullscreen(win_t *win)
 	cm->window = win->xwin;
 	cm->message_type = atoms[ATOM__NET_WM_STATE];
 	cm->format = 32;
-	cm->data.l[0] = 2; // toggle
+	cm->data.l[0] = 2; /* toggle */
 	cm->data.l[1] = atoms[ATOM__NET_WM_STATE_FULLSCREEN];
 
 	XSendEvent(win->env.dpy, DefaultRootWindow(win->env.dpy), False,
