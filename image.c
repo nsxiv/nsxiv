@@ -134,7 +134,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 	if (img->multi.cap == 0) {
 		img->multi.cap = 8;
-		img->multi.frames = emalloc(sizeof(img_frame_t) * img->multi.cap);
+		img->multi.frames = emalloc(img->multi.cap * sizeof(img_frame_t));
 	}
 	img->multi.cnt = img->multi.sel = 0;
 	img->multi.length = 0;
@@ -199,7 +199,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 					DGifGetLine(gif, rows[i], w);
 			}
 
-			ptr = data = emalloc(sizeof(DATA32) * sw * sh);
+			ptr = data = emalloc(sw * sh * sizeof(DATA32));
 			cmap = gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap;
 			if (bg >= cmap->ColorCount) {
 				err = true;
