@@ -233,7 +233,7 @@ void open_info(void)
 	int pfd[2];
 	char w[12], h[12];
 
-	if (info.f.err != 0 || info.fd >= 0 || win.bar.h == 0)
+	if (info.f.err || info.fd >= 0 || win.bar.h == 0)
 		return;
 	win.bar.l.buf[0] = '\0';
 	if (pipe(pfd) < 0)
@@ -378,7 +378,7 @@ void update_info(void)
 			else
 				bar_put(r, "%ds" BAR_SEP, img.ss.delay / 10);
 		}
-		if (img.gamma != 0)
+		if (img.gamma)
 			bar_put(r, "G%+d" BAR_SEP, img.gamma);
 		bar_put(r, "%3d%%" BAR_SEP, (int) (img.zoom * 100.0));
 		if (img.multi.cnt > 0) {
@@ -498,7 +498,7 @@ void run_key_handler(const char *key, unsigned int mask)
 	struct stat *oldst, st;
 	XEvent dump;
 
-	if (keyhandler.f.err != 0) {
+	if (keyhandler.f.err) {
 		if (!keyhandler.warned) {
 			error(0, keyhandler.f.err, "%s", keyhandler.f.cmd);
 			keyhandler.warned = true;

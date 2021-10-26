@@ -860,7 +860,7 @@ bool img_change_gamma(img_t *img, int d)
 
 	if (img->gamma != gamma) {
 		imlib_reset_color_modifier();
-		if (gamma != 0) {
+		if (gamma) {
 			range = gamma <= 0 ? 1.0 : GAMMA_MAX - 1.0;
 			imlib_modify_color_modifier_gamma(1.0 + gamma * (range / GAMMA_RANGE));
 		}
