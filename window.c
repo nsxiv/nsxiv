@@ -170,7 +170,7 @@ void win_init(win_t *win)
 void win_open(win_t *win)
 {
 	int c, i, j, n;
-	long parent;
+	Window parent;
 	win_env_t *e;
 	XClassHint classhint;
 	unsigned long *icon_data;
