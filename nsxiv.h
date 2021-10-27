@@ -117,7 +117,7 @@ typedef enum {
 typedef enum {
 	SUFFIX_EMPTY,
 	SUFFIX_BASENAME,
-	SUFFIX_FULLPATH,
+	SUFFIX_FULLPATH
 } suffixmode_t;
 
 typedef struct {
