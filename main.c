@@ -930,7 +930,7 @@ int main(int argc, char *argv[])
 		const char *s = "/nsxiv/exec/";
 
 		for (i = 0; i < ARRLEN(cmd); i++) {
-			n = strlen(homedir) + strlen(dsuffix) + strlen(name[i]) + strlen(s) + 1;
+			n = strlen(homedir) + strlen(dsuffix) + strlen(s) + strlen(name[i]) + 1;
 			cmd[i]->cmd = emalloc(n);
 			snprintf(cmd[i]->cmd, n, "%s%s%s%s", homedir, dsuffix, s, name[i]);
 			if (access(cmd[i]->cmd, X_OK) != 0)
