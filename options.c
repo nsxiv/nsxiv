@@ -17,7 +17,6 @@
  */
 
 #include "nsxiv.h"
-#define _IMAGE_CONFIG
 #define _TITLE_CONFIG
 #include "config.h"
 #include "version.h"
