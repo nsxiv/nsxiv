@@ -51,7 +51,7 @@ static struct {
 	int name;
 	Cursor icon;
 } cursors[CURSOR_COUNT] = {
-	{ XC_left_ptr }, { XC_dotbox }, { XC_watch },
+	{ XC_left_ptr }, { XC_dotbox }, { XC_fleur }, { XC_watch },
 	{ XC_sb_left_arrow }, { XC_sb_right_arrow }
 };
 
