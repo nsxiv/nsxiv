@@ -1,4 +1,5 @@
-/* Copyright 2011 Bert Muennich
+/* Copyright 2011-2020 Bert Muennich
+ * Copyright 2021 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
