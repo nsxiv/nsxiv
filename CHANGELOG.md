@@ -21,6 +21,7 @@ there may be more changes. Please use `git log` to view them.
 * Added:
 
   * Animated webp support (optional).
+  * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag.
   * Cli flag `-0` for outputting null-seperated list.
   * `make icon` to install icons.
   * `make desktop` to install .desktop entry.
@@ -33,6 +34,7 @@ there may be more changes. Please use `git log` to view them.
 
   * Not able to use `keyhandler_abort` (<kbd>Escape</kbd> by default) in
     keybindings.
+  * Memory leak related to Xresources.
   * Wrong comments in `config.h` and description in `manpage`.
   * Removed non-POSIX commands and extensions from `Makefile`.
   * Regression where nsxiv wouldn't run on non-TrueColor X server.
