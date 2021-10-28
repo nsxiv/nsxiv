@@ -210,6 +210,9 @@ struct img {
 	float x;
 	float y;
 
+	Imlib_Color_Modifier cmod;
+	int gamma;
+
 	scalemode_t scalemode;
 	float zoom;
 
@@ -217,9 +220,6 @@ struct img {
 	bool dirty;
 	bool aa;
 	bool alpha;
-
-	Imlib_Color_Modifier cmod;
-	int gamma;
 
 	struct {
 		bool on;
