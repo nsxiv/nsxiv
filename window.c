@@ -92,7 +92,7 @@ const char* win_res(XrmDatabase db, const char *name, const char *def)
 	char *type;
 	XrmValue ret;
 
-	if (db != None &&
+	if (db != NULL &&
 	    XrmGetResource(db, name, name, &type, &ret) &&
 	    STREQ(type, "String"))
 	{
@@ -130,7 +130,7 @@ void win_init(win_t *win)
 
 	XrmInitialize();
 	res_man = XResourceManagerString(e->dpy);
-	db = res_man != NULL ? XrmGetStringDatabase(res_man) : None;
+	db = res_man == NULL ? NULL : XrmGetStringDatabase(res_man);
 
 	win_bg = win_res(db, RES_CLASS ".window.background", "white");
 	win_fg = win_res(db, RES_CLASS ".window.foreground", "black");
@@ -158,6 +158,7 @@ void win_init(win_t *win)
 	win->bar.h = options->hide_bar ? 0 : barheight;
 #endif /* HAVE_LIBFONTS */
 
+	XrmDestroyDatabase(db);
 	INIT_ATOM_(WM_DELETE_WINDOW);
 	INIT_ATOM_(_NET_WM_NAME);
 	INIT_ATOM_(_NET_WM_ICON_NAME);
