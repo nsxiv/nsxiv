@@ -52,7 +52,7 @@ void parse_options(int argc, char **argv)
 
 	_options.from_stdin = false;
 	_options.to_stdout = false;
-	_options.stdout_separator = '\n';
+	_options.using_null = false;
 	_options.recursive = false;
 	_options.startnum = 0;
 
@@ -181,8 +181,7 @@ void parse_options(int argc, char **argv)
 				_options.zoom = (float) n / 100.0;
 				break;
 			case '0':
-				_options.stdout_separator = '\0';
-				_options.to_stdout = true;  /* -0 implies -o */
+				_options.using_null = true;
 				break;
 		}
 	}
