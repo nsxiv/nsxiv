@@ -445,13 +445,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 			im = imlib_load_image(file->path);
 		if (im != NULL) {
 			imlib_context_set_image(im);
-#if HAVE_LIBWEBP
-			const char *fmt;
-			if ((fmt = imlib_image_format()) != NULL && !STREQ(fmt, "webp") &&
-			    imlib_image_get_data_for_reading_only() == NULL) {
-#else
 			if (imlib_image_get_data_for_reading_only() == NULL) {
-#endif
 				imlib_free_image();
 				im = NULL;
 			}
