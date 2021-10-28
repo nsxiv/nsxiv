@@ -331,6 +331,7 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	unsigned long flags;
 	unsigned int delay;
 	bool err = false;
+	data.bytes = NULL;
 
 	if ((err = fframe == NULL && img == NULL))
 		goto fail;
@@ -340,7 +341,6 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		goto fail;
 	}
 	fseek(webp_file, 0L, SEEK_END);
-	data.bytes = NULL;
 	data.size = ftell(webp_file);
 	rewind(webp_file);
 	data.bytes = emalloc(data.size);
