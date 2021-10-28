@@ -135,8 +135,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 	if (img->multi.cap == 0) {
 		img->multi.cap = 8;
-		img->multi.frames = (img_frame_t*)
-		                    emalloc(sizeof(img_frame_t) * img->multi.cap);
+		img->multi.frames = emalloc(img->multi.cap * sizeof(img_frame_t));
 	}
 	img->multi.cnt = img->multi.sel = 0;
 	img->multi.length = 0;
@@ -188,9 +187,9 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 			w = gif->Image.Width;
 			h = gif->Image.Height;
 
-			rows = (GifRowType*) emalloc(h * sizeof(GifRowType));
+			rows = emalloc(h * sizeof(GifRowType));
 			for (i = 0; i < h; i++)
-				rows[i] = (GifRowType) emalloc(w * sizeof(GifPixelType));
+				rows[i] = emalloc(w * sizeof(GifPixelType));
 			if (gif->Image.Interlace) {
 				for (i = 0; i < 4; i++) {
 					for (j = intoffset[i]; j < h; j += intjump[i])
@@ -201,7 +200,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 					DGifGetLine(gif, rows[i], w);
 			}
 
-			ptr = data = (DATA32*) emalloc(sizeof(DATA32) * sw * sh);
+			ptr = data = emalloc(sw * sh * sizeof(DATA32));
 			cmap = gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap;
 			if (bg >= cmap->ColorCount) {
 				err = true;
@@ -258,8 +257,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 			if (img->multi.cnt == img->multi.cap) {
 				img->multi.cap *= 2;
-				img->multi.frames = (img_frame_t*)
-				                    erealloc(img->multi.frames,
+				img->multi.frames = erealloc(img->multi.frames,
 				                             img->multi.cap * sizeof(img_frame_t));
 			}
 			img->multi.frames[img->multi.cnt].im = im;
@@ -322,7 +320,6 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 {
 	FILE *webp_file;
 	WebPData data;
-	data.bytes = NULL;
 
 	Imlib_Image im = NULL;
 	struct WebPAnimDecoderOptions opts;
@@ -335,6 +332,7 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 	unsigned long flags;
 	unsigned int delay;
 	bool err = false;
+	data.bytes = NULL;
 
 	if ((err = fframe == NULL && img == NULL))
 		goto fail;
@@ -863,7 +861,7 @@ bool img_change_gamma(img_t *img, int d)
 
 	if (img->gamma != gamma) {
 		imlib_reset_color_modifier();
-		if (gamma != 0) {
+		if (gamma) {
 			range = gamma <= 0 ? 1.0 : GAMMA_MAX - 1.0;
 			imlib_modify_color_modifier_gamma(1.0 + gamma * (range / GAMMA_RANGE));
 		}

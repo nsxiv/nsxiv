@@ -18,8 +18,6 @@
  */
 
 #include "nsxiv.h"
-#define _IMAGE_CONFIG
-#include "config.h"
 
 #include <stdlib.h>
 #include <string.h>

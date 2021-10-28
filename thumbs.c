@@ -49,7 +49,7 @@ char* tns_cache_filepath(const char *filepath)
 	if (strncmp(filepath, cache_dir, strlen(cache_dir)) != 0) {
 		/* don't cache images inside the cache directory! */
 		len = strlen(cache_dir) + strlen(filepath) + 2;
-		cfile = (char*) emalloc(len);
+		cfile = emalloc(len);
 		snprintf(cfile, len, "%s/%s", cache_dir, filepath + 1);
 	}
 	return cfile;
@@ -120,7 +120,7 @@ end:
 	}
 }
 
-void tns_clean_cache(tns_t *tns)
+void tns_clean_cache(void)
 {
 	int dirlen;
 	char *cfile, *filename;
@@ -150,7 +150,7 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 	const char *homedir, *dsuffix = "";
 
 	if (cnt != NULL && *cnt > 0) {
-		tns->thumbs = (thumb_t*) emalloc(*cnt * sizeof(thumb_t));
+		tns->thumbs = emalloc(*cnt * sizeof(thumb_t));
 		memset(tns->thumbs, 0, *cnt * sizeof(thumb_t));
 	} else {
 		tns->thumbs = NULL;
@@ -174,7 +174,7 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 		const char *s = "/nsxiv";
 		free(cache_dir);
 		len = strlen(homedir) + strlen(dsuffix) + strlen(s) + 1;
-		cache_dir = (char*) emalloc(len);
+		cache_dir = emalloc(len);
 		snprintf(cache_dir, len, "%s%s%s", homedir, dsuffix, s);
 	} else {
 		error(0, 0, "Cache directory not found");

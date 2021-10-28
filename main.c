@@ -169,7 +169,7 @@ void remove_file(int n, bool manual)
 
 void set_timeout(timeout_f handler, int time, bool overwrite)
 {
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < ARRLEN(timeouts); i++) {
 		if (timeouts[i].handler == handler) {
@@ -185,7 +185,7 @@ void set_timeout(timeout_f handler, int time, bool overwrite)
 
 void reset_timeout(timeout_f handler)
 {
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < ARRLEN(timeouts); i++) {
 		if (timeouts[i].handler == handler) {
@@ -234,7 +234,7 @@ void open_info(void)
 	int pfd[2];
 	char w[12], h[12];
 
-	if (info.f.err != 0 || info.fd >= 0 || win.bar.h == 0)
+	if (info.f.err || info.fd >= 0 || win.bar.h == 0)
 		return;
 	win.bar.l.buf[0] = '\0';
 	if (pipe(pfd) < 0)
@@ -379,7 +379,7 @@ void update_info(void)
 			else
 				bar_put(r, "%ds" BAR_SEP, img.ss.delay / 10);
 		}
-		if (img.gamma != 0)
+		if (img.gamma)
 			bar_put(r, "G%+d" BAR_SEP, img.gamma);
 		bar_put(r, "%3d%%" BAR_SEP, (int) (img.zoom * 100.0));
 		if (img.multi.cnt > 0) {
@@ -423,7 +423,8 @@ void redraw(void)
 
 void reset_cursor(void)
 {
-	int c, i;
+	int c;
+	unsigned int i;
 	cursor_t cursor = CURSOR_NONE;
 
 	if (mode == MODE_IMAGE) {
@@ -499,7 +500,7 @@ void run_key_handler(const char *key, unsigned int mask)
 	struct stat *oldst, st;
 	XEvent dump;
 
-	if (keyhandler.f.err != 0) {
+	if (keyhandler.f.err) {
 		if (!keyhandler.warned) {
 			error(0, keyhandler.f.err, "%s", keyhandler.f.cmd);
 			keyhandler.warned = true;
@@ -586,7 +587,7 @@ end:
 
 void on_keypress(XKeyEvent *kev)
 {
-	int i;
+	unsigned int i;
 	unsigned int sh = 0;
 	KeySym ksym, shksym;
 	char dummy, key;
@@ -629,7 +630,8 @@ void on_keypress(XKeyEvent *kev)
 
 void on_buttonpress(XButtonEvent *bev)
 {
-	int i, sel;
+	int sel;
+	unsigned int i;
 	bool dirty = false;
 	static Time firstclick;
 
@@ -855,7 +857,7 @@ int main(int argc, char *argv[])
 
 	if (options->clean_cache) {
 		tns_init(&tns, NULL, NULL, NULL, NULL);
-		tns_clean_cache(&tns);
+		tns_clean_cache();
 		exit(EXIT_SUCCESS);
 	}
 
@@ -929,7 +931,7 @@ int main(int argc, char *argv[])
 		const char *s = "/nsxiv/exec/";
 
 		for (i = 0; i < ARRLEN(cmd); i++) {
-			n = strlen(homedir) + strlen(dsuffix) + strlen(name[i]) + strlen(s) + 1;
+			n = strlen(homedir) + strlen(dsuffix) + strlen(s) + strlen(name[i]) + 1;
 			cmd[i]->cmd = emalloc(n);
 			snprintf(cmd[i]->cmd, n, "%s%s%s%s", homedir, dsuffix, s, name[i]);
 			if (access(cmd[i]->cmd, X_OK) != 0)

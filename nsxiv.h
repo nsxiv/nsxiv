@@ -119,7 +119,7 @@ typedef enum {
 typedef enum {
 	SUFFIX_EMPTY,
 	SUFFIX_BASENAME,
-	SUFFIX_FULLPATH,
+	SUFFIX_FULLPATH
 } suffixmode_t;
 
 typedef struct {
@@ -198,7 +198,7 @@ typedef struct {
 	int cnt;
 	int sel;
 	bool animate;
-	int framedelay;
+	unsigned int framedelay;
 	int length;
 } multi_img_t;
 
@@ -272,7 +272,7 @@ struct opt {
 	/* window: */
 	bool fullscreen;
 	bool hide_bar;
-	long embed;
+	Window embed; /* unsigned long */
 	char *geometry;
 	char *res_name;
 	const char *title_prefix;
@@ -324,7 +324,7 @@ struct tns {
 	bool dirty;
 };
 
-void tns_clean_cache(tns_t*);
+void tns_clean_cache(void);
 void tns_init(tns_t*, fileinfo_t*, const int*, int*, win_t*);
 CLEANUP void tns_free(tns_t*);
 bool tns_load(tns_t*, int, bool, bool);
