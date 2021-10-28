@@ -545,7 +545,7 @@ void run_key_handler(const char *key, unsigned int mask)
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
 			stat(files[i].path, &oldst[f]);
-			fprintf(pfs, "%s\n", files[i].name);
+			fprintf(pfs, "%s%c", files[i].name, options->using_null ? '\0' : '\n');
 			f++;
 		}
 	}
