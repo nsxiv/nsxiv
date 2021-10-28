@@ -319,7 +319,6 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 {
 	FILE *webp_file;
 	WebPData data;
-	data.bytes = NULL;
 
 	Imlib_Image im = NULL;
 	struct WebPAnimDecoderOptions opts;
@@ -341,6 +340,7 @@ bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 		goto fail;
 	}
 	fseek(webp_file, 0L, SEEK_END);
+	data.bytes = NULL;
 	data.size = ftell(webp_file);
 	rewind(webp_file);
 	data.bytes = emalloc(data.size);
@@ -425,6 +425,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 {
 	struct stat st;
 	Imlib_Image im = NULL;
+	const char *fmt;
 
 	if (access(file->path, R_OK) == 0 &&
 	    stat(file->path, &st) == 0 && S_ISREG(st.st_mode))
@@ -438,7 +439,6 @@ Imlib_Image img_open(const fileinfo_t *file)
 		if (im != NULL) {
 			imlib_context_set_image(im);
 #if HAVE_LIBWEBP
-			const char *fmt;
 			if ((fmt = imlib_image_format()) != NULL && !STREQ(fmt, "webp") &&
 			    imlib_image_get_data_for_reading_only() == NULL) {
 #else
