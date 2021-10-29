@@ -22,7 +22,9 @@ there may be more changes. Please use `git log` to view them.
 
   * Animated webp support (optional).
   * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag.
-  * Cli flag `-0` for outputting null-seperated list.
+  * Ability to configure colors and fonts in `config.h`
+  * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`)
+    and key-handler.
   * `make icon` to install icons.
   * `make desktop` to install .desktop entry.
   * `make install-all` to install everything.
