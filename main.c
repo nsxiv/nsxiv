@@ -606,9 +606,10 @@ bool process_bindings(const keymap_t *keys, int len, KeySym ksym, int state, int
 		{
 			if (keys[i].cmd.func(keys[i].arg))
 				*dirty = true;
+			return true;
 		}
 	}
-	return 1;
+	return false;
 }
 
 void on_keypress(XKeyEvent *kev)
