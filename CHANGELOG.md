@@ -20,7 +20,7 @@ there may be more changes. Please use `git log` to view them.
 
 * Added:
 
-  * Animated webp support (optional).
+  * Animated webp support (optional via `HAVE_LIBWEBP`).
   * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag.
   * Ability to configure colors and fonts in `config.h`
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`)
