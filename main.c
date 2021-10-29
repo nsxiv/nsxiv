@@ -67,7 +67,7 @@ int markidx;
 int prefix;
 bool extprefix;
 
-bool resized = false;
+static bool resized = false;
 
 typedef struct {
 	int err;
@@ -97,7 +97,7 @@ timeout_t timeouts[] = {
 /**************************
   function implementations
  **************************/
-void cleanup(void)
+static void cleanup(void)
 {
 	img_close(&img, false);
 	arl_cleanup(&arl);
@@ -113,7 +113,7 @@ static bool xgetline(char **lineptr, size_t *n)
 	return len > 0;
 }
 
-void check_add_file(char *filename, bool given)
+static void check_add_file(char *filename, bool given)
 {
 	char *path;
 
@@ -203,7 +203,7 @@ void reset_timeout(timeout_f handler)
 	}
 }
 
-bool check_timeouts(struct timeval *t)
+static bool check_timeouts(struct timeval *t)
 {
 	int i = 0, tdiff, tmin = -1;
 	struct timeval now;
@@ -265,7 +265,7 @@ void open_info(void)
 	}
 }
 
-void read_info(void)
+static void read_info(void)
 {
 	ssize_t i, n;
 	char buf[BAR_L_LEN];
@@ -347,7 +347,7 @@ bool mark_image(int n, bool on)
 	return false;
 }
 
-void bar_put(win_bar_t *bar, const char *fmt, ...)
+static void bar_put(win_bar_t *bar, const char *fmt, ...)
 {
 	size_t len = bar->size - (bar->p - bar->buf), n;
 	va_list ap;
@@ -358,7 +358,7 @@ void bar_put(win_bar_t *bar, const char *fmt, ...)
 	va_end(ap);
 }
 
-void update_info(void)
+static void update_info(void)
 {
 	unsigned int i, fn, fw;
 	const char * mark;
@@ -507,7 +507,7 @@ void handle_key_handler(bool init)
 	win_draw(&win);
 }
 
-void run_key_handler(const char *key, unsigned int mask)
+static void run_key_handler(const char *key, unsigned int mask)
 {
 	pid_t pid;
 	FILE *pfs;
@@ -605,8 +605,8 @@ end:
 	redraw();
 }
 
-bool process_bindings(const keymap_t *keys, unsigned int len,
-                      KeySym ksym_or_button, unsigned int state)
+static bool process_bindings(const keymap_t *keys, unsigned int len,
+                             KeySym ksym_or_button, unsigned int state)
 {
 	unsigned int i;
 	bool dirty = false;
@@ -624,7 +624,7 @@ bool process_bindings(const keymap_t *keys, unsigned int len,
 	return dirty;
 }
 
-void on_keypress(XKeyEvent *kev)
+static void on_keypress(XKeyEvent *kev)
 {
 	unsigned int sh = 0;
 	KeySym ksym, shksym;
@@ -659,7 +659,7 @@ void on_keypress(XKeyEvent *kev)
 	prefix = 0;
 }
 
-void on_buttonpress(XButtonEvent *bev)
+static void on_buttonpress(XButtonEvent *bev)
 {
 	int sel;
 	bool dirty = false;
@@ -720,7 +720,7 @@ void on_buttonpress(XButtonEvent *bev)
 	prefix = 0;
 }
 
-void run(void)
+static void run(void)
 {
 	int xfd;
 	fd_set fds;
@@ -837,7 +837,7 @@ void run(void)
 	}
 }
 
-int fncmp(const void *a, const void *b)
+static int fncmp(const void *a, const void *b)
 {
 	return strcoll(((fileinfo_t*) a)->name, ((fileinfo_t*) b)->name);
 }
@@ -847,7 +847,7 @@ void sigchld(int sig)
 	while (waitpid(-1, NULL, WNOHANG) > 0);
 }
 
-void setup_signal(int sig, void (*handler)(int sig))
+static void setup_signal(int sig, void (*handler)(int sig))
 {
 	struct sigaction sa;
 

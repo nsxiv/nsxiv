@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <sys/inotify.h>
 
-union {
+static union {
 	char d[4096]; /* aligned buffer */
 	struct inotify_event e;
 } buf;
