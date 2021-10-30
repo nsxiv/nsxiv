@@ -13,33 +13,49 @@ there may be more changes. Please use `git log` to view them.
 * Changes:
 
   * Statusbar made optional via `HAVE_LIBFONTS`.
+    ([#95](https://github.com/nsxiv/nsxiv/pull/95))
   * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead.
   * By default example scripts will now be installed into `EGPREFIX` (see
-    README for more info).
+    README for more info). ([#86](https://github.com/nsxiv/nsxiv/pull/86))
   * Allow any modifier to be used in keybinding (excluding `ignore_mask`).
+    ([#77](https://github.com/nsxiv/nsxiv/pull/77))
+  * Zoom levels are not hard-coded. This breaks existing configs.
+    ([#92](https://github.com/nsxiv/nsxiv/pull/92))
 
 * Added:
 
   * Animated webp support (optional via `HAVE_LIBWEBP`).
   * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag.
+    ([#117](https://github.com/nsxiv/nsxiv/pull/117))
   * Ability to configure colors and fonts in `config.h`
+    ([#115](https://github.com/nsxiv/nsxiv/pull/115))
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`)
-    and key-handler.
+    and key-handler. ([#68](https://github.com/nsxiv/nsxiv/pull/68),
+    [#141](https://github.com/nsxiv/nsxiv/pull/141))
   * `make install-icon` to install icons.
+    ([#80](https://github.com/nsxiv/nsxiv/pull/80),
+    [#96](https://github.com/nsxiv/nsxiv/pull/96))
   * `make install-desktop` to install .desktop entry.
+    ([#80](https://github.com/nsxiv/nsxiv/pull/80),
+    [#96](https://github.com/nsxiv/nsxiv/pull/96))
   * `make install-all` to install everything.
+    ([#80](https://github.com/nsxiv/nsxiv/pull/80),
+    [#96](https://github.com/nsxiv/nsxiv/pull/96))
   * `keyhandler_abort` in `config.h`.
   * Statusbar message upon key-handler activation.
+    ([#98](https://github.com/nsxiv/nsxiv/pull/98))
   * Ability to write functions in `config.h` and use them via keybindings.
 
 * Fixes:
 
   * Not able to use `keyhandler_abort` (<kbd>Escape</kbd> by default) in
-    keybindings.
-  * Memory leak related to Xresources.
+    keybindings. ([#91](https://github.com/nsxiv/nsxiv/pull/91))
+  * Memory leaks ([#134](https://github.com/nsxiv/nsxiv/pull/134),
+    [#135](https://github.com/nsxiv/nsxiv/pull/135))
   * Wrong comments in `config.h` and description in `manpage`.
   * Removed non-POSIX commands and extensions from `Makefile`.
   * Regression where nsxiv wouldn't run on non-TrueColor X server.
+    ([#114](https://github.com/nsxiv/nsxiv/pull/114))
 
 - - -
 
