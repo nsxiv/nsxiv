@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600;700&display=swap');
+
+body {
+  font-family: 'Inconsolata' , monospace;
+  font-weight: 400;
+  color: black;
+  line-height: 1.2;
+  font-size: 1.05rem;
+  letter-spacing: 0.15px;
+
+  max-width: 100ch;
+  padding: 0 1em;
+  margin: auto;
+}
+
+h1, h2, h3 {
+  font-size: 150%;
+  font-weight: 600;
+  letter-spacing: .07em;
+  margin-top: 1.5em;
+  margin-bottom: .35em;
+}
+
+a {
+  text-decoration: none;
+  color: #0035c7;
+}
+
+b {
+  font-weight: 700;
+}
+
+i {
+  background-color: #F3F3F3;
+  padding: .2em .4em;
+  border-radius: 6px;
+}
