@@ -15,7 +15,7 @@ there may be more changes. Please use `git log` to view them.
   * Statusbar made optional via `HAVE_LIBFONTS`.
     ([#95](https://github.com/nsxiv/nsxiv/pull/95))
   * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead.
-    [#71](https://github.com/nsxiv/nsxiv/pull/71))
+    ([#71](https://github.com/nsxiv/nsxiv/pull/71))
   * By default example scripts will now be installed into `EGPREFIX` (see
     README for more info). ([#86](https://github.com/nsxiv/nsxiv/pull/86))
   * Allow any modifier to be used in keybinding (excluding `ignore_mask`).
@@ -26,7 +26,7 @@ there may be more changes. Please use `git log` to view them.
 * Added:
 
   * Animated webp support (optional via `HAVE_LIBWEBP`).
-    [#20](https://github.com/nsxiv/nsxiv/pull/20))
+    ([#20](https://github.com/nsxiv/nsxiv/pull/20))
   * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag.
     ([#117](https://github.com/nsxiv/nsxiv/pull/117))
   * Ability to configure colors and fonts in `config.h`
@@ -44,11 +44,11 @@ there may be more changes. Please use `git log` to view them.
     ([#80](https://github.com/nsxiv/nsxiv/pull/80),
     [#96](https://github.com/nsxiv/nsxiv/pull/96))
   * `keyhandler_abort` in `config.h`.
-    [#91](https://github.com/nsxiv/nsxiv/pull/91))
+    ([#91](https://github.com/nsxiv/nsxiv/pull/91))
   * Statusbar message upon key-handler activation.
     ([#98](https://github.com/nsxiv/nsxiv/pull/98))
   * Ability to write functions in `config.h` and use them via keybindings.
-    [#76](https://github.com/nsxiv/nsxiv/pull/76))
+    ([#76](https://github.com/nsxiv/nsxiv/pull/76))
 
 * Fixes:
 
@@ -57,7 +57,7 @@ there may be more changes. Please use `git log` to view them.
   * Memory leaks ([#134](https://github.com/nsxiv/nsxiv/pull/134),
     [#135](https://github.com/nsxiv/nsxiv/pull/135))
   * Removed non-POSIX commands and extensions from `Makefile`.
-    [#71](https://github.com/nsxiv/nsxiv/pull/71))
+    ([#71](https://github.com/nsxiv/nsxiv/pull/71))
   * Regression where nsxiv wouldn't run on non-TrueColor X server.
     ([#114](https://github.com/nsxiv/nsxiv/pull/114))
   * Wrong comments in `config.h` and description in `manpage`.
