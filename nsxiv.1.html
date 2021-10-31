@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.22.4 -->
-<!-- CreationDate: Thu Jan 16 12:46:32 2020 -->
+<!-- CreationDate: Sun Oct 31 12:49:01 2021 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,12 +13,12 @@
        table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
        h1      { text-align: center }
 </style>
-<title>SXIV</title>
+<title>NSXIV</title>
 
 </head>
 <body>
 
-<h1 align="center">SXIV</h1>
+<h1 align="center">NSXIV</h1>
 
 <a href="#NAME">NAME</a><br>
 <a href="#SYNOPSIS">SYNOPSIS</a><br>
@@ -30,7 +30,8 @@
 <a href="#STATUS BAR">STATUS BAR</a><br>
 <a href="#EXTERNAL KEY HANDLER">EXTERNAL KEY HANDLER</a><br>
 <a href="#THUMBNAIL CACHING">THUMBNAIL CACHING</a><br>
-<a href="#AUTHOR">AUTHOR</a><br>
+<a href="#ORIGINAL AUTHOR">ORIGINAL AUTHOR</a><br>
+<a href="#CURRENT MAINTAINERS">CURRENT MAINTAINERS</a><br>
 <a href="#CONTRIBUTORS">CONTRIBUTORS</a><br>
 <a href="#HOMEPAGE">HOMEPAGE</a><br>
 <a href="#SEE ALSO">SEE ALSO</a><br>
@@ -43,27 +44,29 @@
 </h2>
 
 
-<p style="margin-left:11%; margin-top: 1em">sxiv - Simple X
-Image Viewer</p>
+<p style="margin-left:11%; margin-top: 1em">nsxiv &minus;
+Simple X Image Viewer</p>
 
 <h2>SYNOPSIS
 <a name="SYNOPSIS"></a>
 </h2>
 
 
-<p style="margin-left:11%; margin-top: 1em"><b>sxiv</b>
-[<b>-abcfhiopqrtvZ</b>] [<b>-A</b> <i>FRAMERATE</i>]
-[<b>-e</b> <i>WID</i>] [<b>-G</b> <i>GAMMA</i>] [<b>-g</b>
-<i>GEOMETRY</i>] [<b>-N</b> <i>NAME</i>] [<b>-n</b>
-<i>NUM</i>] [<b>-S</b> <i>DELAY</i>] [<b>-s</b> <i>MODE</i>]
-[<b>-z</b> <i>ZOOM</i>] <i>FILE</i>...</p>
+<p style="margin-left:11%; margin-top: 1em"><b>nsxiv</b>
+[<b>&minus;abcfhiopqrtvZ0</b>] [<b>&minus;A</b>
+<i>FRAMERATE</i>] [<b>&minus;e</b> <i>WID</i>]
+[<b>&minus;G</b> <i>GAMMA</i>] [<b>&minus;g</b>
+<i>GEOMETRY</i>] [<b>&minus;N</b> <i>NAME</i>]
+[<b>&minus;T</b> <i>TITLE</i>] [<b>&minus;n</b> <i>NUM</i>]
+[<b>&minus;S</b> <i>DELAY</i>] [<b>&minus;s</b> <i>MODE</i>]
+[<b>&minus;z</b> <i>ZOOM</i>] <i>FILE</i>...</p>
 
 <h2>DESCRIPTION
 <a name="DESCRIPTION"></a>
 </h2>
 
 
-<p style="margin-left:11%; margin-top: 1em">sxiv is a
+<p style="margin-left:11%; margin-top: 1em">nsxiv is a
 simple image viewer for X.</p>
 
 <p style="margin-left:11%; margin-top: 1em">It has two
@@ -81,7 +84,8 @@ window manager.</p>
 </h2>
 
 
-<p style="margin-left:11%; margin-top: 1em"><b>-A</b>
+
+<p style="margin-left:11%; margin-top: 1em"><b>&minus;A</b>
 <i>FRAMERATE</i></p>
 
 <p style="margin-left:22%;">Play animations with a constant
@@ -94,7 +98,7 @@ frame rate set to <i>FRAMERATE</i>.</p>
 <td width="9%">
 
 
-<p><b>-a</b></p></td>
+<p><b>&minus;a</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -105,7 +109,7 @@ frame rate set to <i>FRAMERATE</i>.</p>
 <td width="9%">
 
 
-<p><b>-b</b></p></td>
+<p><b>&minus;b</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -116,7 +120,7 @@ frame rate set to <i>FRAMERATE</i>.</p>
 <td width="9%">
 
 
-<p><b>-c</b></p></td>
+<p><b>&minus;c</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -128,19 +132,19 @@ directory and exit.</p></td></tr>
 <td width="9%">
 
 
-<p><b>-e</b> <i>WID</i></p></td>
+<p><b>&minus;e</b> <i>WID</i></p></td>
 <td width="2%"></td>
 <td width="78%">
 
 
-<p>Embed sxiv&rsquo;s window into window whose ID is
+<p>Embed nsxiv&rsquo;s window into window whose ID is
 <i>WID</i>.</p> </td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
 
 
-<p><b>-f</b></p></td>
+<p><b>&minus;f</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -148,21 +152,41 @@ directory and exit.</p></td></tr>
 <p>Start in fullscreen mode.</p></td></tr>
 </table>
 
-<p style="margin-left:11%;"><b>-G</b> <i>GAMMA</i></p>
+<p style="margin-left:11%;"><b>&minus;G</b>
+<i>GAMMA</i></p>
 
 <p style="margin-left:22%;">Set image gamma to GAMMA
-(-32..32).</p>
+(&minus;32..32).</p>
 
-<p style="margin-left:11%;"><b>-g</b> <i>GEOMETRY</i></p>
+<p style="margin-left:11%;"><b>&minus;g</b>
+<i>GEOMETRY</i></p>
 
 <p style="margin-left:22%;">Set window position and size.
 See section GEOMETRY SPECIFICATIONS of X(7) for more
 information on GEOMETRY argument.</p>
 
-<p style="margin-left:11%;"><b>-N</b> <i>NAME</i></p>
+<p style="margin-left:11%;"><b>&minus;N</b> <i>NAME</i></p>
 
 <p style="margin-left:22%;">Set the resource name of
-sxiv&rsquo;s X window to NAME.</p>
+nsxiv&rsquo;s X window to NAME.</p>
+
+<p style="margin-left:11%;"><b>&minus;T</b>
+<i>TITLE</i></p>
+
+<p style="margin-left:22%;">Set the window title to TITLE.
+Use the format &lsquo;prefix:suffixmode&rsquo;. Any string
+literal is accepted for prefix, and the format of suffixmode
+is:</p>
+
+<p style="margin-left:22%; margin-top: 1em">Value Format
+<br>
+0 Empty <br>
+1 Basename of file <br>
+2 Full path to file</p>
+
+<p style="margin-left:22%; margin-top: 1em">By defualt,
+prefix is set to &quot;nsxiv - &quot; and suffixmode is set
+to 1 (basename).</p>
 
 <table width="100%" border="0" rules="none" frame="void"
        cellspacing="0" cellpadding="0">
@@ -171,7 +195,7 @@ sxiv&rsquo;s X window to NAME.</p>
 <td width="9%">
 
 
-<p><b>-n</b> <i>NUM</i></p></td>
+<p><b>&minus;n</b> <i>NUM</i></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -182,7 +206,7 @@ sxiv&rsquo;s X window to NAME.</p>
 <td width="9%">
 
 
-<p><b>-h</b></p></td>
+<p><b>&minus;h</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -194,44 +218,44 @@ exit.</p> </td></tr>
 <td width="9%">
 
 
-<p><b>-i</b></p></td>
+<p><b>&minus;i</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
 
 <p>Read names of files to open from standard input. Also
-done if FILE is &rsquo;-&rsquo;.</p></td></tr>
+done if FILE is &lsquo;-&rsquo;.</p></td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
 
 
-<p><b>-o</b></p></td>
+<p><b>&minus;o</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
 
 <p>Write list of all marked files to standard output when
-quitting. In combination with <b>-i</b> sxiv can be used as
-a visual filter/pipe.</p></td></tr>
+quitting. In combination with <b>&minus;i</b> nsxiv can be
+used as a visual filter/pipe.</p></td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
 
 
-<p><b>-p</b></p></td>
+<p><b>&minus;p</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
 
-<p>Enable private mode, in which sxiv does not write any
+<p>Enable private mode, in which nsxiv does not write any
 cache or temporary files.</p></td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
 
 
-<p><b>-q</b></p></td>
+<p><b>&minus;q</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -242,7 +266,7 @@ cache or temporary files.</p></td></tr>
 <td width="9%">
 
 
-<p><b>-r</b></p></td>
+<p><b>&minus;r</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -251,17 +275,18 @@ cache or temporary files.</p></td></tr>
 view.</p> </td></tr>
 </table>
 
-<p style="margin-left:11%;"><b>-S</b> <i>DELAY</i></p>
+<p style="margin-left:11%;"><b>&minus;S</b>
+<i>DELAY</i></p>
 
 <p style="margin-left:22%;">Start in slideshow mode. Set
 the delay between images to <i>DELAY</i> seconds.
 <i>DELAY</i> may be a floating point number.</p>
 
-<p style="margin-left:11%;"><b>-s</b> <i>MODE</i></p>
+<p style="margin-left:11%;"><b>&minus;s</b> <i>MODE</i></p>
 
 <p style="margin-left:22%;">Set scale mode according to
-MODE character. Supported modes are: [d]own, [f]it, [w]idth,
-[h]eight.</p>
+MODE character. Supported modes are: [d]own, [f]it, [F]ill,
+[w]idth, [h]eight.</p>
 
 <table width="100%" border="0" rules="none" frame="void"
        cellspacing="0" cellpadding="0">
@@ -270,7 +295,7 @@ MODE character. Supported modes are: [d]own, [f]it, [w]idth,
 <td width="3%">
 
 
-<p><b>-t</b></p></td>
+<p><b>&minus;t</b></p></td>
 <td width="8%"></td>
 <td width="78%">
 
@@ -281,7 +306,7 @@ MODE character. Supported modes are: [d]own, [f]it, [w]idth,
 <td width="3%">
 
 
-<p><b>-v</b></p></td>
+<p><b>&minus;v</b></p></td>
 <td width="8%"></td>
 <td width="78%">
 
@@ -293,18 +318,35 @@ exit.</p> </td></tr>
 <td width="3%">
 
 
-<p><b>-Z</b></p></td>
+<p><b>&minus;Z</b></p></td>
 <td width="8%"></td>
 <td width="78%">
 
 
-<p>The same as &rsquo;-z 100&rsquo;.</p></td></tr>
+<p>The same as &lsquo;&minus;z 100&rsquo;.</p></td></tr>
 </table>
 
-<p style="margin-left:11%;"><b>-z</b> <i>ZOOM</i></p>
+<p style="margin-left:11%;"><b>&minus;z</b> <i>ZOOM</i></p>
 
 <p style="margin-left:22%;">Set zoom level to ZOOM
 percent.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="3%">
+
+
+<p><b>&minus;0</b></p></td>
+<td width="8%"></td>
+<td width="78%">
+
+
+<p>Use NULL-separator. With this option output of &minus;o
+and file-list sent to the key-handler will be seperated by a
+NULL character.</p></td></tr>
+</table>
 
 <h2>KEYBOARD COMMANDS
 <a name="KEYBOARD COMMANDS"></a>
@@ -323,13 +365,13 @@ and thumbnail mode:</p>
 <td width="9%">
 
 
-<p><b>0</b>-<b>9</b></p></td>
+<p style="margin-top: 1em"><b>0</b>&minus;<b>9</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
 
-<p>Prefix the next command with a number (denoted via
-<i>count</i>).</p> </td></tr>
+<p style="margin-top: 1em">Prefix the next command with a
+number (denoted via <i>count</i>).</p></td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
@@ -340,7 +382,7 @@ and thumbnail mode:</p>
 <td width="78%">
 
 
-<p>Quit sxiv.</p></td></tr>
+<p>Quit nsxiv.</p></td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
@@ -476,7 +518,7 @@ width.</p>
 <td width="9%">
 
 
-<p><b>-</b></p></td>
+<p><b>&minus;</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -503,17 +545,6 @@ width.</p>
 <td width="78%">
 
 
-<p>Reverse all image marks.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>Ctrl-M</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
 <p>Repeat last mark action on all images from the last
 marked/unmarked up to the current one.</p></td></tr>
 <tr valign="top" align="left">
@@ -522,6 +553,17 @@ marked/unmarked up to the current one.</p></td></tr>
 
 
 <p><b>Ctrl-m</b></p></td>
+<td width="2%"></td>
+<td width="78%">
+
+
+<p>Reverse all image marks.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p><b>Ctrl-u</b></p></td>
 <td width="2%"></td>
 <td width="78%">
 
@@ -716,7 +758,8 @@ backward.</p> </td>
 </td></tr>
 </table>
 
-<p style="margin-left:11%;"><b>Ctrl-Space</b></p>
+<p style="margin-left:11%;"><b>Ctrl-a</b>,
+<b>Ctrl-Space</b></p>
 
 <p style="margin-left:22%;">Play/stop animations of
 multi-frame images.</p>
@@ -847,6 +890,17 @@ window.</p> </td></tr>
 
 
 <p>Fit image to window.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>F</b></p></td>
+<td width="10%"></td>
+<td width="78%">
+
+
+<p>Fill image to window.</p></td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="1%">
@@ -1015,6 +1069,11 @@ Button2</b></p>
 mouse cursor position in the window while keeping this
 button pressed down.</p>
 
+<p style="margin-left:11%;"><b>Ctrl-Button1</b></p>
+
+<p style="margin-left:22%;">Pan the image relative to the
+mouse cursor.</p>
+
 <p style="margin-left:11%;">Zooming: <b><br>
 ScrollUp</b></p>
 
@@ -1031,32 +1090,34 @@ ScrollUp</b></p>
 
 <p style="margin-left:11%; margin-top: 1em">The following X
 resources are supported: <b><br>
-background</b></p>
+window.background</b></p>
 
-<p style="margin-left:22%;">Color of the window background
-and bar foreground</p>
+<p style="margin-left:22%;">Color of the window
+background</p>
 
-<p style="margin-left:11%;"><b>foreground</b></p>
+<p style="margin-left:11%;"><b>window.foreground</b></p>
 
-<p style="margin-left:22%;">Color of the window foreground
-and bar background</p>
+<p style="margin-left:22%;">Color of the window
+foreground</p>
 
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="6%">
+<p style="margin-left:11%;"><b>bar.font</b></p>
 
+<p style="margin-left:22%;">Name of Xft bar font</p>
 
-<p><b>font</b></p></td>
-<td width="5%"></td>
-<td width="30%">
+<p style="margin-left:11%;"><b>bar.background</b></p>
 
+<p style="margin-left:22%;">Color of the bar background.
+Defaults to window.background</p>
 
-<p>Name of Xft bar font</p></td>
-<td width="48%">
-</td></tr>
-</table>
+<p style="margin-left:11%;"><b>bar.foreground</b></p>
+
+<p style="margin-left:22%;">Color of the bar foreground.
+Defaults to window.foreground</p>
+
+<p style="margin-left:11%;"><b>mark.foreground</b></p>
+
+<p style="margin-left:22%;">Color of the mark foreground.
+Defaults to window.foreground</p>
 
 <p style="margin-left:11%;">Please see xrdb(1) on how to
 change them.</p>
@@ -1069,14 +1130,14 @@ change them.</p>
 <p style="margin-left:11%; margin-top: 1em">The information
 displayed on the left side of the status bar can be replaced
 with the output of a user-provided script, which is called
-by sxiv whenever an image gets loaded. The path of this
-script is <i>$XDG_CONFIG_HOME/sxiv/exec/image-info</i> and
+by nsxiv whenever an image gets loaded. The path of this
+script is <i>$XDG_CONFIG_HOME/nsxiv/exec/image-info</i> and
 the arguments given to it are: 1) path to image file, 2)
 image width, 3) image height.</p>
 
 <p style="margin-left:11%; margin-top: 1em">There is also
-an example script installed together with sxiv as
-<i>PREFIX/share/sxiv/exec/image-info</i>.</p>
+an example script installed together with nsxiv as
+<i>EGPREFIX/image-info</i>.</p>
 
 <h2>EXTERNAL KEY HANDLER
 <a name="EXTERNAL KEY HANDLER"></a>
@@ -1086,12 +1147,12 @@ an example script installed together with sxiv as
 <p style="margin-left:11%; margin-top: 1em">Additional
 external keyboard commands can be defined using a handler
 program located in
-<i>$XDG_CONFIG_HOME/sxiv/exec/key-handler</i>. The handler
+<i>$XDG_CONFIG_HOME/nsxiv/exec/key-handler</i>. The handler
 is invoked by pressing <b>Ctrl-x</b>. The next key combo is
 passed as its first argument. Passed via stdin are the
 images to act upon, one path per line: all marked images, if
 in thumbnail mode and at least one image has been marked,
-otherwise the current image. sxiv(1) will block until the
+otherwise the current image. nsxiv(1) will block until the
 handler terminates. It then checks which images have been
 modified and reloads them.</p>
 
@@ -1103,32 +1164,52 @@ as listed in /usr/include/X11/keysymdef.h without the
 &quot;XK_&quot; prefix.</p>
 
 <p style="margin-left:11%; margin-top: 1em">There is also
-an example script installed together with sxiv as
-<i>PREFIX/share/sxiv/exec/key-handler</i>.</p>
+an example script installed together with nsxiv as
+<i>EGPREFIX/key-handler</i>.</p>
 
 <h2>THUMBNAIL CACHING
 <a name="THUMBNAIL CACHING"></a>
 </h2>
 
 
-<p style="margin-left:11%; margin-top: 1em">sxiv stores all
-thumbnails under <i>$XDG_CACHE_HOME/sxiv/</i>.</p>
+<p style="margin-left:11%; margin-top: 1em">nsxiv stores
+all thumbnails under <i>$XDG_CACHE_HOME/nsxiv/</i>.</p>
 
 <p style="margin-left:11%; margin-top: 1em">Use the command
-line option <i>-c</i> to remove all orphaned cache files.
-Additionally, run the following command afterwards inside
-the cache directory to remove empty subdirectories:</p>
+line option <i>&minus;c</i> to remove all orphaned cache
+files. Additionally, run the following command afterwards
+inside the cache directory to remove empty
+subdirectories:</p>
 
-<p style="margin-left:22%; margin-top: 1em">find . -depth
--type d -empty ! -name &rsquo;.&rsquo; -exec rmdir {} \;</p>
+<p style="margin-left:22%; margin-top: 1em">find .
+&minus;depth &minus;type d &minus;empty ! &minus;name
+&rsquo;.&rsquo; &minus;exec rmdir {} \;</p>
 
-<h2>AUTHOR
-<a name="AUTHOR"></a>
+<h2>ORIGINAL AUTHOR
+<a name="ORIGINAL AUTHOR"></a>
 </h2>
 
 
 <p style="margin-left:11%; margin-top: 1em">Bert Muennich
 &lt;ber.t at posteo.de&gt;</p>
+
+<h2>CURRENT MAINTAINERS
+<a name="CURRENT MAINTAINERS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Anupam Ashish
+Minz <br>
+Berke Kocao&Auml;lu &lt;berke.kocaoglu at metu.edu.tr&gt;
+<br>
+Guilherme Freire <br>
+Kian Kasad &lt;kian at kasad.com&gt; <br>
+N-R-K &lt;nrk at disroot.org&gt; <br>
+Stein Gunnar Bakkeby &lt;bakkeby at gmail.com&gt; <br>
+TAAPArthur &lt;taaparthur at gmail.com&gt; <br>
+explosion-mental &lt;explosion0mental at gmail.com&gt; <br>
+eylles &lt;ed.ylles1997 at gmail.com&gt; <br>
+qsmodo</p>
 
 <h2>CONTRIBUTORS
 <a name="CONTRIBUTORS"></a>
@@ -1141,13 +1222,17 @@ Dave Reisner &lt;d at falconindy.com&gt; <br>
 Fung SzeTat &lt;sthorde at gmail.com&gt; <br>
 Max Voit &lt;mvdev at with-eyes.net&gt;</p>
 
+<p style="margin-left:11%; margin-top: 1em">For additional
+contributors, run &lsquo;git shortlog -s&lsquo; in the nsxiv
+repository.</p>
+
 <h2>HOMEPAGE
 <a name="HOMEPAGE"></a>
 </h2>
 
 
 
-<p style="margin-left:11%; margin-top: 1em">https://github.com/muennich/sxiv</p>
+<p style="margin-left:11%; margin-top: 1em">https://github.com/nsxiv/nsxiv</p>
 
 <h2>SEE ALSO
 <a name="SEE ALSO"></a>
