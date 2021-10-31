@@ -71,9 +71,6 @@ static const int THUMB_SIZE = 3;
 #endif
 #ifdef _MAPPINGS_CONFIG
 
-/* following modifiers (NumLock | CapsLock) will be ignored when processing keybindings */
-static const int ignore_mask = Mod2Mask | LockMask;
-
 /* abort the keyhandler */
 static const KeySym keyhandler_abort = XK_Escape;
 
