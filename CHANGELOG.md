@@ -17,7 +17,8 @@ there may be more changes. Please use `git log` to view them.
   * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead.
     ([#71](https://github.com/nsxiv/nsxiv/pull/71))
   * By default example scripts will now be installed into `EGPREFIX` (see
-    README for more info). ([#86](https://github.com/nsxiv/nsxiv/pull/86))
+    README for more info).
+    ([#86](https://github.com/nsxiv/nsxiv/pull/86))
   * Allow any modifier to be used in keybinding (excluding `ignore_mask`).
     ([#77](https://github.com/nsxiv/nsxiv/pull/77))
   * Zoom levels are not hard-coded. This breaks existing configs.
@@ -32,7 +33,8 @@ there may be more changes. Please use `git log` to view them.
   * Ability to configure colors and fonts in `config.h`
     ([#115](https://github.com/nsxiv/nsxiv/pull/115))
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`)
-    and key-handler. ([#68](https://github.com/nsxiv/nsxiv/pull/68),
+    and key-handler.
+    ([#68](https://github.com/nsxiv/nsxiv/pull/68),
     [#141](https://github.com/nsxiv/nsxiv/pull/141))
   * `make install-icon` to install icons.
     ([#80](https://github.com/nsxiv/nsxiv/pull/80),
