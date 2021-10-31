@@ -55,7 +55,7 @@ there may be more changes. Please use `git log` to view them.
   * Not able to use `keyhandler_abort` (<kbd>Escape</kbd> by default) in
     keybindings. ([#91](https://github.com/nsxiv/nsxiv/pull/91))
   * Memory leak related to Xresources.
-    ([#134](https://github.com/nsxiv/nsxiv/pull/134),
+    ([#134](https://github.com/nsxiv/nsxiv/pull/134)).
   * Removed non-POSIX commands and extensions from `Makefile`.
     ([#71](https://github.com/nsxiv/nsxiv/pull/71))
   * Regression where nsxiv wouldn't run on non-TrueColor X server.
