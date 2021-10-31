@@ -26,12 +26,13 @@ there may be more changes. Please use `git log` to view them.
   * Ability to configure colors and fonts in `config.h` (#115)
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`)
     and key-handler. (#68, #141)
-  * `make install-icon` to install icons. (#80, #96)
-  * `make install-desktop` to install .desktop entry. (#80, #96)
-  * `make install-all` to install everything. (#80, #96)
+  * `make install-icon` to install icons. (#80) (#96)
+  * `make install-desktop` to install .desktop entry. (#80) (#96)
+  * `make install-all` to install everything. (#80) (#96)
   * `keyhandler_abort` in `config.h`. (#91)
   * Statusbar message upon key-handler activation. (#98)
-  * Ability to write functions in `config.h` and use them via keybindings. (#76)
+  * Ability to write custom C functions in `config.h` and use them via
+    keybindings. (#76)
 
 * Fixes:
 
