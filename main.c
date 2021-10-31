@@ -36,7 +36,7 @@
 #include <X11/keysym.h>
 #include <X11/XF86keysym.h>
 
-#define MODMASK(mask) ((mask) & (ShiftMask|ControlMask|Mod1Mask))
+#define MODMASK(mask) ((mask) & allowed_modifiers)
 #define BAR_SEP "  "
 
 typedef struct {
