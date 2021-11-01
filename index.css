@@ -1,11 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600;700&display=swap');
-
 body {
-  font-family: 'Inconsolata' , monospace;
+  font-family: 'Courier New';
   font-weight: 400;
   color: black;
   line-height: 1.2;
-  font-size: 1.05rem;
+  font-size: 0.9rem;
   letter-spacing: 0.15px;
 
   max-width: 100ch;
