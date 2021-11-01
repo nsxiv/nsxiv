@@ -1,6 +1,6 @@
 #!/bin/sh
 
-css='<link rel="stylesheet" href="index.css">'
+css='<link rel="stylesheet" href="style.css">'
 icon_src='https://raw.githubusercontent.com/nsxiv/nsxiv/master/icon/16x16.png'
 icon='<link rel="icon" type="image/png" href="'"$icon_src"'" sizes="16x16">'
 
