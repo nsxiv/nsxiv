@@ -42,7 +42,7 @@ static const int SLIDESHOW_DELAY = 5;
 
 /* gamma correction: the user-visible ranges [-GAMMA_RANGE, 0] and
  * (0, GAMMA_RANGE] are mapped to the ranges [0, 1], and (1, GAMMA_MAX].
- * */
+ */
 static const double GAMMA_MAX   = 10.0;
 static const int    GAMMA_RANGE = 32;
 
