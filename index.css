@@ -9,6 +9,9 @@ body {
   max-width: 100ch;
   padding: 0 1em;
   margin: auto;
+
+  background-color: #181A1B;
+  color: #E8E6E3;
 }
 
 h1, h2, h3 {
@@ -21,7 +24,7 @@ h1, h2, h3 {
 
 a {
   text-decoration: none;
-  color: #0035c7;
+  color: #55A4FF;
 }
 
 b {
@@ -29,7 +32,7 @@ b {
 }
 
 i {
-  background-color: #F3F3F3;
+  background-color: #1F2123;
   padding: .2em .4em;
   border-radius: 6px;
 }
