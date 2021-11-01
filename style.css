@@ -1,0 +1,37 @@
+body {
+  font-family: 'monospace';
+  font-weight: 400;
+  line-height: 1.2;
+  font-size: 1.0rem;
+  letter-spacing: 0.15px;
+
+  max-width: 100ch;
+  padding: 0 1em;
+  margin: auto;
+
+  background-color: #181A1B;
+  color: #E8E6E3;
+}
+
+h1, h2, h3 {
+  font-size: 150%;
+  font-weight: 600;
+  letter-spacing: .07em;
+  margin-top: 1.5em;
+  margin-bottom: .35em;
+}
+
+a {
+  text-decoration: none;
+  color: #55A4FF;
+}
+
+b {
+  font-weight: 700;
+}
+
+i {
+  background-color: #1F2123;
+  padding: .2em .4em;
+  border-radius: 6px;
+}
