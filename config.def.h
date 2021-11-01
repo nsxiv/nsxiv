@@ -72,7 +72,7 @@ static const int THUMB_SIZE = 3;
 #ifdef _MAPPINGS_CONFIG
 
 /* these modifiers are allowed in keybindings */
-static const int allowed_modifiers = ShiftMask | ControlMask | Mod1Mask;
+static const unsigned int allowed_modifiers = ShiftMask | ControlMask | Mod1Mask;
 
 /* abort the keyhandler */
 static const KeySym keyhandler_abort = XK_Escape;
