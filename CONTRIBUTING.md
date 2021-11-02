@@ -31,7 +31,7 @@ to work on. You can also filter the issues via label:
 * [Good first issue](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22):
   (Easy) Issues which not require much if any experience.
 * [Up for grabs](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22up+for+grabs%22):
-  (Intermediate) Issues which are free for anyone who want's to pick it up.
+  (Intermediate) Issues which are free for anyone who wants to pick it up.
   Might require some experience.
 * [Help wanted](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22):
   (Intermediate/Experienced) Issues where we require some help.
