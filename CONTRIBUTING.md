@@ -29,7 +29,7 @@ See the [open issues](https://github.com/nsxiv/nsxiv/issues) to find something
 to work on. You can also filter the issues via label:
 
 * [Good first issue](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22):
-  (Easy) Issues which not require much if any experience.
+  (Easy) Issues which do not require much if any experience.
 * [Up for grabs](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22up+for+grabs%22):
   (Intermediate) Issues which are free for anyone who wants to pick it up.
   Might require some experience.
