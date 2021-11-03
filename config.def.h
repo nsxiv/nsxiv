@@ -60,12 +60,12 @@ static const bool ANTI_ALIAS = true;
 static const bool ALPHA_LAYER = false;
 
 /* width of navigation area on left and right side of the window:
- * value >= 1 defines the width as number of pixels (convert to integer),
- * 0 < value < 1 defines the width as the fraction of the window width,
- * value <= 0 is meaningless, will use the default value 0.33,
- * the area width will be kept under half the window width in any case.
+ * a negative value defines the width as number of pixels (without the negative sign),
+ * a positive value defines the width as percentage of the window width,
+ * 0 disables cursor navigation,
+ * the area width will be kept under half of the window width in any case.
  */
-static const float NAV_WIDTH = 0.33;
+static const int NAV_WIDTH = 33;
 
 #endif
 #ifdef _THUMBS_CONFIG

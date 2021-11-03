@@ -397,8 +397,11 @@ int nav_button(void)
 {
 	int x, y, nav_width;
 
+	if (NAV_WIDTH == 0)
+		return 1;
+
 	win_cursor_pos(&win, &x, &y);
-	nav_width = (nav_width <= 0 ? 0.33 : nav_width) * (nav_width >= 1 ? 1 : win.w);
+	nav_width = NAV_WIDTH > 0 ? win.w * NAV_WIDTH / 100 : -NAV_WIDTH;
 	nav_width = MIN(nav_width, win.w / 2);
 
 	return x <= nav_width ? 0 : x < win.w - nav_width ? 1 : 2;
