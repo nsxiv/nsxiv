@@ -403,7 +403,12 @@ int nav_button(void)
 	nw = NAV_IS_REL ? win.w * NAV_WIDTH / 100 : NAV_WIDTH;
 	nw = MIN(nw, (win.w + 1) / 2);
 
-	return x < nw ? 0 : x < win.w - nw ? 1 : 2;
+	if (x < nw)
+		return 0;
+	else if (x < win.w-nw)
+		return 1;
+	else
+		return 2;
 }
 
 void redraw(void)
