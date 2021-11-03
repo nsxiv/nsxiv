@@ -395,13 +395,13 @@ void update_info(void)
 
 int nav_button(void)
 {
-	int x, y, nw;
+	int x, y, nav_width;
 
 	win_cursor_pos(&win, &x, &y);
-	nw = (NAV_WIDTH <= 0 ? 0.33 : NAV_WIDTH) * (NAV_WIDTH >= 1 ? 1 : win.w);
-	nw = MIN(nw, win.w / 2);
+	nav_width = (nav_width <= 0 ? 0.33 : nav_width) * (nav_width >= 1 ? 1 : win.w);
+	nav_width = MIN(nav_width, win.w / 2);
 
-	return x <= nw ? 0 : x < win.w - nw ? 1 : 2;
+	return x <= nav_width ? 0 : x < win.w - nav_width ? 1 : 2;
 }
 
 void redraw(void)
