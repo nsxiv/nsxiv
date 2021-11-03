@@ -703,12 +703,10 @@ bool img_zoom_to(img_t *img, float z)
 bool img_zoom(img_t *img, int d)
 {
 	int i = d > 0 ? 0 : ARRLEN(zoom_levels)-1;
-	if (d > 0) {
-		while (i < ARRLEN(zoom_levels) && zoom_levels[i]/100 <= img->zoom)
-			++i;
-	} else {
-		while (i >= 0 && zoom_levels[i]/100 >= img->zoom)
-			--i;
+	while (i >= 0 && i < ARRLEN(zoom_levels) && (d > 0 ?
+	       zoom_levels[i]/100 <= img->zoom : zoom_levels[i]/100 >= img->zoom))
+	{
+		i += d;
 	}
 	i = MIN(MAX(i, 0), ARRLEN(zoom_levels)-1);
 	return img_zoom_to(img, zoom_levels[i]/100);
