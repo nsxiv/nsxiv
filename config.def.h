@@ -178,12 +178,10 @@ static const cursor_t imgcursor[3] = {
 	CURSOR_LEFT, CURSOR_ARROW, CURSOR_RIGHT
 };
 
-/* width of navigation area on left and right side of the window:
- * a positive value defines the width as percentage of the window width,
- * a negative value defines the width in pixels (without the negative sign),
- * 0 disables cursor navigation,
- * the area width will be kept under half of the window width in any case.
- */
+/* width of navigation area, 0 disables cursor navigation, */
 static const int NAV_WIDTH = 33;
+
+/* true means NAV_WIDTH is relative (33%), false means absolute (33 pixels) */
+static const bool NAV_IS_REL = true;
 
 #endif
