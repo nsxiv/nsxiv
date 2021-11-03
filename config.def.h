@@ -173,15 +173,14 @@ static const button_t buttons[] = {
 	{ 0,            5,                g_zoom,               -1 },
 };
 
+/* true means NAV_WIDTH is relative (33%), false means absolute (33 pixels) */
+static const bool NAV_IS_REL = true;
+/* width of navigation area, 0 disables cursor navigation, */
+static const unsigned int NAV_WIDTH = 33;
+
 /* mouse cursor on left, middle and right part of the window */
 static const cursor_t imgcursor[3] = {
 	CURSOR_LEFT, CURSOR_ARROW, CURSOR_RIGHT
 };
-
-/* true means NAV_WIDTH is relative (33%), false means absolute (33 pixels) */
-static const bool NAV_IS_REL = true;
-
-/* width of navigation area, 0 disables cursor navigation, */
-static const int NAV_WIDTH = 33;
 
 #endif
