@@ -179,8 +179,8 @@ static const cursor_t imgcursor[3] = {
 };
 
 /* width of navigation area on left and right side of the window:
- * a negative value defines the width as number of pixels (without the negative sign),
  * a positive value defines the width as percentage of the window width,
+ * a negative value defines the width in pixels (without the negative sign),
  * 0 disables cursor navigation,
  * the area width will be kept under half of the window width in any case.
  */
