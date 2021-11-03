@@ -42,7 +42,8 @@ there may be more changes. Please use `git log` to view them.
   * Memory leak related to Xresources. (#134)
   * Removed non-POSIX commands and extensions from `Makefile`. (#71)
   * Regression where nsxiv wouldn't run on non-TrueColor X server. (#114)
-  * Wrong comments in `config.h` and description in `manpage`. (#105) (#106)
+  * Wrong comments in `config.h` and description in `manpage`.
+    (#105) (#106) (#152)
 
 - - -
 
