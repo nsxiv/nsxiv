@@ -59,14 +59,6 @@ static const bool ANTI_ALIAS = true;
  */
 static const bool ALPHA_LAYER = false;
 
-/* width of navigation area on left and right side of the window:
- * a negative value defines the width as number of pixels (without the negative sign),
- * a positive value defines the width as percentage of the window width,
- * 0 disables cursor navigation,
- * the area width will be kept under half of the window width in any case.
- */
-static const int NAV_WIDTH = 33;
-
 #endif
 #ifdef _THUMBS_CONFIG
 
@@ -185,5 +177,13 @@ static const button_t buttons[] = {
 static const cursor_t imgcursor[3] = {
 	CURSOR_LEFT, CURSOR_ARROW, CURSOR_RIGHT
 };
+
+/* width of navigation area on left and right side of the window:
+ * a negative value defines the width as number of pixels (without the negative sign),
+ * a positive value defines the width as percentage of the window width,
+ * 0 disables cursor navigation,
+ * the area width will be kept under half of the window width in any case.
+ */
+static const int NAV_WIDTH = 33;
 
 #endif

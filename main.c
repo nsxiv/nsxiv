@@ -20,7 +20,6 @@
 #include "nsxiv.h"
 #include "commands.h"
 #define _MAPPINGS_CONFIG
-#define _IMAGE_CONFIG
 #include "config.h"
 
 #include <stdlib.h>
