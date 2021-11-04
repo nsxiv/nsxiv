@@ -605,9 +605,9 @@ bool process_bindings(const keymap_t *keys, int len, KeySym ksym, int state, int
 
 	for (i = 0; i < len; i++) {
 		if ((keys[i].ksym_or_button == ksym || keys[i].ksym_or_button == 0) &&
-			(keys[i].mask == AnyModifier || MODMASK(keys[i].mask | implict_mod) == MODMASK(state)) &&
-			keys[i].cmd.func &&
-			(keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
+		    (keys[i].mask == AnyModifier || MODMASK(keys[i].mask | implict_mod) == MODMASK(state)) &&
+		    keys[i].cmd.func &&
+		    (keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
 		{
 			if (keys[i].cmd.func(keys[i].arg))
 				dirty = true;
