@@ -29,7 +29,7 @@ void load_image(int);
 bool mark_image(int, bool);
 void close_info(void);
 void open_info(void);
-int ptr_third_x(void);
+int nav_button(void);
 void redraw(void);
 void reset_cursor(void);
 void animate(void);
@@ -286,7 +286,7 @@ bool ci_navigate(arg_t n)
 
 bool ci_cursor_navigate(arg_t _)
 {
-	return ci_navigate(ptr_third_x() - 1);
+	return ci_navigate(nav_button() - 1);
 }
 
 bool ci_alternate(arg_t _)
