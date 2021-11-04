@@ -69,8 +69,6 @@ bool extprefix;
 
 bool resized = false;
 
-XEvent ev;
-
 typedef struct {
 	int err;
 	char *cmd;
@@ -719,7 +717,7 @@ void run(void)
 	struct timeval timeout;
 	const struct timespec ten_ms = {0, 10000000};
 	bool discard, init_thumb, load_thumb, to_set;
-	XEvent nextev;
+	XEvent ev, nextev;
 
 	while (true) {
 		to_set = check_timeouts(&timeout);
