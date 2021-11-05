@@ -1,7 +1,7 @@
 [![nsxiv](https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png)](https://github.com/nsxiv/nsxiv)
 
 [![tags](https://img.shields.io/github/v/tag/nsxiv/nsxiv?sort=semver&style=flat-square)](https://github.com/nsxiv/nsxiv/tags)
-[![license](https://img.shields.io/badge/license-GPL--2.0-dark_green?style=flat-square)](https://github.com/nsxiv/nsxiv/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/license-GPL--2.0-lightgreen?style=flat-square)](https://github.com/nsxiv/nsxiv/blob/master/LICENSE)
 [![code-size](https://img.shields.io/github/languages/code-size/nsxiv/nsxiv?color=red&style=flat-square)](https://github.com/nsxiv/nsxiv)
 
 **Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
