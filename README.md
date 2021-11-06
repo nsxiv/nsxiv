@@ -76,6 +76,7 @@ The following dependencies are optional.
   * libexif : Used for auto-orientation and exif thumbnails.
     Disable via `HAVE_LIBEXIF=0`
   * libwebp : Used for animated webp playback.
+    (NOTE: animated webp also requires Imlib2 v1.7.5 or above)
     Disabled via `HAVE_LIBWEBP=0`.
 
 Please make sure to install the corresponding development packages in case that
