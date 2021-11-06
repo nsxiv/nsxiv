@@ -302,20 +302,17 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 {
 	FILE *webp_file;
 	WebPData data;
-
 	Imlib_Image im = NULL;
 	struct WebPAnimDecoderOptions opts;
 	WebPAnimDecoder *dec = NULL;
 	struct WebPAnimInfo info;
-	unsigned char *buf = NULL;
+	unsigned char *buf = NULL, *bytes = NULL;
 	int ts;
 	const WebPDemuxer *demux;
 	WebPIterator iter;
 	unsigned long flags;
 	unsigned int delay;
 	bool err = false;
-
-	data.bytes = NULL;
 
 	if ((err = (webp_file = fopen(file->path, "rb")) == NULL)) {
 		error(0, 0, "%s: Error opening webp image", file->name);
@@ -324,11 +321,12 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	fseek(webp_file, 0L, SEEK_END);
 	data.size = ftell(webp_file);
 	rewind(webp_file);
-	data.bytes = emalloc(data.size);
-	if ((err = fread((unsigned char *)data.bytes, 1, data.size, webp_file) != data.size)) {
+	bytes = emalloc(data.size);
+	if ((err = fread(bytes, 1, data.size, webp_file) != data.size)) {
 		error(0, 0, "%s: Error reading webp image", file->name);
 		goto fail;
 	}
+	data.bytes = bytes;
 
 	/* Setup the WebP Animation Decoder */
 	if ((err = !WebPAnimDecoderOptionsInit(&opts))) {
@@ -391,7 +389,7 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 fail:
 	if (dec != NULL)
 		WebPAnimDecoderDelete(dec);
-	free((unsigned char *)data.bytes);
+	free(bytes);
 	return !err;
 }
 #endif /* HAVE_LIBWEBP */
