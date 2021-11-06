@@ -175,6 +175,7 @@ typedef struct {
 	KeySym ksym_or_button;
 	cmd_t cmd;
 	arg_t arg;
+	bool* enabled;
 } keymap_t;
 
 typedef keymap_t button_t;
@@ -281,6 +282,8 @@ struct opt {
 };
 
 extern const opt_t *options;
+
+extern bool key_handler_enabled;
 
 void print_usage(void);
 void print_version(void);

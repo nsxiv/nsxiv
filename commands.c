@@ -29,6 +29,7 @@ void load_image(int);
 bool mark_image(int, bool);
 void close_info(void);
 void open_info(void);
+void update_info(void);
 int nav_button(void);
 void redraw(void);
 void reset_cursor(void);
@@ -36,7 +37,6 @@ void animate(void);
 void slideshow(void);
 void set_timeout(timeout_f, int, bool);
 void reset_timeout(timeout_f);
-void handle_key_handler(bool);
 
 extern appmode_t mode;
 extern img_t img;
@@ -50,7 +50,7 @@ extern int markcnt;
 extern int markidx;
 
 extern int prefix;
-extern bool extprefix;
+bool key_handler_enabled;
 
 bool cg_quit(arg_t _)
 {
@@ -112,11 +112,41 @@ bool cg_toggle_bar(arg_t _)
 	return true;
 }
 
-bool cg_prefix_external(arg_t _)
+bool cg_key_handler(arg_t n)
 {
-	handle_key_handler(true);
+	key_handler_enabled = n;
+	if (win.bar.h) {
+		if (n) {
+			   close_info();
+			   snprintf(win.bar.l.buf, win.bar.l.size, "Getting key handler input");
+		} else { /* abort */
+			   open_info();
+			   update_info();
+		}
+		win_draw(&win);
+	}
 	return false;
 }
+
+void run_key_handler(const char *key, unsigned int mask);
+bool cg_run_key_handler(arg_t _) {
+       unsigned int sh = 0;
+       KeySym ksym, shksym;
+       char dummy, key;
+       extern XEvent ev;
+       XKeyEvent *kev = &ev.xkey;
+       XLookupString(kev, &key, 1, &ksym, NULL);
+
+       if (kev->state & ShiftMask) {
+               kev->state &= ~ShiftMask;
+               XLookupString(kev, &dummy, 1, &shksym, NULL);
+               kev->state |= ShiftMask;
+               if (ksym != shksym)
+                       sh = ShiftMask;
+       }
+       run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
+       return 0;
+ }
 
 bool cg_reload_image(arg_t _)
 {

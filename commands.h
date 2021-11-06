@@ -3,12 +3,13 @@
 #include <stdbool.h>
 
 /* global */
+bool cg_run_key_handler();
 bool cg_change_gamma();
 bool cg_first();
+bool cg_key_handler();
 bool cg_mark_range();
 bool cg_n_or_last();
 bool cg_navigate_marked();
-bool cg_prefix_external();
 bool cg_quit();
 bool cg_reload_image();
 bool cg_remove_image();
@@ -42,12 +43,14 @@ bool ct_move_sel();
 bool ct_reload_all();
 
 /* global */
+#define g_run_key_handler { cg_run_key_handler, MODE_ALL }
+
 #define g_change_gamma { cg_change_gamma, MODE_ALL }
 #define g_first { cg_first, MODE_ALL }
 #define g_mark_range { cg_mark_range, MODE_ALL }
 #define g_n_or_last { cg_n_or_last, MODE_ALL }
 #define g_navigate_marked { cg_navigate_marked, MODE_ALL }
-#define g_prefix_external { cg_prefix_external, MODE_ALL }
+#define g_key_handler { cg_key_handler, MODE_ALL }
 #define g_quit { cg_quit, MODE_ALL }
 #define g_reload_image { cg_reload_image, MODE_ALL }
 #define g_remove_image { cg_remove_image, MODE_ALL }

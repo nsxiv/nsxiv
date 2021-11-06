@@ -65,7 +65,6 @@ int markcnt;
 int markidx;
 
 int prefix;
-bool extprefix;
 
 bool resized = false;
 
@@ -485,22 +484,6 @@ Bool is_input_ev(Display *dpy, XEvent *ev, XPointer arg)
 	return ev->type == ButtonPress || ev->type == KeyPress;
 }
 
-void handle_key_handler(bool init)
-{
-	extprefix = init;
-	if (win.bar.h == 0)
-		return;
-	if (init) {
-		close_info();
-		snprintf(win.bar.l.buf, win.bar.l.size, "Getting key handler input "
-		         "(%s to abort)...", XKeysymToString(keyhandler_abort));
-	} else { /* abort */
-		open_info();
-		update_info();
-	}
-	win_draw(&win);
-}
-
 void run_key_handler(const char *key, unsigned int mask)
 {
 	pid_t pid;
@@ -603,7 +586,7 @@ bool process_bindings(const keymap_t *keys, int len, KeySym ksym, int state, int
 	for (i = 0; i < len; i++) {
 		if ((keys[i].ksym_or_button == ksym || keys[i].ksym_or_button == 0) &&
 			(keys[i].mask == AnyModifier || MODMASK(keys[i].mask | implict_mod) == MODMASK(state)) &&
-			keys[i].cmd.func &&
+			keys[i].cmd.func && (!keys[i].enabled || *keys[i].enabled) &&
 			(keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
 		{
 			if (keys[i].cmd.func(keys[i].arg))
@@ -632,18 +615,11 @@ void on_keypress(XKeyEvent *kev)
 	}
 	if (IsModifierKey(ksym))
 		return;
-	if (extprefix && ksym == keyhandler_abort && MODMASK(kev->state) == 0) {
-		handle_key_handler(false);
-	} else if (extprefix) {
-		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
-		extprefix = false;
-	} else {
-		if(!process_bindings(keys, ARRLEN(keys), ksym, kev->state, sh, &dirty)) {
-			if (key >= '0' && key <= '9') {
-				/* number prefix for commands */
-				prefix = prefix * 10 + (int) (key - '0');
-				return;
-			}
+	if(!process_bindings(keys, ARRLEN(keys), ksym, kev->state, sh, &dirty)) {
+		if (key >= '0' && key <= '9') {
+			/* number prefix for commands */
+			prefix = prefix * 10 + (int) (key - '0');
+			return;
 		}
 	}
 	if (dirty)

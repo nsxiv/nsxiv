@@ -74,17 +74,18 @@ static const int THUMB_SIZE = 3;
 /* following modifiers (NumLock | CapsLock) will be ignored when processing keybindings */
 static const int ignore_mask = Mod2Mask | LockMask;
 
-/* abort the keyhandler */
-static const KeySym keyhandler_abort = XK_Escape;
-
 /* keyboard mappings for image and thumbnail mode: */
 static const keymap_t keys[] = {
+	// Legacy keyhander related bindings
+	{ 0,			XK_Escape,		  g_key_handler,		false },
+	{ AnyModifier,	0,				  g_run_key_handler,	None, .enabled=&key_handler_enabled},
+	{ ControlMask,	XK_x,			  g_key_handler,		true  },
+
 	/* modifiers    key               function              argument */
 	{ 0,            XK_q,             g_quit,               None },
 	{ 0,            XK_Return,        g_switch_mode,        None },
 	{ 0,            XK_f,             g_toggle_fullscreen,  None },
 	{ 0,            XK_b,             g_toggle_bar,         None },
-	{ ControlMask,  XK_x,             g_prefix_external,    None },
 	{ 0,            XK_g,             g_first,              None },
 	{ 0,            XK_G,             g_n_or_last,          None },
 	{ 0,            XK_r,             g_reload_image,       None },
