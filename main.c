@@ -637,12 +637,14 @@ void on_keypress(XKeyEvent *kev)
 	} else if (extprefix) {
 		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
 		extprefix = false;
-	} else if (key >= '0' && key <= '9') {
-		/* number prefix for commands */
-		prefix = prefix * 10 + (int) (key - '0');
-		return;
 	} else {
-		process_bindings(keys, ARRLEN(keys), ksym, kev->state, sh, &dirty);
+		if(!process_bindings(keys, ARRLEN(keys), ksym, kev->state, sh, &dirty)) {
+			if (key >= '0' && key <= '9') {
+				/* number prefix for commands */
+				prefix = prefix * 10 + (int) (key - '0');
+				return;
+			}
+		}
 	}
 	if (dirty)
 		redraw();
