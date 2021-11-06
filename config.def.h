@@ -16,18 +16,14 @@ static const char *DEFAULT_BAR_FG     = NULL;  /* NULL means it will default to 
 static const char *DEFAULT_FONT       = "monospace-8";
 #endif
 
+
+static const char* (*get_window_title)(const char*) = default_window_title;
+
 #endif
 #ifdef _TITLE_CONFIG
 
 /* default title prefix */
 static const char *TITLE_PREFIX = "nsxiv - ";
-
-/* default title suffixmode, available options are:
- * SUFFIX_EMPTY
- * SUFFIX_BASENAME
- * SUFFIX_FULLPATH
- */
-static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
 
 #endif
 #ifdef _IMAGE_CONFIG

@@ -494,20 +494,21 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
 }
 
+const char* default_window_title(const char* path) {
+	static char title[512];
+
+	const char *basename = strrchr(path, '/') + 1;
+	snprintf(title, sizeof(title) - 1, "%s%s", options->title_prefix, basename);
+	return title;
+}
+
 void win_set_title(win_t *win, const char *path)
 {
-	enum { title_max = 512 };
-	char title[title_max];
-	const char *basename = strrchr(path, '/') + 1;
 
 	/* Return if window is not ready yet */
 	if (win->xwin == None)
 		return;
-
-	snprintf(title, title_max, "%s%s", options->title_prefix,
-	         options->title_suffixmode == SUFFIX_BASENAME ? basename : path);
-	if (options->title_suffixmode == SUFFIX_EMPTY)
-		*(title+strlen(options->title_prefix)) = '\0';
+	const char* title = get_window_title(path);
 
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,

@@ -69,7 +69,6 @@ void parse_options(int argc, char **argv)
 	_options.geometry = NULL;
 	_options.res_name = NULL;
 	_options.title_prefix = TITLE_PREFIX;
-	_options.title_suffixmode = TITLE_SUFFIXMODE;
 
 	_options.quiet = false;
 	_options.thumb_mode = false;
@@ -154,13 +153,6 @@ void parse_options(int argc, char **argv)
 				_options.scalemode = s - scalemodes;
 				break;
 			case 'T':
-				if ((s = strrchr(optarg, ':')) != NULL) {
-					*s = '\0';
-					n = strtol(++s, &end, 0);
-					if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
-						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", s);
-					_options.title_suffixmode = n;
-				}
 				_options.title_prefix = optarg;
 				break;
 			case 't':
