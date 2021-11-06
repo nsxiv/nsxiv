@@ -76,10 +76,10 @@ static const int ignore_mask = Mod2Mask | LockMask;
 
 /* keyboard mappings for image and thumbnail mode: */
 static const keymap_t keys[] = {
-	// Legacy keyhander related bindings
-	{ 0,			XK_Escape,		  g_key_handler,		false },
-	{ AnyModifier,	0,				  g_run_key_handler,	None, .enabled=&key_handler_enabled},
-	{ ControlMask,	XK_x,			  g_key_handler,		true  },
+	// Legacy key handler related bindings
+	{ 0,            XK_Escape,        g_key_handler,        false },
+	{ AnyModifier,  0,                g_run_key_handler,    None, .enabled=&key_handler_enabled},
+	{ ControlMask,  XK_x,             g_key_handler,        true  },
 
 	/* modifiers    key               function              argument */
 	{ 0,            XK_q,             g_quit,               None },
