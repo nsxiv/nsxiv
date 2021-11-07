@@ -1,68 +1,65 @@
-* {
-  color: #c4c4c4;
-  font-family: sans-serif;
-}
-
 html {
-  padding: 0px;
-  margin: 10px;
   scroll-behavior: smooth;
-  background-color: #181A1B;
-}
-
-p, body, code, pre, li, ul {
-  font-size: 1.15rem;
-  line-height: 1.5;
-  letter-spacing: 1px;
 }
 
 body {
+  font-family: 'monospace';
+  font-weight: 400;
+  line-height: 1.2;
+  font-size: 1.10rem;
+  letter-spacing: 0.20px;
   word-wrap: break-word;
-  width: 85%;
-  max-width: 950px;
-  padding: 40px 40px 40px 40px;
-  text-align: left;
-  margin: 0 auto;
-  max-width: 50em;
-  padding: 0 2em 0 2em;
+
+  max-width: 100ch;
+  padding: 0 1em;
+  margin: auto;
+
+  background-color: #181A1B;
+  color: #E8E6E3;
+}
+
+h1, h2, h3 {
+  font-family: 'sans-serif';
+  font-size: 150%;
+  font-weight: 600;
+  letter-spacing: .07em;
+  margin-top: 1.5em;
+  margin-bottom: .35em;
+}
+
+i, code {
+  font-family: monospace;
+  background-color: #2c2d32;
+  padding: .2em .4em;
+  border-radius: 6px;
 }
 
 code {
-  font-family: monospace;
-  background: #2c2d32;
-  margin-top: 15px !important;
+  margin-top: 15px;
   padding: 3px 3px;
   display: block;
-  border: 5px solid #383a3f;
 }
 
 p > code, li > code {
+  padding: 4px 4px 2px 4px;
   display: inline;
-  border: none;
-  border-radius: 0px;
 }
 
-img {
-  display: inline;
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+pre > code {
+  padding: 12px 8px 8px 8px;
+  border: 2px solid #383a3f;
+  border-radius: 2px;
 }
 
-li, ul {
-  position: relative;
-  left: -11px;
+a {
+  font-family: monospace;
+  text-decoration: none;
+  color: #55A4FF;
 }
 
-h1 {font-size: 1.5em;}
-a {text-decoration: none;}
-a:active, a:link, a:visited {color: #8ab4f8;}
-a:hover {color: #4286f4; text-decoration: none;}
-pre {font-family: monospace;}
-hr {margin: 0px 0px 0px 0px;}
+b {
+  font-family: monospace;
+  font-weight: 700;
+}
 
-::-webkit-scrollbar {width: 8px;}
-::-webkit-scrollbar-track {background: #c4c4c4;}
-::-webkit-scrollbar-thumb {background: #888;}
-::-webkit-scrollbar-thumb:hover {background: #555;}
 ::selection {color: #c4c4c4; background: #50525b;}
