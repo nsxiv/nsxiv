@@ -4,7 +4,7 @@
 
 #Mainpage
 cat template/template-1.html > index.html
-git show "master:README.md" | lowdown >> index.html
+git show "master:README.md" | lowdown | sed -f template/changes.sed >> index.html
 cat template/template-2.html >> index.html
 
 #Manpage
