@@ -77,10 +77,24 @@ version.h: Makefile .git/index
 	v="$$(git describe 2>/dev/null)"; \
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
+icon/img2data: icon/img2data.c
+	@echo "CC $@"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -lImlib2 -o $@ $<
+
+icon/data.h: icon/data.gen.h
+
+icon/data.gen.h: icon/img2data
+	@echo "GEN $@"
+	icon_files=""; \
+	for i in $(ICONS); do \
+		icon_files="$$icon_files icon/$$i"; \
+	done; \
+	icon/img2data $${icon_files} > $@
+
 .git/index:
 
 clean:
-	rm -f *.o nsxiv version.h
+	rm -f *.o nsxiv version.h icon/img2data icon/data.gen.h
 
 install-all: install install-desktop install-icon
 
