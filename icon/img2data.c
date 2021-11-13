@@ -5,6 +5,13 @@
 
 #include "../nsxiv.h"
 
+/* globals */
+unsigned int palette[16] = {0};
+unsigned int palette_size = 0;
+unsigned int run_column = 0;
+unsigned int icon_sizes[16] = {0};
+unsigned int icon_sizes_size = 0;
+
 unsigned int color_to_uint(Imlib_Color color)
 {
 	return (color.alpha << 24 & 0xff000000) |
@@ -12,9 +19,6 @@ unsigned int color_to_uint(Imlib_Color color)
 		(color.green <<  8 & 0x0000ff00) |
 		(color.blue        & 0x000000ff);
 }
-
-unsigned int palette[16] = {0};
-unsigned int palette_size = 0;
 
 int to_palette(unsigned int color)
 {
@@ -30,8 +34,6 @@ int to_palette(unsigned int color)
 
 	return palette_size++;
 }
-
-unsigned int run_column = 0;
 
 void print_run(int color, unsigned int run_length)
 {
@@ -57,9 +59,6 @@ void print_palette(void)
 	}
 	printf("\n};\n\n");
 }
-
-unsigned int icon_sizes[16] = {0};
-unsigned int icon_sizes_size = 0;
 
 void print_icon_array(void)
 {
