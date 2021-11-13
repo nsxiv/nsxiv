@@ -1,8 +1,6 @@
 #ifndef ICON_DATA_H
 #define ICON_DATA_H
 
-#include "../nsxiv.h"
-
 typedef struct {
   unsigned int size;
   unsigned int cnt;
@@ -14,4 +12,3 @@ typedef struct {
 #include "data.gen.h"
 
 #endif /* ICON_DATA_H */
-
