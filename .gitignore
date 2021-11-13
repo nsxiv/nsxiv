@@ -3,3 +3,5 @@ version.h
 *.d
 *.o
 nsxiv
+icon/img2data
+icon/data.gen.h
