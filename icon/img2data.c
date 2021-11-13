@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <stdarg.h>
+#include <string.h>
 #include <Imlib2.h>
 
-#include "../nsxiv.h"
+/* macros */
+#define ARRLEN(a) (sizeof(a) / sizeof((a)[0]))
 
 /* globals */
 static unsigned int palette[16] = {0};
@@ -11,6 +13,24 @@ static unsigned int palette_size = 0;
 static unsigned int run_column = 0;
 static unsigned int icon_sizes[16] = {0};
 static unsigned int icon_sizes_size = 0;
+
+/* functions */
+static void error(int eval, int err, const char *fmt, ...)
+{
+	va_list ap;
+
+	fflush(stdout);
+	va_start(ap, fmt);
+	if (fmt)
+		vfprintf(stderr, fmt, ap);
+	va_end(ap);
+	if (err)
+		fprintf(stderr, "%s%s", fmt ? ": " : "", strerror(err));
+	fputc('\n', stderr);
+
+	if (eval)
+		exit(eval);
+}
 
 static unsigned int color_to_uint(Imlib_Color color)
 {
