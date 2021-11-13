@@ -32,7 +32,7 @@ static void error(int eval, int err, const char *fmt, ...)
 		exit(eval);
 }
 
-static unsigned int color_to_uint(Imlib_Color color)
+static unsigned long color_to_ulong(Imlib_Color color)
 {
 	return (color.alpha << 24 & 0xff000000) |
 		(color.red   << 16 & 0x00ff0000) |
@@ -40,7 +40,7 @@ static unsigned int color_to_uint(Imlib_Color color)
 		(color.blue        & 0x000000ff);
 }
 
-static int to_palette(unsigned int color)
+static int to_palette(unsigned long color)
 {
 	unsigned int i;
 
@@ -116,7 +116,7 @@ static unsigned int print_encoded_image(const char *path)
 	for (y = 0; y < height; y++) {
 		for (x = 0; x < width; x++) {
 			imlib_image_query_pixel(x, y, &color);
-			currentcolor = to_palette(color_to_uint(color));
+			currentcolor = to_palette(color_to_ulong(color));
 			if (currentcolor != lastcolor) {
 				if (lastcolor != -1)
 					print_run(lastcolor, run_length);
@@ -153,5 +153,5 @@ int main(int argc, char **argv)
 	print_palette();
 	print_icon_array();
 
-	return 0;
+	return EXIT_FAILURE;
 }
