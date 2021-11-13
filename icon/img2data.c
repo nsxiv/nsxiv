@@ -25,7 +25,7 @@ int to_palette(unsigned int color)
 	}
 
 	if (palette_size + 1 == 16)
-		error(1, 0, "Error: More than 16 colors in palette");
+		error(EXIT_FAILURE, 0, "Error: More than 16 colors in palette");
 
 	palette[palette_size] = color;
 	return palette_size++;
@@ -87,7 +87,7 @@ unsigned int print_encoded_image(const char *path)
 	image = imlib_load_image(path);
 
 	if (!image)
-		error(1, 0, "Error loading image: %s", path);
+		error(EXIT_FAILURE, 0, "Error loading image: %s", path);
 
 	imlib_context_set_image(image);
 
@@ -95,7 +95,7 @@ unsigned int print_encoded_image(const char *path)
 	height = imlib_image_get_height();
 
 	if (width != height)
-		error(1, 0, "Image is not square: %s", path);
+		error(EXIT_FAILURE, 0, "Image is not square: %s", path);
 
 	printf("static const unsigned char icon_data_%d[] = {\n\t", width);
 	for (y = 0; y < height; y++) {
@@ -129,9 +129,9 @@ int main(int argc, char **argv)
 	unsigned int i;
 
 	if (argc < 2)
-		error(1, 0, "No icons provided");
+		error(EXIT_FAILURE, 0, "No icons provided");
 	else if (argc > 1 + ARRLEN(icon_sizes))
-		error(1, 0, "Too many icons");
+		error(EXIT_FAILURE, 0, "Too many icons");
 
 	for (i = 1; i < argc; i++) {
 		img_size = print_encoded_image(argv[i]);
@@ -146,4 +146,3 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
