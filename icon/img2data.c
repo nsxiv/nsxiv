@@ -3,17 +3,7 @@
 
 #include <Imlib2.h>
 
-void die(const char *message)
-{
-	fprintf(stderr, "%s\n", message);
-	exit(EXIT_FAILURE);
-}
-
-void die_arg(const char *message, const char *arg)
-{
-	fprintf(stderr, "%s: %s\n", message, arg);
-	exit(EXIT_FAILURE);
-}
+#include "../nsxiv.h"
 
 unsigned int color_to_uint(Imlib_Color color)
 {
@@ -35,7 +25,7 @@ int to_palette(unsigned int color)
 	}
 
 	if (palette_size + 1 == 16)
-		die("Error: More than 16 colors in palette");
+		error(1, 0, "Error: More than 16 colors in palette");
 
 	palette[palette_size] = color;
 	return palette_size++;
@@ -97,7 +87,7 @@ unsigned int print_encoded_image(const char *path)
 	image = imlib_load_image(path);
 
 	if (!image)
-		die_arg("Error loading image", path);
+		error(1, 0, "Error loading image: %s", path);
 
 	imlib_context_set_image(image);
 
@@ -105,7 +95,7 @@ unsigned int print_encoded_image(const char *path)
 	height = imlib_image_get_height();
 
 	if (width != height)
-		die_arg("Image is not square", path);
+		error(1, 0, "Image is not square: %s", path);
 
 	printf("static const unsigned char icon_data_%d[] = {\n\t", width);
 	for (y = 0; y < height; y++) {
@@ -139,9 +129,9 @@ int main(int argc, char **argv)
 	unsigned int i;
 
 	if (argc < 2)
-		die("No icons provided");
-	else if (argc > 1 + (sizeof(icon_sizes) / sizeof(icon_sizes[0])))
-		die("Too many icons");
+		error(1, 0, "No icons provided");
+	else if (argc > 1 + ARRLEN(icon_sizes))
+		error(1, 0, "Too many icons");
 
 	for (i = 1; i < argc; i++) {
 		img_size = print_encoded_image(argv[i]);
