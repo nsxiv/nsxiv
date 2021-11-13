@@ -8,7 +8,7 @@
 #define ARRLEN(a) (sizeof(a) / sizeof((a)[0]))
 
 /* globals */
-static unsigned int palette[16] = {0};
+static unsigned long palette[16] = {0};
 static unsigned int palette_size = 0;
 static unsigned int run_column = 0;
 static unsigned int icon_sizes[16] = {0};
@@ -73,7 +73,7 @@ static void print_palette(void)
 
 	printf("static const unsigned int icon_colors[] = {\n\t");
 	for (i = 0; i < palette_size; i++) {
-		printf("0x%08x, ", palette[i]);
+		printf("0x%08lx, ", palette[i]);
 		if (i % 4 == 3)
 			printf("\n\t");
 	}
