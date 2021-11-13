@@ -71,7 +71,7 @@ static void print_palette(void)
 {
 	unsigned int i;
 
-	printf("static const unsigned int icon_colors[] = {\n\t");
+	printf("static const unsigned long icon_colors[] = {\n\t");
 	for (i = 0; i < palette_size; i++) {
 		printf("0x%08lx, ", palette[i]);
 		if (i % 4 == 3)
