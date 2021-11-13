@@ -153,5 +153,5 @@ int main(int argc, char **argv)
 	print_palette();
 	print_icon_array();
 
-	return EXIT_FAILURE;
+	return EXIT_SUCCESS;
 }
