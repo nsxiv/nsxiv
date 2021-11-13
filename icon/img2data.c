@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2)
 		error(EXIT_FAILURE, 0, "No icons provided");
-	else if (argc > 1 + ARRLEN(icon_sizes))
+	else if (argc-1 > ARRLEN(icon_sizes))
 		error(EXIT_FAILURE, 0, "Too many icons");
 
 	for (i = 1; i < argc; i++) {
