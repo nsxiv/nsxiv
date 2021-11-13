@@ -19,8 +19,7 @@ See `data.gen.h` or the output of img2data for a better understanding.
 Dependencies
 ------------
 
-img2data requires the nsxiv codebase to be available in the parent directory
-and Imlib2 to be installed.
+img2data requires Imlib2 to be installed.
 
 
 Building
