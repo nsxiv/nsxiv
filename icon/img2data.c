@@ -1,8 +1,6 @@
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <X11/Xlib.h>
 #include <Imlib2.h>
 
 void die(const char *message)
