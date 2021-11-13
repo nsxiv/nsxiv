@@ -59,9 +59,9 @@ static void print_run(int color, unsigned int run_length)
 {
 	while (run_length > 0) {
 		int x = run_length / 16 >= 1 ? 16 : run_length;
+
 		printf("0x%02x, ", (x - 1) << 4 | color);
 		run_length -= x;
-
 		if (++run_column % 12 == 0)
 			printf("\n\t");
 	}
@@ -101,7 +101,7 @@ static unsigned int print_encoded_image(const char *path)
 
 	image = imlib_load_image(path);
 
-	if (!image)
+	if (image == NULL)
 		error(EXIT_FAILURE, 0, "Error loading image: %s", path);
 
 	imlib_context_set_image(image);
