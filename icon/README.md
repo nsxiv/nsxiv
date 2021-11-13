@@ -7,7 +7,7 @@ img2data is a helper program to convert images to binary data for embedding in s
 Dependencies
 ------------
 
-img2data requires the nsxiv codebase and Imlib2.
+img2data requires the nsxiv codebase to be available in the parent directory and Imlib2 to be installed.
 
 
 Building
