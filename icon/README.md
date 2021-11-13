@@ -4,6 +4,14 @@ img2data
 img2data is a helper program to convert images to binary data for embedding in software. The generated data is used in nsxiv to set the window icons.
 
 
+How It Works
+------------
+
+Each given image is compressed using run-length encoding and a data array is generated. In these arrays, the four high bits of each byte are the run length minus one and the lowest four bits are the data, which are indices for the color array.
+
+See `data.gen.h` or the output of img2data for a better understanding.
+
+
 Dependencies
 ------------
 
