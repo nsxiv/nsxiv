@@ -19,15 +19,15 @@ unsigned int palette_size = 0;
 int to_palette(unsigned int color)
 {
 	unsigned int i;
+
 	for (i = 0; i < palette_size; i++) {
 		if (palette[i] == color)
 			return i;
 	}
-
 	if (palette_size + 1 == 16)
 		error(EXIT_FAILURE, 0, "Error: More than 16 colors in palette");
-
 	palette[palette_size] = color;
+
 	return palette_size++;
 }
 
@@ -64,6 +64,7 @@ unsigned int icon_sizes_size = 0;
 void print_icon_array(void)
 {
 	unsigned int i;
+
 	printf("static const icon_data_t icons[] = {\n");
 	for (i = 0; i < icon_sizes_size; i++)
 		printf("\tICON_(%d),\n", icon_sizes[i]);
@@ -74,12 +75,7 @@ unsigned int print_encoded_image(const char *path)
 {
 	Imlib_Image image;
 	Imlib_Color color;
-
-	unsigned int width;
-	unsigned int height;
-	unsigned int x;
-	unsigned int y;
-
+	unsigned int width, height, x, y;
 	unsigned int run_length = 1;
 	int currentcolor = 0;
 	int lastcolor = -1;
@@ -101,15 +97,12 @@ unsigned int print_encoded_image(const char *path)
 	for (y = 0; y < height; y++) {
 		for (x = 0; x < width; x++) {
 			imlib_image_query_pixel(x, y, &color);
-
 			currentcolor = to_palette(color_to_uint(color));
-
 			if (currentcolor != lastcolor) {
 				if (lastcolor != -1)
 					print_run(lastcolor, run_length);
 				run_length = 1;
-			}
-			else {
+			} else {
 				run_length++;
 			}
 			lastcolor = currentcolor;
@@ -136,12 +129,9 @@ int main(int argc, char **argv)
 	for (i = 1; i < argc; i++) {
 		img_size = print_encoded_image(argv[i]);
 		run_column = 0;
-
 		icon_sizes[icon_sizes_size++] = img_size;
 	}
-
 	print_palette();
-
 	print_icon_array();
 
 	return 0;
