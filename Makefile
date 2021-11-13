@@ -23,8 +23,6 @@ CFLAGS ?= -std=c99 -Wall -pedantic
 
 # icons that will be installed via `make icon`
 ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
-ICONFILES = icon/16x16.png icon/32x32.png icon/48x48.png \
-			icon/64x64.png icon/128x128.png
 
 inc_fonts_0 =
 inc_fonts_1 = -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
@@ -68,7 +66,7 @@ nsxiv: $(OBJS)
 
 $(OBJS): Makefile nsxiv.h config.h
 options.o: version.h
-window.o: icon/data.h icon/data.gen.h
+window.o: icon/data.h
 
 config.h:
 	@echo "GEN $@"
@@ -79,20 +77,10 @@ version.h: Makefile .git/index
 	v="$$(git describe 2>/dev/null)"; \
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
-icon/img2data: icon/img2data.c
-	@echo "CC $@"
-	$(CC) $(CFLAGS) $(CPPFLAGS) -lImlib2 -o $@ $<
-
-icon/data.h: icon/data.gen.h
-
-icon/data.gen.h: icon/img2data $(ICONFILES)
-	@echo "GEN $@"
-	icon/img2data $(ICONFILES) > $@
-
 .git/index:
 
 clean:
-	rm -f *.o nsxiv version.h icon/img2data icon/data.gen.h
+	rm -f *.o nsxiv version.h
 
 install-all: install install-desktop install-icon
 
