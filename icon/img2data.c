@@ -28,7 +28,8 @@ unsigned int palette_size = 0;
 
 int to_palette(unsigned int color)
 {
-	for (unsigned int i = 0; i < palette_size; i++) {
+	unsigned int i;
+	for (i = 0; i < palette_size; i++) {
 		if (palette[i] == color)
 			return i;
 	}
@@ -56,12 +57,12 @@ void print_run(int color, unsigned int run_length)
 
 void print_palette(void)
 {
-	unsigned int width = 0;
+	unsigned int i;
 
 	printf("static const unsigned int icon_colors[] = {\n\t");
-	for (unsigned int i = 0; i < palette_size; i++) {
+	for (i = 0; i < palette_size; i++) {
 		printf("0x%08x, ", palette[i]);
-		if (++width % 4 == 0)
+		if (i % 4 == 3)
 			printf("\n\t");
 	}
 	printf("\n};\n\n");
@@ -72,8 +73,9 @@ unsigned int icon_sizes_size = 0;
 
 void print_icon_array(void)
 {
+	unsigned int i;
 	printf("static const icon_data_t icons[] = {\n");
-	for (unsigned int i = 0; i < icon_sizes_size; i++)
+	for (i = 0; i < icon_sizes_size; i++)
 		printf("\tICON_(%d),\n", icon_sizes[i]);
 	printf("};\n\n");
 }
@@ -81,9 +83,16 @@ void print_icon_array(void)
 unsigned int print_encoded_image(const char *path)
 {
 	Imlib_Image image;
+	Imlib_Color color;
 
-	unsigned int width = 0;
-	unsigned int height = 0;
+	unsigned int width;
+	unsigned int height;
+	unsigned int x;
+	unsigned int y;
+
+	unsigned int run_length = 1;
+	int currentcolor = 0;
+	int lastcolor = -1;
 
 	image = imlib_load_image(path);
 
@@ -98,14 +107,9 @@ unsigned int print_encoded_image(const char *path)
 	if (width != height)
 		die_arg("Image is not square", path);
 
-	unsigned int run_length = 1;
-	int currentcolor = 0;
-	int lastcolor = -1;
-
 	printf("static const unsigned char icon_data_%d[] = {\n\t", width);
-	for (unsigned int y = 0; y < height; y++) {
-		for (unsigned int x = 0; x < width; x++) {
-			Imlib_Color color;
+	for (y = 0; y < height; y++) {
+		for (x = 0; x < width; x++) {
 			imlib_image_query_pixel(x, y, &color);
 
 			currentcolor = to_palette(color_to_uint(color));
@@ -131,14 +135,15 @@ unsigned int print_encoded_image(const char *path)
 
 int main(int argc, char **argv)
 {
+	unsigned int img_size = 0;
+	unsigned int i;
+
 	if (argc < 2)
 		die("No icons provided");
 	else if (argc > 1 + (sizeof(icon_sizes) / sizeof(icon_sizes[0])))
 		die("Too many icons");
 
-	unsigned int img_size = 0;
-
-	for (int i = 1; i < argc; i++) {
+	for (i = 1; i < argc; i++) {
 		img_size = print_encoded_image(argv[i]);
 		run_column = 0;
 
@@ -148,5 +153,7 @@ int main(int argc, char **argv)
 	print_palette();
 
 	print_icon_array();
+
+	return 0;
 }
 
