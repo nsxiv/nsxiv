@@ -6,13 +6,13 @@
 #include "../nsxiv.h"
 
 /* globals */
-unsigned int palette[16] = {0};
-unsigned int palette_size = 0;
-unsigned int run_column = 0;
-unsigned int icon_sizes[16] = {0};
-unsigned int icon_sizes_size = 0;
+static unsigned int palette[16] = {0};
+static unsigned int palette_size = 0;
+static unsigned int run_column = 0;
+static unsigned int icon_sizes[16] = {0};
+static unsigned int icon_sizes_size = 0;
 
-unsigned int color_to_uint(Imlib_Color color)
+static unsigned int color_to_uint(Imlib_Color color)
 {
 	return (color.alpha << 24 & 0xff000000) |
 		(color.red   << 16 & 0x00ff0000) |
@@ -20,7 +20,7 @@ unsigned int color_to_uint(Imlib_Color color)
 		(color.blue        & 0x000000ff);
 }
 
-int to_palette(unsigned int color)
+static int to_palette(unsigned int color)
 {
 	unsigned int i;
 
@@ -35,7 +35,7 @@ int to_palette(unsigned int color)
 	return palette_size++;
 }
 
-void print_run(int color, unsigned int run_length)
+static void print_run(int color, unsigned int run_length)
 {
 	while (run_length > 0) {
 		int x = run_length / 16 >= 1 ? 16 : run_length;
@@ -47,7 +47,7 @@ void print_run(int color, unsigned int run_length)
 	}
 }
 
-void print_palette(void)
+static void print_palette(void)
 {
 	unsigned int i;
 
@@ -60,7 +60,7 @@ void print_palette(void)
 	printf("\n};\n\n");
 }
 
-void print_icon_array(void)
+static void print_icon_array(void)
 {
 	unsigned int i;
 
@@ -70,7 +70,7 @@ void print_icon_array(void)
 	printf("};\n\n");
 }
 
-unsigned int print_encoded_image(const char *path)
+static unsigned int print_encoded_image(const char *path)
 {
 	Imlib_Image image;
 	Imlib_Color color;
