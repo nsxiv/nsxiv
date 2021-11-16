@@ -202,10 +202,6 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 			ptr = data = emalloc(sw * sh * sizeof(DATA32));
 			cmap = gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap;
-			if (bg >= cmap->ColorCount) {
-				err = true;
-				break;
-			}
 			r = cmap->Colors[bg].Red;
 			g = cmap->Colors[bg].Green;
 			b = cmap->Colors[bg].Blue;
