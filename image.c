@@ -348,10 +348,7 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	img->w = WebPDemuxGetI(demux, WEBP_FF_CANVAS_WIDTH);
 	img->h = WebPDemuxGetI(demux, WEBP_FF_CANVAS_HEIGHT);
 
-	if (img->multi.cap == 0) {
-		img->multi.cap = info.frame_count;
-		img->multi.frames = emalloc(img->multi.cap * sizeof(img_frame_t));
-	} else if (info.frame_count > img->multi.cap) {
+	if (info.frame_count > img->multi.cap) {
 		img->multi.cap = info.frame_count;
 		img->multi.frames = erealloc(img->multi.frames,
 		                             img->multi.cap * sizeof(img_frame_t));
