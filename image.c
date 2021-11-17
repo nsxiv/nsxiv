@@ -314,9 +314,9 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	unsigned int delay;
 	bool err = false;
 
-	if ((err = (webp_file = fopen(file->path, "rb")) == NULL)) {
-		error(0, 0, "%s: Error opening webp image", file->name);
-		goto fail;
+	if ((webp_file = fopen(file->path, "rb")) == NULL) {
+		error(0, errno, "%s: Error opening webp image", file->name);
+		return false;
 	}
 	fseek(webp_file, 0L, SEEK_END);
 	data.size = ftell(webp_file);
@@ -387,6 +387,7 @@ fail:
 	if (dec != NULL)
 		WebPAnimDecoderDelete(dec);
 	free(bytes);
+	fclose(webp_file);
 	return !err;
 }
 #endif /* HAVE_LIBWEBP */
