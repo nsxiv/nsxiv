@@ -549,6 +549,7 @@ void run_key_handler(const char *key, unsigned int mask)
 	         mask & ControlMask ? "C-" : "",
 	         mask & Mod1Mask    ? "M-" : "",
 	         mask & ShiftMask   ? "S-" : "", key);
+	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
 
 	if ((pid = fork()) == 0) {
 		close(pfd[1]);
