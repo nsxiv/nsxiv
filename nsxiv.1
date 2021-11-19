@@ -439,14 +439,20 @@ located in
 The handler is invoked by pressing
 .BR Ctrl-x .
 The next key combo is passed as its first argument. Passed via stdin are the
-images to act upon, one path per line: all marked images, if in thumbnail mode
-and at least one image has been marked, otherwise the current image.
-nsxiv(1) will block until the handler terminates. It then checks which images
-have been modified and reloads them.
+images to act upon: all marked images, if in thumbnail mode and at least one
+image has been marked, otherwise the current image. nsxiv(1) will block until
+the handler terminates. It then checks which images have been modified and
+reloads them.
+
+By default nsxiv(1) will send one image per-line to stdin, however when using
+\-0 the image list will be NULL separated and the enviornment variable
+"$NSXIV_USING_NULL" will be set to 1.
 
 The key combo argument has the following form: "[C-][M-][S-]KEY",
 where C/M/S indicate Ctrl/Meta(Alt)/Shift modifier states and KEY is the X
 keysym as listed in /usr/include/X11/keysymdef.h without the "XK_" prefix.
+If KEY has an uppercase equivalent, S-KEY is resolved into it. For instance,
+K replaces S-k and Scedilla replaces S-scedilla, but S-Delete is sent as-is.
 
 There is also an example script installed together with nsxiv as
 .IR EGPREFIX/key-handler .
