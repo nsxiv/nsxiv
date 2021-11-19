@@ -596,9 +596,27 @@ end:
 	redraw();
 }
 
-void on_keypress(XKeyEvent *kev)
+bool process_bindings(const keymap_t *keys, unsigned int len,
+                      KeySym ksym_or_button, unsigned int state)
 {
 	unsigned int i;
+	bool dirty = false;
+
+	for (i = 0; i < len; i++) {
+		if (keys[i].ksym_or_button == ksym_or_button &&
+		    MODMASK(keys[i].mask) == MODMASK(state) &&
+		    keys[i].cmd.func &&
+		    (keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
+		{
+			if (keys[i].cmd.func(keys[i].arg))
+				dirty = true;
+		}
+	}
+	return dirty;
+}
+
+void on_keypress(XKeyEvent *kev)
+{
 	unsigned int sh = 0;
 	KeySym ksym, shksym;
 	char dummy, key;
@@ -624,15 +642,8 @@ void on_keypress(XKeyEvent *kev)
 		/* number prefix for commands */
 		prefix = prefix * 10 + (int) (key - '0');
 		return;
-	} else for (i = 0; i < ARRLEN(keys); i++) {
-		if (keys[i].ksym == ksym &&
-		    MODMASK(keys[i].mask | sh) == MODMASK(kev->state) &&
-		    keys[i].cmd.func &&
-		    (keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
-		{
-			if (keys[i].cmd.func(keys[i].arg))
-				dirty = true;
-		}
+	} else {
+		dirty = process_bindings(keys, ARRLEN(keys), ksym, kev->state & ~sh);
 	}
 	if (dirty)
 		redraw();
@@ -642,24 +653,13 @@ void on_keypress(XKeyEvent *kev)
 void on_buttonpress(XButtonEvent *bev)
 {
 	int sel;
-	unsigned int i;
 	bool dirty = false;
 	static Time firstclick;
 
 	if (mode == MODE_IMAGE) {
 		set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
 		reset_cursor();
-
-		for (i = 0; i < ARRLEN(buttons); i++) {
-			if (buttons[i].button == bev->button &&
-			    MODMASK(buttons[i].mask) == MODMASK(bev->state) &&
-			    buttons[i].cmd.func &&
-			    (buttons[i].cmd.mode == MODE_ALL || buttons[i].cmd.mode == mode))
-			{
-				if (buttons[i].cmd.func(buttons[i].arg))
-					dirty = true;
-			}
-		}
+		dirty = process_bindings(buttons, ARRLEN(buttons), bev->button, bev->state);
 		if (dirty)
 			redraw();
 	} else {
