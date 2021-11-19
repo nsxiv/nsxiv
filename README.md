@@ -14,7 +14,7 @@ nsxiv is free software licensed under GPLv2 and aims to be easy to modify and cu
 Please file a bug report if something does not work as documented or
 expected in *this* repository, after making sure you are using the latest
 release of nsxiv. Contributions are welcome, see
-[CONTRIBUTING.md](CONTRIBUTING.md#Contribution-Guideline) for details.
+[CONTRIBUTING.md](https://github.com/nsxiv/nsxiv/blob/master/CONTRIBUTING.md#Contribution-Guideline) for details.
 
 
 Features
@@ -164,7 +164,7 @@ Yes, see [nsxiv-pipe](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/n
 User patches
 ------------
 
-Due to our limited [project scope](CONTRIBUTING.md#Project-Scope), certain features or
+Due to our limited [project scope](https://github.com/nsxiv/nsxiv/blob/master/CONTRIBUTING.md#Project-Scope), certain features or
 customization cannot be merged into nsxiv mainline. Following the spirit of
 suckless software, we host the [nsxiv-extra](https://github.com/nsxiv/nsxiv-extra)
 repo where users are free to submit whatever patches or scripts they wish.
@@ -181,4 +181,4 @@ on GitHub or get a copy using git with the following command:
 
     $ git clone https://github.com/nsxiv/nsxiv.git
 
-You can view the changelog [here](CHANGELOG.md)
+You can view the changelog [here](https://github.com/nsxiv/nsxiv/blob/master/CHANGELOG.md)

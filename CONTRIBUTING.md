@@ -18,7 +18,7 @@ Contribution Guideline
 When contributing, make sure:
 
   * Your contribution falls under nsxiv's scope and aim
-  * You follow the existing code style (see [.editorconfig](.editorconfig))
+  * You follow the existing code style (see [.editorconfig](https://github.com/nsxiv/nsxiv/blob/master/.editorconfig))
   * You open the pull request from a new branch, not from master
 
 If your contribution is not suitable for general use, it will not be included in nsxiv.
