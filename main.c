@@ -105,6 +105,14 @@ void cleanup(void)
 	win_close(&win);
 }
 
+static bool xgetline(char **lineptr, size_t *n)
+{
+	ssize_t len = getdelim(lineptr, n, options->using_null ? '\0' : '\n', stdin);
+	if (!options->using_null && len > 0 && (*lineptr)[len-1] == '\n')
+		(*lineptr)[len-1] = '\0';
+	return len > 0;
+}
+
 void check_add_file(char *filename, bool given)
 {
 	char *path;
@@ -853,7 +861,6 @@ int main(int argc, char *argv[])
 {
 	int i, start;
 	size_t n;
-	ssize_t len;
 	char *filename;
 	const char *homedir, *dsuffix = "";
 	struct stat fstats;
@@ -889,11 +896,8 @@ int main(int argc, char *argv[])
 	if (options->from_stdin) {
 		n = 0;
 		filename = NULL;
-		while ((len = getline(&filename, &n, stdin)) > 0) {
-			if (filename[len-1] == '\n')
-				filename[len-1] = '\0';
+		while (xgetline(&filename, &n))
 			check_add_file(filename, true);
-		}
 		free(filename);
 	}
 
