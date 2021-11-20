@@ -63,7 +63,7 @@ static int barheight;
 Atom atoms[ATOM_COUNT];
 
 #if HAVE_LIBFONTS
-void win_init_font(const win_env_t *e, const char *fontstr)
+static void win_init_font(const win_env_t *e, const char *fontstr)
 {
 	int fontheight = 0;
 	if ((font = XftFontOpenName(e->dpy, e->scr, fontstr)) == NULL)
@@ -74,21 +74,21 @@ void win_init_font(const win_env_t *e, const char *fontstr)
 	XftFontClose(e->dpy, font);
 }
 
-void xft_alloc_color(const win_env_t *e, const char *name, XftColor *col)
+static void xft_alloc_color(const win_env_t *e, const char *name, XftColor *col)
 {
 	if (!XftColorAllocName(e->dpy, e->vis, e->cmap, name, col))
 		error(EXIT_FAILURE, 0, "Error allocating color '%s'", name);
 }
 #endif /* HAVE_LIBFONTS */
 
-void win_alloc_color(const win_env_t *e, const char *name, XColor *col)
+static void win_alloc_color(const win_env_t *e, const char *name, XColor *col)
 {
 	XColor screen;
 	if (!XAllocNamedColor(e->dpy, e->cmap, name, &screen, col))
 		error(EXIT_FAILURE, 0, "Error allocating color '%s'", name);
 }
 
-const char* win_res(XrmDatabase db, const char *name, const char *def)
+static const char* win_res(XrmDatabase db, const char *name, const char *def)
 {
 	char *type;
 	XrmValue ret;
@@ -396,8 +396,8 @@ void win_clear(win_t *win)
 }
 
 #if HAVE_LIBFONTS
-int win_draw_text(win_t *win, XftDraw *d, const XftColor *color, int x, int y,
-                  char *text, int len, int w)
+static int win_draw_text(win_t *win, XftDraw *d, const XftColor *color,
+                         int x, int y, char *text, int len, int w)
 {
 	int err, tw = 0;
 	char *t, *next;
@@ -430,7 +430,7 @@ int win_draw_text(win_t *win, XftDraw *d, const XftColor *color, int x, int y,
 	return tw;
 }
 
-void win_draw_bar(win_t *win)
+static void win_draw_bar(win_t *win)
 {
 	int len, x, y, w, tw;
 	win_env_t *e;
@@ -466,7 +466,7 @@ void win_draw_bar(win_t *win)
 	XftDrawDestroy(d);
 }
 #else
-void win_draw_bar(win_t *win){}
+static void win_draw_bar(win_t *win){}
 #endif /* HAVE_LIBFONTS */
 
 void win_draw(win_t *win)

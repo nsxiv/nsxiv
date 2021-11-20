@@ -233,7 +233,6 @@ bool img_fit_win(img_t*, scalemode_t);
 bool img_zoom(img_t*, int);
 bool img_zoom_to(img_t*, float);
 bool img_pos(img_t*, float, float);
-bool img_move(img_t*, float, float);
 bool img_pan(img_t*, direction_t, int);
 bool img_pan_edge(img_t*, direction_t);
 void img_rotate(img_t*, degree_t);
@@ -283,7 +282,6 @@ struct opt {
 extern const opt_t *options;
 
 void print_usage(void);
-void print_version(void);
 void parse_options(int, char**);
 
 

@@ -38,7 +38,7 @@ Imlib_Image img_open(const fileinfo_t*);
 static char *cache_dir;
 extern const int fileidx;
 
-char* tns_cache_filepath(const char *filepath)
+static char* tns_cache_filepath(const char *filepath)
 {
 	size_t len;
 	char *cfile = NULL;
@@ -55,7 +55,7 @@ char* tns_cache_filepath(const char *filepath)
 	return cfile;
 }
 
-Imlib_Image tns_cache_load(const char *filepath, bool *outdated)
+static Imlib_Image tns_cache_load(const char *filepath, bool *outdated)
 {
 	char *cfile;
 	struct stat cstats, fstats;
@@ -76,7 +76,7 @@ Imlib_Image tns_cache_load(const char *filepath, bool *outdated)
 	return im;
 }
 
-void tns_cache_write(Imlib_Image im, const char *filepath, bool force)
+static void tns_cache_write(Imlib_Image im, const char *filepath, bool force)
 {
 	char *cfile, *dirend;
 	struct stat cstats, fstats;
@@ -200,7 +200,7 @@ CLEANUP void tns_free(tns_t *tns)
 	cache_dir = NULL;
 }
 
-Imlib_Image tns_scale_down(Imlib_Image im, int dim)
+static Imlib_Image tns_scale_down(Imlib_Image im, int dim)
 {
 	int w, h;
 	float z, zw, zh;
@@ -374,7 +374,7 @@ void tns_unload(tns_t *tns, int n)
 	}
 }
 
-void tns_check_view(tns_t *tns, bool scrolled)
+static void tns_check_view(tns_t *tns, bool scrolled)
 {
 	int r;
 

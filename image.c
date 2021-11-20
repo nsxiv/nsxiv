@@ -114,7 +114,7 @@ void exif_auto_orientate(const fileinfo_t *file)
 #endif
 
 #if HAVE_LIBGIF
-bool img_load_gif(img_t *img, const fileinfo_t *file)
+static bool img_load_gif(img_t *img, const fileinfo_t *file)
 {
 	GifFileType *gif;
 	GifRowType *rows = NULL;
@@ -295,7 +295,7 @@ bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 
 #if HAVE_LIBWEBP
-bool is_webp(const char *path)
+static bool is_webp(const char *path)
 {
 	/* The size (in bytes) of the largest amount of data required to verify a WebP image. */
 	enum { max = 30 };
@@ -316,7 +316,7 @@ bool is_webp(const char *path)
  * x        NULL  = load the first frame as an Imlib_Image
  * NULL     x     = load all frames into img->multi.
  */
-bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
+static bool img_load_webp(const fileinfo_t *file, Imlib_Image *fframe, img_t *img)
 {
 	FILE *webp_file;
 	WebPData data;
@@ -507,7 +507,7 @@ CLEANUP void img_close(img_t *img, bool decache)
 	}
 }
 
-void img_check_pan(img_t *img, bool moved)
+static void img_check_pan(img_t *img, bool moved)
 {
 	win_t *win;
 	float w, h, ox, oy;
@@ -535,7 +535,7 @@ void img_check_pan(img_t *img, bool moved)
 		img->dirty = true;
 }
 
-bool img_fit(img_t *img)
+static bool img_fit(img_t *img)
 {
 	float z, zw, zh;
 
@@ -723,7 +723,7 @@ bool img_pos(img_t *img, float x, float y)
 	}
 }
 
-bool img_move(img_t *img, float dx, float dy)
+static bool img_move(img_t *img, float dx, float dy)
 {
 	return img_pos(img, img->x + dx, img->y + dy);
 }
@@ -873,7 +873,7 @@ bool img_change_gamma(img_t *img, int d)
 	}
 }
 
-bool img_frame_goto(img_t *img, int n)
+static bool img_frame_goto(img_t *img, int n)
 {
 	if (n < 0 || n >= img->multi.cnt || n == img->multi.sel)
 		return false;
