@@ -182,3 +182,22 @@ on GitHub or get a copy using git with the following command:
     $ git clone https://github.com/nsxiv/nsxiv.git
 
 You can view the changelog [here](CHANGELOG.md)
+
+Related projects
+----------------
+
+If nsxiv isn't able to fit your needs, here's a couple similar projects to try out:
+
+* [sxiv](https://github.com/muennich/sxiv) :
+  Base/parent of nsxiv, now unmaintained.
+* [feh](https://feh.finalrewind.org/) :
+  X11 image viewer aimed at command line users.
+* [meh](https://www.johnhawthorn.com/meh) :
+  Image viewer similar to feh, using raw xlib.
+* [MAGE](https://github.com/explosion-mental/mage) :
+  Imlib2 based image viewer. Inspired by sxiv.
+* [div](https://github.com/TAAPArthur/div) :
+  Minimal and extensive, aimed at power users willing to build their own features.
+
+For more similar projects, check out the image viewer section of
+[suckless rocks](https://suckless.org/rocks).
