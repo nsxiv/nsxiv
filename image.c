@@ -203,10 +203,13 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 
 			ptr = data = emalloc(sw * sh * sizeof(DATA32));
 			cmap = gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap;
-			r = cmap->Colors[bg].Red;
-			g = cmap->Colors[bg].Green;
-			b = cmap->Colors[bg].Blue;
-			bgpixel = 0x00ffffff & (r << 16 | g << 8 | b);
+			/* if bg > cmap->ColorCount, it is transparent black already */
+			if (cmap && bg >= 0 && bg < cmap->ColorCount) {
+				r = cmap->Colors[bg].Red;
+				g = cmap->Colors[bg].Green;
+				b = cmap->Colors[bg].Blue;
+				bgpixel = 0x00ffffff & (r << 16 | g << 8 | b);
+			}
 
 			for (i = 0; i < sh; i++) {
 				for (j = 0; j < sw; j++) {
