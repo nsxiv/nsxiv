@@ -59,6 +59,9 @@ static const bool ANTI_ALIAS = true;
  */
 static const bool ALPHA_LAYER = false;
 
+/* cache size for imlib2, in bytes */
+static const int CACHE_SIZE = 4 * 1024 * 1024; /* 4Mb */
+
 #endif
 #ifdef _THUMBS_CONFIG
 
