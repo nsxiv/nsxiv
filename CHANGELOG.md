@@ -9,7 +9,7 @@ there may be more changes. Please use `git log` to view them.
 - - -
 
 **[v28](https://github.com/nsxiv/nsxiv/archive/v28.tar.gz)**
-*(date goes here)*
+*(TODO: DATE GOES HERE)*
 
 * Changes:
 
@@ -25,8 +25,12 @@ there may be more changes. Please use `git log` to view them.
   * Animated webp support (optional via `HAVE_LIBWEBP`). (#20)
   * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag. (#117)
   * Ability to configure colors and fonts in `config.h` (#115)
-  * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`)
-    and key-handler. (#68, #141)
+  * Ability to configure navigation width area in `config.h` (#155)
+  * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`),
+    and key-handler and recieving null-seperated file-list via stdin (`-i`)
+    (#68) (#141) (#164)
+  * Export environment variable `NSXIV_USING_NULL` to key-handler. (#164)
+  * Embed new nsxiv icon. (#163)
   * `make install-icon` to install icons. (#80) (#96)
   * `make install-desktop` to install .desktop entry. (#80) (#96)
   * `make install-all` to install everything. (#80) (#96)
