@@ -196,3 +196,6 @@ Below are a couple other lesser known projects not listed in suckless rocks.
   Imlib2 based image viewer. Inspired by sxiv.
 * [div](https://github.com/TAAPArthur/div) :
   Minimal and extensive, aimed at power users willing to build their own features.
+* [mpv-image-viewer](https://github.com/occivink/mpv-image-viewer) :
+  Lua script to turn mpv into an image viewer. Supports thumbnails via
+  [mpv-gallery-view](https://github.com/occivink/mpv-gallery-view).
