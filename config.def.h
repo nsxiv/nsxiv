@@ -75,7 +75,7 @@ static const int THUMB_SIZE = 3;
 static const int ignore_mask = Mod2Mask | LockMask;
 
 /* abort the keyhandler */
-static const KeySym keyhandler_abort = XK_Escape;
+static const KeySym KEYHANDLER_ABORT = XK_Escape;
 
 /* keyboard mappings for image and thumbnail mode: */
 static const keymap_t keys[] = {
