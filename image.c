@@ -117,6 +117,23 @@ void exif_auto_orientate(const fileinfo_t *file)
 }
 #endif
 
+#if HAVE_LIBGIF || HAVE_LIBWEBP
+static void img_multiframe_context_set(img_t *img)
+{
+	if (img->multi.cnt > 1) {
+		imlib_context_set_image(img->im);
+		imlib_free_image();
+		img->im = img->multi.frames[0].im;
+	} else if (img->multi.cnt == 1) {
+		imlib_context_set_image(img->multi.frames[0].im);
+		imlib_free_image();
+		img->multi.cnt = 0;
+	}
+
+	imlib_context_set_image(img->im);
+}
+#endif
+
 #if HAVE_LIBGIF
 static bool img_load_gif(img_t *img, const fileinfo_t *file)
 {
@@ -280,17 +297,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 	if (err && (file->flags & FF_WARN))
 		error(0, 0, "%s: Corrupted gif file", file->name);
 
-	if (img->multi.cnt > 1) {
-		imlib_context_set_image(img->im);
-		imlib_free_image();
-		img->im = img->multi.frames[0].im;
-	} else if (img->multi.cnt == 1) {
-		imlib_context_set_image(img->multi.frames[0].im);
-		imlib_free_image();
-		img->multi.cnt = 0;
-	}
-
-	imlib_context_set_image(img->im);
+	img_multiframe_context_set(img);
 
 	return !err;
 }
@@ -373,16 +380,7 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	}
 	WebPDemuxReleaseIterator(&iter);
 
-	if (img->multi.cnt > 1) {
-		imlib_context_set_image(img->im);
-		imlib_free_image();
-		img->im = img->multi.frames[0].im;
-	} else if (img->multi.cnt == 1) {
-		imlib_context_set_image(img->multi.frames[0].im);
-		imlib_free_image();
-		img->multi.cnt = 0;
-	}
-	imlib_context_set_image(img->im);
+	img_multiframe_context_set(img);
 fail:
 	if (dec != NULL)
 		WebPAnimDecoderDelete(dec);
