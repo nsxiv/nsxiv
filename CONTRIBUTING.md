@@ -1,6 +1,3 @@
-Contribution Guideline
-----------------------
-
 Project Scope
 -------------
 
