@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="style.css"><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/nsxiv/nsxiv/master/icon/16x16.png" sizes="16x16"></head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width">
+<base href="https://github.com/nsxiv/nsxiv/blob/master/" target="_self">
 </head>
 <body><p><a href="https://github.com/nsxiv/nsxiv"><img src="https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png" alt="nsxiv" /></a></p>
 
@@ -29,10 +30,10 @@ release of nsxiv. Contributions are welcome, see
 <ul>
 <li>Basic image operations, e.g. zooming, panning, rotating</li>
 <li>Customizable key and mouse button mappings (in <em>config.h</em>)</li>
+<li>Script-ability via <code>key-handler</code></li>
 <li>Thumbnail mode: grid of selectable previews of all images</li>
 <li>Ability to cache thumbnails for fast re-loading</li>
-<li>Basic support for multi-frame images</li>
-<li>Play GIF animations</li>
+<li>Basic support for animated&#47;multi-frame images (GIF&#47;WebP)</li>
 <li>Display image information in status bar</li>
 <li>Display image name&#47;path in X title</li>
 </ul>
@@ -189,5 +190,23 @@ on GitHub or get a copy using git with the following command:</p>
 </code></pre>
 
 <p>You can view the changelog <a href="CHANGELOG.md">here</a></p>
+
+<h2 id="Related%20projects">Related projects</h2>
+
+<p>If nsxiv isn&#8217;t able to fit your needs, check out the image viewer section of
+<a href="https://suckless.org/rocks">suckless rocks</a> to find other minimal image viewers
+to try out.</p>
+
+<p>Below are a couple other lesser known projects not listed in suckless rocks.</p>
+
+<ul>
+<li><a href="https://github.com/explosion-mental/mage">MAGE</a> :
+Aims to be a smaller&#47;more-suckless version of sxiv.</li>
+<li><a href="https://github.com/TAAPArthur/div">div</a> :
+Minimal and extensive, aimed at C devs willing to build their own features.</li>
+<li><a href="https://github.com/occivink/mpv-image-viewer">mpv-image-viewer</a> :
+Lua script to turn mpv into an image viewer. Supports thumbnails via
+<a href="https://github.com/occivink/mpv-gallery-view">mpv-gallery-view</a>.</li>
+</ul>
 </body>
 </html>

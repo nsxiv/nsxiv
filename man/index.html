@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.22.4 -->
-<!-- CreationDate: Sun Nov  7 07:12:55 2021 -->
+<!-- CreationDate: Tue Nov 23 12:33:46 2021 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -344,8 +344,8 @@ percent.</p>
 
 
 <p>Use NULL-separator. With this option output of &minus;o
-and file-list sent to the key-handler will be seperated by a
-NULL character.</p></td></tr>
+and file-list sent to the key-handler and the input of
+&minus;i will be seperated by a NULL character.</p></td></tr>
 </table>
 
 <h2>KEYBOARD COMMANDS
@@ -1150,18 +1150,27 @@ program located in
 <i>$XDG_CONFIG_HOME/nsxiv/exec/key-handler</i>. The handler
 is invoked by pressing <b>Ctrl-x</b>. The next key combo is
 passed as its first argument. Passed via stdin are the
-images to act upon, one path per line: all marked images, if
-in thumbnail mode and at least one image has been marked,
-otherwise the current image. nsxiv(1) will block until the
-handler terminates. It then checks which images have been
-modified and reloads them.</p>
+images to act upon: all marked images, if in thumbnail mode
+and at least one image has been marked, otherwise the
+current image. nsxiv(1) will block until the handler
+terminates. It then checks which images have been modified
+and reloads them.</p>
+
+<p style="margin-left:11%; margin-top: 1em">By default
+nsxiv(1) will send one image per-line to stdin, however when
+using &minus;0 the image list will be NULL separated and the
+enviornment variable &quot;$NSXIV_USING_NULL&quot; will be
+set to 1.</p>
 
 <p style="margin-left:11%; margin-top: 1em">The key combo
 argument has the following form:
 &quot;[C-][M-][S-]KEY&quot;, where C/M/S indicate
 Ctrl/Meta(Alt)/Shift modifier states and KEY is the X keysym
 as listed in /usr/include/X11/keysymdef.h without the
-&quot;XK_&quot; prefix.</p>
+&quot;XK_&quot; prefix. If KEY has an uppercase equivalent,
+S-KEY is resolved into it. For instance, K replaces S-k and
+Scedilla replaces S-scedilla, but S-Delete is sent
+as-is.</p>
 
 <p style="margin-left:11%; margin-top: 1em">There is also
 an example script installed together with nsxiv as
