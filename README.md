@@ -22,10 +22,10 @@ Features
 
 * Basic image operations, e.g. zooming, panning, rotating
 * Customizable key and mouse button mappings (in *config.h*)
+* Script-ability via `key-handler`
 * Thumbnail mode: grid of selectable previews of all images
 * Ability to cache thumbnails for fast re-loading
-* Basic support for multi-frame images
-* Play GIF animations
+* Basic support for animated/multi-frame images (GIF/WebP)
 * Display image information in status bar
 * Display image name/path in X title
 
@@ -182,3 +182,20 @@ on GitHub or get a copy using git with the following command:
     $ git clone https://github.com/nsxiv/nsxiv.git
 
 You can view the changelog [here](CHANGELOG.md)
+
+Related projects
+----------------
+
+If nsxiv isn't able to fit your needs, check out the image viewer section of
+[suckless rocks](https://suckless.org/rocks) to find other minimal image viewers
+to try out.
+
+Below are a couple other lesser known projects not listed in suckless rocks.
+
+* [MAGE](https://github.com/explosion-mental/mage) :
+  Aims to be a smaller/more-suckless version of sxiv.
+* [div](https://github.com/TAAPArthur/div) :
+  Minimal and extensive, aimed at C devs willing to build their own features.
+* [mpv-image-viewer](https://github.com/occivink/mpv-image-viewer) :
+  Lua script to turn mpv into an image viewer. Supports thumbnails via
+  [mpv-gallery-view](https://github.com/occivink/mpv-gallery-view).
