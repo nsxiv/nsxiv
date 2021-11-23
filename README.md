@@ -22,10 +22,10 @@ Features
 
 * Basic image operations, e.g. zooming, panning, rotating
 * Customizable key and mouse button mappings (in *config.h*)
+* Script-ability via `key-handler`
 * Thumbnail mode: grid of selectable previews of all images
 * Ability to cache thumbnails for fast re-loading
-* Basic support for multi-frame images
-* Play GIF animations
+* Basic support for animated/multi-frame images (GIF/WebP)
 * Display image information in status bar
 * Display image name/path in X title
 
