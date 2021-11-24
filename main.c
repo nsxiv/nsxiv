@@ -499,7 +499,7 @@ void handle_key_handler(bool init)
 	if (init) {
 		close_info();
 		snprintf(win.bar.l.buf, win.bar.l.size, "Getting key handler input "
-		         "(%s to abort)...", XKeysymToString(keyhandler_abort));
+		         "(%s to abort)...", XKeysymToString(KEYHANDLER_ABORT));
 	} else { /* abort */
 		open_info();
 		update_info();
@@ -642,7 +642,7 @@ static void on_keypress(XKeyEvent *kev)
 	}
 	if (IsModifierKey(ksym))
 		return;
-	if (extprefix && ksym == keyhandler_abort && MODMASK(kev->state) == 0) {
+	if (extprefix && ksym == KEYHANDLER_ABORT && MODMASK(kev->state) == 0) {
 		handle_key_handler(false);
 	} else if (extprefix) {
 		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
