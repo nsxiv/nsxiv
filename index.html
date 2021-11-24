@@ -1,1246 +1,212 @@
-<!-- Creator     : groff version 1.22.4 -->
-<!-- CreationDate: Mon Nov  1 15:00:29 2021 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta name="generator" content="groff -Thtml, see www.gnu.org">
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<meta name="Content-Style" content="text/css">
-<style type="text/css">
-       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
-       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
-       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
-       h1      { text-align: center }
-</style>
-<title>NSXIV</title>
-
+<title>nsxiv - Neo Simple X Image Viewer</title>
 <link rel="stylesheet" href="style.css"><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/nsxiv/nsxiv/master/icon/16x16.png" sizes="16x16"></head>
-<body>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width">
+<base href="https://github.com/nsxiv/nsxiv/blob/master/" target="_self">
+</head>
+<body><p><a href="https://github.com/nsxiv/nsxiv"><img src="https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png" alt="nsxiv" /></a></p>
 
-<h1 align="center">NSXIV</h1>
+<p><a href="https://github.com/nsxiv/nsxiv/tags"><img src="https://img.shields.io/github/v/tag/nsxiv/nsxiv?sort=semver&amp;style=flat-square" alt="tags" /></a>
+<a href="https://github.com/nsxiv/nsxiv/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-GPL--2.0-lightgreen?style=flat-square" alt="license" /></a>
+<a href="https://github.com/nsxiv/nsxiv"><img src="https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&amp;style=flat-square" alt="loc" /></a></p>
 
-<a href="#NAME">NAME</a><br>
-<a href="#SYNOPSIS">SYNOPSIS</a><br>
-<a href="#DESCRIPTION">DESCRIPTION</a><br>
-<a href="#OPTIONS">OPTIONS</a><br>
-<a href="#KEYBOARD COMMANDS">KEYBOARD COMMANDS</a><br>
-<a href="#MOUSE COMMANDS">MOUSE COMMANDS</a><br>
-<a href="#CONFIGURATION">CONFIGURATION</a><br>
-<a href="#STATUS BAR">STATUS BAR</a><br>
-<a href="#EXTERNAL KEY HANDLER">EXTERNAL KEY HANDLER</a><br>
-<a href="#THUMBNAIL CACHING">THUMBNAIL CACHING</a><br>
-<a href="#ORIGINAL AUTHOR">ORIGINAL AUTHOR</a><br>
-<a href="#CURRENT MAINTAINERS">CURRENT MAINTAINERS</a><br>
-<a href="#CONTRIBUTORS">CONTRIBUTORS</a><br>
-<a href="#HOMEPAGE">HOMEPAGE</a><br>
-<a href="#SEE ALSO">SEE ALSO</a><br>
+<p><a href="https://nsxiv.github.io/nsxiv/man">View Man Page</a></p>
+<h2 id="%3Cstrong%3ENeo%20(or%20New%20or%20Not)%20Simple%20(or%20Small%20or%20Suckless)%20X%20Image%20Viewer%3C/strong%3E"><strong>Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer</strong></h2>
 
-<hr>
+<p>nsxiv is a fork of now unmaintained <a href="https://github.com/muennich/sxiv">sxiv</a>
+with the purpose of maintaining it and adding simple, sensible features.
+nsxiv is free software licensed under GPLv2 and aims to be easy to modify and customize.</p>
 
+<p>Please file a bug report if something does not work as documented or
+expected in <em>this</em> repository, after making sure you are using the latest
+release of nsxiv. Contributions are welcome, see
+<a href="CONTRIBUTING.md#Contribution-Guideline">CONTRIBUTING.md</a> for details.</p>
 
-<h2>NAME
-<a name="NAME"></a>
-</h2>
+<h2 id="Features">Features</h2>
 
+<ul>
+<li>Basic image operations, e.g. zooming, panning, rotating</li>
+<li>Customizable key and mouse button mappings (in <em>config.h</em>)</li>
+<li>Script-ability via <code>key-handler</code></li>
+<li>Thumbnail mode: grid of selectable previews of all images</li>
+<li>Ability to cache thumbnails for fast re-loading</li>
+<li>Basic support for animated&#47;multi-frame images (GIF&#47;WebP)</li>
+<li>Display image information in status bar</li>
+<li>Display image name&#47;path in X title</li>
+</ul>
 
-<p style="margin-left:11%; margin-top: 1em">nsxiv &minus;
-Neo Simple X Image Viewer</p>
+<h2 id="Screenshots">Screenshots</h2>
 
-<h2>SYNOPSIS
-<a name="SYNOPSIS"></a>
-</h2>
+<p><strong>Image mode: (Default colors)</strong></p>
 
+<p><img src="https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/image.png" alt="Image" title="Image mode" /></p>
 
-<p style="margin-left:11%; margin-top: 1em"><b>nsxiv</b>
-[<b>&minus;abcfhiopqrtvZ0</b>] [<b>&minus;A</b>
-<i>FRAMERATE</i>] [<b>&minus;e</b> <i>WID</i>]
-[<b>&minus;G</b> <i>GAMMA</i>] [<b>&minus;g</b>
-<i>GEOMETRY</i>] [<b>&minus;N</b> <i>NAME</i>]
-[<b>&minus;T</b> <i>TITLE</i>] [<b>&minus;n</b> <i>NUM</i>]
-[<b>&minus;S</b> <i>DELAY</i>] [<b>&minus;s</b> <i>MODE</i>]
-[<b>&minus;z</b> <i>ZOOM</i>] <i>FILE</i>...</p>
+<p><strong>Thumbnail mode: (Custom colors)</strong></p>
 
-<h2>DESCRIPTION
-<a name="DESCRIPTION"></a>
-</h2>
+<p><img src="https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/thumb.png" alt="Thumb" title="Thumb mode" /></p>
 
+<h2 id="Installing%20via%20package%20manager">Installing via package manager</h2>
 
-<p style="margin-left:11%; margin-top: 1em">nsxiv is a
-simple image viewer for X.</p>
+<p>nsxiv is available on the following distributions&#47;repositories. If you don&#8217;t see
+your distro listed here, either contact your distro&#8217;s package maintainer or
+consider packaging it yourself and adding it to the respective community repo.</p>
 
-<p style="margin-left:11%; margin-top: 1em">It has two
-modes of operation: image and thumbnail mode. The default is
-image mode, in which only the current image is shown. In
-thumbnail mode a grid of small previews is displayed, making
-it easy to choose an image to open.</p>
+<p><a href="https://repology.org/project/nsxiv/versions"><img src="https://repology.org/badge/vertical-allrepos/nsxiv.svg" alt="Packaging status" /></a></p>
 
-<p style="margin-left:11%; margin-top: 1em">Please note,
-that the fullscreen mode requires an EWMH/NetWM compliant
-window manager.</p>
+<p>Repos not tracked by repology:</p>
 
-<h2>OPTIONS
-<a name="OPTIONS"></a>
-</h2>
+<ul>
+<li>Fedora: Enable the copr repo via <code>dnf copr enable mamg22&#47;nsxiv</code>.</li>
+</ul>
 
+<h2 id="Dependencies">Dependencies</h2>
 
+<p>nsxiv requires the following software to be installed:</p>
 
-<p style="margin-left:11%; margin-top: 1em"><b>&minus;A</b>
-<i>FRAMERATE</i></p>
+<ul>
+<li>Imlib2</li>
+<li>X11</li>
+</ul>
 
-<p style="margin-left:22%;">Play animations with a constant
-frame rate set to <i>FRAMERATE</i>.</p>
+<p>The following dependencies are optional.</p>
 
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
+<ul>
+<li>inotify : Used for auto-reloading images on change.
+Disabled via <code>HAVE_INOTIFY=0</code></li>
+<li>libXft, freetype2, fontconfig : Used for the status bar.
+Disabled via <code>HAVE_LIBFONTS=0</code></li>
+<li>giflib : Used for animated gif playback.
+Disabled via <code>HAVE_LIBGIF=0</code>.</li>
+<li>libexif : Used for auto-orientation and exif thumbnails.
+Disable via <code>HAVE_LIBEXIF=0</code></li>
+<li>libwebp : Used for animated webp playback.
+Disabled via <code>HAVE_LIBWEBP=0</code>.</li>
+</ul>
 
+<p>Please make sure to install the corresponding development packages in case that
+you want to build nsxiv on a distribution with separate runtime and development
+packages (e.g. *-dev on Debian).</p>
 
-<p><b>&minus;a</b></p></td>
-<td width="2%"></td>
-<td width="78%">
+<h2 id="Building">Building</h2>
 
+<p>nsxiv is built using the commands:</p>
 
-<p>Play animations of multi-frame images.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
+<pre><code>$ make
+</code></pre>
 
+<p>You can pass <code>HAVE_X=0</code> to <code>make</code> to disable an optional dependency.
+For example:</p>
 
-<p><b>&minus;b</b></p></td>
-<td width="2%"></td>
-<td width="78%">
+<pre><code>$ make HAVE_LIBEXIF=0
+</code></pre>
 
+<p>will disable <code>libexif</code> support. Alternatively they can be disabled via editing
+the <code>Makefile</code> directly. <code>OPT_DEP_DEFAULT=0</code> can be used to disable all
+optional dependencies.</p>
 
-<p>Do not show info bar on bottom of window.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
+<p>Installing nsxiv:</p>
 
+<pre><code># make install
+</code></pre>
 
-<p><b>&minus;c</b></p></td>
-<td width="2%"></td>
-<td width="78%">
+<p>Installing desktop entry:</p>
 
+<pre><code># make install-desktop
+</code></pre>
 
-<p>Remove all orphaned cache files from the thumbnail cache
-directory and exit.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
+<p>Installing icons:</p>
 
+<pre><code># make install-icon
+</code></pre>
 
-<p><b>&minus;e</b> <i>WID</i></p></td>
-<td width="2%"></td>
-<td width="78%">
+<p>Installing all of the above:</p>
 
+<pre><code># make install-all
+</code></pre>
 
-<p>Embed nsxiv&rsquo;s window into window whose ID is
-<i>WID</i>.</p> </td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
+<p>Please note, that these requires root privileges.
+By default, nsxiv is installed using the prefix <code>&#47;usr&#47;local</code>, so the full path
+of the executable will be <code>&#47;usr&#47;local&#47;bin&#47;nsxiv</code>, the <code>.desktop</code> entry will be
+<code>&#47;usr&#47;local&#47;share&#47;applications&#47;nsxiv.desktop</code> and the icon path will be
+<code>&#47;usr&#47;local&#47;share&#47;icons&#47;hicolor&#47;{size}&#47;apps&#47;nsxiv.png</code>.</p>
 
+<p>You can install nsxiv into a directory of your choice by changing this command to:</p>
 
-<p><b>&minus;f</b></p></td>
-<td width="2%"></td>
-<td width="78%">
+<pre><code>$ make PREFIX="&#47;your&#47;dir" install
+</code></pre>
 
+<p>Example scripts are installed using <code>EGPREFIX</code> which defaults to
+<code>&#47;usr&#47;local&#47;share&#47;doc&#47;nsxiv&#47;examples</code>. You can change <code>EGPREFIX</code> the same way
+you can change <code>PREFIX</code> shown above.</p>
 
-<p>Start in fullscreen mode.</p></td></tr>
-</table>
+<p>The build-time specific settings of nsxiv can be found in the file <em>config.h</em>.
+Please check and change them, so that they fit your needs.
+If the file <em>config.h</em> does not already exist, then you have to create it with
+the following command:</p>
 
-<p style="margin-left:11%;"><b>&minus;G</b>
-<i>GAMMA</i></p>
+<pre><code>$ make config.h
+</code></pre>
 
-<p style="margin-left:22%;">Set image gamma to GAMMA
-(&minus;32..32).</p>
+<h2 id="Usage">Usage</h2>
 
-<p style="margin-left:11%;"><b>&minus;g</b>
-<i>GEOMETRY</i></p>
+<p>Please see man page for information on how to use nsxiv. To do so, execute the
+following after the installation:</p>
 
-<p style="margin-left:22%;">Set window position and size.
-See section GEOMETRY SPECIFICATIONS of X(7) for more
-information on GEOMETRY argument.</p>
+<pre><code>$ man nsxiv
+</code></pre>
 
-<p style="margin-left:11%;"><b>&minus;N</b> <i>NAME</i></p>
+<h2 id="F.A.Q">F.A.Q</h2>
 
-<p style="margin-left:22%;">Set the resource name of
-nsxiv&rsquo;s X window to NAME.</p>
+<ul>
+<li><p>Can I open remote urls with nsxiv? 
+Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-url">nsxiv-url</a></p></li>
+<li><p>Can I open all the images in a directory? 
+Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-rifle">nsxiv-rifle</a></p></li>
+<li><p>Can I set default arguments for nsxiv? 
+Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-env">nsxiv-env</a></p></li>
+<li><p>Can I pipe images into nsxiv? 
+Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe">nsxiv-pipe</a></p></li>
+</ul>
 
-<p style="margin-left:11%;"><b>&minus;T</b>
-<i>TITLE</i></p>
+<h2 id="User%20patches">User patches</h2>
 
-<p style="margin-left:22%;">Set the window title to TITLE.
-Use the format &lsquo;prefix:suffixmode&rsquo;. Any string
-literal is accepted for prefix, and the format of suffixmode
-is:</p>
+<p>Due to our limited <a href="CONTRIBUTING.md#Project-Scope">project scope</a>, certain features or
+customization cannot be merged into nsxiv mainline. Following the spirit of
+suckless software, we host the <a href="https://github.com/nsxiv/nsxiv-extra">nsxiv-extra</a>
+repo where users are free to submit whatever patches or scripts they wish.</p>
 
-<p style="margin-left:22%; margin-top: 1em">Value Format
-<br>
-0 Empty <br>
-1 Basename of file <br>
-2 Full path to file</p>
+<p>Description on how to use or submit patches can be found on
+<a href="https://github.com/nsxiv/nsxiv-extra">nsxiv-extra&#8217;s</a> README.</p>
 
-<p style="margin-left:22%; margin-top: 1em">By defualt,
-prefix is set to &quot;nsxiv - &quot; and suffixmode is set
-to 1 (basename).</p>
+<h2 id="Download">Download</h2>
 
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
+<p>You can <a href="https://github.com/nsxiv/nsxiv">browse</a> the source code repository
+on GitHub or get a copy using git with the following command:</p>
 
+<pre><code>$ git clone https:&#47;&#47;github.com&#47;nsxiv&#47;nsxiv.git
+</code></pre>
 
-<p><b>&minus;n</b> <i>NUM</i></p></td>
-<td width="2%"></td>
-<td width="78%">
+<p>You can view the changelog <a href="CHANGELOG.md">here</a></p>
 
+<h2 id="Related%20projects">Related projects</h2>
 
-<p>Start at picture number NUM.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
+<p>If nsxiv isn&#8217;t able to fit your needs, check out the image viewer section of
+<a href="https://suckless.org/rocks">suckless rocks</a> to find other minimal image viewers
+to try out.</p>
 
+<p>Below are a couple other lesser known projects not listed in suckless rocks.</p>
 
-<p><b>&minus;h</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Print brief usage information to standard output and
-exit.</p> </td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>&minus;i</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Read names of files to open from standard input. Also
-done if FILE is &lsquo;-&rsquo;.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>&minus;o</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Write list of all marked files to standard output when
-quitting. In combination with <b>&minus;i</b> nsxiv can be
-used as a visual filter/pipe.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>&minus;p</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Enable private mode, in which nsxiv does not write any
-cache or temporary files.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>&minus;q</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Be quiet, disable warnings to standard error stream.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>&minus;r</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Search the given directories recursively for images to
-view.</p> </td></tr>
-</table>
-
-<p style="margin-left:11%;"><b>&minus;S</b>
-<i>DELAY</i></p>
-
-<p style="margin-left:22%;">Start in slideshow mode. Set
-the delay between images to <i>DELAY</i> seconds.
-<i>DELAY</i> may be a floating point number.</p>
-
-<p style="margin-left:11%;"><b>&minus;s</b> <i>MODE</i></p>
-
-<p style="margin-left:22%;">Set scale mode according to
-MODE character. Supported modes are: [d]own, [f]it, [F]ill,
-[w]idth, [h]eight.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="3%">
-
-
-<p><b>&minus;t</b></p></td>
-<td width="8%"></td>
-<td width="78%">
-
-
-<p>Start in thumbnail mode.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="3%">
-
-
-<p><b>&minus;v</b></p></td>
-<td width="8%"></td>
-<td width="78%">
-
-
-<p>Print version information to standard output and
-exit.</p> </td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="3%">
-
-
-<p><b>&minus;Z</b></p></td>
-<td width="8%"></td>
-<td width="78%">
-
-
-<p>The same as &lsquo;&minus;z 100&rsquo;.</p></td></tr>
-</table>
-
-<p style="margin-left:11%;"><b>&minus;z</b> <i>ZOOM</i></p>
-
-<p style="margin-left:22%;">Set zoom level to ZOOM
-percent.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="3%">
-
-
-<p><b>&minus;0</b></p></td>
-<td width="8%"></td>
-<td width="78%">
-
-
-<p>Use NULL-separator. With this option output of &minus;o
-and file-list sent to the key-handler will be seperated by a
-NULL character.</p></td></tr>
-</table>
-
-<h2>KEYBOARD COMMANDS
-<a name="KEYBOARD COMMANDS"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em"><b>General</b>
-<br>
-The following keyboard commands are available in both image
-and thumbnail mode:</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p style="margin-top: 1em"><b>0</b>&minus;<b>9</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p style="margin-top: 1em">Prefix the next command with a
-number (denoted via <i>count</i>).</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>q</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Quit nsxiv.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>Return</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Switch to thumbnail mode / open selected image in image
-mode.</p> </td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>f</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Toggle fullscreen mode.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>b</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Toggle visibility of info bar on bottom of window.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>Ctrl-x</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Send the next key to the external key-handler. See
-section EXTERNAL KEY HANDLER for more information.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>g</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Go to the first image.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>G</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Go to the last image, or image number <i>count</i>.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>r</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Reload image.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>D</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Remove current image from file list and go to next
-image.</p> </td></tr>
-</table>
-
-<p style="margin-left:11%;"><b>Ctrl-h</b>,
-<b>Ctrl-Left</b></p>
-
-<p style="margin-left:22%;">Scroll left one screen
-width.</p>
-
-<p style="margin-left:11%;"><b>Ctrl-j</b>,
-<b>Ctrl-Down</b></p>
-
-<p style="margin-left:22%;">Scroll down one screen
-height.</p>
-
-<p style="margin-left:11%;"><b>Ctrl-k</b>,
-<b>Ctrl-Up</b></p>
-
-<p style="margin-left:22%;">Scroll up one screen
-height.</p>
-
-<p style="margin-left:11%;"><b>Ctrl-l</b>,
-<b>Ctrl-Right</b></p>
-
-<p style="margin-left:22%;">Scroll right one screen
-width.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>+</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Zoom in.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>&minus;</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Zoom out.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>m</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Mark/unmark the current image.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>M</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Repeat last mark action on all images from the last
-marked/unmarked up to the current one.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>Ctrl-m</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Reverse all image marks.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>Ctrl-u</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Remove all image marks.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>N</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Go <i>count</i> marked images forward.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>P</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Go <i>count</i> marked images backward.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>{</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Decrease gamma correction by <i>count</i> steps.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>}</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Increase gamma correction by <i>count</i> steps.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>Ctrl-g</b></p></td>
-<td width="2%"></td>
-<td width="78%">
-
-
-<p>Reset gamma correction.</p></td></tr>
-</table>
-
-<p style="margin-left:11%; margin-top: 1em"><b>Thumbnail
-mode</b> <br>
-The following keyboard commands are only available in
-thumbnail mode: <b><br>
-h</b>, <b>Left</b></p>
-
-<p style="margin-left:22%;">Move selection left
-<i>count</i> times.</p>
-
-<p style="margin-left:11%;"><b>j</b>, <b>Down</b></p>
-
-<p style="margin-left:22%;">Move selection down
-<i>count</i> times.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="7%">
-
-
-<p><b>k</b>, <b>Up</b></p></td>
-<td width="4%"></td>
-<td width="46%">
-
-
-<p>Move selection up <i>count</i> times.</p></td>
-<td width="32%">
-</td></tr>
-</table>
-
-<p style="margin-left:11%;"><b>l</b>, <b>Right</b></p>
-
-<p style="margin-left:22%;">Move selection right
-<i>count</i> times.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>R</b></p></td>
-<td width="10%"></td>
-<td width="33%">
-
-
-<p>Reload all thumbnails.</p></td>
-<td width="45%">
-</td></tr>
-</table>
-
-<p style="margin-left:11%; margin-top: 1em"><b>Image
-mode</b> <br>
-The following keyboard commands are only available in image
-mode: <br>
-Navigate image list: <b><br>
-n</b>, <b>Space</b></p>
-
-<p style="margin-left:22%;">Go <i>count</i> images
-forward.</p>
-
-<p style="margin-left:11%;"><b>p</b>, <b>Backspace</b></p>
-
-<p style="margin-left:22%;">Go <i>count</i> images
-backward.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>[</b></p></td>
-<td width="10%"></td>
-<td width="46%">
-
-
-<p>Go <i>count</i> * 10 images backward.</p></td>
-<td width="32%">
-</td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>]</b></p></td>
-<td width="10%"></td>
-<td width="46%">
-
-
-<p>Go <i>count</i> * 10 images forward.</p></td>
-<td width="32%">
-</td></tr>
-</table>
-
-<p style="margin-left:11%;">Handle multi-frame images:</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>Ctrl-n</b></p></td>
-<td width="2%"></td>
-<td width="73%">
-
-
-<p>Go <i>count</i> frames of a multi-frame image
-forward.</p> </td>
-<td width="5%">
-</td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="9%">
-
-
-<p><b>Ctrl-p</b></p></td>
-<td width="2%"></td>
-<td width="73%">
-
-
-<p>Go <i>count</i> frames of a multi-frame image
-backward.</p> </td>
-<td width="5%">
-</td></tr>
-</table>
-
-<p style="margin-left:11%;"><b>Ctrl-a</b>,
-<b>Ctrl-Space</b></p>
-
-<p style="margin-left:22%;">Play/stop animations of
-multi-frame images.</p>
-
-<p style="margin-left:11%;">Panning: <b><br>
-h</b>, <b>Left</b></p>
-
-<p style="margin-left:22%;">Scroll image 1/5 of window
-width or <i>count</i> pixel left.</p>
-
-<p style="margin-left:11%;"><b>j</b>, <b>Down</b></p>
-
-<p style="margin-left:22%;">Scroll image 1/5 of window
-height or <i>count</i> pixel down.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="7%">
-
-
-<p><b>k</b>, <b>Up</b></p></td>
-<td width="4%"></td>
-<td width="78%">
-
-
-<p>Scroll image 1/5 of window height or <i>count</i> pixel
-up.</p> </td></tr>
-</table>
-
-<p style="margin-left:11%;"><b>l</b>, <b>Right</b></p>
-
-<p style="margin-left:22%;">Scroll image 1/5 of window
-width or <i>count</i> pixel right.</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>H</b></p></td>
-<td width="10%"></td>
-<td width="43%">
-
-
-<p>Scroll to left image edge.</p></td>
-<td width="35%">
-</td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>J</b></p></td>
-<td width="10%"></td>
-<td width="43%">
-
-
-<p>Scroll to bottom image edge.</p></td>
-<td width="35%">
-</td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>K</b></p></td>
-<td width="10%"></td>
-<td width="43%">
-
-
-<p>Scroll to top image edge.</p></td>
-<td width="35%">
-</td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>L</b></p></td>
-<td width="10%"></td>
-<td width="43%">
-
-
-<p>Scroll to right image edge.</p></td>
-<td width="35%">
-</td></tr>
-</table>
-
-<p style="margin-left:11%;">Zooming:</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>=</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Set zoom level to 100%, or <i>count</i>%.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>w</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Set zoom level to 100%, but fit large images into
-window.</p> </td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>W</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Fit image to window.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>F</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Fill image to window.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>e</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Fit image to window width.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>E</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Fit image to window height.</p></td></tr>
-</table>
-
-<p style="margin-left:11%;">Rotation:</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>&lt;</b></p></td>
-<td width="10%"></td>
-<td width="69%">
-
-
-<p>Rotate image counter-clockwise by 90 degrees.</p></td>
-<td width="9%">
-</td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>&gt;</b></p></td>
-<td width="10%"></td>
-<td width="69%">
-
-
-<p>Rotate image clockwise by 90 degrees.</p></td>
-<td width="9%">
-</td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>?</b></p></td>
-<td width="10%"></td>
-<td width="69%">
-
-
-<p>Rotate image by 180 degrees.</p></td>
-<td width="9%">
-</td></tr>
-</table>
-
-<p style="margin-left:11%;">Flipping:</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>|</b></p></td>
-<td width="10%"></td>
-<td width="36%">
-
-
-<p>Flip image horizontally.</p></td>
-<td width="42%">
-</td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>_</b></p></td>
-<td width="10%"></td>
-<td width="36%">
-
-
-<p>Flip image vertically.</p></td>
-<td width="42%">
-</td></tr>
-</table>
-
-<p style="margin-left:11%;">Miscellaneous:</p>
-
-<table width="100%" border="0" rules="none" frame="void"
-       cellspacing="0" cellpadding="0">
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>a</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Toggle anti-aliasing.</p></td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>A</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Toggle visibility of alpha-channel, i.e. image
-transparency.</p> </td></tr>
-<tr valign="top" align="left">
-<td width="11%"></td>
-<td width="1%">
-
-
-<p><b>s</b></p></td>
-<td width="10%"></td>
-<td width="78%">
-
-
-<p>Toggle slideshow mode and/or set the delay between
-images to <i>count</i> seconds.</p></td></tr>
-</table>
-
-<h2>MOUSE COMMANDS
-<a name="MOUSE COMMANDS"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">The following
-mouse mappings are available in image mode: <br>
-General: <b><br>
-Button3</b></p>
-
-<p style="margin-left:22%;">Switch to thumbnail mode.</p>
-
-<p style="margin-left:11%;">Navigate image list: <b><br>
-Button1</b></p>
-
-<p style="margin-left:22%;">Go to the next image if the
-mouse cursor is in the right part of the window or to the
-previous image if it is in the left part.</p>
-
-<p style="margin-left:11%;">Panning: <b><br>
-Button2</b></p>
-
-<p style="margin-left:22%;">Pan the image according to the
-mouse cursor position in the window while keeping this
-button pressed down.</p>
-
-<p style="margin-left:11%;"><b>Ctrl-Button1</b></p>
-
-<p style="margin-left:22%;">Pan the image relative to the
-mouse cursor.</p>
-
-<p style="margin-left:11%;">Zooming: <b><br>
-ScrollUp</b></p>
-
-<p style="margin-left:22%;">Zoom in.</p>
-
-<p style="margin-left:11%;"><b>ScrollDown</b></p>
-
-<p style="margin-left:22%;">Zoom out.</p>
-
-<h2>CONFIGURATION
-<a name="CONFIGURATION"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">The following X
-resources are supported: <b><br>
-window.background</b></p>
-
-<p style="margin-left:22%;">Color of the window
-background</p>
-
-<p style="margin-left:11%;"><b>window.foreground</b></p>
-
-<p style="margin-left:22%;">Color of the window
-foreground</p>
-
-<p style="margin-left:11%;"><b>bar.font</b></p>
-
-<p style="margin-left:22%;">Name of Xft bar font</p>
-
-<p style="margin-left:11%;"><b>bar.background</b></p>
-
-<p style="margin-left:22%;">Color of the bar background.
-Defaults to window.background</p>
-
-<p style="margin-left:11%;"><b>bar.foreground</b></p>
-
-<p style="margin-left:22%;">Color of the bar foreground.
-Defaults to window.foreground</p>
-
-<p style="margin-left:11%;"><b>mark.foreground</b></p>
-
-<p style="margin-left:22%;">Color of the mark foreground.
-Defaults to window.foreground</p>
-
-<p style="margin-left:11%;">Please see xrdb(1) on how to
-change them.</p>
-
-<h2>STATUS BAR
-<a name="STATUS BAR"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">The information
-displayed on the left side of the status bar can be replaced
-with the output of a user-provided script, which is called
-by nsxiv whenever an image gets loaded. The path of this
-script is <i>$XDG_CONFIG_HOME/nsxiv/exec/image-info</i> and
-the arguments given to it are: 1) path to image file, 2)
-image width, 3) image height.</p>
-
-<p style="margin-left:11%; margin-top: 1em">There is also
-an example script installed together with nsxiv as
-<i>EGPREFIX/image-info</i>.</p>
-
-<h2>EXTERNAL KEY HANDLER
-<a name="EXTERNAL KEY HANDLER"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">Additional
-external keyboard commands can be defined using a handler
-program located in
-<i>$XDG_CONFIG_HOME/nsxiv/exec/key-handler</i>. The handler
-is invoked by pressing <b>Ctrl-x</b>. The next key combo is
-passed as its first argument. Passed via stdin are the
-images to act upon, one path per line: all marked images, if
-in thumbnail mode and at least one image has been marked,
-otherwise the current image. nsxiv(1) will block until the
-handler terminates. It then checks which images have been
-modified and reloads them.</p>
-
-<p style="margin-left:11%; margin-top: 1em">The key combo
-argument has the following form:
-&quot;[C-][M-][S-]KEY&quot;, where C/M/S indicate
-Ctrl/Meta(Alt)/Shift modifier states and KEY is the X keysym
-as listed in /usr/include/X11/keysymdef.h without the
-&quot;XK_&quot; prefix.</p>
-
-<p style="margin-left:11%; margin-top: 1em">There is also
-an example script installed together with nsxiv as
-<i>EGPREFIX/key-handler</i>.</p>
-
-<h2>THUMBNAIL CACHING
-<a name="THUMBNAIL CACHING"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">nsxiv stores
-all thumbnails under <i>$XDG_CACHE_HOME/nsxiv/</i>.</p>
-
-<p style="margin-left:11%; margin-top: 1em">Use the command
-line option <i>&minus;c</i> to remove all orphaned cache
-files. Additionally, run the following command afterwards
-inside the cache directory to remove empty
-subdirectories:</p>
-
-<p style="margin-left:22%; margin-top: 1em">find .
-&minus;depth &minus;type d &minus;empty ! &minus;name
-&rsquo;.&rsquo; &minus;exec rmdir {} \;</p>
-
-<h2>ORIGINAL AUTHOR
-<a name="ORIGINAL AUTHOR"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">Bert Muennich
-&lt;ber.t at posteo.de&gt;</p>
-
-<h2>CURRENT MAINTAINERS
-<a name="CURRENT MAINTAINERS"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">Anupam Ashish
-Minz <br>
-Berke Kocao&Auml;lu &lt;berke.kocaoglu at metu.edu.tr&gt;
-<br>
-Guilherme Freire <br>
-Kian Kasad &lt;kian at kasad.com&gt; <br>
-N-R-K &lt;nrk at disroot.org&gt; <br>
-Stein Gunnar Bakkeby &lt;bakkeby at gmail.com&gt; <br>
-TAAPArthur &lt;taaparthur at gmail.com&gt; <br>
-explosion-mental &lt;explosion0mental at gmail.com&gt; <br>
-eylles &lt;ed.ylles1997 at gmail.com&gt; <br>
-qsmodo</p>
-
-<h2>CONTRIBUTORS
-<a name="CONTRIBUTORS"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em">Bastien Dejean
-&lt;nihilhill at gmail.com&gt; <br>
-Dave Reisner &lt;d at falconindy.com&gt; <br>
-Fung SzeTat &lt;sthorde at gmail.com&gt; <br>
-Max Voit &lt;mvdev at with-eyes.net&gt;</p>
-
-<p style="margin-left:11%; margin-top: 1em">For additional
-contributors, run &lsquo;git shortlog -s&lsquo; in the nsxiv
-repository.</p>
-
-<h2>HOMEPAGE
-<a name="HOMEPAGE"></a>
-</h2>
-
-
-
-<p style="margin-left:11%; margin-top: 1em">https://github.com/nsxiv/nsxiv</p>
-
-<h2>SEE ALSO
-<a name="SEE ALSO"></a>
-</h2>
-
-
-<p style="margin-left:11%; margin-top: 1em"><b>X</b>(7),
-<b>xrdb</b>(1)</p>
-<hr>
+<ul>
+<li><a href="https://github.com/explosion-mental/mage">MAGE</a> :
+Aims to be a smaller&#47;more-suckless version of sxiv.</li>
+<li><a href="https://github.com/TAAPArthur/div">div</a> :
+Minimal and extensive, aimed at C devs willing to build their own features.</li>
+<li><a href="https://github.com/occivink/mpv-image-viewer">mpv-image-viewer</a> :
+Lua script to turn mpv into an image viewer. Supports thumbnails via
+<a href="https://github.com/occivink/mpv-gallery-view">mpv-gallery-view</a>.</li>
+</ul>
 </body>
 </html>
