@@ -17,7 +17,6 @@ there may be more changes. Please use `git log` to view them.
   * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead. (#71)
   * By default example scripts will now be installed into `EGPREFIX` (see
     README for more info). (#86)
-  * Allow any modifier to be used in keybinding (excluding `ignore_mask`). (#77)
   * Zoom levels are not hard-coded. This breaks existing configs. (#92)
 
 * Added:
@@ -26,6 +25,8 @@ there may be more changes. Please use `git log` to view them.
   * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag. (#117)
   * Ability to configure colors and fonts in `config.h` (#115)
   * Ability to configure navigation width area in `config.h` (#155)
+  * Ability to customize the set of modifers used when processing keybindings
+    in `config.h` (#150)
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`),
     and key-handler and recieving null-seperated file-list via stdin (`-i`)
     (#68) (#141) (#164)
