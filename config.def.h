@@ -42,7 +42,7 @@ static const int SLIDESHOW_DELAY = 5;
 
 /* gamma correction: the user-visible ranges [-GAMMA_RANGE, 0] and
  * (0, GAMMA_RANGE] are mapped to the ranges [0, 1], and (1, GAMMA_MAX].
- * */
+ */
 static const double GAMMA_MAX   = 10.0;
 static const int    GAMMA_RANGE = 32;
 
@@ -71,8 +71,8 @@ static const int THUMB_SIZE = 3;
 #endif
 #ifdef _MAPPINGS_CONFIG
 
-/* following modifiers (NumLock | CapsLock) will be ignored when processing keybindings */
-static const int ignore_mask = Mod2Mask | LockMask;
+/* these modifiers will be used when processing keybindings */
+static const unsigned int USED_MODMASK = ShiftMask | ControlMask | Mod1Mask;
 
 /* abort the keyhandler */
 static const KeySym KEYHANDLER_ABORT = XK_Escape;
