@@ -59,6 +59,12 @@ static const bool ANTI_ALIAS = true;
  */
 static const bool ALPHA_LAYER = false;
 
+/* cache size for imlib2, in bytes. For backwards compatibility reasons, the
+ * size is kept at 4MiB. For most users, it is advised to pick a value close to
+ * or above 128MiB for better image (re)loading performance.
+ */
+static const int CACHE_SIZE = 4 * 1024 * 1024; /* 4MiB */
+
 #endif
 #ifdef _THUMBS_CONFIG
 
