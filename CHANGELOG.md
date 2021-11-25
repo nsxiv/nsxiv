@@ -27,6 +27,8 @@ there may be more changes. Please use `git log` to view them.
   * Ability to configure navigation width area in `config.h` (#155)
   * Ability to customize the set of modifers used when processing keybindings
     in `config.h` (#150)
+  * Ability to configure Imlib2's cache size for better image (re)loading
+    performance in `config.h` (#171)
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`),
     and key-handler and recieving null-seperated file-list via stdin (`-i`)
     (#68) (#141) (#164)
