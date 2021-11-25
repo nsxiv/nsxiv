@@ -35,15 +35,15 @@ there may be more changes. Please use `git log` to view them.
   * `make install-icon` to install icons. (#80) (#96)
   * `make install-desktop` to install .desktop entry. (#80) (#96)
   * `make install-all` to install everything. (#80) (#96)
-  * `keyhandler_abort` in `config.h`. (#91)
+  * Configurable `KEYHANDLER_ABORT` in `config.h`. (#91) (#172)
   * Statusbar message upon key-handler activation. (#98)
   * Ability to write custom C functions in `config.h` and use them via
     keybindings. (#76)
 
 * Fixes:
 
-  * Not able to use `keyhandler_abort` (<kbd>Escape</kbd> by default) in
-    keybindings. (#91)
+  * Not able to use `KEYHANDLER_ABORT` key (<kbd>Escape</kbd> by default) in
+    regular keybindings. (#91)
   * Memory leak related to Xresources. (#134)
   * Removed non-POSIX commands and extensions from `Makefile`. (#71)
   * Regression where nsxiv wouldn't run on non-TrueColor X server. (#114)
