@@ -605,9 +605,8 @@ end:
 	redraw();
 }
 
-static bool process_bindings(const keymap_t *keys, unsigned int len,
-                             KeySym ksym_or_button, unsigned int state,
-                             unsigned int implicit_mod)
+static bool process_bindings(const keymap_t *keys, unsigned int len, KeySym ksym_or_button,
+                             unsigned int state, unsigned int implicit_mod)
 {
 	unsigned int i;
 	bool dirty = false;
