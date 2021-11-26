@@ -371,34 +371,48 @@ Toggle slideshow mode and/or set the delay between images to
 .I count
 seconds.
 .SH MOUSE COMMANDS
-The following mouse mappings are available in image mode:
+.SS Thumbnail mode
+The following mouse mappings are available in thumbnail mode:
 .TP
-General:
+.B Button1
+Select the image. Goes into image mode if double\-clicked.
 .TP
 .B Button3
-Switch to thumbnail mode.
+Mark/unmark the image. Dragging while holding Button3 down will mark/unmark
+multiple images.
 .TP
-Navigate image list:
+.B Button4
+Scroll up by one row.
+.TP
+.B Button5
+Scroll down by one row.
+.TP
+.B Ctrl-Button4
+Scroll up by one page.
+.TP
+.B Ctrl-Button5
+Scroll down by one page.
+.SS Image mode
+The following mouse mappings are available in image mode:
 .TP
 .B Button1
 Go to the next image if the mouse cursor is in the right part of the window or
 to the previous image if it is in the left part.
 .TP
-Panning:
+.B Ctrl-Button1
+Pan the image relative to the mouse cursor.
 .TP
 .B Button2
 Pan the image according to the mouse cursor position in the window while
 keeping this button pressed down.
 .TP
-.B Ctrl-Button1
-Pan the image relative to the mouse cursor.
+.B Button3
+Switch to thumbnail mode.
 .TP
-Zooming:
-.TP
-.B ScrollUp
+.B Button4
 Zoom in.
 .TP
-.B ScrollDown
+.B Button5
 Zoom out.
 .SH CONFIGURATION
 The following X resources are supported:
