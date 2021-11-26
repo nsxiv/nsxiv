@@ -232,7 +232,7 @@ to try out.
 Below are a couple other lesser known projects not listed in suckless rocks.
 
 * [MAGE](https://github.com/explosion-mental/mage) :
-  Aims to be a smaller/more-suckless version of sxiv.
+  A smaller/more-suckless version of sxiv.
 * [div](https://github.com/TAAPArthur/div) :
   Minimal and extensive, aimed at C devs willing to build their own features.
 * [mpv-image-viewer](https://github.com/occivink/mpv-image-viewer) :
