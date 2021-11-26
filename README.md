@@ -161,16 +161,25 @@ Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/ns
 Yes, see [nsxiv-pipe](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe)
 
 
-User patches
-------------
+Customization
+-------------
+
+The main method of customizing nsxiv is by setting values for the variables in *config.h*,
+or by using Xresources as explained in the manual. If these options are not sufficient,
+you may implement your own features by following
+[this guide](https://github.com/nsxiv/nsxiv-extra/blob/master/CUSTOMIZATION.md).
 
 Due to our limited [project scope](CONTRIBUTING.md#Project-Scope), certain features or
-customization cannot be merged into nsxiv mainline. Following the spirit of
-suckless software, we host the [nsxiv-extra](https://github.com/nsxiv/nsxiv-extra)
-repo where users are free to submit whatever patches or scripts they wish.
+customization cannot be merged into nsxiv mainline. Following the spirit of suckless
+software, we host the [nsxiv-extra](https://github.com/nsxiv/nsxiv-extra) repo where users
+are free to submit whatever patches or scripts they wish.
+
+If you think your custom features can be beneficial for the general user base and is within
+our project scope, please submit it as a pull request on this repository, then we *may*
+merge it to mainline.
 
 Description on how to use or submit patches can be found on
-[nsxiv-extra's](https://github.com/nsxiv/nsxiv-extra) README.
+nsxiv-extra's [README](https://github.com/nsxiv/nsxiv-extra).
 
 
 Download
@@ -193,7 +202,7 @@ to try out.
 Below are a couple other lesser known projects not listed in suckless rocks.
 
 * [MAGE](https://github.com/explosion-mental/mage) :
-  Aims to be a smaller/more-suckless version of sxiv.
+  A smaller/more-suckless version of sxiv.
 * [div](https://github.com/TAAPArthur/div) :
   Minimal and extensive, aimed at C devs willing to build their own features.
 * [mpv-image-viewer](https://github.com/occivink/mpv-image-viewer) :
