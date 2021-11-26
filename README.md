@@ -179,7 +179,7 @@ our project scope, please submit it as a pull request on this repository, then w
 merge it to mainline.
 
 Description on how to use or submit patches can be found on
-nsxiv-extra's [README](https://github.com/nsxiv/nsxiv-extra/blob/master/README.md).
+nsxiv-extra's [README](https://github.com/nsxiv/nsxiv-extra).
 
 
 Download
