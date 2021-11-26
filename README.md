@@ -169,14 +169,14 @@ or by using Xresources as explained in the manual. If these options are not suff
 you may implement your own features by following
 [this guide](https://github.com/nsxiv/nsxiv-extra/blob/master/CUSTOMIZATION.md).
 
-If you think that your custom features can be beneficial for the general user base and
-is within our [project scope](CONTRIBUTING.md#Project-Scope), please submit it as a
-pull request on this repository, then we *may* merge it to mainline.
+Due to our limited [project scope](CONTRIBUTING.md#Project-Scope), certain features or
+customization cannot be merged into nsxiv mainline. Following the spirit of suckless
+software, we host the [nsxiv-extra](https://github.com/nsxiv/nsxiv-extra) repo where users
+are free to submit whatever patches or scripts they wish.
 
-Due to our limited project scope, certain features or customization cannot be merged into
-nsxiv mainline. Following the spirit of suckless software, we host the
-[nsxiv-extra](https://github.com/nsxiv/nsxiv-extra) repo where users are free to submit
-whatever patches or scripts they wish.
+If you think your custom features can be beneficial for the general user base and is within
+our project scope, please submit it as a pull request on this repository, then we *may*
+merge it to mainline.
 
 Description on how to use or submit patches can be found on
 nsxiv-extra's [README](https://github.com/nsxiv/nsxiv-extra/blob/master/README.md).
