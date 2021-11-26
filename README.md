@@ -136,45 +136,6 @@ the following command:
     $ make config.h
 
 
-Hacking
--------
-
-This section is only applicable if you are not using a packaged binary.
-
-nsxiv aims to be suckless-like and is designed to be hacked and customized by
-the user. The main method of doing so is editing [config.h](config.h), a plain
-C99 header file. There are two ways you could edit this file.
-
-The first is to change the values of the configuration variables. As an example,
-the default value of the `ANTI_ALIAS` variable is `true`. You could set it to
-`false` to start nsxiv without anti aliasing.
-
-The second way is writing custom functions. In these functions, you may interact
-with other components of nsxiv to implement macros, bindings or other
-functionality. For instance, the following snippet calls the `run_key_handler`
-function located in [main.c](main.c) to send the key handler a key with the
-control modifier.
-
-    static void run_key_handler(const char *, unsigned int);
-    bool cg_send_with_ctrl(arg_t key) {
-        run_key_handler(XKeysymToString(key), ControlMask);
-        return false;
-    }
-
-You may then utilize this function to bind the `z` key to send `C-Kanji` to
-the key handler:
-
-    #define g_send_with_ctrl { cg_send_with_ctrl, MODE_ALL }
-    static const keymap_t keys[] = {
-        ...
-        { 0,            XK_z,             g_send_with_ctrl,     XK_Kanji },
-        ...
-    }
-
-For more complex functionality, you may also choose to directly edit the nsxiv
-source, or apply a [patch](#user-patches).
-
-
 Usage
 -----
 
