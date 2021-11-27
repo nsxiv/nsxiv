@@ -602,7 +602,7 @@ void img_render(img_t *img)
 		sx = 0;
 		sw = img->w;
 		dx = img->x;
-		dw = img->w * img->zoom;
+		dw = MAX(img->w * img->zoom, 1);
 	}
 	if (img->y <= 0) {
 		sy = -img->y / img->zoom + 0.5;
@@ -613,7 +613,7 @@ void img_render(img_t *img)
 		sy = 0;
 		sh = img->h;
 		dy = img->y;
-		dh = img->h * img->zoom;
+		dh = MAX(img->h * img->zoom, 1);
 	}
 
 	win_clear(win);
