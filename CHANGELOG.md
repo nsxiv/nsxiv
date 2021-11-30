@@ -48,6 +48,7 @@ there may be more changes. Please use `git log` to view them.
     regular keybindings. (#91)
   * Memory leak related to Xresources. (#134)
   * Memory leak in gif loader. (#165)
+  * Prevent crash when zooming out in very small images. (#178)
   * Better handle gif colormap and prevent out-of-bound access. (#165)
   * Removed non-POSIX commands and extensions from `Makefile`. (#71)
   * Regression where nsxiv wouldn't run on non-TrueColor X server. (#114)
