@@ -1,7 +1,3 @@
-#ifndef COMMANDS_H
-#define COMMANDS_H
-#include <stdbool.h>
-
 #define G_CMD(c) bool cg_##c(arg_t); static const cmd_t g_##c = { cg_##c, MODE_ALL };
 #define I_CMD(c) bool ci_##c(arg_t); static const cmd_t i_##c = { ci_##c, MODE_IMAGE };
 #define T_CMD(c) bool ct_##c(arg_t); static const cmd_t t_##c = { ct_##c, MODE_THUMB };
@@ -45,5 +41,3 @@ I_CMD(toggle_antialias)
 /* thumbnails mode */
 T_CMD(move_sel)
 T_CMD(reload_all)
-
-#endif
