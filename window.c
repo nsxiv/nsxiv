@@ -466,7 +466,10 @@ static void win_draw_bar(win_t *win)
 	XftDrawDestroy(d);
 }
 #else
-static void win_draw_bar(win_t *win){}
+static void win_draw_bar(win_t *win)
+{
+	(void) win;
+}
 #endif /* HAVE_LIBFONTS */
 
 void win_draw(win_t *win)

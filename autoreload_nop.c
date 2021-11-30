@@ -35,7 +35,7 @@ void arl_setup(arl_t *arl, const char *filepath)
 }
 
 bool arl_handle(arl_t *arl)
-{ 
+{
 	(void) arl;
 	return false;
 }
