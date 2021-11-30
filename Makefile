@@ -64,7 +64,7 @@ nsxiv: $(OBJS)
 	@echo "CC $@"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
-$(OBJS): Makefile nsxiv.h config.h
+$(OBJS): Makefile nsxiv.h config.h commands.h
 options.o: version.h
 window.o: icon/data.h
 
