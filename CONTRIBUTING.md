@@ -8,6 +8,10 @@ Project Scope
   * New features may be added if it cannot be achieved (easily) via a shell script,
     doesn't break backwards compatibility and doesn't violate any of the above rules.
 
+Note: Since we aim to be a drop-in replacement for sxiv, we intend to keep all
+sxiv's behaviors/features even in cases where removing them would make the
+code-base simpler.
+
 
 Contribution Guideline
 ----------------------

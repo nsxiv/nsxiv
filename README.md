@@ -8,8 +8,9 @@
 --------------------------------------------------------------------
 
 nsxiv is a fork of now unmaintained [sxiv](https://github.com/muennich/sxiv)
-with the purpose of maintaining it and adding simple, sensible features.
-nsxiv is free software licensed under GPLv2 and aims to be easy to modify and customize.
+with the purpose of being a drop-in replacement of sxiv, maintaining it and
+adding simple, sensible features. nsxiv is free software licensed under GPLv2
+and aims to be easy to modify and customize.
 
 Please file a bug report if something does not work as documented or
 expected in *this* repository, after making sure you are using the latest
