@@ -43,6 +43,9 @@ enum { DEF_GIF_DELAY = 75 };
 enum { DEF_WEBP_DELAY = 75 };
 #endif
 
+static const float ZOOM_MIN = zoom_levels[0] / 100;
+static const float ZOOM_MAX = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
+
 void img_init(img_t *img, win_t *win)
 {
 	imlib_context_set_display(win->env.dpy);
@@ -699,8 +702,14 @@ bool img_zoom_to(img_t *img, float z)
 
 bool img_zoom(img_t *img, int d)
 {
-	const float z = img->zoom * (d > 0 ? ZOOM_STEP : 1/ZOOM_STEP);
-	return img_zoom_to(img, z);
+	int i = d > 0 ? 0 : ARRLEN(zoom_levels)-1;
+	while (i >= 0 && i < ARRLEN(zoom_levels) && (d > 0 ?
+	       zoom_levels[i]/100 <= img->zoom : zoom_levels[i]/100 >= img->zoom))
+	{
+		i += d;
+	}
+	i = MIN(MAX(i, 0), ARRLEN(zoom_levels)-1);
+	return img_zoom_to(img, zoom_levels[i]/100);
 }
 
 bool img_pos(img_t *img, float x, float y)
