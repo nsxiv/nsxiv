@@ -17,7 +17,6 @@ there may be more changes. Please use `git log` to view them.
   * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead. (#71)
   * By default example scripts will now be installed into `EGPREFIX` (see
     README for more info). (#86)
-  * Zoom levels are not hard-coded. This breaks existing configs. (#92)
 
 * Added:
 
