@@ -43,8 +43,8 @@ enum { DEF_GIF_DELAY = 75 };
 enum { DEF_WEBP_DELAY = 75 };
 #endif
 
-static const float ZOOM_MIN = zoom_levels[0] / 100;
-static const float ZOOM_MAX = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
+#define ZOOM_MIN (zoom_levels[0] / 100)
+#define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels)-1] / 100)
 
 void img_init(img_t *img, win_t *win)
 {
