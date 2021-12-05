@@ -46,12 +46,22 @@ enum { DEF_WEBP_DELAY = 75 };
 static const float ZOOM_MIN = zoom_levels[0] / 100;
 static const float ZOOM_MAX = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
 
+long long calc_cache_size() {
+	long pages = sysconf(_SC_PHYS_PAGES);
+	long page_size = sysconf(_SC_PAGE_SIZE);
+	long long total_ram = pages * page_size;
+
+	/* long long down to int inside imlib2, don't run this on supercomputer, I guess */
+	long long for_cache = total_ram * CACHE_SIZE_RAM_PERCENTAGE;
+	return MAX(for_cache, 4 * 1024 * 1024);
+}
+
 void img_init(img_t *img, win_t *win)
 {
 	imlib_context_set_display(win->env.dpy);
 	imlib_context_set_visual(win->env.vis);
 	imlib_context_set_colormap(win->env.cmap);
-	imlib_set_cache_size(CACHE_SIZE);
+	imlib_set_cache_size(calc_cache_size());
 
 	img->im = NULL;
 	img->win = win;
