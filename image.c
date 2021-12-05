@@ -43,8 +43,8 @@ enum { DEF_GIF_DELAY = 75 };
 enum { DEF_WEBP_DELAY = 75 };
 #endif
 
-static float ZOOM_MIN;
-static float ZOOM_MAX;
+#define ZOOM_MIN (zoom_levels[0] / 100)
+#define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels)-1] / 100)
 
 void img_init(img_t *img, win_t *win)
 {
@@ -56,8 +56,6 @@ void img_init(img_t *img, win_t *win)
 	img->im = NULL;
 	img->win = win;
 	img->scalemode = options->scalemode;
-	ZOOM_MIN = zoom_levels[0] / 100;
-	ZOOM_MAX = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
 	img->zoom = options->zoom;
 	img->zoom = MAX(img->zoom, ZOOM_MIN);
 	img->zoom = MIN(img->zoom, ZOOM_MAX);
