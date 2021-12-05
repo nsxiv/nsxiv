@@ -66,7 +66,7 @@ static const bool ALPHA_LAYER = false;
  * size is kept at 4MiB. For most users, it is advised to pick a value close to
  * or above 128MiB for better image (re)loading performance.
  */
-static const int CACHE_SIZE = 4 * 1024 * 1024; /* 4MiB */
+static const int CACHE_SIZE = DEFAULT_CACHE_SIZE * 1024 * 1024; /* 4MiB */
 
 #endif
 #ifdef _THUMBS_CONFIG

@@ -6,6 +6,12 @@ PREFIX ?= /usr/local
 MANPREFIX ?= $(PREFIX)/share/man
 EGPREFIX ?= $(PREFIX)/share/doc/nsxiv/examples
 
+# default cache size
+DEFAULT_CACHE_SIZE=4
+
+# cache size being 0.000004 of your total ram (falls down to 4 if the number is lower than 4)
+AUTO_CACHE_SIZE=$(shell awk '/MemTotal/{size=$$2 * 0.000004; if (size < 4) print 4; else printf "%0.f\n", size;}' /proc/meminfo)
+
 # default value for optional dependencies. 1 = enabled, 0 = disabled
 OPT_DEP_DEFAULT ?= 1
 
@@ -30,6 +36,7 @@ inc_fonts_1 = -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
 CPPFLAGS = -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
+  -DDEFAULT_CACHE_SIZE=$(AUTO_CACHE_SIZE) \
   $(inc_fonts_$(HAVE_LIBFONTS))
 
 lib_fonts_0 =
