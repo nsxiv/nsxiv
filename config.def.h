@@ -63,10 +63,14 @@ static const bool ANTI_ALIAS = true;
 static const bool ALPHA_LAYER = false;
 
 /* size of cache used by imlib2 in % of RAM it is allowed to use.
- * from 0.0 (use ancient imlib2's default 4MiB) to 1.0 (all available).
+ * from 0.0 (use ancient imlib2's default 4MiB) to 1.0 (all available, but not above CACHE_SIZE_LIMIT).
  * 3% is about 245MiB on 8GiB machine which should be good enough for most use cases.
  */
 static const float CACHE_SIZE_RAM_PERCENTAGE = 0.03; /* use 3% of RAM at max for cache */
+static const int CACHE_SIZE_LIMIT = 256 * 1024 * 1024; /* ...but not above 256MiB at max */
+
+/* if we can't determine total RAM - use cache of this size, 32MiB */
+static const int CACHE_SIZE_FALLBACK = 32 * 1024 * 1024;
 
 #endif
 #ifdef _THUMBS_CONFIG
