@@ -3,42 +3,42 @@
 #include <stdbool.h>
 
 /* global */
-bool cg_change_gamma();
-bool cg_first();
-bool cg_mark_range();
-bool cg_n_or_last();
-bool cg_navigate_marked();
-bool cg_prefix_external();
-bool cg_quit();
-bool cg_reload_image();
-bool cg_remove_image();
-bool cg_reverse_marks();
-bool cg_scroll_screen();
-bool cg_switch_mode();
-bool cg_toggle_bar();
-bool cg_toggle_fullscreen();
-bool cg_toggle_image_mark();
-bool cg_unmark_all();
-bool cg_zoom();
+bool cg_change_gamma(arg_t);
+bool cg_first(arg_t);
+bool cg_mark_range(arg_t);
+bool cg_n_or_last(arg_t);
+bool cg_navigate_marked(arg_t);
+bool cg_prefix_external(arg_t);
+bool cg_quit(arg_t);
+bool cg_reload_image(arg_t);
+bool cg_remove_image(arg_t);
+bool cg_reverse_marks(arg_t);
+bool cg_scroll_screen(arg_t);
+bool cg_switch_mode(arg_t);
+bool cg_toggle_bar(arg_t);
+bool cg_toggle_fullscreen(arg_t);
+bool cg_toggle_image_mark(arg_t);
+bool cg_unmark_all(arg_t);
+bool cg_zoom(arg_t);
 /* image mode */
-bool ci_alternate();
-bool ci_cursor_navigate();
-bool ci_drag();
-bool ci_fit_to_win();
-bool ci_flip();
-bool ci_navigate();
-bool ci_navigate_frame();
-bool ci_rotate();
-bool ci_scroll();
-bool ci_scroll_to_edge();
-bool ci_set_zoom();
-bool ci_slideshow();
-bool ci_toggle_alpha();
-bool ci_toggle_animation();
+bool ci_alternate(arg_t);
+bool ci_cursor_navigate(arg_t);
+bool ci_drag(arg_t);
+bool ci_fit_to_win(arg_t);
+bool ci_flip(arg_t);
+bool ci_navigate(arg_t);
+bool ci_navigate_frame(arg_t);
+bool ci_rotate(arg_t);
+bool ci_scroll(arg_t);
+bool ci_scroll_to_edge(arg_t);
+bool ci_set_zoom(arg_t);
+bool ci_slideshow(arg_t);
+bool ci_toggle_alpha(arg_t);
+bool ci_toggle_animation(arg_t);
 bool ci_toggle_antialias();
 /* thumbnails mode */
-bool ct_move_sel();
-bool ct_reload_all();
+bool ct_move_sel(arg_t);
+bool ct_reload_all(arg_t);
 
 /* global */
 #define g_change_gamma { cg_change_gamma, MODE_ALL }
@@ -80,4 +80,4 @@ bool ct_reload_all();
 #define t_move_sel { ct_move_sel, MODE_THUMB }
 #define t_reload_all { ct_reload_all, MODE_THUMB }
 
-#endif
+#endif /* COMMANDS_H */

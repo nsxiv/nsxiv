@@ -802,10 +802,10 @@ static void run(void)
 				break;
 			case ClientMessage:
 				if ((Atom) ev.xclient.data.l[0] == atoms[ATOM_WM_DELETE_WINDOW])
-					cg_quit();
+					cg_quit(EXIT_SUCCESS);
 				break;
 			case DestroyNotify:
-				exit(EXIT_FAILURE);
+				cg_quit(EXIT_FAILURE);
 				break;
 			case ConfigureNotify:
 				if (win_configure(&win, &ev.xconfigure)) {
