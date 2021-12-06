@@ -46,19 +46,20 @@ enum { DEF_WEBP_DELAY = 75 };
 static const float ZOOM_MIN = zoom_levels[0] / 100;
 static const float ZOOM_MAX = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
 
-long long calc_cache_size() {
-	long pages = sysconf(_SC_PHYS_PAGES);
+static int calc_cache_size(void)
+{
+	long pages, page_size;
+	int cache;
 
-	if (pages < 0)
-		/* _SC_PHYS_PAGES is not supported / error / "indeterminate" */
+	pages = sysconf(_SC_PHYS_PAGES);
+	page_size = sysconf(_SC_PAGE_SIZE);
+	if (pages < 0 || page_size < 0)
 		return CACHE_SIZE_FALLBACK;
 
-	long page_size = sysconf(_SC_PAGE_SIZE);
-	long long total_ram = pages * page_size;
+	cache = pages * CACHE_SIZE_RAM_PERCENTAGE;
+	cache *= page_size;
 
-	/* long long down to int inside imlib2, don't run this on supercomputer, I guess */
-	long long for_cache = total_ram * CACHE_SIZE_RAM_PERCENTAGE;
-	return MIN(MAX(for_cache, 4 * 1024 * 1024), CACHE_SIZE_LIMIT);
+	return MIN(MAX(cache, 4 * 1024 * 1024), CACHE_SIZE_LIMIT);
 }
 
 void img_init(img_t *img, win_t *win)
