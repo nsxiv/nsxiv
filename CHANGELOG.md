@@ -44,7 +44,6 @@ there may be more changes. Please use `git log` to view them.
 
 * Fixes:
 
-  * Compilation fails with some non-gcc compilers. (#182)
   * Not able to use `KEYHANDLER_ABORT` key (<kbd>Escape</kbd> by default) in
     regular keybindings. (#91)
   * Memory leak related to Xresources. (#134)
