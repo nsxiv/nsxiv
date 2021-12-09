@@ -43,11 +43,11 @@ enum { DEF_GIF_DELAY = 75 };
 enum { DEF_WEBP_DELAY = 75 };
 #endif
 
+#define ZOOM_MIN (zoom_levels[0] / 100)
+#define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels)-1] / 100)
+
 void img_init(img_t *img, win_t *win)
 {
-	const float zoom_min = zoom_levels[0];
-	const float zoom_max = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
-
 	imlib_context_set_display(win->env.dpy);
 	imlib_context_set_visual(win->env.vis);
 	imlib_context_set_colormap(win->env.cmap);
@@ -57,8 +57,8 @@ void img_init(img_t *img, win_t *win)
 	img->win = win;
 	img->scalemode = options->scalemode;
 	img->zoom = options->zoom;
-	img->zoom = MAX(img->zoom, zoom_min);
-	img->zoom = MIN(img->zoom, zoom_max);
+	img->zoom = MAX(img->zoom, ZOOM_MIN);
+	img->zoom = MIN(img->zoom, ZOOM_MAX);
 	img->checkpan = false;
 	img->dirty = false;
 	img->aa = ANTI_ALIAS;
@@ -541,7 +541,6 @@ static void img_check_pan(img_t *img, bool moved)
 static bool img_fit(img_t *img)
 {
 	float z, zw, zh;
-	const float zoom_max = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
 
 	if (img->scalemode == SCALE_ZOOM)
 		return false;
@@ -563,7 +562,7 @@ static bool img_fit(img_t *img)
 			z = MIN(zw, zh);
 			break;
 	}
-	z = MIN(z, img->scalemode == SCALE_DOWN ? 1.0 : zoom_max);
+	z = MIN(z, img->scalemode == SCALE_DOWN ? 1.0 : ZOOM_MAX);
 
 	if (ABS(img->zoom - z) > 1.0/MAX(img->w, img->h)) {
 		img->zoom = z;
@@ -683,10 +682,7 @@ bool img_fit_win(img_t *img, scalemode_t sm)
 bool img_zoom_to(img_t *img, float z)
 {
 	int x, y;
-	const float zoom_min = zoom_levels[0];
-	const float zoom_max = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
-
-	if (zoom_min <= z && z <= zoom_max) {
+	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
 		win_cursor_pos(img->win, &x, &y);
 		if (x < 0 || x >= img->win->w || y < 0 || y >= img->win->h) {
 			x = img->win->w / 2;
