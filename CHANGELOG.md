@@ -9,7 +9,7 @@ there may be more changes. Please use `git log` to view them.
 - - -
 
 **[v28](https://github.com/nsxiv/nsxiv/archive/v28.tar.gz)**
-*(TODO: DATE GOES HERE)*
+*(December 12, 2021)*
 
 * Changes:
 
