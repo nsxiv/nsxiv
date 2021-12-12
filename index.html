@@ -9,7 +9,7 @@
 </head>
 <body><p><a href="https://github.com/nsxiv/nsxiv"><img src="https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png" alt="nsxiv" /></a></p>
 
-<p><a href="https://github.com/nsxiv/nsxiv/tags"><img src="https://img.shields.io/github/v/tag/nsxiv/nsxiv?sort=semver&amp;style=flat-square" alt="tags" /></a>
+<p><a href="https://github.com/nsxiv/nsxiv/tags"><img src="https://img.shields.io/github/v/tag/nsxiv/nsxiv?style=flat-square" alt="tags" /></a>
 <a href="https://github.com/nsxiv/nsxiv/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-GPL--2.0-lightgreen?style=flat-square" alt="license" /></a>
 <a href="https://github.com/nsxiv/nsxiv"><img src="https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&amp;style=flat-square" alt="loc" /></a></p>
 
@@ -17,8 +17,9 @@
 <h2 id="%3Cstrong%3ENeo%20(or%20New%20or%20Not)%20Simple%20(or%20Small%20or%20Suckless)%20X%20Image%20Viewer%3C/strong%3E"><strong>Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer</strong></h2>
 
 <p>nsxiv is a fork of now unmaintained <a href="https://github.com/muennich/sxiv">sxiv</a>
-with the purpose of maintaining it and adding simple, sensible features.
-nsxiv is free software licensed under GPLv2 and aims to be easy to modify and customize.</p>
+with the purpose of being a drop-in replacement of sxiv, maintaining it and
+adding simple, sensible features. nsxiv is free software licensed under GPLv2
+and aims to be easy to modify and customize.</p>
 
 <p>Please file a bug report if something does not work as documented or
 expected in <em>this</em> repository, after making sure you are using the latest
@@ -83,6 +84,7 @@ Disabled via <code>HAVE_LIBGIF=0</code>.</li>
 <li>libexif : Used for auto-orientation and exif thumbnails.
 Disable via <code>HAVE_LIBEXIF=0</code></li>
 <li>libwebp : Used for animated webp playback.
+(NOTE: animated webp also requires Imlib2 v1.7.5 or above)
 Disabled via <code>HAVE_LIBWEBP=0</code>.</li>
 </ul>
 
