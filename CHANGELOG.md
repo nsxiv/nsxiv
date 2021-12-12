@@ -1,6 +1,62 @@
 nsxiv
 -----
 
+**[git](https://github.com/nsxiv/nsxiv.git)**
+
+Changes will only be documented on stable releases. If you're on git/master then
+there may be more changes. Please use `git log` to view them.
+
+- - -
+
+**[v28](https://github.com/nsxiv/nsxiv/archive/v28.tar.gz)**
+*(December 12, 2021)*
+
+* Changes:
+
+  * Statusbar made optional via `HAVE_LIBFONTS`. (#95)
+  * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead. (#71)
+  * Example scripts will now be installed into `EGPREFIX`
+    (`$(PREFIX)/share/doc/nsxiv/examples` by default). See README for more
+    info. (#86)
+
+* Added:
+
+  * Animated webp support (optional via `HAVE_LIBWEBP`). (#20)
+  * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag. (#117)
+  * Ability to configure colors and fonts in `config.h`. (#115)
+  * Ability to configure navigation width area in `config.h`. (#155)
+  * Ability to customize the set of modifers used when processing keybindings
+    in `config.h` via `USED_MODMASK`. (#150)
+  * Ability to configure Imlib2's cache size for better image (re)loading
+    performance in `config.h`. (#171)
+  * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`),
+    and key-handler and recieving null-seperated file-list via stdin (`-i`).
+    (#68) (#141) (#164)
+  * Export environment variable `NSXIV_USING_NULL` to key-handler. (#164)
+  * Embed new nsxiv icon. (#163)
+  * `make install-icon` to install icons. (#80) (#96)
+  * `make install-desktop` to install .desktop entry. (#80) (#96)
+  * `make install-all` to install everything. (#80) (#96)
+  * Configurable `KEYHANDLER_ABORT` in `config.h`. (#91) (#172)
+  * Statusbar message upon key-handler activation. (#98)
+  * Ability to write custom C functions in `config.h` and use them via
+    keybindings. (#76)
+
+* Fixes:
+
+  * Not able to use `KEYHANDLER_ABORT` key (<kbd>Escape</kbd> by default) in
+    regular keybindings. (#91)
+  * Memory leak related to Xresources. (#134)
+  * Memory leak in gif loader. (#165)
+  * Better handle gif colormap and prevent out-of-bound access. (#165)
+  * Prevent crash when zooming out in very small images. (#178)
+  * Removed non-POSIX commands and extensions from `Makefile`. (#71)
+  * Regression where nsxiv wouldn't run on non-TrueColor X server. (#114)
+  * Wrong comments in `config.h` and description in `manpage`.
+    (#105) (#106) (#152)
+
+- - -
+
 **[v27.1](https://github.com/nsxiv/nsxiv/archive/v27.1.tar.gz)**
 *(September 16, 2021)*
 
@@ -8,6 +64,7 @@ nsxiv
 
   * Source tarball failing build ([#66](https://github.com/nsxiv/nsxiv/pull/66))
 
+- - -
 
 **[v27](https://github.com/nsxiv/nsxiv/archive/v27.tar.gz)**
 *(September 16, 2021)*
