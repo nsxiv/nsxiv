@@ -9,7 +9,7 @@
 </head>
 <body><p><a href="https://github.com/nsxiv/nsxiv"><img src="https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/logo.png" alt="nsxiv" /></a></p>
 
-<p><a href="https://github.com/nsxiv/nsxiv/tags"><img src="https://img.shields.io/github/v/tag/nsxiv/nsxiv?sort=semver&amp;style=flat-square" alt="tags" /></a>
+<p><a href="https://github.com/nsxiv/nsxiv/tags"><img src="https://img.shields.io/github/v/tag/nsxiv/nsxiv?style=flat-square" alt="tags" /></a>
 <a href="https://github.com/nsxiv/nsxiv/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-GPL--2.0-lightgreen?style=flat-square" alt="license" /></a>
 <a href="https://github.com/nsxiv/nsxiv"><img src="https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&amp;style=flat-square" alt="loc" /></a></p>
 
@@ -17,8 +17,9 @@
 <h2 id="%3Cstrong%3ENeo%20(or%20New%20or%20Not)%20Simple%20(or%20Small%20or%20Suckless)%20X%20Image%20Viewer%3C/strong%3E"><strong>Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer</strong></h2>
 
 <p>nsxiv is a fork of now unmaintained <a href="https://github.com/muennich/sxiv">sxiv</a>
-with the purpose of maintaining it and adding simple, sensible features.
-nsxiv is free software licensed under GPLv2 and aims to be easy to modify and customize.</p>
+with the purpose of being a drop-in replacement of sxiv, maintaining it and
+adding simple, sensible features. nsxiv is free software licensed under GPLv2
+and aims to be easy to modify and customize.</p>
 
 <p>Please file a bug report if something does not work as documented or
 expected in <em>this</em> repository, after making sure you are using the latest
@@ -83,6 +84,7 @@ Disabled via <code>HAVE_LIBGIF=0</code>.</li>
 <li>libexif : Used for auto-orientation and exif thumbnails.
 Disable via <code>HAVE_LIBEXIF=0</code></li>
 <li>libwebp : Used for animated webp playback.
+(NOTE: animated webp also requires Imlib2 v1.7.5 or above)
 Disabled via <code>HAVE_LIBWEBP=0</code>.</li>
 </ul>
 
@@ -171,15 +173,24 @@ Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv
 Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe">nsxiv-pipe</a></p></li>
 </ul>
 
-<h2 id="User%20patches">User patches</h2>
+<h2 id="Customization">Customization</h2>
+
+<p>The main method of customizing nsxiv is by setting values for the variables in <em>config.h</em>,
+or by using Xresources as explained in the manual. If these options are not sufficient,
+you may implement your own features by following
+<a href="https://github.com/nsxiv/nsxiv-extra/blob/master/CUSTOMIZATION.md">this guide</a>.</p>
 
 <p>Due to our limited <a href="CONTRIBUTING.md#Project-Scope">project scope</a>, certain features or
-customization cannot be merged into nsxiv mainline. Following the spirit of
-suckless software, we host the <a href="https://github.com/nsxiv/nsxiv-extra">nsxiv-extra</a>
-repo where users are free to submit whatever patches or scripts they wish.</p>
+customization cannot be merged into nsxiv mainline. Following the spirit of suckless
+software, we host the <a href="https://github.com/nsxiv/nsxiv-extra">nsxiv-extra</a> repo where users
+are free to submit whatever patches or scripts they wish.</p>
+
+<p>If you think your custom features can be beneficial for the general user base and is within
+our project scope, please submit it as a pull request on this repository, then we <em>may</em>
+merge it to mainline.</p>
 
 <p>Description on how to use or submit patches can be found on
-<a href="https://github.com/nsxiv/nsxiv-extra">nsxiv-extra&#8217;s</a> README.</p>
+nsxiv-extra&#8217;s <a href="https://github.com/nsxiv/nsxiv-extra">README</a>.</p>
 
 <h2 id="Download">Download</h2>
 
@@ -201,7 +212,7 @@ to try out.</p>
 
 <ul>
 <li><a href="https://github.com/explosion-mental/mage">MAGE</a> :
-Aims to be a smaller&#47;more-suckless version of sxiv.</li>
+A smaller&#47;more-suckless version of sxiv.</li>
 <li><a href="https://github.com/TAAPArthur/div">div</a> :
 Minimal and extensive, aimed at C devs willing to build their own features.</li>
 <li><a href="https://github.com/occivink/mpv-image-viewer">mpv-image-viewer</a> :
