@@ -425,7 +425,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
  * this version also happens to be the first one which defines the
  * IMLIB2_VERSION macro.
  */
-#if defined(HAVE_LIBEXIF) && !defined(IMLIB2_VERSION)
+#if HAVE_LIBEXIF && !defined(IMLIB2_VERSION)
 	exif_auto_orientate(file);
 #endif
 
@@ -438,7 +438,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 		if (STREQ(fmt, "webp"))
 			img_load_webp(img, file);
 #endif
-#if defined(HAVE_LIBEXIF) && defined(IMLIB2_VERSION)
+#if HAVE_LIBEXIF && defined(IMLIB2_VERSION)
 		if (!STREQ(fmt, "jpeg") && !STREQ(fmt, "jpg"))
 			exif_auto_orientate(file);
 #endif
