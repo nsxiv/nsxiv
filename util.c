@@ -79,16 +79,6 @@ void error(int eval, int err, const char* fmt, ...)
 		exit(eval);
 }
 
-void size_readable(float *size, const char **unit)
-{
-	const char *units[] = { "", "K", "M", "G" };
-	unsigned int i;
-
-	for (i = 0; i < ARRLEN(units) && *size > 1024.0; i++)
-		*size /= 1024.0;
-	*unit = units[MIN(i, ARRLEN(units) - 1)];
-}
-
 int r_opendir(r_dir_t *rdir, const char *dirname, bool recursive)
 {
 	if (*dirname == '\0')
