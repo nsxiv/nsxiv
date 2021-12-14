@@ -421,11 +421,14 @@ bool img_load(img_t *img, const fileinfo_t *file)
 
 	imlib_image_set_changes_on_disk();
 
+	if ((fmt = imlib_image_format()) != NULL) {
 #if HAVE_LIBEXIF
-	exif_auto_orientate(file);
+		/* Imlib2 can handle jpeg exif orientation since v1.7.5 */
+		if ((IMLIB2_VERSION <= IMLIB2_VERSION_(1, 7, 4)) ||
+		    (!STREQ(fmt, "jpeg") && !STREQ(fmt, "jpg")))
+			exif_auto_orientate(file);
 #endif
 
-	if ((fmt = imlib_image_format()) != NULL) {
 #if HAVE_LIBGIF
 		if (STREQ(fmt, "gif"))
 			img_load_gif(img, file);
