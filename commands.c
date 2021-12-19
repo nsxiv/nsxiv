@@ -52,7 +52,7 @@ extern int markidx;
 extern int prefix;
 extern bool extprefix;
 
-bool cg_quit(arg_t _)
+bool cg_quit(arg_t status)
 {
 	unsigned int i;
 
@@ -62,7 +62,7 @@ bool cg_quit(arg_t _)
 				printf("%s%c", files[i].name, options->using_null ? '\0' : '\n');
 		}
 	}
-	exit(EXIT_SUCCESS);
+	exit(status);
 }
 
 bool cg_switch_mode(arg_t _)
