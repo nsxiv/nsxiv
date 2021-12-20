@@ -507,7 +507,7 @@ void handle_key_handler(bool init)
 	win_draw(&win);
 }
 
-static void run_key_handler(const char *key, unsigned int mask)
+static bool run_key_handler(const char *key, unsigned int mask)
 {
 	pid_t pid;
 	FILE *pfs;
@@ -524,19 +524,19 @@ static void run_key_handler(const char *key, unsigned int mask)
 			error(0, keyhandler.f.err, "%s", keyhandler.f.cmd);
 			keyhandler.warned = true;
 		}
-		return;
+		return false;
 	}
 	if (key == NULL)
-		return;
+		return false;
 
 	if (pipe(pfd) < 0) {
 		error(0, errno, "pipe");
-		return;
+		return false;
 	}
 	if ((pfs = fdopen(pfd[1], "w")) == NULL) {
 		error(0, errno, "open pipe");
 		close(pfd[0]), close(pfd[1]);
-		return;
+		return false;
 	}
 	oldst = emalloc(fcnt * sizeof(*oldst));
 
@@ -603,6 +603,7 @@ end:
 	free(oldst);
 	reset_cursor();
 	redraw();
+	return true;
 }
 
 static bool process_bindings(const keymap_t *keys, unsigned int len, KeySym ksym_or_button,
@@ -645,8 +646,10 @@ static void on_keypress(XKeyEvent *kev)
 	if (extprefix && ksym == KEYHANDLER_ABORT && MODMASK(kev->state) == 0) {
 		handle_key_handler(false);
 	} else if (extprefix) {
-		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
-		extprefix = false;
+		if (run_key_handler(XKeysymToString(ksym), kev->state & ~sh))
+			extprefix = false;
+		else
+			handle_key_handler(false);
 	} else if (key >= '0' && key <= '9') {
 		/* number prefix for commands */
 		prefix = prefix * 10 + (int) (key - '0');
