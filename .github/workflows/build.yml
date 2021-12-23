@@ -6,8 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+# NOTE: "stable" tcc is too old and fails at linking. instead using git version.
 jobs:
-  gcc-full:
+  full-build:
 
     runs-on: ubuntu-latest
 
@@ -18,68 +19,15 @@ jobs:
         sudo apt-get install libimlib2 libimlib2-dev \
                              xserver-xorg-core xserver-xorg-dev \
                              libxft2 libxft-dev libexif12 libexif-dev \
-                             gcc
-        CC=gcc OPT_DEP_DEFAULT=1 make
-
-  gcc-minimal:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: |
-        sudo apt-get install libimlib2 libimlib2-dev \
-                             xserver-xorg-core xserver-xorg-dev \
-                             gcc
-        sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev
-        CC=gcc OPT_DEP_DEFAULT=0 make
-
-  clang-full:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: |
-        sudo apt-get install libimlib2 libimlib2-dev \
-                             xserver-xorg-core xserver-xorg-dev \
-                             libxft2 libxft-dev libexif12 libexif-dev \
-                             clang
-        CC=clang OPT_DEP_DEFAULT=1 make
-
-  clang-minimal:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: |
-        sudo apt-get install libimlib2 libimlib2-dev \
-                             xserver-xorg-core xserver-xorg-dev \
-                             clang
-        sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev
-        CC=clang OPT_DEP_DEFAULT=0 make
-
-  # NOTE: "stable" tcc is too old and fails at linking. instead using git version.
-  tcc-full:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: |
-        sudo apt-get install libimlib2 libimlib2-dev \
-                             xserver-xorg-core xserver-xorg-dev \
-                             libxft2 libxft-dev libexif12 libexif-dev
+                             gcc clang
         git clone 'git://repo.or.cz/tinycc.git'
         ( cd tinycc && ./configure && make && sudo make install; )
-        CC=tcc OPT_DEP_DEFAULT=1 make
+        export OPT_DEP_DEFAULT=1
+        make clean && CC=gcc   make
+        make clean && CC=clang make
+        make clean && CC=tcc   make
 
-  tcc-minimal:
+  minimal-build:
 
     runs-on: ubuntu-latest
 
@@ -88,8 +36,12 @@ jobs:
     - name: make
       run: |
         sudo apt-get install libimlib2 libimlib2-dev \
-                             xserver-xorg-core xserver-xorg-dev
+                             xserver-xorg-core xserver-xorg-dev \
+                             gcc clang
         sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev
         git clone 'git://repo.or.cz/tinycc.git'
         ( cd tinycc && ./configure && make && sudo make install; )
-        CC=tcc OPT_DEP_DEFAULT=0 make
+        export OPT_DEP_DEFAULT=0
+        make clean && CC=gcc   make
+        make clean && CC=clang make
+        make clean && CC=tcc   make
