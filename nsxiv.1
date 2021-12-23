@@ -14,14 +14,14 @@ nsxiv \- Neo Simple X Image Viewer
 .IR GEOMETRY ]
 .RB [ \-N
 .IR NAME ]
-.RB [ \-T
-.IR TITLE ]
 .RB [ \-n
 .IR NUM ]
 .RB [ \-S
 .IR DELAY ]
 .RB [ \-s
 .IR MODE ]
+.RB [ \-T
+.IR TITLE ]
 .RB [ \-z
 .IR ZOOM ]
 .IR FILE ...
@@ -44,7 +44,7 @@ Play animations with a constant frame rate set to
 Play animations of multi-frame images.
 .TP
 .B \-b
-Do not show info bar on bottom of window.
+Do not show statusbar at the bottom of the window.
 .TP
 .B \-c
 Remove all orphaned cache files from the thumbnail cache directory and exit.
@@ -65,19 +65,6 @@ more information on GEOMETRY argument.
 .TP
 .BI "\-N " NAME
 Set the resource name of nsxiv's X window to NAME.
-.TP
-.BI "\-T " TITLE
-Set the window title to TITLE. Use the format `prefix:suffixmode'. Any string
-literal is accepted for prefix, and the format of suffixmode is:
-
-.EX
-    Value  Format
-    0      Empty
-    1      Basename of file
-    2      Full path to file
-.EE
-
-By defualt, prefix is set to "nsxiv - " and suffixmode is set to 1 (basename).
 .TP
 .BI "\-n " NUM
 Start at picture number NUM.
@@ -114,6 +101,19 @@ may be a floating point number.
 Set scale mode according to MODE character. Supported modes are: [d]own,
 [f]it, [F]ill, [w]idth, [h]eight.
 .TP
+.BI "\-T " TITLE
+Set the window title to TITLE. Use the format `prefix:suffixmode'. Any string
+literal is accepted for prefix, and the format of suffixmode is:
+
+.EX
+    Value  Format
+    0      Empty
+    1      Basename of file
+    2      Full path to file
+.EE
+
+By default, prefix is set to "nsxiv - " and suffixmode is set to 1 (basename).
+.TP
 .B \-t
 Start in thumbnail mode.
 .TP
@@ -128,7 +128,7 @@ Set zoom level to ZOOM percent.
 .TP
 .B \-0
 Use NULL-separator. With this option output of \-o and file-list sent to the
-key-handler and the input of \-i will be seperated by a NULL character.
+key-handler and the input of \-i will be separated by a NULL character.
 .SH KEYBOARD COMMANDS
 .SS General
 The following keyboard commands are available in both image and thumbnail mode:
@@ -147,7 +147,7 @@ Switch to thumbnail mode / open selected image in image mode.
 Toggle fullscreen mode.
 .TP
 .B b
-Toggle visibility of info bar on bottom of window.
+Toggle visibility of statusbar at the bottom of the window.
 .TP
 .B Ctrl-x
 Send the next key to the external key-handler. See section EXTERNAL KEY HANDLER
@@ -188,7 +188,7 @@ Zoom out.
 Mark/unmark the current image.
 .TP
 .B M
-Repeat last mark action on all images from the last marked/unmarked up to the
+Mark/unmark all images starting from the last marked/unmarked image up to the
 current one.
 .TP
 .B Ctrl-m
@@ -289,22 +289,22 @@ Panning:
 .BR h ", " Left
 Scroll image 1/5 of window width or
 .I count
-pixel left.
+pixels left.
 .TP
 .BR j ", " Down
 Scroll image 1/5 of window height or
 .I count
-pixel down.
+pixels down.
 .TP
 .BR k ", " Up
 Scroll image 1/5 of window height or
 .I count
-pixel up.
+pixels up.
 .TP
 .BR l ", " Right
 Scroll image 1/5 of window width or
 .I count
-pixel right.
+pixels right.
 .TP
 .B H
 Scroll to left image edge.
@@ -371,34 +371,48 @@ Toggle slideshow mode and/or set the delay between images to
 .I count
 seconds.
 .SH MOUSE COMMANDS
-The following mouse mappings are available in image mode:
+.SS Thumbnail mode
+The following mouse mappings are available in thumbnail mode:
 .TP
-General:
+.B Button1
+Select the image. Goes into image mode if double\-clicked.
 .TP
 .B Button3
-Switch to thumbnail mode.
+Mark/unmark the image. Dragging while holding Button3 down will mark/unmark
+multiple images.
 .TP
-Navigate image list:
+.B Button4
+Scroll up by one row.
+.TP
+.B Button5
+Scroll down by one row.
+.TP
+.B Ctrl-Button4
+Scroll up by one page.
+.TP
+.B Ctrl-Button5
+Scroll down by one page.
+.SS Image mode
+The following mouse mappings are available in image mode:
 .TP
 .B Button1
 Go to the next image if the mouse cursor is in the right part of the window or
 to the previous image if it is in the left part.
 .TP
-Panning:
+.B Ctrl-Button1
+Pan the image relative to the mouse cursor.
 .TP
 .B Button2
 Pan the image according to the mouse cursor position in the window while
 keeping this button pressed down.
 .TP
-.B Ctrl-Button1
-Pan the image relative to the mouse cursor.
+.B Button3
+Switch to thumbnail mode.
 .TP
-Zooming:
-.TP
-.B ScrollUp
+.B Button4
 Zoom in.
 .TP
-.B ScrollDown
+.B Button5
 Zoom out.
 .SH CONFIGURATION
 The following X resources are supported:
@@ -474,15 +488,18 @@ Bert Muennich          <ber.t at posteo.de>
 .EE
 .SH CURRENT MAINTAINERS
 .EX
-Anupam Ashish Minz
-Berke Kocaoğlu         <berke.kocaoglu at metu.edu.tr>
-Guilherme Freire
-Kian Kasad             <kian at kasad.com>
 N-R-K                  <nrk at disroot.org>
-Stein Gunnar Bakkeby   <bakkeby at gmail.com>
+Berke Kocaoğlu         <berke.kocaoglu at metu.edu.tr>
 TAAPArthur             <taaparthur at gmail.com>
-explosion-mental       <explosion0mental at gmail.com>
 eylles                 <ed.ylles1997 at gmail.com>
+mamg22                 <marcomonizg at gmail.com>
+LuXu
+explosion-mental       <explosion0mental at gmail.com>
+Guilherme Freire
+Stein Gunnar Bakkeby   <bakkeby at gmail.com>
+Anupam Ashish Minz
+Sam Whitehead
+Kian Kasad             <kian at kasad.com>
 qsmodo
 .EE
 .SH CONTRIBUTORS
@@ -495,9 +512,16 @@ Max Voit               <mvdev at with-eyes.net>
 For additional contributors, run `git shortlog -s` in the nsxiv repository.
 .EE
 .SH HOMEPAGE
-.EX
-https://github.com/nsxiv/nsxiv
+.TP
+Website:
 .EE
+https://nsxiv.github.io/nsxiv/
+.EX
+.TP
+Source code:
+.EE
+https://github.com/nsxiv/nsxiv
+.EX
 .SH SEE ALSO
 .BR X (7),
 .BR xrdb (1)
