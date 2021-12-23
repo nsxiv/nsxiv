@@ -1,0 +1,78 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  gcc-full:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: |
+        sudo apt-get install libimlib2 libimlib2-dev libxft2 libxft-dev gcc
+        CC=gcc OPT_DEP_DEFAULT=1 make
+
+  gcc-minimal:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: |
+        sudo apt-get install libimlib2 libimlib2-dev gcc
+        sudo apt-get remove libxft2 libxft-dev
+        CC=gcc OPT_DEP_DEFAULT=0 make
+
+  clang-full:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: |
+        sudo apt-get install libimlib2 libimlib2-dev libxft2 libxft-dev clang
+        CC=clang OPT_DEP_DEFAULT=1 make
+
+  clang-minimal:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: |
+        sudo apt-get install libimlib2 libimlib2-dev clang
+        sudo apt-get remove libxft2 libxft-dev
+        CC=clang OPT_DEP_DEFAULT=0 make
+
+  # FIXME: tcc fails at linking "tcc: error: undefined symbol '__dso_handle'"
+  # tcc-full:
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: make
+  #     run: |
+  #       sudo apt-get install libimlib2 libimlib2-dev libxft2 libxft-dev tcc
+  #       CC=tcc OPT_DEP_DEFAULT=1 make
+
+  # tcc-minimal:
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: make
+  #     run: |
+  #       sudo apt-get install libimlib2 libimlib2-dev tcc
+  #       sudo apt-get remove libxft2 libxft-dev
+  #       CC=tcc OPT_DEP_DEFAULT=0 make
