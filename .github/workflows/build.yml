@@ -21,11 +21,11 @@ jobs:
                              libxft2 libxft-dev libexif12 libexif-dev \
                              gcc clang
         git clone 'git://repo.or.cz/tinycc.git'
-        ( cd tinycc && ./configure && make && sudo make install; )
+        ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
         export OPT_DEP_DEFAULT=1
-        make clean && CC=gcc   make
-        make clean && CC=clang make
-        make clean && CC=tcc   make
+        make clean && CC=gcc   make -s
+        make clean && CC=clang make -s
+        make clean && CC=tcc   make -s
 
   minimal-build:
 
@@ -40,8 +40,8 @@ jobs:
                              gcc clang
         sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev
         git clone 'git://repo.or.cz/tinycc.git'
-        ( cd tinycc && ./configure && make && sudo make install; )
+        ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
         export OPT_DEP_DEFAULT=0
-        make clean && CC=gcc   make
-        make clean && CC=clang make
-        make clean && CC=tcc   make
+        make clean && CC=gcc   make -s
+        make clean && CC=clang make -s
+        make clean && CC=tcc   make -s
