@@ -23,7 +23,6 @@ jobs:
         git clone 'git://repo.or.cz/tinycc.git'
         ( cd tinycc && ./configure && make && sudo make install; )
         export OPT_DEP_DEFAULT=1
-        export CFLAGS="-std=c99 -Wall -pedantic -Werror"
         make clean && CC=gcc   make
         make clean && CC=clang make
         make clean && CC=tcc   make
@@ -43,7 +42,6 @@ jobs:
         git clone 'git://repo.or.cz/tinycc.git'
         ( cd tinycc && ./configure && make && sudo make install; )
         export OPT_DEP_DEFAULT=0
-        export CFLAGS="-std=c99 -Wall -pedantic -Werror"
         make clean && CC=gcc   make
         make clean && CC=clang make
         make clean && CC=tcc   make
