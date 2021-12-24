@@ -19,13 +19,13 @@ jobs:
         sudo apt-get install libimlib2 libimlib2-dev \
                              xserver-xorg-core xserver-xorg-dev \
                              libxft2 libxft-dev libexif12 libexif-dev \
-                             gcc clang
-        git clone 'git://repo.or.cz/tinycc.git'
+                             gcc clang >/dev/null
+        git clone 'git://repo.or.cz/tinycc.git' >/dev/null
         ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
         export OPT_DEP_DEFAULT=1
-        make clean && CC=gcc   make -s
-        make clean && CC=clang make -s
-        make clean && CC=tcc   make -s
+        make clean && echo "###  GCC BUILD  ###" && CC=gcc   make -s
+        make clean && echo "### CLANG BUILD ###" && CC=clang make -s
+        make clean && echo "###  TCC BUILD  ###" && CC=tcc   make -s
 
   minimal-build:
 
@@ -37,11 +37,11 @@ jobs:
       run: |
         sudo apt-get install libimlib2 libimlib2-dev \
                              xserver-xorg-core xserver-xorg-dev \
-                             gcc clang
-        sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev
-        git clone 'git://repo.or.cz/tinycc.git'
+                             gcc clang >/dev/null
+        sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev >/dev/null
+        git clone 'git://repo.or.cz/tinycc.git' >/dev/null
         ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
         export OPT_DEP_DEFAULT=0
-        make clean && CC=gcc   make -s
-        make clean && CC=clang make -s
-        make clean && CC=tcc   make -s
+        make clean && echo "###  GCC BUILD  ###" && CC=gcc   make -s
+        make clean && echo "### CLANG BUILD ###" && CC=clang make -s
+        make clean && echo "###  TCC BUILD  ###" && CC=tcc   make -s
