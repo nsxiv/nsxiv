@@ -602,7 +602,6 @@ end:
 	}
 	free(oldst);
 	reset_cursor();
-	redraw();
 	return true;
 }
 
@@ -646,7 +645,7 @@ static void on_keypress(XKeyEvent *kev)
 	if (extprefix && ksym == KEYHANDLER_ABORT && MODMASK(kev->state) == 0) {
 		handle_key_handler(false);
 	} else if (extprefix) {
-		if (run_key_handler(XKeysymToString(ksym), kev->state & ~sh))
+		if ((dirty = run_key_handler(XKeysymToString(ksym), kev->state & ~sh)))
 			extprefix = false;
 		else
 			handle_key_handler(false);
