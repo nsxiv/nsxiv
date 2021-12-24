@@ -328,7 +328,7 @@ bool ci_scroll_to_edge(arg_t dir)
 	return img_pan_edge(&img, dir);
 }
 
-bool ci_drag(arg_t mode)
+bool ci_drag(arg_t drag_mode)
 {
 	int x, y, ox, oy;
 	float px, py;
@@ -337,13 +337,13 @@ bool ci_drag(arg_t mode)
 	if ((int)(img.w * img.zoom) <= win.w && (int)(img.h * img.zoom) <= win.h)
 		return false;
 
-	win_set_cursor(&win, mode == DRAG_ABSOLUTE ? CURSOR_DRAG_ABSOLUTE : CURSOR_DRAG_RELATIVE);
+	win_set_cursor(&win, drag_mode == DRAG_ABSOLUTE ? CURSOR_DRAG_ABSOLUTE : CURSOR_DRAG_RELATIVE);
 	win_cursor_pos(&win, &x, &y);
 	ox = x;
 	oy = y;
 
 	while (true) {
-		if (mode == DRAG_ABSOLUTE) {
+		if (drag_mode == DRAG_ABSOLUTE) {
 			px = MIN(MAX(0.0, x - win.w*0.1), win.w*0.8) / (win.w*0.8)
 			   * (win.w - img.w * img.zoom);
 			py = MIN(MAX(0.0, y - win.h*0.1), win.h*0.8) / (win.h*0.8)

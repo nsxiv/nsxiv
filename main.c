@@ -605,19 +605,19 @@ end:
 	return true;
 }
 
-static bool process_bindings(const keymap_t *keys, unsigned int len, KeySym ksym_or_button,
+static bool process_bindings(const keymap_t *bindings, unsigned int len, KeySym ksym_or_button,
                              unsigned int state, unsigned int implicit_mod)
 {
 	unsigned int i;
 	bool dirty = false;
 
 	for (i = 0; i < len; i++) {
-		if (keys[i].ksym_or_button == ksym_or_button &&
-		    MODMASK(keys[i].mask | implicit_mod) == MODMASK(state) &&
-		    keys[i].cmd.func &&
-		    (keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
+		if (bindings[i].ksym_or_button == ksym_or_button &&
+		    MODMASK(bindings[i].mask | implicit_mod) == MODMASK(state) &&
+		    bindings[i].cmd.func &&
+		    (bindings[i].cmd.mode == MODE_ALL || bindings[i].cmd.mode == mode))
 		{
-			if (keys[i].cmd.func(keys[i].arg))
+			if (bindings[i].cmd.func(bindings[i].arg))
 				dirty = true;
 		}
 	}
