@@ -35,7 +35,7 @@ bool ci_set_zoom(arg_t);
 bool ci_slideshow(arg_t);
 bool ci_toggle_alpha(arg_t);
 bool ci_toggle_animation(arg_t);
-bool ci_toggle_antialias();
+bool ci_toggle_antialias(arg_t);
 /* thumbnails mode */
 bool ct_move_sel(arg_t);
 bool ct_reload_all(arg_t);
