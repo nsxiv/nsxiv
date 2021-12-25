@@ -9,9 +9,7 @@ on:
 # NOTE: "stable" tcc is too old and fails at linking. instead using git version.
 jobs:
   full-build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: make
@@ -28,9 +26,7 @@ jobs:
         make clean && echo "###  TCC BUILD  ###" && CC=tcc   make -s
 
   minimal-build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: make
