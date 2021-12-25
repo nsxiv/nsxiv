@@ -141,7 +141,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 	GifRowType *rows = NULL;
 	GifRecordType rec;
 	ColorMapObject *cmap;
-	DATA32 bgpixel, *data, *ptr;
+	DATA32 bgpixel = 0, *data, *ptr;
 	DATA32 *prev_frame = NULL;
 	Imlib_Image im;
 	int i, j, bg, r, g, b;
