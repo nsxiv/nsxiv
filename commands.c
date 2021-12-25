@@ -63,6 +63,7 @@ bool cg_quit(arg_t status)
 		}
 	}
 	exit(status);
+	return None; /* silence tcc warning */
 }
 
 bool cg_switch_mode(arg_t _)
