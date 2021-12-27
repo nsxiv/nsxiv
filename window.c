@@ -186,6 +186,8 @@ void win_open(win_t *win)
 	pid_t pid;
 	char hostname[256];
 	XSetWindowAttributes attrs;
+	char res_class[] = RES_CLASS;
+	char res_name[] = "nsxiv";
 
 	e = &win->env;
 	parent = options->embed ? options->embed : RootWindow(e->dpy, e->scr);
@@ -284,11 +286,11 @@ void win_open(win_t *win)
 	free(icon_data);
 
 	/* These two atoms won't change and thus only need to be set once. */
-	XStoreName(win->env.dpy, win->xwin, "nsxiv");
-	XSetIconName(win->env.dpy, win->xwin, "nsxiv");
+	XStoreName(win->env.dpy, win->xwin, res_name);
+	XSetIconName(win->env.dpy, win->xwin, res_name);
 
-	classhint.res_class = RES_CLASS;
-	classhint.res_name = options->res_name != NULL ? options->res_name : "nsxiv";
+	classhint.res_class = res_class;
+	classhint.res_name = options->res_name != NULL ? options->res_name : res_name;
 	XSetClassHint(e->dpy, win->xwin, &classhint);
 
 	XSetWMProtocols(e->dpy, win->xwin, &atoms[ATOM_WM_DELETE_WINDOW], 1);
