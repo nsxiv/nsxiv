@@ -20,9 +20,9 @@ jobs:
         git clone --quiet 'git://repo.or.cz/tinycc.git'
         ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
         export OPT_DEP_DEFAULT=1
-        make clean && echo "###  GCC BUILD  ###" && CC=gcc   make -s
-        make clean && echo "### CLANG BUILD ###" && CC=clang make -s
-        make clean && echo "###  TCC BUILD  ###" && CC=tcc   make -s
+        echo "###  GCC BUILD  ###" && make clean && CC=gcc   make -s
+        echo "### CLANG BUILD ###" && make clean && CC=clang make -s
+        echo "###  TCC BUILD  ###" && make clean && CC=tcc   make -s
 
   minimal-build:
     runs-on: ubuntu-latest
@@ -36,6 +36,6 @@ jobs:
         git clone --quiet 'git://repo.or.cz/tinycc.git'
         ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
         export OPT_DEP_DEFAULT=0
-        make clean && echo "###  GCC BUILD  ###" && CC=gcc   make -s
-        make clean && echo "### CLANG BUILD ###" && CC=clang make -s
-        make clean && echo "###  TCC BUILD  ###" && CC=tcc   make -s
+        echo "###  GCC BUILD  ###" && make clean && CC=gcc   make -s
+        echo "### CLANG BUILD ###" && make clean && CC=clang make -s
+        echo "###  TCC BUILD  ###" && make clean && CC=tcc   make -s
