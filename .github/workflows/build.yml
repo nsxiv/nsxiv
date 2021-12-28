@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# NOTE: "stable" tcc is too old and fails at linking. instead using git version.
+jobs:
+  full-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: |
+        sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
+                             libxft2 libxft-dev libexif12 libexif-dev \
+                             gcc clang >/dev/null
+        git clone --quiet --depth 1 'git://repo.or.cz/tinycc.git'
+        ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
+        export OPT_DEP_DEFAULT=1
+        echo "###  GCC BUILD  ###" && make clean && CC=gcc   make -s
+        echo "### CLANG BUILD ###" && make clean && CC=clang make -s
+        echo "###  TCC BUILD  ###" && make clean && CC=tcc   make -s
+
+  minimal-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: |
+        sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
+                             gcc clang >/dev/null
+        sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev >/dev/null
+        git clone --quiet --depth 1 'git://repo.or.cz/tinycc.git'
+        ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
+        export OPT_DEP_DEFAULT=0
+        echo "###  GCC BUILD  ###" && make clean && CC=gcc   make -s
+        echo "### CLANG BUILD ###" && make clean && CC=clang make -s
+        echo "###  TCC BUILD  ###" && make clean && CC=tcc   make -s
