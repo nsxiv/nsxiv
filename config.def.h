@@ -63,9 +63,9 @@ static const bool ANTI_ALIAS = true;
 static const bool ALPHA_LAYER = false;
 
 /* percentage of memory to use for imlib2's cache size.
- *   0 means use imlib2's default 4MiB
- * 100 means use all available memory (but not above CACHE_SIZE_LIMIT).
  *   3 means use 3% of total memory which is about 245MiB on 8GiB machine.
+ *   0 means disable cache
+ * 100 means use all available memory (but not above CACHE_SIZE_LIMIT).
  */
 static const int CACHE_SIZE_MEM_PERCENTAGE = 3;          /* use 3% of total memory for cache */
 static const int CACHE_SIZE_LIMIT = 256 * 1024 * 1024;   /* but not above 256MiB */

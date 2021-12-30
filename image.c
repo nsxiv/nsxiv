@@ -51,15 +51,17 @@ static int calc_cache_size(void)
 	long pages, page_size;
 	int cache;
 
+	if (CACHE_SIZE_MEM_PERCENTAGE == 0)
+		return 0;
+
 	pages = sysconf(_SC_PHYS_PAGES);
 	page_size = sysconf(_SC_PAGE_SIZE);
 	if (pages < 0 || page_size < 0)
 		return CACHE_SIZE_FALLBACK;
-
 	cache = (pages/100) * CACHE_SIZE_MEM_PERCENTAGE;
 	cache *= page_size;
 
-	return MIN(MAX(cache, 4 * 1024 * 1024), CACHE_SIZE_LIMIT);
+	return MIN(cache, CACHE_SIZE_LIMIT);
 }
 
 void img_init(img_t *img, win_t *win)
