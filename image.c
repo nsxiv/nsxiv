@@ -56,7 +56,7 @@ static int calc_cache_size(void)
 	if (pages < 0 || page_size < 0)
 		return CACHE_SIZE_FALLBACK;
 
-	cache = pages * CACHE_SIZE_RAM_PERCENTAGE;
+	cache = (pages/100) * CACHE_SIZE_MEM_PERCENTAGE;
 	cache *= page_size;
 
 	return MIN(MAX(cache, 4 * 1024 * 1024), CACHE_SIZE_LIMIT);
