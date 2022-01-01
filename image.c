@@ -48,10 +48,10 @@ static const float ZOOM_MAX = zoom_levels[ARRLEN(zoom_levels)-1] / 100;
 
 static int calc_cache_size(void)
 {
-	long pages, page_size;
 	int cache;
+	long pages, page_size;
 
-	if (CACHE_SIZE_MEM_PERCENTAGE == 0)
+	if (CACHE_SIZE_MEM_PERCENTAGE <= 0)
 		return 0;
 
 	pages = sysconf(_SC_PHYS_PAGES);

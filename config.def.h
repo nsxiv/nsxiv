@@ -64,7 +64,7 @@ static const bool ALPHA_LAYER = false;
 
 /* percentage of memory to use for imlib2's cache size.
  *   3 means use 3% of total memory which is about 245MiB on 8GiB machine.
- *   0 means disable cache
+ *   0 or less means disable cache.
  * 100 means use all available memory (but not above CACHE_SIZE_LIMIT).
  */
 static const int CACHE_SIZE_MEM_PERCENTAGE = 3;          /* use 3% of total memory for cache */
