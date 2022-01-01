@@ -439,7 +439,11 @@ bool img_load(img_t *img, const fileinfo_t *file)
 
 	imlib_image_set_changes_on_disk();
 
-#if HAVE_LIBEXIF
+/* since v1.7.5, Imlib2 can parse exif orientation from jpeg files.
+ * this version also happens to be the first one which defines the
+ * IMLIB2_VERSION macro.
+ */
+#if HAVE_LIBEXIF && !defined(IMLIB2_VERSION)
 	exif_auto_orientate(file);
 #endif
 
@@ -451,6 +455,10 @@ bool img_load(img_t *img, const fileinfo_t *file)
 #if HAVE_LIBWEBP
 		if (STREQ(fmt, "webp"))
 			img_load_webp(img, file);
+#endif
+#if HAVE_LIBEXIF && defined(IMLIB2_VERSION)
+		if (!STREQ(fmt, "jpeg") && !STREQ(fmt, "jpg"))
+			exif_auto_orientate(file);
 #endif
 	}
 	img->w = imlib_image_get_width();
