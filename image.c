@@ -46,12 +46,30 @@ enum { DEF_WEBP_DELAY = 75 };
 #define ZOOM_MIN (zoom_levels[0] / 100)
 #define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels)-1] / 100)
 
+static int calc_cache_size(void)
+{
+	int cache;
+	long pages, page_size;
+
+	if (CACHE_SIZE_MEM_PERCENTAGE <= 0)
+		return 0;
+
+	pages = sysconf(_SC_PHYS_PAGES);
+	page_size = sysconf(_SC_PAGE_SIZE);
+	if (pages < 0 || page_size < 0)
+		return CACHE_SIZE_FALLBACK;
+	cache = (pages/100) * CACHE_SIZE_MEM_PERCENTAGE;
+	cache *= page_size;
+
+	return MIN(cache, CACHE_SIZE_LIMIT);
+}
+
 void img_init(img_t *img, win_t *win)
 {
 	imlib_context_set_display(win->env.dpy);
 	imlib_context_set_visual(win->env.vis);
 	imlib_context_set_colormap(win->env.cmap);
-	imlib_set_cache_size(CACHE_SIZE);
+	imlib_set_cache_size(calc_cache_size());
 
 	img->im = NULL;
 	img->win = win;
