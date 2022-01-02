@@ -470,8 +470,8 @@ void reset_cursor(void)
 void animate(void)
 {
 	if (img_frame_animate(&img)) {
-		redraw();
 		set_timeout(animate, img.multi.frames[img.multi.sel].delay, true);
+		redraw();
 	}
 }
 
