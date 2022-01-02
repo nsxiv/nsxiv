@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.22.4 -->
-<!-- CreationDate: Sun Dec 12 12:24:25 2021 -->
+<!-- CreationDate: Sun Jan  2 05:09:48 2022 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -57,8 +57,8 @@ Neo Simple X Image Viewer</p>
 <i>FRAMERATE</i>] [<b>&minus;e</b> <i>WID</i>]
 [<b>&minus;G</b> <i>GAMMA</i>] [<b>&minus;g</b>
 <i>GEOMETRY</i>] [<b>&minus;N</b> <i>NAME</i>]
-[<b>&minus;T</b> <i>TITLE</i>] [<b>&minus;n</b> <i>NUM</i>]
-[<b>&minus;S</b> <i>DELAY</i>] [<b>&minus;s</b> <i>MODE</i>]
+[<b>&minus;n</b> <i>NUM</i>] [<b>&minus;S</b> <i>DELAY</i>]
+[<b>&minus;s</b> <i>MODE</i>] [<b>&minus;T</b> <i>TITLE</i>]
 [<b>&minus;z</b> <i>ZOOM</i>] <i>FILE</i>...</p>
 
 <h2>DESCRIPTION
@@ -114,7 +114,7 @@ frame rate set to <i>FRAMERATE</i>.</p>
 <td width="78%">
 
 
-<p>Do not show info bar on bottom of window.</p></td></tr>
+<p>Do not show statusbar at the bottom of the window.</p></td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
@@ -169,24 +169,6 @@ information on GEOMETRY argument.</p>
 
 <p style="margin-left:22%;">Set the resource name of
 nsxiv&rsquo;s X window to NAME.</p>
-
-<p style="margin-left:11%;"><b>&minus;T</b>
-<i>TITLE</i></p>
-
-<p style="margin-left:22%;">Set the window title to TITLE.
-Use the format &lsquo;prefix:suffixmode&rsquo;. Any string
-literal is accepted for prefix, and the format of suffixmode
-is:</p>
-
-<p style="margin-left:22%; margin-top: 1em">Value Format
-<br>
-0 Empty <br>
-1 Basename of file <br>
-2 Full path to file</p>
-
-<p style="margin-left:22%; margin-top: 1em">By defualt,
-prefix is set to &quot;nsxiv - &quot; and suffixmode is set
-to 1 (basename).</p>
 
 <table width="100%" border="0" rules="none" frame="void"
        cellspacing="0" cellpadding="0">
@@ -288,6 +270,24 @@ the delay between images to <i>DELAY</i> seconds.
 MODE character. Supported modes are: [d]own, [f]it, [F]ill,
 [w]idth, [h]eight.</p>
 
+<p style="margin-left:11%;"><b>&minus;T</b>
+<i>TITLE</i></p>
+
+<p style="margin-left:22%;">Set the window title to TITLE.
+Use the format &lsquo;prefix:suffixmode&rsquo;. Any string
+literal is accepted for prefix, and the format of suffixmode
+is:</p>
+
+<p style="margin-left:22%; margin-top: 1em">Value Format
+<br>
+0 Empty <br>
+1 Basename of file <br>
+2 Full path to file</p>
+
+<p style="margin-left:22%; margin-top: 1em">By default,
+prefix is set to &quot;nsxiv - &quot; and suffixmode is set
+to 1 (basename).</p>
+
 <table width="100%" border="0" rules="none" frame="void"
        cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
@@ -345,7 +345,7 @@ percent.</p>
 
 <p>Use NULL-separator. With this option output of &minus;o
 and file-list sent to the key-handler and the input of
-&minus;i will be seperated by a NULL character.</p></td></tr>
+&minus;i will be separated by a NULL character.</p></td></tr>
 </table>
 
 <h2>KEYBOARD COMMANDS
@@ -416,7 +416,8 @@ mode.</p> </td></tr>
 <td width="78%">
 
 
-<p>Toggle visibility of info bar on bottom of window.</p></td></tr>
+<p>Toggle visibility of statusbar at the bottom of the
+window.</p> </td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
@@ -545,8 +546,8 @@ width.</p>
 <td width="78%">
 
 
-<p>Repeat last mark action on all images from the last
-marked/unmarked up to the current one.</p></td></tr>
+<p>Mark/unmark all images starting from the last
+marked/unmarked image up to the current one.</p></td></tr>
 <tr valign="top" align="left">
 <td width="11%"></td>
 <td width="9%">
@@ -768,12 +769,12 @@ multi-frame images.</p>
 h</b>, <b>Left</b></p>
 
 <p style="margin-left:22%;">Scroll image 1/5 of window
-width or <i>count</i> pixel left.</p>
+width or <i>count</i> pixels left.</p>
 
 <p style="margin-left:11%;"><b>j</b>, <b>Down</b></p>
 
 <p style="margin-left:22%;">Scroll image 1/5 of window
-height or <i>count</i> pixel down.</p>
+height or <i>count</i> pixels down.</p>
 
 <table width="100%" border="0" rules="none" frame="void"
        cellspacing="0" cellpadding="0">
@@ -787,14 +788,14 @@ height or <i>count</i> pixel down.</p>
 <td width="78%">
 
 
-<p>Scroll image 1/5 of window height or <i>count</i> pixel
+<p>Scroll image 1/5 of window height or <i>count</i> pixels
 up.</p> </td></tr>
 </table>
 
 <p style="margin-left:11%;"><b>l</b>, <b>Right</b></p>
 
 <p style="margin-left:22%;">Scroll image 1/5 of window
-width or <i>count</i> pixel right.</p>
+width or <i>count</i> pixels right.</p>
 
 <table width="100%" border="0" rules="none" frame="void"
        cellspacing="0" cellpadding="0">
@@ -1048,38 +1049,67 @@ images to <i>count</i> seconds.</p></td></tr>
 </h2>
 
 
-<p style="margin-left:11%; margin-top: 1em">The following
-mouse mappings are available in image mode: <br>
-General: <b><br>
-Button3</b></p>
+<p style="margin-left:11%; margin-top: 1em"><b>Thumbnail
+mode</b> <br>
+The following mouse mappings are available in thumbnail
+mode: <b><br>
+Button1</b></p>
 
-<p style="margin-left:22%;">Switch to thumbnail mode.</p>
+<p style="margin-left:22%;">Select the image. Goes into
+image mode if double&minus;clicked.</p>
 
-<p style="margin-left:11%;">Navigate image list: <b><br>
+<p style="margin-left:11%;"><b>Button3</b></p>
+
+<p style="margin-left:22%;">Mark/unmark the image. Dragging
+while holding Button3 down will mark/unmark multiple
+images.</p>
+
+<p style="margin-left:11%;"><b>Button4</b></p>
+
+<p style="margin-left:22%;">Scroll up by one row.</p>
+
+<p style="margin-left:11%;"><b>Button5</b></p>
+
+<p style="margin-left:22%;">Scroll down by one row.</p>
+
+<p style="margin-left:11%;"><b>Ctrl-Button4</b></p>
+
+<p style="margin-left:22%;">Scroll up by one page.</p>
+
+<p style="margin-left:11%;"><b>Ctrl-Button5</b></p>
+
+<p style="margin-left:22%;">Scroll down by one page.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Image
+mode</b> <br>
+The following mouse mappings are available in image mode:
+<b><br>
 Button1</b></p>
 
 <p style="margin-left:22%;">Go to the next image if the
 mouse cursor is in the right part of the window or to the
 previous image if it is in the left part.</p>
 
-<p style="margin-left:11%;">Panning: <b><br>
-Button2</b></p>
-
-<p style="margin-left:22%;">Pan the image according to the
-mouse cursor position in the window while keeping this
-button pressed down.</p>
-
 <p style="margin-left:11%;"><b>Ctrl-Button1</b></p>
 
 <p style="margin-left:22%;">Pan the image relative to the
 mouse cursor.</p>
 
-<p style="margin-left:11%;">Zooming: <b><br>
-ScrollUp</b></p>
+<p style="margin-left:11%;"><b>Button2</b></p>
+
+<p style="margin-left:22%;">Pan the image according to the
+mouse cursor position in the window while keeping this
+button pressed down.</p>
+
+<p style="margin-left:11%;"><b>Button3</b></p>
+
+<p style="margin-left:22%;">Switch to thumbnail mode.</p>
+
+<p style="margin-left:11%;"><b>Button4</b></p>
 
 <p style="margin-left:22%;">Zoom in.</p>
 
-<p style="margin-left:11%;"><b>ScrollDown</b></p>
+<p style="margin-left:11%;"><b>Button5</b></p>
 
 <p style="margin-left:22%;">Zoom out.</p>
 
@@ -1207,17 +1237,20 @@ subdirectories:</p>
 </h2>
 
 
-<p style="margin-left:11%; margin-top: 1em">Anupam Ashish
-Minz <br>
+<p style="margin-left:11%; margin-top: 1em">N-R-K &lt;nrk
+at disroot.org&gt; <br>
 Berke Kocao&Auml;lu &lt;berke.kocaoglu at metu.edu.tr&gt;
 <br>
-Guilherme Freire <br>
-Kian Kasad &lt;kian at kasad.com&gt; <br>
-N-R-K &lt;nrk at disroot.org&gt; <br>
-Stein Gunnar Bakkeby &lt;bakkeby at gmail.com&gt; <br>
 TAAPArthur &lt;taaparthur at gmail.com&gt; <br>
-explosion-mental &lt;explosion0mental at gmail.com&gt; <br>
 eylles &lt;ed.ylles1997 at gmail.com&gt; <br>
+mamg22 &lt;marcomonizg at gmail.com&gt; <br>
+LuXu <br>
+explosion-mental &lt;explosion0mental at gmail.com&gt; <br>
+Guilherme Freire <br>
+Stein Gunnar Bakkeby &lt;bakkeby at gmail.com&gt; <br>
+Anupam Ashish Minz <br>
+Sam Whitehead <br>
+Kian Kasad &lt;kian at kasad.com&gt; <br>
 qsmodo</p>
 
 <h2>CONTRIBUTORS
@@ -1240,8 +1273,15 @@ repository.</p>
 </h2>
 
 
+<p style="margin-left:11%; margin-top: 1em">Website:</p>
 
-<p style="margin-left:11%; margin-top: 1em">https://github.com/nsxiv/nsxiv</p>
+
+<p style="margin-left:22%;">https://nsxiv.github.io/nsxiv/</p>
+
+<p style="margin-left:11%;">Source code:</p>
+
+
+<p style="margin-left:22%;">https://github.com/nsxiv/nsxiv</p>
 
 <h2>SEE ALSO
 <a name="SEE ALSO"></a>
