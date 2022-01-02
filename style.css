@@ -49,6 +49,7 @@ pre > code {
   padding: 12px 8px 8px 8px;
   border: 2px solid #383a3f;
   border-radius: 2px;
+  white-space: pre-wrap;
 }
 
 a {
@@ -60,6 +61,11 @@ a {
 b {
   font-family: monospace;
   font-weight: 700;
+}
+
+img {
+  max-width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 ::selection {color: #c4c4c4; background: #50525b;}
