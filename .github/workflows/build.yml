@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
 
-# NOTE: "stable" tcc is too old and fails at linking. instead using git version.
+# NOTE: "stable" tcc is too old and fails at linking. instead fetching a recent known working commit.
 jobs:
   full-build:
     runs-on: ubuntu-latest
@@ -17,8 +17,9 @@ jobs:
         sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
                              libxft2 libxft-dev libexif12 libexif-dev \
                              gcc clang >/dev/null
-        git clone --quiet --depth 1 'https://github.com/TinyCC/tinycc.git'
-        ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
+        TCC_SHA="027b8fb9b88fe137447fb8bb1b61079be9702472"
+        wget --quiet "https://github.com/TinyCC/tinycc/archive/${TCC_SHA}.tar.gz" && tar xzf "${TCC_SHA}.tar.gz"
+        ( cd "tinycc-$TCC_SHA" && ./configure && make && sudo make install; ) >/dev/null
         # vanilla flags
         CFLAGS="-std=c99 -Wall -pedantic"
         # extra flags
@@ -42,8 +43,9 @@ jobs:
         sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
                              gcc clang >/dev/null
         sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev >/dev/null
-        git clone --quiet --depth 1 'https://github.com/TinyCC/tinycc.git'
-        ( cd tinycc && ./configure && make && sudo make install; ) >/dev/null
+        TCC_SHA="027b8fb9b88fe137447fb8bb1b61079be9702472"
+        wget --quiet "https://github.com/TinyCC/tinycc/archive/${TCC_SHA}.tar.gz" && tar xzf "${TCC_SHA}.tar.gz"
+        ( cd "tinycc-$TCC_SHA" && ./configure && make && sudo make install; ) >/dev/null
         # vanilla flags
         CFLAGS="-std=c99 -Wall -pedantic"
         # extra flags
