@@ -39,6 +39,9 @@ bool ci_toggle_antialias(arg_t);
 /* thumbnails mode */
 bool ct_move_sel(arg_t);
 bool ct_reload_all(arg_t);
+bool ct_scroll(arg_t);
+bool ct_drag_mark_image(arg_t);
+bool ct_select(arg_t);
 
 /* global */
 #define g_change_gamma { cg_change_gamma, MODE_ALL }
@@ -79,5 +82,8 @@ bool ct_reload_all(arg_t);
 /* thumbnails mode */
 #define t_move_sel { ct_move_sel, MODE_THUMB }
 #define t_reload_all { ct_reload_all, MODE_THUMB }
+#define t_scroll { ct_scroll, MODE_THUMB }
+#define t_drag_mark_image { ct_drag_mark_image, MODE_THUMB }
+#define t_select { ct_select, MODE_THUMB }
 
 #endif /* COMMANDS_H */

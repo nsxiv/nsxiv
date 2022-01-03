@@ -175,7 +175,7 @@ static const keymap_t keys[] = {
 };
 
 /* mouse button mappings for image mode: */
-static const button_t buttons[] = {
+static const button_t buttons_img[] = {
 	/* modifiers    button            function              argument */
 	{ 0,            1,                i_cursor_navigate,    None },
 	{ ControlMask,  1,                i_drag,               DRAG_RELATIVE },
@@ -183,6 +183,17 @@ static const button_t buttons[] = {
 	{ 0,            3,                g_switch_mode,        None },
 	{ 0,            4,                g_zoom,               +1 },
 	{ 0,            5,                g_zoom,               -1 },
+};
+
+/* mouse button mappings for thumbnail mode: */
+static const button_t buttons_tns[] = {
+	/* modifiers    button            function              argument */
+	{ 0,            1,                t_select,             None },
+	{ 0,            3,                t_drag_mark_image,    None },
+	{ 0,            4,                t_scroll,             DIR_UP },
+	{ 0,            5,                t_scroll,             DIR_DOWN },
+	{ ControlMask,  4,                g_scroll_screen,      DIR_UP },
+	{ ControlMask,  5,                g_scroll_screen,      DIR_DOWN },
 };
 
 /* true means NAV_WIDTH is relative (33%), false means absolute (33 pixels) */
