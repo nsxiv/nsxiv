@@ -36,3 +36,16 @@ to work on. You can also filter the issues via label:
   Might require some experience.
 * [Help wanted](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22):
   (Intermediate/Experienced) Issues where we require some help.
+
+Development workflow
+--------------------
+
+Our workflow regarding pull requests (PR) is laid out as:
+
+  * Code related changes require two approvals, but documentation related
+    changes (e.g typo) can be merged with just one.
+  * Automated checks for the PR should be successful.
+  * Always prefer squashing when merging. But in case a PR makes more than one
+    significant change, use the "don't squash" tag and rebase instead.
+  * When merging, make sure the commit message is cleaned up properly so that
+    it reflects the intention of the PR.
