@@ -40,7 +40,7 @@ to work on. You can also filter the issues via label:
 Development workflow
 --------------------
 
-Our workflow regarding pull requests (PR) is laid out as:
+Our workflow regarding pull requests (PR) is:
 
   * Code related changes require two approvals, but documentation related
     changes (e.g typo) can be merged with just one.
