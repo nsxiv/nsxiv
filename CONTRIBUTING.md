@@ -21,6 +21,8 @@ When contributing, make sure:
   * Your contribution falls under nsxiv's scope and aim
   * You follow the existing code style (see [.editorconfig](.editorconfig))
   * You open the pull request from a new branch, not from master
+  * To avoid using force pushes, especially for bigger patches. Only use them
+    when there's merge conflicts.
 
 If your contribution is not suitable for general use, it will not be included in nsxiv.
 For changes that are very much up to preference, such as changing values in config.h,
