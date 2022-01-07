@@ -43,9 +43,9 @@ Development workflow
 Our workflow regarding pull requests (PR) is:
 
   * Code related changes require two approvals, but documentation related
-    changes (e.g typo) can be merged with just one.
+    changes (e.g. typo) can be merged with just one.
   * Automated checks for the PR should be successful.
-  * Always prefer squashing when merging. But in case a PR makes more than one
+  * Always prefer squashing when merging. In the case a PR makes more than one
     significant change, use the "don't squash" tag and rebase instead.
   * When merging, make sure the commit message is cleaned up properly so that
     it reflects the intention of the PR.
