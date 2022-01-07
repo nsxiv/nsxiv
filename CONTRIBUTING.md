@@ -39,10 +39,13 @@ to work on. You can also filter the issues via label:
 * [Help wanted](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22):
   (Intermediate/Experienced) Issues where we require some help.
 
-Development workflow
---------------------
+Development workflow for maintainers
+------------------------------------
 
-Our workflow regarding pull requests (PR) is:
+If we notice you contributing and/or showing interest in issues/pull requests,
+we may invite you to join the nsxiv org as a member. Being a member simply means
+you will be able to approve, disapprove and merge pull requests. Our workflow
+regarding pull requests is the following:
 
   * Code related changes require two approvals, but documentation related
     changes (e.g. typo) can be merged with just one.
@@ -50,3 +53,7 @@ Our workflow regarding pull requests (PR) is:
     significant change, use the "don't squash" tag and rebase instead.
   * When merging, make sure the commit message is cleaned up properly so that
     it reflects the intention of the PR.
+
+For mundane development related talks which don't warrent their own issue, use
+the [general-dev](https://github.com/nsxiv/nsxiv/discussions/119) discussion
+thread.
