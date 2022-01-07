@@ -52,7 +52,7 @@ regarding pull requests is the following:
   * Always prefer squashing when merging. In the case a PR makes more than one
     significant change, use the "don't squash" tag and rebase instead.
   * When merging, make sure the commit message is cleaned up properly so that
-    it reflects the intention of the PR.
+    it reflects the current intention of the PR.
 
 For mundane development related talks which don't warrent their own issue, use
 the [general-dev](https://github.com/nsxiv/nsxiv/discussions/119) discussion
