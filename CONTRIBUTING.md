@@ -44,8 +44,9 @@ Development workflow for maintainers
 
 If we notice you contributing and/or showing interest in issues/pull requests,
 we may invite you to join the nsxiv org as a member. Being a member simply means
-you will be able to approve, disapprove and merge pull requests. Our workflow
-regarding pull requests is the following:
+you will be able to approve, disapprove and merge pull requests.
+
+Our workflow regarding pull requests is the following:
 
   * Code related changes require two approvals, but documentation related
     changes (e.g. typo) can be merged with just one.
@@ -54,28 +55,20 @@ regarding pull requests is the following:
   * When merging, make sure the commit message is cleaned up properly so that
     it reflects the current intention of the PR.
 
-For mundane development related talks which don't warrant their own issue, use
-the [general-dev](https://github.com/nsxiv/nsxiv/discussions/119) discussion
-thread.
-
-For releases, the process is as follows:
+For releases, the process is the following:
 
   * Tag the release with a "vN" tag, where N is the version number. Also set
     the commit message and tag description for the release commit to "Release
     version N".
   * Update `VERSION` macro in the `Makefile`.
   * Update the changelog (`CHANGELOG.md`):
-    * Separate each release with three dashes as separators, with a space
-      between each dash.
-    * Include a link with the version name, pointing to the release tarball
-      download, and highlight in bold. In the next line, add the release date,
-      wrapped in parentheses and highlighted in italics.
-    * Document only the changes or fixes between releases.
-    * Don't document internal, non user-visible changes.
-    * Create a list of change sections, each with a sub-list of relevant
-      changes.
+    * Include link to the release tarball and add the release date.
+    * Document only the changes or fixes between releases. Don't document
+      changes which never made it into a release.
     * Use the "Changes" section to document behavior changes since the last
       release, the "Added" section for new features, and the "Fixes" section
-      for fixed bugs or regressions.
-    * Include related pull request IDs after each item of the changelog, each
-      wrapped in parentheses.
+      for fixed bugs or regressions. Include pull request IDs.
+
+For mundane development related talks which don't warrant their own issue, use
+the [general-dev](https://github.com/nsxiv/nsxiv/discussions/119) discussion
+thread.
