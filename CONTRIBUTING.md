@@ -60,6 +60,10 @@ thread.
 
 For releases, the process is as follows:
 
+  * Tag the release with a "vN" tag, where N is the version number. Also set
+    the commit message and tag description for the release commit to "Release
+    version N".
+  * Update `VERSION` macro in the `Makefile`.
   * Update the changelog (`CHANGELOG.md`):
     * Separate each release with three dashes as separators, with a space
       between each dash.
