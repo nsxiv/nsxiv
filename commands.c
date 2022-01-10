@@ -42,6 +42,7 @@ extern appmode_t mode;
 extern img_t img;
 extern tns_t tns;
 extern win_t win;
+extern const XButtonEvent *xbutton_ev;
 
 extern fileinfo_t *files;
 extern int filecnt, fileidx;
@@ -435,4 +436,58 @@ bool ct_reload_all(arg_t _)
 	tns_init(&tns, files, &filecnt, &fileidx, &win);
 	tns.dirty = true;
 	return true;
+}
+
+bool ct_scroll(arg_t dir)
+{
+	return tns_scroll(&tns, dir, false);
+}
+
+bool ct_drag_mark_image(arg_t _)
+{
+	int sel;
+
+	if ((sel = tns_translate(&tns, xbutton_ev->x, xbutton_ev->y)) >= 0) {
+		XEvent e;
+		bool on = !(files[sel].flags & FF_MARK);
+
+		while (true) {
+			if (sel >= 0 && mark_image(sel, on))
+				redraw();
+			XMaskEvent(win.env.dpy,
+			           ButtonPressMask | ButtonReleaseMask | PointerMotionMask, &e);
+			if (e.type == ButtonPress || e.type == ButtonRelease)
+				break;
+			while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e));
+			sel = tns_translate(&tns, e.xbutton.x, e.xbutton.y);
+		}
+	}
+
+	return false;
+}
+
+bool ct_select(arg_t _)
+{
+	int sel;
+	bool dirty = false;
+	static Time firstclick;
+
+	if ((sel = tns_translate(&tns, xbutton_ev->x, xbutton_ev->y)) >= 0) {
+		if (sel != fileidx) {
+			tns_highlight(&tns, fileidx, false);
+			tns_highlight(&tns, sel, true);
+			fileidx = sel;
+			firstclick = xbutton_ev->time;
+			dirty = true;
+		} else if (xbutton_ev->time - firstclick <= TO_DOUBLE_CLICK) {
+			mode = MODE_IMAGE;
+			set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
+			load_image(fileidx);
+			dirty = true;
+		} else {
+			firstclick = xbutton_ev->time;
+		}
+	}
+
+	return dirty;
 }

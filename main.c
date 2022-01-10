@@ -57,6 +57,7 @@ arl_t arl;
 img_t img;
 tns_t tns;
 win_t win;
+const XButtonEvent *xbutton_ev;
 
 fileinfo_t *files;
 int filecnt, fileidx;
@@ -661,64 +662,19 @@ static void on_keypress(XKeyEvent *kev)
 	prefix = 0;
 }
 
-static void on_buttonpress(XButtonEvent *bev)
+static void on_buttonpress(const XButtonEvent *bev)
 {
-	int sel;
 	bool dirty = false;
-	static Time firstclick;
 
 	if (mode == MODE_IMAGE) {
 		set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
 		reset_cursor();
-		dirty = process_bindings(buttons, ARRLEN(buttons), bev->button, bev->state, 0);
-		if (dirty)
-			redraw();
-	} else {
-		/* thumbnail mode (hard-coded) */
-		switch (bev->button) {
-			case Button1:
-				if ((sel = tns_translate(&tns, bev->x, bev->y)) >= 0) {
-					if (sel != fileidx) {
-						tns_highlight(&tns, fileidx, false);
-						tns_highlight(&tns, sel, true);
-						fileidx = sel;
-						firstclick = bev->time;
-						redraw();
-					} else if (bev->time - firstclick <= TO_DOUBLE_CLICK) {
-						mode = MODE_IMAGE;
-						set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
-						load_image(fileidx);
-						redraw();
-					} else {
-						firstclick = bev->time;
-					}
-				}
-				break;
-			case Button3:
-				if ((sel = tns_translate(&tns, bev->x, bev->y)) >= 0) {
-					bool on = !(files[sel].flags & FF_MARK);
-					XEvent e;
-
-					while (true) {
-						if (sel >= 0 && mark_image(sel, on))
-							redraw();
-						XMaskEvent(win.env.dpy,
-						           ButtonPressMask | ButtonReleaseMask | PointerMotionMask, &e);
-						if (e.type == ButtonPress || e.type == ButtonRelease)
-							break;
-						while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e));
-						sel = tns_translate(&tns, e.xbutton.x, e.xbutton.y);
-					}
-				}
-				break;
-			case Button4:
-			case Button5:
-				if (tns_scroll(&tns, bev->button == Button4 ? DIR_UP : DIR_DOWN,
-				               (bev->state & ControlMask) != 0))
-					redraw();
-				break;
-		}
+		dirty = process_bindings(buttons_img, ARRLEN(buttons_img), bev->button, bev->state, 0);
+	} else { /* thumbnail mode */
+		dirty = process_bindings(buttons_tns, ARRLEN(buttons_tns), bev->button, bev->state, 0);
 	}
+	if (dirty)
+		redraw();
 	prefix = 0;
 }
 
@@ -731,13 +687,14 @@ static void run(void)
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
 
+	xbutton_ev = &ev.xbutton;
 	while (true) {
 		to_set = check_timeouts(&timeout);
 		init_thumb = mode == MODE_THUMB && tns.initnext < filecnt;
 		load_thumb = mode == MODE_THUMB && tns.loadnext < tns.end;
 
 		if ((init_thumb || load_thumb || to_set || info.fd != -1 ||
-			   arl.fd != -1) && XPending(win.env.dpy) == 0)
+		     arl.fd != -1) && XPending(win.env.dpy) == 0)
 		{
 			if (load_thumb) {
 				set_timeout(redraw, TO_REDRAW_THUMBS, false);
