@@ -744,6 +744,14 @@ bool img_pan(img_t *img, direction_t dir, int d)
 	return false;
 }
 
+bool img_pan_center(img_t *img)
+{
+	float x, y;
+	x = (img->win->w - img->w * img->zoom) / 2.0;
+	y = (img->win->h - img->h * img->zoom) / 2.0;
+	return img_pos(img, x, y);
+}
+
 bool img_pan_edge(img_t *img, direction_t dir)
 {
 	float ox, oy;
