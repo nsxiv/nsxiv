@@ -8,6 +8,30 @@ there may be more changes. Please use `git log` to view them.
 
 - - -
 
+**[v29](https://github.com/nsxiv/nsxiv/archive/v29.tar.gz)**
+*(TODO: put date in here)*
+
+* Changes:
+
+  * Imlib2 cache size is now set based on total memory percentage, by default
+    set to 3%. (#184)
+
+* Added:
+
+  * Ability to customize thumbnail mode mouse-bindings via `config.h`. (#167)
+  * New keybinding <kbd>z</kbd> to scroll to center. (#203)
+
+* Fixes:
+
+  * Manpage cleanup: avoid confusing wording and document thumbnail mode
+    mouse-bindings. (#186)
+  * Wrong jpeg exif orientation with `Imlib2 v1.7.5`. (#188)
+  * Animation slowdown when zoomed in. (#200)
+  * Reset statusbar after failed keyhandler. (#191)
+  * Various compiler warnings. (#197)
+
+- - -
+
 **[v28](https://github.com/nsxiv/nsxiv/archive/v28.tar.gz)**
 *(December 12, 2021)*
 
