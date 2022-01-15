@@ -229,6 +229,7 @@ bool img_zoom(img_t*, int);
 bool img_zoom_to(img_t*, float);
 bool img_pos(img_t*, float, float);
 bool img_pan(img_t*, direction_t, int);
+bool img_pan_center(img_t*);
 bool img_pan_edge(img_t*, direction_t);
 void img_rotate(img_t*, degree_t);
 void img_flip(img_t*, flipdir_t);

@@ -325,6 +325,11 @@ bool ci_scroll(arg_t dir)
 	return img_pan(&img, dir, prefix);
 }
 
+bool ci_scroll_to_center(arg_t _)
+{
+	return img_pan_center(&img);
+}
+
 bool ci_scroll_to_edge(arg_t dir)
 {
 	return img_pan_edge(&img, dir);

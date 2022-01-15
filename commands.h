@@ -30,6 +30,7 @@ bool ci_navigate(arg_t);
 bool ci_navigate_frame(arg_t);
 bool ci_rotate(arg_t);
 bool ci_scroll(arg_t);
+bool ci_scroll_to_center(arg_t);
 bool ci_scroll_to_edge(arg_t);
 bool ci_set_zoom(arg_t);
 bool ci_slideshow(arg_t);
@@ -72,6 +73,7 @@ bool ct_select(arg_t);
 #define i_navigate_frame { ci_navigate_frame, MODE_IMAGE }
 #define i_rotate { ci_rotate, MODE_IMAGE }
 #define i_scroll { ci_scroll, MODE_IMAGE }
+#define i_scroll_to_center { ci_scroll_to_center, MODE_IMAGE }
 #define i_scroll_to_edge { ci_scroll_to_edge, MODE_IMAGE }
 #define i_set_zoom { ci_set_zoom, MODE_IMAGE }
 #define i_slideshow { ci_slideshow, MODE_IMAGE }
