@@ -158,7 +158,7 @@ static const keymap_t keys[] = {
 	{ 0,            XK_J,             i_scroll_to_edge,     DIR_DOWN },
 	{ 0,            XK_K,             i_scroll_to_edge,     DIR_UP },
 	{ 0,            XK_L,             i_scroll_to_edge,     DIR_RIGHT },
-	{ 0,            XK_c,             i_scroll_to_center,   None },
+	{ 0,            XK_z,             i_scroll_to_center,   None },
 	{ 0,            XK_equal,         i_set_zoom,           100 },
 	{ 0,            XK_w,             i_fit_to_win,         SCALE_DOWN },
 	{ 0,            XK_W,             i_fit_to_win,         SCALE_FIT },
