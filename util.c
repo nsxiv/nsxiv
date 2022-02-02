@@ -202,7 +202,7 @@ int r_mkdir(char *path)
 	return 0;
 }
 
-xpopen_t xpopen(const char *cmd, const char **argv)
+xpopen_t xpopen(const char *cmd, char *const argv[])
 {
 	xpopen_t ret = { -1, -1, -1 };
 	int pfd_read[2];

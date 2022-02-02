@@ -358,7 +358,7 @@ int r_opendir(r_dir_t*, const char*, bool);
 int r_closedir(r_dir_t*);
 char* r_readdir(r_dir_t*, bool);
 int r_mkdir(char*);
-xpopen_t xpopen(const char *cmd, const char **argv);
+xpopen_t xpopen(const char *, char *const []);
 
 
 /* window.c */

@@ -242,7 +242,7 @@ void open_info(void)
 {
 	xpopen_t pfd;
 	char w[12], h[12];
-	const char *argv[5];
+	char *argv[5];
 
 	if (info.f.err || info.fd >= 0 || win.bar.h == 0)
 		return;
@@ -250,7 +250,7 @@ void open_info(void)
 	snprintf(w, sizeof(w), "%d", img.w);
 	snprintf(h, sizeof(h), "%d", img.h);
 	argv[0] = info.f.cmd;
-	argv[1] = files[fileidx].path;
+	argv[1] = (char *)files[fileidx].path;
 	argv[2] = w;
 	argv[3] = h;
 	argv[4] = NULL;
@@ -516,7 +516,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	char kstr[32];
 	struct stat *oldst, st;
 	XEvent dump;
-	const char *argv[3];
+	char *argv[3];
 	xpopen_t pfd;
 
 	if (keyhandler.f.err) {
