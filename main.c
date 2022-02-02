@@ -508,15 +508,16 @@ void handle_key_handler(bool init)
 
 static bool run_key_handler(const char *key, unsigned int mask)
 {
-	pid_t pid;
 	FILE *pfs;
 	bool marked = mode == MODE_THUMB && markcnt > 0;
 	bool changed = false;
-	int f, i, pfd[2];
+	int f, i;
 	int fcnt = marked ? markcnt : 1;
 	char kstr[32];
 	struct stat *oldst, st;
 	XEvent dump;
+	const char *argv[3];
+	xpopen_t pfd;
 
 	if (keyhandler.f.err) {
 		if (!keyhandler.warned) {
@@ -527,17 +528,6 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	}
 	if (key == NULL)
 		return false;
-
-	if (pipe(pfd) < 0) {
-		error(0, errno, "pipe");
-		return false;
-	}
-	if ((pfs = fdopen(pfd[1], "w")) == NULL) {
-		error(0, errno, "open pipe");
-		close(pfd[0]), close(pfd[1]);
-		return false;
-	}
-	oldst = emalloc(fcnt * sizeof(*oldst));
 
 	close_info();
 	strncpy(win.bar.l.buf, "Running key handler...", win.bar.l.size);
@@ -550,19 +540,16 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	         mask & ShiftMask   ? "S-" : "", key);
 	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
 
-	if ((pid = fork()) == 0) {
-		close(pfd[1]);
-		dup2(pfd[0], 0);
-		execl(keyhandler.f.cmd, keyhandler.f.cmd, kstr, NULL);
-		error(EXIT_FAILURE, errno, "exec: %s", keyhandler.f.cmd);
-	}
-	close(pfd[0]);
-	if (pid < 0) {
-		error(0, errno, "fork");
-		fclose(pfs);
-		goto end;
-	}
+	argv[0] = keyhandler.f.cmd;
+	argv[1] = kstr;
+	argv[2] = NULL;
+	pfd = xpopen(keyhandler.f.cmd, argv);
+	if (pfd.readfd < 0 || pfd.writefd < 0)
+		return false;
+	close(pfd.readfd);
+	pfs = fdopen(pfd.writefd, "w");
 
+	oldst = emalloc(fcnt * sizeof(*oldst));
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
 			stat(files[i].path, &oldst[f]);
@@ -571,7 +558,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 		}
 	}
 	fclose(pfs);
-	while (waitpid(pid, NULL, 0) == -1 && errno == EINTR);
+	while (waitpid(pfd.pid, NULL, 0) == -1 && errno == EINTR);
 
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
@@ -590,7 +577,6 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	/* drop user input events that occurred while running the key handler */
 	while (XCheckIfEvent(win.env.dpy, &dump, is_input_ev, NULL));
 
-end:
 	if (mode == MODE_IMAGE) {
 		if (changed) {
 			img_close(&img, true);
