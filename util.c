@@ -202,12 +202,15 @@ int r_mkdir(char *path)
 	return 0;
 }
 
-xpopen_t xpopen(const char *cmd, char *const argv[])
+xpopen_t xpopen(const char *cmd, char *const argv[], unsigned int flags)
 {
 	xpopen_t ret = { -1, -1, -1 };
 	int pfd_read[2];
 	int pfd_write[2];
 	pid_t pid;
+
+	if (cmd == NULL || argv == NULL || flags == 0)
+		return ret;
 
 	if (pipe(pfd_read) < 0)
 		return ret;
@@ -238,7 +241,13 @@ xpopen_t xpopen(const char *cmd, char *const argv[])
 	}
 
 	ret.pid = pid;
-	ret.readfd = pfd_read[0];
-	ret.writefd = pfd_write[1];
+	if (flags & X_READ)
+		ret.readfd = pfd_read[0];
+	else
+		close(pfd_read[0]);
+	if (flags & X_WRITE)
+		ret.writefd = pfd_write[1];
+	else
+		close(pfd_write[1]);
 	return ret;
 }

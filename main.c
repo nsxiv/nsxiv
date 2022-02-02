@@ -254,9 +254,8 @@ void open_info(void)
 	argv[2] = w;
 	argv[3] = h;
 	argv[4] = NULL;
-	pfd = xpopen(info.f.cmd, argv);
-	if (!(pfd.readfd < 0 || pfd.writefd < 0)) {
-		close(pfd.writefd);
+	pfd = xpopen(info.f.cmd, argv, X_READ);
+	if (pfd.readfd >= 0) {
 		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
 		info.fd = pfd.readfd;
 		info.i = info.lastsep = 0;
@@ -543,10 +542,9 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	argv[0] = keyhandler.f.cmd;
 	argv[1] = kstr;
 	argv[2] = NULL;
-	pfd = xpopen(keyhandler.f.cmd, argv);
-	if (pfd.readfd < 0 || pfd.writefd < 0)
+	pfd = xpopen(keyhandler.f.cmd, argv, X_WRITE);
+	if (pfd.writefd < 0)
 		return false;
-	close(pfd.readfd);
 	pfs = fdopen(pfd.writefd, "w");
 
 	oldst = emalloc(fcnt * sizeof(*oldst));
