@@ -250,7 +250,7 @@ void open_info(void)
 	snprintf(w, sizeof(w), "%d", img.w);
 	snprintf(h, sizeof(h), "%d", img.h);
 	argv[0] = info.f.cmd;
-	argv[1] = (char *)files[fileidx].path;
+	argv[1] = (char *)files[fileidx].name;
 	argv[2] = w;
 	argv[3] = h;
 	argv[4] = NULL;
