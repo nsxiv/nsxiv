@@ -240,29 +240,27 @@ void close_info(void)
 
 void open_info(void)
 {
-	int pfd[2];
+	xpopen_t pfd;
 	char w[12], h[12];
+	const char *argv[5];
 
 	if (info.f.err || info.fd >= 0 || win.bar.h == 0)
 		return;
 	win.bar.l.buf[0] = '\0';
-	if (pipe(pfd) < 0)
-		return;
-	if ((info.pid = fork()) == 0) {
-		close(pfd[0]);
-		dup2(pfd[1], 1);
-		snprintf(w, sizeof(w), "%d", img.w);
-		snprintf(h, sizeof(h), "%d", img.h);
-		execl(info.f.cmd, info.f.cmd, files[fileidx].name, w, h, NULL);
-		error(EXIT_FAILURE, errno, "exec: %s", info.f.cmd);
-	}
-	close(pfd[1]);
-	if (info.pid < 0) {
-		close(pfd[0]);
-	} else {
-		fcntl(pfd[0], F_SETFL, O_NONBLOCK);
-		info.fd = pfd[0];
+	snprintf(w, sizeof(w), "%d", img.w);
+	snprintf(h, sizeof(h), "%d", img.h);
+	argv[0] = info.f.cmd;
+	argv[1] = files[fileidx].path;
+	argv[2] = w;
+	argv[3] = h;
+	argv[4] = NULL;
+	pfd = xpopen(info.f.cmd, argv);
+	if (!(pfd.readfd < 0 || pfd.writefd < 0)) {
+		close(pfd.writefd);
+		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
+		info.fd = pfd.readfd;
 		info.i = info.lastsep = 0;
+		info.pid = pfd.pid;
 	}
 }
 
