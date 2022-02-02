@@ -342,6 +342,12 @@ typedef struct {
 	int stlen;
 } r_dir_t;
 
+typedef struct {
+	int readfd;
+	int writefd;
+	pid_t pid;
+} xpopen_t;
+
 extern const char *progname;
 
 void* emalloc(size_t);
@@ -352,6 +358,7 @@ int r_opendir(r_dir_t*, const char*, bool);
 int r_closedir(r_dir_t*);
 char* r_readdir(r_dir_t*, bool);
 int r_mkdir(char*);
+xpopen_t xpopen(const char *cmd, const char **argv);
 
 
 /* window.c */

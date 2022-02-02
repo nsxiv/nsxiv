@@ -201,3 +201,44 @@ int r_mkdir(char *path)
 	}
 	return 0;
 }
+
+xpopen_t xpopen(const char *cmd, const char **argv)
+{
+	xpopen_t ret = { -1, -1, -1 };
+	int pfd_read[2];
+	int pfd_write[2];
+	pid_t pid;
+
+	if (pipe(pfd_read) < 0)
+		return ret;
+
+	if (pipe(pfd_write) < 0) {
+		close(pfd_read[0]);
+		close(pfd_read[1]);
+		return ret;
+	}
+
+	if ((pid = fork()) == 0) {
+		close(pfd_read[0]);
+		dup2(pfd_read[1], 1);
+		close(pfd_write[1]);
+		dup2(pfd_write[0], 0);
+
+		execv(cmd, argv);
+		error(EXIT_FAILURE, errno, "exec: %s", cmd);
+	}
+
+	close(pfd_read[1]);
+	close(pfd_write[0]);
+
+	if (pid < 0) {
+		close(pfd_read[0]);
+		close(pfd_write[1]);
+		return ret;
+	}
+
+	ret.pid = pid;
+	ret.readfd = pfd_read[0];
+	ret.writefd = pfd_write[1];
+	return ret;
+}
