@@ -212,12 +212,15 @@ xpopen_t xpopen(const char *cmd, char *const argv[], unsigned int flags)
 	if (cmd == NULL || argv == NULL || flags == 0)
 		return ret;
 
-	if (pipe(pfd_read) < 0)
+	if (pipe(pfd_read) < 0) {
+		error(0, errno, "pipe: %s", cmd);
 		return ret;
+	}
 
 	if (pipe(pfd_write) < 0) {
 		close(pfd_read[0]);
 		close(pfd_read[1]);
+		error(0, errno, "pipe: %s", cmd);
 		return ret;
 	}
 
@@ -237,6 +240,7 @@ xpopen_t xpopen(const char *cmd, char *const argv[], unsigned int flags)
 	if (pid < 0) {
 		close(pfd_read[0]);
 		close(pfd_write[1]);
+		error(0, errno, "fork: %s", cmd);
 		return ret;
 	}
 
