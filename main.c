@@ -240,7 +240,7 @@ void close_info(void)
 
 void open_info(void)
 {
-	xpopen_t pfd;
+	spawn_t pfd;
 	char w[12], h[12];
 	char *argv[5];
 
@@ -254,7 +254,7 @@ void open_info(void)
 	argv[2] = w;
 	argv[3] = h;
 	argv[4] = NULL;
-	pfd = xpopen(info.f.cmd, argv, X_READ);
+	pfd = spawn(info.f.cmd, argv, X_READ);
 	if (pfd.readfd >= 0) {
 		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
 		info.fd = pfd.readfd;
@@ -516,7 +516,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	struct stat *oldst, st;
 	XEvent dump;
 	char *argv[3];
-	xpopen_t pfd;
+	spawn_t pfd;
 
 	if (keyhandler.f.err) {
 		if (!keyhandler.warned) {
@@ -542,7 +542,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	argv[0] = keyhandler.f.cmd;
 	argv[1] = kstr;
 	argv[2] = NULL;
-	pfd = xpopen(keyhandler.f.cmd, argv, X_WRITE);
+	pfd = spawn(keyhandler.f.cmd, argv, X_WRITE);
 	if (pfd.writefd < 0)
 		return false;
 	pfs = fdopen(pfd.writefd, "w");

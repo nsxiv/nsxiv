@@ -202,9 +202,9 @@ int r_mkdir(char *path)
 	return 0;
 }
 
-xpopen_t xpopen(const char *cmd, char *const argv[], unsigned int flags)
+spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 {
-	xpopen_t ret = { -1, -1, -1 };
+	spawn_t ret = { -1, -1, -1 };
 	int pfd_read[2];
 	int pfd_write[2];
 	pid_t pid;
