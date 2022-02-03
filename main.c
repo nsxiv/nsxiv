@@ -66,7 +66,7 @@ int markcnt;
 int markidx;
 
 int prefix;
-bool extprefix;
+static bool extprefix;
 
 static bool resized = false;
 
@@ -75,19 +75,19 @@ typedef struct {
 	char *cmd;
 } extcmd_t;
 
-struct {
+static struct {
 	extcmd_t f;
 	int fd;
 	unsigned int i, lastsep;
 	pid_t pid;
 } info;
 
-struct {
+static struct {
 	extcmd_t f;
 	bool warned;
 } keyhandler;
 
-timeout_t timeouts[] = {
+static timeout_t timeouts[] = {
 	{ { 0, 0 }, false, redraw       },
 	{ { 0, 0 }, false, reset_cursor },
 	{ { 0, 0 }, false, animate      },
