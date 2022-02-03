@@ -545,7 +545,11 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	pfd = spawn(keyhandler.f.cmd, argv, X_WRITE);
 	if (pfd.writefd < 0)
 		return false;
-	pfs = fdopen(pfd.writefd, "w");
+	if ((pfs = fdopen(pfd.writefd, "w")) == NULL) {
+		close(pfd.writefd);
+		error(0, errno, "open pipe");
+		return false;
+	}
 
 	oldst = emalloc(fcnt * sizeof(*oldst));
 	for (f = i = 0; f < fcnt; i++) {
