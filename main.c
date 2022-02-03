@@ -114,6 +114,19 @@ static bool xgetline(char **lineptr, size_t *n)
 	return len > 0;
 }
 
+static void construct_argv(char **argv, unsigned int len, ...)
+{
+	unsigned int i;
+	va_list args;
+
+	va_start(args, len);
+	for (i = 0; i < len; ++i)
+		argv[i] = va_arg(args, char *);
+	va_end(args);
+	if (argv[len-1] != NULL)
+		error(EXIT_FAILURE, 0, "argv not NULL terminated");
+}
+
 static void check_add_file(char *filename, bool given)
 {
 	char *path;
@@ -249,11 +262,7 @@ void open_info(void)
 	win.bar.l.buf[0] = '\0';
 	snprintf(w, sizeof(w), "%d", img.w);
 	snprintf(h, sizeof(h), "%d", img.h);
-	argv[0] = info.f.cmd;
-	argv[1] = (char *)files[fileidx].name;
-	argv[2] = w;
-	argv[3] = h;
-	argv[4] = NULL;
+	construct_argv(argv, ARRLEN(argv), info.f.cmd, (char*)files[fileidx].name, w, h, NULL);
 	pfd = spawn(info.f.cmd, argv, X_READ);
 	if (pfd.readfd >= 0) {
 		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
@@ -539,9 +548,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	         mask & ShiftMask   ? "S-" : "", key);
 	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
 
-	argv[0] = keyhandler.f.cmd;
-	argv[1] = kstr;
-	argv[2] = NULL;
+	construct_argv(argv, ARRLEN(argv), keyhandler.f.cmd, kstr, NULL);
 	pfd = spawn(keyhandler.f.cmd, argv, X_WRITE);
 	if (pfd.writefd < 0)
 		return false;
