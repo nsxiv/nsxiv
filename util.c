@@ -225,11 +225,14 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 	}
 
 	if ((pid = fork()) == 0) {
+		bool err = dup2(pfd_read[1], 1) < 0 || dup2(pfd_write[0], 0) < 0;
 		close(pfd_read[0]);
-		dup2(pfd_read[1], 1);
+		close(pfd_read[1]);
+		close(pfd_write[0]);
 		close(pfd_write[1]);
-		dup2(pfd_write[0], 0);
 
+		if (err)
+			error(EXIT_FAILURE, errno, "dup2: %s", cmd);
 		execv(cmd, argv);
 		error(EXIT_FAILURE, errno, "exec: %s", cmd);
 	}
