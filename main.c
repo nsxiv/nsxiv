@@ -849,8 +849,7 @@ int main(int argc, char *argv[])
 	else
 		filecnt = options->filecnt;
 
-	files = emalloc(filecnt * sizeof(*files));
-	memset(files, 0, filecnt * sizeof(*files));
+	files = ecalloc(filecnt, sizeof(*files));
 	fileidx = 0;
 
 	if (options->from_stdin) {

@@ -38,6 +38,16 @@ void* emalloc(size_t size)
 	return ptr;
 }
 
+void* ecalloc(size_t nmemb, size_t size)
+{
+	void *ptr;
+
+	ptr = calloc(nmemb, size);
+	if (ptr == NULL)
+		error(EXIT_FAILURE, errno, NULL);
+	return ptr;
+}
+
 void* erealloc(void *ptr, size_t size)
 {
 	ptr = realloc(ptr, size);

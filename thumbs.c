@@ -149,12 +149,10 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 	int len;
 	const char *homedir, *dsuffix = "";
 
-	if (cnt != NULL && *cnt > 0) {
-		tns->thumbs = emalloc(*cnt * sizeof(thumb_t));
-		memset(tns->thumbs, 0, *cnt * sizeof(thumb_t));
-	} else {
+	if (cnt != NULL && *cnt > 0)
+		tns->thumbs = ecalloc(*cnt, sizeof(thumb_t));
+	else
 		tns->thumbs = NULL;
-	}
 	tns->files = files;
 	tns->cnt = cnt;
 	tns->initnext = tns->loadnext = 0;
