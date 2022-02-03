@@ -345,6 +345,7 @@ typedef struct {
 extern const char *progname;
 
 void* emalloc(size_t);
+void* ecalloc(size_t, size_t);
 void* erealloc(void*, size_t);
 char* estrdup(const char*);
 void error(int, int, const char*, ...);
