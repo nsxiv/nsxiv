@@ -262,7 +262,7 @@ void open_info(void)
 	win.bar.l.buf[0] = '\0';
 	snprintf(w, sizeof(w), "%d", img.w);
 	snprintf(h, sizeof(h), "%d", img.h);
-	construct_argv(argv, ARRLEN(argv), info.f.cmd, (char*)files[fileidx].name, w, h, NULL);
+	construct_argv(argv, ARRLEN(argv), info.f.cmd, files[fileidx].name, w, h, NULL);
 	pfd = spawn(info.f.cmd, argv, X_READ);
 	if (pfd.readfd >= 0) {
 		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
@@ -541,13 +541,12 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	strncpy(win.bar.l.buf, "Running key handler...", win.bar.l.size);
 	win_draw(&win);
 	win_set_cursor(&win, CURSOR_WATCH);
+	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
 
 	snprintf(kstr, sizeof(kstr), "%s%s%s%s",
 	         mask & ControlMask ? "C-" : "",
 	         mask & Mod1Mask    ? "M-" : "",
 	         mask & ShiftMask   ? "S-" : "", key);
-	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
-
 	construct_argv(argv, ARRLEN(argv), keyhandler.f.cmd, kstr, NULL);
 	pfd = spawn(keyhandler.f.cmd, argv, X_WRITE);
 	if (pfd.writefd < 0)
