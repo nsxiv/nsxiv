@@ -202,6 +202,19 @@ int r_mkdir(char *path)
 	return 0;
 }
 
+void construct_argv(char **argv, unsigned int len, ...)
+{
+	unsigned int i;
+	va_list args;
+
+	va_start(args, len);
+	for (i = 0; i < len; ++i)
+		argv[i] = va_arg(args, char *);
+	va_end(args);
+	if (argv[len-1] != NULL)
+		error(EXIT_FAILURE, 0, "argv not NULL terminated");
+}
+
 spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 {
 	spawn_t status = { -1, -1, -1 };
