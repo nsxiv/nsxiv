@@ -204,24 +204,24 @@ int r_mkdir(char *path)
 
 spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 {
-	spawn_t ret = { -1, -1, -1 };
+	spawn_t status = { -1, -1, -1 };
 	int pfd_read[2];
 	int pfd_write[2];
 	pid_t pid;
 
 	if (cmd == NULL || argv == NULL || flags == 0)
-		return ret;
+		return status;
 
 	if (pipe(pfd_read) < 0) {
 		error(0, errno, "pipe: %s", cmd);
-		return ret;
+		return status;
 	}
 
 	if (pipe(pfd_write) < 0) {
 		close(pfd_read[0]);
 		close(pfd_read[1]);
 		error(0, errno, "pipe: %s", cmd);
-		return ret;
+		return status;
 	}
 
 	if ((pid = fork()) == 0) {
@@ -244,17 +244,17 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 		close(pfd_read[0]);
 		close(pfd_write[1]);
 		error(0, errno, "fork: %s", cmd);
-		return ret;
+		return status;
 	}
 
-	ret.pid = pid;
+	status.pid = pid;
 	if (flags & X_READ)
-		ret.readfd = pfd_read[0];
+		status.readfd = pfd_read[0];
 	else
 		close(pfd_read[0]);
 	if (flags & X_WRITE)
-		ret.writefd = pfd_write[1];
+		status.writefd = pfd_write[1];
 	else
 		close(pfd_write[1]);
-	return ret;
+	return status;
 }
