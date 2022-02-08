@@ -215,34 +215,42 @@ void construct_argv(char **argv, unsigned int len, ...)
 		error(EXIT_FAILURE, 0, "argv not NULL terminated");
 }
 
+static void xclose(int fd)
+{
+	if (fd >= 0)
+		close(fd);
+}
+
 spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 {
-	spawn_t status = { -1, -1, -1 };
-	int pfd_read[2];
-	int pfd_write[2];
 	pid_t pid;
+	spawn_t status = { -1, -1, -1 };
+	int pfd_read[2] = { -1, -1 };
+	int pfd_write[2] = { -1, -1 };
+	const bool r = flags & X_READ;
+	const bool w = flags & X_WRITE;
 
 	if (cmd == NULL || argv == NULL || flags == 0)
 		return status;
 
-	if (pipe(pfd_read) < 0) {
+	if (r && pipe(pfd_read) < 0) {
 		error(0, errno, "pipe: %s", cmd);
 		return status;
 	}
 
-	if (pipe(pfd_write) < 0) {
-		close(pfd_read[0]);
-		close(pfd_read[1]);
+	if (w && pipe(pfd_write) < 0) {
+		xclose(pfd_read[0]);
+		xclose(pfd_read[1]);
 		error(0, errno, "pipe: %s", cmd);
 		return status;
 	}
 
 	if ((pid = fork()) == 0) {
-		bool err = dup2(pfd_read[1], 1) < 0 || dup2(pfd_write[0], 0) < 0;
-		close(pfd_read[0]);
-		close(pfd_read[1]);
-		close(pfd_write[0]);
-		close(pfd_write[1]);
+		bool err = (r && dup2(pfd_read[1], 1) < 0) || (w && dup2(pfd_write[0], 0) < 0);
+		xclose(pfd_read[0]);
+		xclose(pfd_read[1]);
+		xclose(pfd_write[0]);
+		xclose(pfd_write[1]);
 
 		if (err)
 			error(EXIT_FAILURE, errno, "dup2: %s", cmd);
@@ -250,24 +258,18 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 		error(EXIT_FAILURE, errno, "exec: %s", cmd);
 	}
 
-	close(pfd_read[1]);
-	close(pfd_write[0]);
+	xclose(pfd_read[1]);
+	xclose(pfd_write[0]);
 
 	if (pid < 0) {
-		close(pfd_read[0]);
-		close(pfd_write[1]);
+		xclose(pfd_read[0]);
+		xclose(pfd_write[1]);
 		error(0, errno, "fork: %s", cmd);
 		return status;
 	}
 
 	status.pid = pid;
-	if (flags & X_READ)
-		status.readfd = pfd_read[0];
-	else
-		close(pfd_read[0]);
-	if (flags & X_WRITE)
-		status.writefd = pfd_write[1];
-	else
-		close(pfd_write[1]);
+	status.readfd = pfd_read[0];
+	status.writefd = pfd_write[1];
 	return status;
 }
