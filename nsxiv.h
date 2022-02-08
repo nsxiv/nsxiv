@@ -363,7 +363,7 @@ int r_opendir(r_dir_t*, const char*, bool);
 int r_closedir(r_dir_t*);
 char* r_readdir(r_dir_t*, bool);
 int r_mkdir(char*);
-void construct_argv(char **argv, unsigned int len, ...);
+void construct_argv(char **, unsigned int, ...);
 spawn_t spawn(const char *, char *const [], unsigned int);
 
 
