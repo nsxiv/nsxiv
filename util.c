@@ -215,12 +215,6 @@ void construct_argv(char **argv, unsigned int len, ...)
 		error(EXIT_FAILURE, 0, "argv not NULL terminated");
 }
 
-static void xclose(int fd)
-{
-	if (fd >= 0)
-		close(fd);
-}
-
 spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 {
 	pid_t pid;
@@ -239,18 +233,24 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 	}
 
 	if (w && pipe(pfd_write) < 0) {
-		xclose(pfd_read[0]);
-		xclose(pfd_read[1]);
+		if (r) {
+			close(pfd_read[0]);
+			close(pfd_read[1]);
+		}
 		error(0, errno, "pipe: %s", cmd);
 		return status;
 	}
 
 	if ((pid = fork()) == 0) {
 		bool err = (r && dup2(pfd_read[1], 1) < 0) || (w && dup2(pfd_write[0], 0) < 0);
-		xclose(pfd_read[0]);
-		xclose(pfd_read[1]);
-		xclose(pfd_write[0]);
-		xclose(pfd_write[1]);
+		if (r) {
+			close(pfd_read[0]);
+			close(pfd_read[1]);
+		}
+		if (w) {
+			close(pfd_write[0]);
+			close(pfd_write[1]);
+		}
 
 		if (err)
 			error(EXIT_FAILURE, errno, "dup2: %s", cmd);
@@ -258,12 +258,16 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 		error(EXIT_FAILURE, errno, "exec: %s", cmd);
 	}
 
-	xclose(pfd_read[1]);
-	xclose(pfd_write[0]);
+	if (r)
+		close(pfd_read[1]);
+	if (w)
+		close(pfd_write[0]);
 
 	if (pid < 0) {
-		xclose(pfd_read[0]);
-		xclose(pfd_write[1]);
+		if (r)
+			close(pfd_read[0]);
+		if (w)
+			close(pfd_write[1]);
 		error(0, errno, "fork: %s", cmd);
 		return status;
 	}
