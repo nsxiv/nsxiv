@@ -18,8 +18,6 @@
  */
 
 #include "nsxiv.h"
-#define _TITLE_CONFIG
-#include "config.h"
 #include "version.h"
 
 #include <stdlib.h>
@@ -31,8 +29,21 @@ const opt_t *options;
 void print_usage(void)
 {
 	printf("usage: nsxiv [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
-	       "[-g GEOMETRY] [-N NAME] [-T TITLE] [-n NUM] [-S DELAY] [-s MODE] "
+	       "[-g GEOMETRY] [-N NAME] [-n NUM] [-S DELAY] [-s MODE] "
 	       "[-z ZOOM] FILES...\n");
+}
+
+static void title_deprecation_notice(void)
+{
+	error(EXIT_FAILURE, 0, "\n"
+	      "################################################################\n"
+	      "#                      DEPRECATION NOTICE                      #\n"
+	      "################################################################\n"
+	      "# `-T` option has been deprecated in favour of `win-title`.    #\n"
+	      "# Please read the `WINDOW TITLE` section of the manpage for    #\n"
+	      "# more info.                                                   #\n"
+	      "################################################################"
+	);
 }
 
 static void print_version(void)
@@ -69,8 +80,6 @@ void parse_options(int argc, char **argv)
 	_options.hide_bar = false;
 	_options.geometry = NULL;
 	_options.res_name = NULL;
-	_options.title_prefix = TITLE_PREFIX;
-	_options.title_suffixmode = TITLE_SUFFIXMODE;
 
 	_options.quiet = false;
 	_options.thumb_mode = false;
@@ -155,14 +164,7 @@ void parse_options(int argc, char **argv)
 				_options.scalemode = s - scalemodes;
 				break;
 			case 'T':
-				if ((s = strrchr(optarg, ':')) != NULL) {
-					*s = '\0';
-					n = strtol(++s, &end, 0);
-					if (*end != '\0' || n < SUFFIX_EMPTY || n > SUFFIX_FULLPATH)
-						error(EXIT_FAILURE, 0, "Invalid argument for option -T suffixmode: %s", s);
-					_options.title_suffixmode = n;
-				}
-				_options.title_prefix = optarg;
+				title_deprecation_notice(); /* TODO: remove this option after sometimes */
 				break;
 			case 't':
 				_options.thumb_mode = true;

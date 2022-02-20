@@ -30,6 +30,8 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
+extern size_t win_title_get(char *, int);
+
 #if HAVE_LIBFONTS
 #include "utf8.h"
 static XftFont *font;
@@ -499,27 +501,20 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
 }
 
-void win_set_title(win_t *win, const char *path)
+void win_set_title(win_t *win)
 {
-	enum { title_max = 512 };
-	char title[title_max];
-	const char *basename = strrchr(path, '/') + 1;
+	char title[512];
+	size_t len;
 
-	/* Return if window is not ready yet */
-	if (win->xwin == None)
+	if ((len = win_title_get(title, ARRLEN(title))) <= 0)
 		return;
-
-	snprintf(title, title_max, "%s%s", options->title_prefix,
-	         options->title_suffixmode == SUFFIX_BASENAME ? basename : path);
-	if (options->title_suffixmode == SUFFIX_EMPTY)
-		*(title+strlen(options->title_prefix)) = '\0';
 
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
-	                PropModeReplace, (unsigned char *) title, strlen(title));
+	                PropModeReplace, (unsigned char *) title, len);
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_ICON_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
-	                PropModeReplace, (unsigned char *) title, strlen(title));
+	                PropModeReplace, (unsigned char *) title, len);
 }
 
 void win_set_cursor(win_t *win, cursor_t cursor)

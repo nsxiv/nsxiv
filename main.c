@@ -87,6 +87,10 @@ static struct {
 	bool warned;
 } keyhandler;
 
+static struct {
+	extcmd_t f;
+} wintitle;
+
 static timeout_t timeouts[] = {
 	{ { 0, 0 }, false, redraw       },
 	{ { 0, 0 }, false, reset_cursor },
@@ -229,6 +233,33 @@ static bool check_timeouts(struct timeval *t)
 	return tmin > 0;
 }
 
+size_t win_title_get(char *buf, int len)
+{
+	char *argv[8];
+	spawn_t pfd;
+	char w[12] = "", h[12] = "", z[12] = "", fidx[12], fcnt[12];
+	ssize_t n = -1;
+
+	if (wintitle.f.err || buf == NULL || len <= 0)
+		return 0;
+
+	if (mode == MODE_IMAGE) {
+		snprintf(w, ARRLEN(w), "%d", img.w);
+		snprintf(h, ARRLEN(h), "%d", img.h);
+		snprintf(z, ARRLEN(z), "%d", (int)(img.zoom * 100));
+	}
+	snprintf(fidx, ARRLEN(fidx), "%d", fileidx+1);
+	snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
+	construct_argv(argv, ARRLEN(argv), wintitle.f.cmd, files[fileidx].path,
+	               fidx, fcnt, w, h, z, NULL);
+	pfd = spawn(wintitle.f.cmd, argv, X_READ);
+	if (pfd.readfd >= 0) {
+		if ((n = read(pfd.readfd, buf, len-1)) > 0)
+			buf[n] = '\0';
+	}
+	return n <= 0 ? 0 : n;
+}
+
 void close_info(void)
 {
 	if (info.fd != -1) {
@@ -320,7 +351,6 @@ void load_image(int new)
 	close_info();
 	open_info();
 	arl_setup(&arl, files[fileidx].path);
-	win_set_title(&win, files[fileidx].path);
 
 	if (img.multi.cnt > 0 && img.multi.animate)
 		set_timeout(animate, img.multi.frames[img.multi.sel].delay, true);
@@ -429,6 +459,7 @@ void redraw(void)
 		tns_render(&tns);
 	}
 	update_info();
+	win_set_title(&win);
 	win_draw(&win);
 	reset_timeout(redraw);
 	reset_cursor();
@@ -879,8 +910,8 @@ int main(int argc, char *argv[])
 		dsuffix = "/.config";
 	}
 	if (homedir != NULL) {
-		extcmd_t *cmd[] = { &info.f, &keyhandler.f };
-		const char *name[] = { "image-info", "key-handler" };
+		extcmd_t *cmd[] = { &info.f, &keyhandler.f, &wintitle.f };
+		const char *name[] = { "image-info", "key-handler", "win-title" };
 		const char *s = "/nsxiv/exec/";
 
 		for (i = 0; i < ARRLEN(cmd); i++) {
@@ -906,7 +937,6 @@ int main(int argc, char *argv[])
 		load_image(fileidx);
 	}
 	win_open(&win);
-	win_set_title(&win, files[fileidx].path);
 	win_set_cursor(&win, CURSOR_WATCH);
 
 	atexit(cleanup);

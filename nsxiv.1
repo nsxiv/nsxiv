@@ -20,8 +20,6 @@ nsxiv \- Neo Simple X Image Viewer
 .IR DELAY ]
 .RB [ \-s
 .IR MODE ]
-.RB [ \-T
-.IR TITLE ]
 .RB [ \-z
 .IR ZOOM ]
 .IR FILE ...
@@ -100,19 +98,6 @@ may be a floating point number.
 .BI "\-s " MODE
 Set scale mode according to MODE character. Supported modes are: [d]own,
 [f]it, [F]ill, [w]idth, [h]eight.
-.TP
-.BI "\-T " TITLE
-Set the window title to TITLE. Use the format `prefix:suffixmode'. Any string
-literal is accepted for prefix, and the format of suffixmode is:
-
-.EX
-    Value  Format
-    0      Empty
-    1      Basename of file
-    2      Full path to file
-.EE
-
-By default, prefix is set to "nsxiv - " and suffixmode is set to 1 (basename).
 .TP
 .B \-t
 Start in thumbnail mode.
@@ -439,6 +424,20 @@ Color of the bar foreground. Defaults to window.foreground
 Color of the mark foreground. Defaults to window.foreground
 .TP
 Please see xrdb(1) on how to change them.
+.SH WINDOW TITLE
+The window title can be replaced with the output of a user-provided script,
+which is called by nsxiv whenever there's a redraw. The path of this script is
+.I $XDG_CONFIG_HOME/nsxiv/exec/win-title
+and the arguments given to it (where "Optional" arguments might be empty) are:
+1) full path to the current image,
+2) current file number,
+3) total file number,
+4) image width (Optional: Disabled on thumbnails mode),
+5) image height (Optional: Disabled on thumbnails mode),
+6) current zoom (Optional: Disabled on thumbnails mode).
+.P
+There is also an example script installed together with nsxiv as
+.IR EGPREFIX/win-title .
 .SH STATUS BAR
 The information displayed on the left side of the status bar can be replaced
 with the output of a user-provided script, which is called by nsxiv whenever an
