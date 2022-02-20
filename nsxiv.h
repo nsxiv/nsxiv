@@ -342,6 +342,17 @@ typedef struct {
 	int stlen;
 } r_dir_t;
 
+typedef struct {
+	int readfd;
+	int writefd;
+	pid_t pid;
+} spawn_t;
+
+enum {
+	X_READ  = (1 << 0),
+	X_WRITE = (1 << 1)
+};
+
 extern const char *progname;
 
 void* emalloc(size_t);
@@ -353,6 +364,8 @@ int r_opendir(r_dir_t*, const char*, bool);
 int r_closedir(r_dir_t*);
 char* r_readdir(r_dir_t*, bool);
 int r_mkdir(char*);
+void construct_argv(char**, unsigned int, ...);
+spawn_t spawn(const char*, char *const [], unsigned int);
 
 
 /* window.c */

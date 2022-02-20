@@ -240,29 +240,22 @@ void close_info(void)
 
 void open_info(void)
 {
-	int pfd[2];
+	spawn_t pfd;
 	char w[12], h[12];
+	char *argv[5];
 
 	if (info.f.err || info.fd >= 0 || win.bar.h == 0)
 		return;
 	win.bar.l.buf[0] = '\0';
-	if (pipe(pfd) < 0)
-		return;
-	if ((info.pid = fork()) == 0) {
-		close(pfd[0]);
-		dup2(pfd[1], 1);
-		snprintf(w, sizeof(w), "%d", img.w);
-		snprintf(h, sizeof(h), "%d", img.h);
-		execl(info.f.cmd, info.f.cmd, files[fileidx].name, w, h, NULL);
-		error(EXIT_FAILURE, errno, "exec: %s", info.f.cmd);
-	}
-	close(pfd[1]);
-	if (info.pid < 0) {
-		close(pfd[0]);
-	} else {
-		fcntl(pfd[0], F_SETFL, O_NONBLOCK);
-		info.fd = pfd[0];
+	snprintf(w, sizeof(w), "%d", img.w);
+	snprintf(h, sizeof(h), "%d", img.h);
+	construct_argv(argv, ARRLEN(argv), info.f.cmd, files[fileidx].name, w, h, NULL);
+	pfd = spawn(info.f.cmd, argv, X_READ);
+	if (pfd.readfd >= 0) {
+		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
+		info.fd = pfd.readfd;
 		info.i = info.lastsep = 0;
+		info.pid = pfd.pid;
 	}
 }
 
@@ -510,15 +503,16 @@ void handle_key_handler(bool init)
 
 static bool run_key_handler(const char *key, unsigned int mask)
 {
-	pid_t pid;
 	FILE *pfs;
 	bool marked = mode == MODE_THUMB && markcnt > 0;
 	bool changed = false;
-	int f, i, pfd[2];
+	int f, i;
 	int fcnt = marked ? markcnt : 1;
 	char kstr[32];
 	struct stat *oldst, st;
 	XEvent dump;
+	char *argv[3];
+	spawn_t pfd;
 
 	if (keyhandler.f.err) {
 		if (!keyhandler.warned) {
@@ -530,41 +524,27 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	if (key == NULL)
 		return false;
 
-	if (pipe(pfd) < 0) {
-		error(0, errno, "pipe");
-		return false;
-	}
-	if ((pfs = fdopen(pfd[1], "w")) == NULL) {
-		error(0, errno, "open pipe");
-		close(pfd[0]), close(pfd[1]);
-		return false;
-	}
-	oldst = emalloc(fcnt * sizeof(*oldst));
-
 	close_info();
 	strncpy(win.bar.l.buf, "Running key handler...", win.bar.l.size);
 	win_draw(&win);
 	win_set_cursor(&win, CURSOR_WATCH);
+	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
 
 	snprintf(kstr, sizeof(kstr), "%s%s%s%s",
 	         mask & ControlMask ? "C-" : "",
 	         mask & Mod1Mask    ? "M-" : "",
 	         mask & ShiftMask   ? "S-" : "", key);
-	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
-
-	if ((pid = fork()) == 0) {
-		close(pfd[1]);
-		dup2(pfd[0], 0);
-		execl(keyhandler.f.cmd, keyhandler.f.cmd, kstr, NULL);
-		error(EXIT_FAILURE, errno, "exec: %s", keyhandler.f.cmd);
-	}
-	close(pfd[0]);
-	if (pid < 0) {
-		error(0, errno, "fork");
-		fclose(pfs);
-		goto end;
+	construct_argv(argv, ARRLEN(argv), keyhandler.f.cmd, kstr, NULL);
+	pfd = spawn(keyhandler.f.cmd, argv, X_WRITE);
+	if (pfd.writefd < 0)
+		return false;
+	if ((pfs = fdopen(pfd.writefd, "w")) == NULL) {
+		close(pfd.writefd);
+		error(0, errno, "open pipe");
+		return false;
 	}
 
+	oldst = emalloc(fcnt * sizeof(*oldst));
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
 			stat(files[i].path, &oldst[f]);
@@ -573,7 +553,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 		}
 	}
 	fclose(pfs);
-	while (waitpid(pid, NULL, 0) == -1 && errno == EINTR);
+	while (waitpid(pfd.pid, NULL, 0) == -1 && errno == EINTR);
 
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
@@ -592,7 +572,6 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	/* drop user input events that occurred while running the key handler */
 	while (XCheckIfEvent(win.env.dpy, &dump, is_input_ev, NULL));
 
-end:
 	if (mode == MODE_IMAGE) {
 		if (changed) {
 			img_close(&img, true);
