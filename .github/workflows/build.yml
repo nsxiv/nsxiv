@@ -17,7 +17,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
                              libxft2 libxft-dev libexif12 libexif-dev \
-                             gcc clang
+                             gcc clang git
         TCC_SHA="027b8fb9b88fe137447fb8bb1b61079be9702472"
         wget "https://github.com/TinyCC/tinycc/archive/${TCC_SHA}.tar.gz" && tar xzf "${TCC_SHA}.tar.gz"
         ( cd "tinycc-$TCC_SHA" && ./configure && make && sudo make install; )
@@ -32,12 +32,9 @@ jobs:
         CFLAGS+=" -Wbad-function-cast -Wdeclaration-after-statement"
         # silence
         CFLAGS+=" -Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers"
-        export CFLAGS
-        export LDFLAGS="$CFLAGS"
-        export OPT_DEP_DEFAULT=1
-        echo "###  GCC BUILD  ###" && make clean && CC=gcc   make -s
-        echo "### CLANG BUILD ###" && make clean && CC=clang make -s
-        echo "###  TCC BUILD  ###" && make clean && CC=tcc   make -s
+        echo "###  GCC BUILD  ###" && make clean && make -s CC=gcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=1
+        echo "### CLANG BUILD ###" && make clean && make -s CC=clang CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=1
+        echo "###  TCC BUILD  ###" && make clean && make -s CC=tcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=1
 
   minimal-build:
     runs-on: ubuntu-latest
@@ -47,7 +44,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
-                             gcc clang
+                             gcc clang git
         sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev
         TCC_SHA="027b8fb9b88fe137447fb8bb1b61079be9702472"
         wget "https://github.com/TinyCC/tinycc/archive/${TCC_SHA}.tar.gz" && tar xzf "${TCC_SHA}.tar.gz"
@@ -63,9 +60,6 @@ jobs:
         CFLAGS+=" -Wbad-function-cast -Wdeclaration-after-statement"
         # silence
         CFLAGS+=" -Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers"
-        export CFLAGS
-        export LDFLAGS="$CFLAGS"
-        export OPT_DEP_DEFAULT=0
-        echo "###  GCC BUILD  ###" && make clean && CC=gcc   make -s
-        echo "### CLANG BUILD ###" && make clean && CC=clang make -s
-        echo "###  TCC BUILD  ###" && make clean && CC=tcc   make -s
+        echo "###  GCC BUILD  ###" && make clean && make -s CC=gcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=0
+        echo "### CLANG BUILD ###" && make clean && make -s CC=clang CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=0
+        echo "###  TCC BUILD  ###" && make clean && make -s CC=tcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=0

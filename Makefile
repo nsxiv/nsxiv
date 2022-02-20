@@ -76,7 +76,7 @@ config.h:
 
 version.h: Makefile .git/index
 	@echo "GEN $@"
-	v="$$(git describe 2>/dev/null)"; \
+	v="$$(git describe 2>/dev/null || true)"; \
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
 .git/index:
