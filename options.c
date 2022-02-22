@@ -164,7 +164,7 @@ void parse_options(int argc, char **argv)
 				_options.scalemode = s - scalemodes;
 				break;
 			case 'T':
-				title_deprecation_notice(); /* TODO: remove this option after sometimes */
+				title_deprecation_notice(); /* TODO(v30): remove this option */
 				break;
 			case 't':
 				_options.thumb_mode = true;

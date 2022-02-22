@@ -233,7 +233,7 @@ static bool check_timeouts(struct timeval *t)
 	return tmin > 0;
 }
 
-size_t win_title_get(char *buf, int len)
+size_t get_win_title(char *buf, int len)
 {
 	char *argv[8];
 	spawn_t pfd;
@@ -257,7 +257,7 @@ size_t win_title_get(char *buf, int len)
 		if ((n = read(pfd.readfd, buf, len-1)) > 0)
 			buf[n] = '\0';
 	}
-	return n <= 0 ? 0 : n;
+	return MAX(0, n);
 }
 
 void close_info(void)

@@ -30,7 +30,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-extern size_t win_title_get(char *, int);
+extern size_t get_win_title(char *, int);
 
 #if HAVE_LIBFONTS
 #include "utf8.h"
@@ -506,7 +506,7 @@ void win_set_title(win_t *win)
 	char title[512];
 	size_t len;
 
-	if ((len = win_title_get(title, ARRLEN(title))) <= 0)
+	if ((len = get_win_title(title, ARRLEN(title))) <= 0)
 		return;
 
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
