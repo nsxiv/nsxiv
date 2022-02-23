@@ -17,19 +17,6 @@ static const char *DEFAULT_FONT       = "monospace-8";
 #endif
 
 #endif
-#ifdef _TITLE_CONFIG
-
-/* default title prefix */
-static const char *TITLE_PREFIX = "nsxiv - ";
-
-/* default title suffixmode, available options are:
- * SUFFIX_EMPTY
- * SUFFIX_BASENAME
- * SUFFIX_FULLPATH
- */
-static const suffixmode_t TITLE_SUFFIXMODE = SUFFIX_BASENAME;
-
-#endif
 #ifdef _IMAGE_CONFIG
 
 /* levels (in percent) to use when zooming via '-' and '+':
