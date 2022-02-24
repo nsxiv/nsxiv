@@ -1,5 +1,5 @@
 /* Copyright 2011-2020 Bert Muennich
- * Copyright 2021 nsxiv contributors
+ * Copyright 2021-2022 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
@@ -57,6 +57,7 @@ arl_t arl;
 img_t img;
 tns_t tns;
 win_t win;
+const XButtonEvent *xbutton_ev;
 
 fileinfo_t *files;
 int filecnt, fileidx;
@@ -65,7 +66,7 @@ int markcnt;
 int markidx;
 
 int prefix;
-bool extprefix;
+static bool extprefix;
 
 static bool resized = false;
 
@@ -74,19 +75,23 @@ typedef struct {
 	char *cmd;
 } extcmd_t;
 
-struct {
+static struct {
 	extcmd_t f;
 	int fd;
 	unsigned int i, lastsep;
 	pid_t pid;
 } info;
 
-struct {
+static struct {
 	extcmd_t f;
 	bool warned;
 } keyhandler;
 
-timeout_t timeouts[] = {
+static struct {
+	extcmd_t f;
+} wintitle;
+
+static timeout_t timeouts[] = {
 	{ { 0, 0 }, false, redraw       },
 	{ { 0, 0 }, false, reset_cursor },
 	{ { 0, 0 }, false, animate      },
@@ -228,6 +233,33 @@ static bool check_timeouts(struct timeval *t)
 	return tmin > 0;
 }
 
+size_t get_win_title(char *buf, int len)
+{
+	char *argv[8];
+	spawn_t pfd;
+	char w[12] = "", h[12] = "", z[12] = "", fidx[12], fcnt[12];
+	ssize_t n = -1;
+
+	if (wintitle.f.err || buf == NULL || len <= 0)
+		return 0;
+
+	if (mode == MODE_IMAGE) {
+		snprintf(w, ARRLEN(w), "%d", img.w);
+		snprintf(h, ARRLEN(h), "%d", img.h);
+		snprintf(z, ARRLEN(z), "%d", (int)(img.zoom * 100));
+	}
+	snprintf(fidx, ARRLEN(fidx), "%d", fileidx+1);
+	snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
+	construct_argv(argv, ARRLEN(argv), wintitle.f.cmd, files[fileidx].path,
+	               fidx, fcnt, w, h, z, NULL);
+	pfd = spawn(wintitle.f.cmd, argv, X_READ);
+	if (pfd.readfd >= 0) {
+		if ((n = read(pfd.readfd, buf, len-1)) > 0)
+			buf[n] = '\0';
+	}
+	return MAX(0, n);
+}
+
 void close_info(void)
 {
 	if (info.fd != -1) {
@@ -239,29 +271,22 @@ void close_info(void)
 
 void open_info(void)
 {
-	int pfd[2];
+	spawn_t pfd;
 	char w[12], h[12];
+	char *argv[5];
 
 	if (info.f.err || info.fd >= 0 || win.bar.h == 0)
 		return;
 	win.bar.l.buf[0] = '\0';
-	if (pipe(pfd) < 0)
-		return;
-	if ((info.pid = fork()) == 0) {
-		close(pfd[0]);
-		dup2(pfd[1], 1);
-		snprintf(w, sizeof(w), "%d", img.w);
-		snprintf(h, sizeof(h), "%d", img.h);
-		execl(info.f.cmd, info.f.cmd, files[fileidx].name, w, h, NULL);
-		error(EXIT_FAILURE, errno, "exec: %s", info.f.cmd);
-	}
-	close(pfd[1]);
-	if (info.pid < 0) {
-		close(pfd[0]);
-	} else {
-		fcntl(pfd[0], F_SETFL, O_NONBLOCK);
-		info.fd = pfd[0];
+	snprintf(w, sizeof(w), "%d", img.w);
+	snprintf(h, sizeof(h), "%d", img.h);
+	construct_argv(argv, ARRLEN(argv), info.f.cmd, files[fileidx].name, w, h, NULL);
+	pfd = spawn(info.f.cmd, argv, X_READ);
+	if (pfd.readfd >= 0) {
+		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
+		info.fd = pfd.readfd;
 		info.i = info.lastsep = 0;
+		info.pid = pfd.pid;
 	}
 }
 
@@ -326,7 +351,6 @@ void load_image(int new)
 	close_info();
 	open_info();
 	arl_setup(&arl, files[fileidx].path);
-	win_set_title(&win, files[fileidx].path);
 
 	if (img.multi.cnt > 0 && img.multi.animate)
 		set_timeout(animate, img.multi.frames[img.multi.sel].delay, true);
@@ -435,6 +459,7 @@ void redraw(void)
 		tns_render(&tns);
 	}
 	update_info();
+	win_set_title(&win);
 	win_draw(&win);
 	reset_timeout(redraw);
 	reset_cursor();
@@ -470,8 +495,8 @@ void reset_cursor(void)
 void animate(void)
 {
 	if (img_frame_animate(&img)) {
-		redraw();
 		set_timeout(animate, img.multi.frames[img.multi.sel].delay, true);
+		redraw();
 	}
 }
 
@@ -507,63 +532,50 @@ void handle_key_handler(bool init)
 	win_draw(&win);
 }
 
-static void run_key_handler(const char *key, unsigned int mask)
+static bool run_key_handler(const char *key, unsigned int mask)
 {
-	pid_t pid;
 	FILE *pfs;
 	bool marked = mode == MODE_THUMB && markcnt > 0;
 	bool changed = false;
-	int f, i, pfd[2];
+	int f, i;
 	int fcnt = marked ? markcnt : 1;
 	char kstr[32];
 	struct stat *oldst, st;
 	XEvent dump;
+	char *argv[3];
+	spawn_t pfd;
 
 	if (keyhandler.f.err) {
 		if (!keyhandler.warned) {
 			error(0, keyhandler.f.err, "%s", keyhandler.f.cmd);
 			keyhandler.warned = true;
 		}
-		return;
+		return false;
 	}
 	if (key == NULL)
-		return;
-
-	if (pipe(pfd) < 0) {
-		error(0, errno, "pipe");
-		return;
-	}
-	if ((pfs = fdopen(pfd[1], "w")) == NULL) {
-		error(0, errno, "open pipe");
-		close(pfd[0]), close(pfd[1]);
-		return;
-	}
-	oldst = emalloc(fcnt * sizeof(*oldst));
+		return false;
 
 	close_info();
 	strncpy(win.bar.l.buf, "Running key handler...", win.bar.l.size);
 	win_draw(&win);
 	win_set_cursor(&win, CURSOR_WATCH);
+	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
 
 	snprintf(kstr, sizeof(kstr), "%s%s%s%s",
 	         mask & ControlMask ? "C-" : "",
 	         mask & Mod1Mask    ? "M-" : "",
 	         mask & ShiftMask   ? "S-" : "", key);
-	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
-
-	if ((pid = fork()) == 0) {
-		close(pfd[1]);
-		dup2(pfd[0], 0);
-		execl(keyhandler.f.cmd, keyhandler.f.cmd, kstr, NULL);
-		error(EXIT_FAILURE, errno, "exec: %s", keyhandler.f.cmd);
-	}
-	close(pfd[0]);
-	if (pid < 0) {
-		error(0, errno, "fork");
-		fclose(pfs);
-		goto end;
+	construct_argv(argv, ARRLEN(argv), keyhandler.f.cmd, kstr, NULL);
+	pfd = spawn(keyhandler.f.cmd, argv, X_WRITE);
+	if (pfd.writefd < 0)
+		return false;
+	if ((pfs = fdopen(pfd.writefd, "w")) == NULL) {
+		close(pfd.writefd);
+		error(0, errno, "open pipe");
+		return false;
 	}
 
+	oldst = emalloc(fcnt * sizeof(*oldst));
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
 			stat(files[i].path, &oldst[f]);
@@ -572,7 +584,7 @@ static void run_key_handler(const char *key, unsigned int mask)
 		}
 	}
 	fclose(pfs);
-	while (waitpid(pid, NULL, 0) == -1 && errno == EINTR);
+	while (waitpid(pfd.pid, NULL, 0) == -1 && errno == EINTR);
 
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
@@ -591,7 +603,6 @@ static void run_key_handler(const char *key, unsigned int mask)
 	/* drop user input events that occurred while running the key handler */
 	while (XCheckIfEvent(win.env.dpy, &dump, is_input_ev, NULL));
 
-end:
 	if (mode == MODE_IMAGE) {
 		if (changed) {
 			img_close(&img, true);
@@ -602,22 +613,22 @@ end:
 	}
 	free(oldst);
 	reset_cursor();
-	redraw();
+	return true;
 }
 
-static bool process_bindings(const keymap_t *keys, unsigned int len, KeySym ksym_or_button,
+static bool process_bindings(const keymap_t *bindings, unsigned int len, KeySym ksym_or_button,
                              unsigned int state, unsigned int implicit_mod)
 {
 	unsigned int i;
 	bool dirty = false;
 
 	for (i = 0; i < len; i++) {
-		if (keys[i].ksym_or_button == ksym_or_button &&
-		    MODMASK(keys[i].mask | implicit_mod) == MODMASK(state) &&
-		    keys[i].cmd.func &&
-		    (keys[i].cmd.mode == MODE_ALL || keys[i].cmd.mode == mode))
+		if (bindings[i].ksym_or_button == ksym_or_button &&
+		    MODMASK(bindings[i].mask | implicit_mod) == MODMASK(state) &&
+		    bindings[i].cmd.func &&
+		    (bindings[i].cmd.mode == MODE_ALL || bindings[i].cmd.mode == mode))
 		{
-			if (keys[i].cmd.func(keys[i].arg))
+			if (bindings[i].cmd.func(bindings[i].arg))
 				dirty = true;
 		}
 	}
@@ -645,8 +656,10 @@ static void on_keypress(XKeyEvent *kev)
 	if (extprefix && ksym == KEYHANDLER_ABORT && MODMASK(kev->state) == 0) {
 		handle_key_handler(false);
 	} else if (extprefix) {
-		run_key_handler(XKeysymToString(ksym), kev->state & ~sh);
-		extprefix = false;
+		if ((dirty = run_key_handler(XKeysymToString(ksym), kev->state & ~sh)))
+			extprefix = false;
+		else
+			handle_key_handler(false);
 	} else if (key >= '0' && key <= '9') {
 		/* number prefix for commands */
 		prefix = prefix * 10 + (int) (key - '0');
@@ -659,64 +672,19 @@ static void on_keypress(XKeyEvent *kev)
 	prefix = 0;
 }
 
-static void on_buttonpress(XButtonEvent *bev)
+static void on_buttonpress(const XButtonEvent *bev)
 {
-	int sel;
 	bool dirty = false;
-	static Time firstclick;
 
 	if (mode == MODE_IMAGE) {
 		set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
 		reset_cursor();
-		dirty = process_bindings(buttons, ARRLEN(buttons), bev->button, bev->state, 0);
-		if (dirty)
-			redraw();
-	} else {
-		/* thumbnail mode (hard-coded) */
-		switch (bev->button) {
-			case Button1:
-				if ((sel = tns_translate(&tns, bev->x, bev->y)) >= 0) {
-					if (sel != fileidx) {
-						tns_highlight(&tns, fileidx, false);
-						tns_highlight(&tns, sel, true);
-						fileidx = sel;
-						firstclick = bev->time;
-						redraw();
-					} else if (bev->time - firstclick <= TO_DOUBLE_CLICK) {
-						mode = MODE_IMAGE;
-						set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
-						load_image(fileidx);
-						redraw();
-					} else {
-						firstclick = bev->time;
-					}
-				}
-				break;
-			case Button3:
-				if ((sel = tns_translate(&tns, bev->x, bev->y)) >= 0) {
-					bool on = !(files[sel].flags & FF_MARK);
-					XEvent e;
-
-					while (true) {
-						if (sel >= 0 && mark_image(sel, on))
-							redraw();
-						XMaskEvent(win.env.dpy,
-						           ButtonPressMask | ButtonReleaseMask | PointerMotionMask, &e);
-						if (e.type == ButtonPress || e.type == ButtonRelease)
-							break;
-						while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e));
-						sel = tns_translate(&tns, e.xbutton.x, e.xbutton.y);
-					}
-				}
-				break;
-			case Button4:
-			case Button5:
-				if (tns_scroll(&tns, bev->button == Button4 ? DIR_UP : DIR_DOWN,
-				               (bev->state & ControlMask) != 0))
-					redraw();
-				break;
-		}
+		dirty = process_bindings(buttons_img, ARRLEN(buttons_img), bev->button, bev->state, 0);
+	} else { /* thumbnail mode */
+		dirty = process_bindings(buttons_tns, ARRLEN(buttons_tns), bev->button, bev->state, 0);
 	}
+	if (dirty)
+		redraw();
 	prefix = 0;
 }
 
@@ -729,13 +697,14 @@ static void run(void)
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
 
+	xbutton_ev = &ev.xbutton;
 	while (true) {
 		to_set = check_timeouts(&timeout);
 		init_thumb = mode == MODE_THUMB && tns.initnext < filecnt;
 		load_thumb = mode == MODE_THUMB && tns.loadnext < tns.end;
 
 		if ((init_thumb || load_thumb || to_set || info.fd != -1 ||
-			   arl.fd != -1) && XPending(win.env.dpy) == 0)
+		     arl.fd != -1) && XPending(win.env.dpy) == 0)
 		{
 			if (load_thumb) {
 				set_timeout(redraw, TO_REDRAW_THUMBS, false);
@@ -890,8 +859,7 @@ int main(int argc, char *argv[])
 	else
 		filecnt = options->filecnt;
 
-	files = emalloc(filecnt * sizeof(*files));
-	memset(files, 0, filecnt * sizeof(*files));
+	files = ecalloc(filecnt, sizeof(*files));
 	fileidx = 0;
 
 	if (options->from_stdin) {
@@ -942,8 +910,8 @@ int main(int argc, char *argv[])
 		dsuffix = "/.config";
 	}
 	if (homedir != NULL) {
-		extcmd_t *cmd[] = { &info.f, &keyhandler.f };
-		const char *name[] = { "image-info", "key-handler" };
+		extcmd_t *cmd[] = { &info.f, &keyhandler.f, &wintitle.f };
+		const char *name[] = { "image-info", "key-handler", "win-title" };
 		const char *s = "/nsxiv/exec/";
 
 		for (i = 0; i < ARRLEN(cmd); i++) {
@@ -969,7 +937,6 @@ int main(int argc, char *argv[])
 		load_image(fileidx);
 	}
 	win_open(&win);
-	win_set_title(&win, files[fileidx].path);
 	win_set_cursor(&win, CURSOR_WATCH);
 
 	atexit(cleanup);

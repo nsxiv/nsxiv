@@ -1,5 +1,5 @@
 /* Copyright 2011-2020 Bert Muennich
- * Copyright 2021 nsxiv contributors
+ * Copyright 2021-2022 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
@@ -36,7 +36,6 @@ void exif_auto_orientate(const fileinfo_t*);
 Imlib_Image img_open(const fileinfo_t*);
 
 static char *cache_dir;
-extern const int fileidx;
 
 static char* tns_cache_filepath(const char *filepath)
 {
@@ -149,12 +148,10 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 	int len;
 	const char *homedir, *dsuffix = "";
 
-	if (cnt != NULL && *cnt > 0) {
-		tns->thumbs = emalloc(*cnt * sizeof(thumb_t));
-		memset(tns->thumbs, 0, *cnt * sizeof(thumb_t));
-	} else {
+	if (cnt != NULL && *cnt > 0)
+		tns->thumbs = ecalloc(*cnt, sizeof(thumb_t));
+	else
 		tns->thumbs = NULL;
-	}
 	tns->files = files;
 	tns->cnt = cnt;
 	tns->initnext = tns->loadnext = 0;
@@ -532,7 +529,6 @@ bool tns_move_selection(tns_t *tns, direction_t dir, int cnt)
 		if (!tns->dirty)
 			tns_highlight(tns, *tns->sel, true);
 	}
-	win_set_title(tns->win, tns->files[fileidx].path);
 	return *tns->sel != old;
 }
 

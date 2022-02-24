@@ -1,5 +1,5 @@
 /* Copyright 2011-2020 Bert Muennich
- * Copyright 2021 nsxiv contributors
+ * Copyright 2021-2022 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
@@ -33,6 +33,16 @@ void* emalloc(size_t size)
 	void *ptr;
 
 	ptr = malloc(size);
+	if (ptr == NULL)
+		error(EXIT_FAILURE, errno, NULL);
+	return ptr;
+}
+
+void* ecalloc(size_t nmemb, size_t size)
+{
+	void *ptr;
+
+	ptr = calloc(nmemb, size);
 	if (ptr == NULL)
 		error(EXIT_FAILURE, errno, NULL);
 	return ptr;
@@ -77,16 +87,6 @@ void error(int eval, int err, const char* fmt, ...)
 
 	if (eval != 0)
 		exit(eval);
-}
-
-void size_readable(float *size, const char **unit)
-{
-	const char *units[] = { "", "K", "M", "G" };
-	unsigned int i;
-
-	for (i = 0; i < ARRLEN(units) && *size > 1024.0; i++)
-		*size /= 1024.0;
-	*unit = units[MIN(i, ARRLEN(units) - 1)];
 }
 
 int r_opendir(r_dir_t *rdir, const char *dirname, bool recursive)
@@ -210,4 +210,80 @@ int r_mkdir(char *path)
 		*s = c;
 	}
 	return 0;
+}
+
+void construct_argv(char **argv, unsigned int len, ...)
+{
+	unsigned int i;
+	va_list args;
+
+	va_start(args, len);
+	for (i = 0; i < len; ++i)
+		argv[i] = va_arg(args, char *);
+	va_end(args);
+	if (argv[len-1] != NULL)
+		error(EXIT_FAILURE, 0, "argv not NULL terminated");
+}
+
+spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
+{
+	pid_t pid;
+	spawn_t status = { -1, -1, -1 };
+	int pfd_read[2] = { -1, -1 };
+	int pfd_write[2] = { -1, -1 };
+	const bool r = flags & X_READ;
+	const bool w = flags & X_WRITE;
+
+	if (cmd == NULL || argv == NULL || flags == 0)
+		return status;
+
+	if (r && pipe(pfd_read) < 0) {
+		error(0, errno, "pipe: %s", cmd);
+		return status;
+	}
+
+	if (w && pipe(pfd_write) < 0) {
+		if (r) {
+			close(pfd_read[0]);
+			close(pfd_read[1]);
+		}
+		error(0, errno, "pipe: %s", cmd);
+		return status;
+	}
+
+	if ((pid = fork()) == 0) {
+		bool err = (r && dup2(pfd_read[1], 1) < 0) || (w && dup2(pfd_write[0], 0) < 0);
+		if (r) {
+			close(pfd_read[0]);
+			close(pfd_read[1]);
+		}
+		if (w) {
+			close(pfd_write[0]);
+			close(pfd_write[1]);
+		}
+
+		if (err)
+			error(EXIT_FAILURE, errno, "dup2: %s", cmd);
+		execv(cmd, argv);
+		error(EXIT_FAILURE, errno, "exec: %s", cmd);
+	}
+
+	if (r)
+		close(pfd_read[1]);
+	if (w)
+		close(pfd_write[0]);
+
+	if (pid < 0) {
+		if (r)
+			close(pfd_read[0]);
+		if (w)
+			close(pfd_write[1]);
+		error(0, errno, "fork: %s", cmd);
+		return status;
+	}
+
+	status.pid = pid;
+	status.readfd = pfd_read[0];
+	status.writefd = pfd_write[1];
+	return status;
 }

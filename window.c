@@ -1,5 +1,5 @@
 /* Copyright 2011-2020 Bert Muennich
- * Copyright 2021 nsxiv contributors
+ * Copyright 2021-2022 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
@@ -29,6 +29,8 @@
 #include <X11/cursorfont.h>
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
+
+extern size_t get_win_title(char *, int);
 
 #if HAVE_LIBFONTS
 #include "utf8.h"
@@ -186,6 +188,8 @@ void win_open(win_t *win)
 	pid_t pid;
 	char hostname[256];
 	XSetWindowAttributes attrs;
+	char res_class[] = RES_CLASS;
+	char res_name[] = "nsxiv";
 
 	e = &win->env;
 	parent = options->embed ? options->embed : RootWindow(e->dpy, e->scr);
@@ -284,11 +288,11 @@ void win_open(win_t *win)
 	free(icon_data);
 
 	/* These two atoms won't change and thus only need to be set once. */
-	XStoreName(win->env.dpy, win->xwin, "nsxiv");
-	XSetIconName(win->env.dpy, win->xwin, "nsxiv");
+	XStoreName(win->env.dpy, win->xwin, res_name);
+	XSetIconName(win->env.dpy, win->xwin, res_name);
 
-	classhint.res_class = RES_CLASS;
-	classhint.res_name = options->res_name != NULL ? options->res_name : "nsxiv";
+	classhint.res_class = res_class;
+	classhint.res_name = options->res_name != NULL ? options->res_name : res_name;
 	XSetClassHint(e->dpy, win->xwin, &classhint);
 
 	XSetWMProtocols(e->dpy, win->xwin, &atoms[ATOM_WM_DELETE_WINDOW], 1);
@@ -497,27 +501,20 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
 }
 
-void win_set_title(win_t *win, const char *path)
+void win_set_title(win_t *win)
 {
-	enum { title_max = 512 };
-	char title[title_max];
-	const char *basename = strrchr(path, '/') + 1;
+	char title[512];
+	size_t len;
 
-	/* Return if window is not ready yet */
-	if (win->xwin == None)
+	if ((len = get_win_title(title, ARRLEN(title))) <= 0)
 		return;
-
-	snprintf(title, title_max, "%s%s", options->title_prefix,
-	         options->title_suffixmode == SUFFIX_BASENAME ? basename : path);
-	if (options->title_suffixmode == SUFFIX_EMPTY)
-		*(title+strlen(options->title_prefix)) = '\0';
 
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
-	                PropModeReplace, (unsigned char *) title, strlen(title));
+	                PropModeReplace, (unsigned char *) title, len);
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_ICON_NAME],
 	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
-	                PropModeReplace, (unsigned char *) title, strlen(title));
+	                PropModeReplace, (unsigned char *) title, len);
 }
 
 void win_set_cursor(win_t *win, cursor_t cursor)

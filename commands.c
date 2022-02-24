@@ -1,5 +1,5 @@
 /* Copyright 2011-2020 Bert Muennich
- * Copyright 2021 nsxiv contributors
+ * Copyright 2021-2022 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
@@ -42,6 +42,7 @@ extern appmode_t mode;
 extern img_t img;
 extern tns_t tns;
 extern win_t win;
+extern const XButtonEvent *xbutton_ev;
 
 extern fileinfo_t *files;
 extern int filecnt, fileidx;
@@ -63,6 +64,7 @@ bool cg_quit(arg_t status)
 		}
 	}
 	exit(status);
+	return None; /* silence tcc warning */
 }
 
 bool cg_switch_mode(arg_t _)
@@ -323,12 +325,17 @@ bool ci_scroll(arg_t dir)
 	return img_pan(&img, dir, prefix);
 }
 
+bool ci_scroll_to_center(arg_t _)
+{
+	return img_pan_center(&img);
+}
+
 bool ci_scroll_to_edge(arg_t dir)
 {
 	return img_pan_edge(&img, dir);
 }
 
-bool ci_drag(arg_t mode)
+bool ci_drag(arg_t drag_mode)
 {
 	int x, y, ox, oy;
 	float px, py;
@@ -337,13 +344,13 @@ bool ci_drag(arg_t mode)
 	if ((int)(img.w * img.zoom) <= win.w && (int)(img.h * img.zoom) <= win.h)
 		return false;
 
-	win_set_cursor(&win, mode == DRAG_ABSOLUTE ? CURSOR_DRAG_ABSOLUTE : CURSOR_DRAG_RELATIVE);
+	win_set_cursor(&win, drag_mode == DRAG_ABSOLUTE ? CURSOR_DRAG_ABSOLUTE : CURSOR_DRAG_RELATIVE);
 	win_cursor_pos(&win, &x, &y);
 	ox = x;
 	oy = y;
 
 	while (true) {
-		if (mode == DRAG_ABSOLUTE) {
+		if (drag_mode == DRAG_ABSOLUTE) {
 			px = MIN(MAX(0.0, x - win.w*0.1), win.w*0.8) / (win.w*0.8)
 			   * (win.w - img.w * img.zoom);
 			py = MIN(MAX(0.0, y - win.h*0.1), win.h*0.8) / (win.h*0.8)
@@ -434,4 +441,58 @@ bool ct_reload_all(arg_t _)
 	tns_init(&tns, files, &filecnt, &fileidx, &win);
 	tns.dirty = true;
 	return true;
+}
+
+bool ct_scroll(arg_t dir)
+{
+	return tns_scroll(&tns, dir, false);
+}
+
+bool ct_drag_mark_image(arg_t _)
+{
+	int sel;
+
+	if ((sel = tns_translate(&tns, xbutton_ev->x, xbutton_ev->y)) >= 0) {
+		XEvent e;
+		bool on = !(files[sel].flags & FF_MARK);
+
+		while (true) {
+			if (sel >= 0 && mark_image(sel, on))
+				redraw();
+			XMaskEvent(win.env.dpy,
+			           ButtonPressMask | ButtonReleaseMask | PointerMotionMask, &e);
+			if (e.type == ButtonPress || e.type == ButtonRelease)
+				break;
+			while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e));
+			sel = tns_translate(&tns, e.xbutton.x, e.xbutton.y);
+		}
+	}
+
+	return false;
+}
+
+bool ct_select(arg_t _)
+{
+	int sel;
+	bool dirty = false;
+	static Time firstclick;
+
+	if ((sel = tns_translate(&tns, xbutton_ev->x, xbutton_ev->y)) >= 0) {
+		if (sel != fileidx) {
+			tns_highlight(&tns, fileidx, false);
+			tns_highlight(&tns, sel, true);
+			fileidx = sel;
+			firstclick = xbutton_ev->time;
+			dirty = true;
+		} else if (xbutton_ev->time - firstclick <= TO_DOUBLE_CLICK) {
+			mode = MODE_IMAGE;
+			set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
+			load_image(fileidx);
+			dirty = true;
+		} else {
+			firstclick = xbutton_ev->time;
+		}
+	}
+
+	return dirty;
 }

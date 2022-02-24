@@ -1,5 +1,5 @@
 /* Copyright 2011-2020 Bert Muennich
- * Copyright 2021 nsxiv contributors
+ * Copyright 2021-2022 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
@@ -56,11 +56,6 @@
 }
 
 typedef enum {
-	BO_BIG_ENDIAN,
-	BO_LITTLE_ENDIAN
-} byteorder_t;
-
-typedef enum {
 	MODE_ALL,
 	MODE_IMAGE,
 	MODE_THUMB
@@ -115,12 +110,6 @@ typedef enum {
 	FF_MARK    = 2,
 	FF_TN_INIT = 4
 } fileflags_t;
-
-typedef enum {
-	SUFFIX_EMPTY,
-	SUFFIX_BASENAME,
-	SUFFIX_FULLPATH
-} suffixmode_t;
 
 typedef struct {
 	const char *name; /* as given by user */
@@ -234,6 +223,7 @@ bool img_zoom(img_t*, int);
 bool img_zoom_to(img_t*, float);
 bool img_pos(img_t*, float, float);
 bool img_pan(img_t*, direction_t, int);
+bool img_pan_center(img_t*);
 bool img_pan_edge(img_t*, direction_t);
 void img_rotate(img_t*, degree_t);
 void img_flip(img_t*, flipdir_t);
@@ -269,8 +259,6 @@ struct opt {
 	Window embed; /* unsigned long */
 	char *geometry;
 	char *res_name;
-	const char *title_prefix;
-	suffixmode_t title_suffixmode;
 
 	/* misc flags: */
 	bool quiet;
@@ -346,17 +334,30 @@ typedef struct {
 	int stlen;
 } r_dir_t;
 
+typedef struct {
+	int readfd;
+	int writefd;
+	pid_t pid;
+} spawn_t;
+
+enum {
+	X_READ  = (1 << 0),
+	X_WRITE = (1 << 1)
+};
+
 extern const char *progname;
 
 void* emalloc(size_t);
+void* ecalloc(size_t, size_t);
 void* erealloc(void*, size_t);
 char* estrdup(const char*);
 void error(int, int, const char*, ...);
-void size_readable(float*, const char**);
 int r_opendir(r_dir_t*, const char*, bool);
 int r_closedir(r_dir_t*);
 char* r_readdir(r_dir_t*, bool);
 int r_mkdir(char*);
+void construct_argv(char**, unsigned int, ...);
+spawn_t spawn(const char*, char *const [], unsigned int);
 
 
 /* window.c */
@@ -439,7 +440,7 @@ void win_toggle_bar(win_t*);
 void win_clear(win_t*);
 void win_draw(win_t*);
 void win_draw_rect(win_t*, int, int, int, int, bool, int, unsigned long);
-void win_set_title(win_t*, const char*);
+void win_set_title(win_t*);
 void win_set_cursor(win_t*, cursor_t);
 void win_cursor_pos(win_t*, int*, int*);
 

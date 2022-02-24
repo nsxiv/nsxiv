@@ -1,5 +1,5 @@
 /* Copyright 2011-2020 Bert Muennich
- * Copyright 2021 nsxiv contributors
+ * Copyright 2021-2022 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
@@ -46,12 +46,30 @@ enum { DEF_WEBP_DELAY = 75 };
 #define ZOOM_MIN (zoom_levels[0] / 100)
 #define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels)-1] / 100)
 
+static int calc_cache_size(void)
+{
+	int cache;
+	long pages, page_size;
+
+	if (CACHE_SIZE_MEM_PERCENTAGE <= 0)
+		return 0;
+
+	pages = sysconf(_SC_PHYS_PAGES);
+	page_size = sysconf(_SC_PAGE_SIZE);
+	if (pages < 0 || page_size < 0)
+		return CACHE_SIZE_FALLBACK;
+	cache = (pages/100) * CACHE_SIZE_MEM_PERCENTAGE;
+	cache *= page_size;
+
+	return MIN(cache, CACHE_SIZE_LIMIT);
+}
+
 void img_init(img_t *img, win_t *win)
 {
 	imlib_context_set_display(win->env.dpy);
 	imlib_context_set_visual(win->env.vis);
 	imlib_context_set_colormap(win->env.cmap);
-	imlib_set_cache_size(CACHE_SIZE);
+	imlib_set_cache_size(calc_cache_size());
 
 	img->im = NULL;
 	img->win = win;
@@ -141,7 +159,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 	GifRowType *rows = NULL;
 	GifRecordType rec;
 	ColorMapObject *cmap;
-	DATA32 bgpixel, *data, *ptr;
+	DATA32 bgpixel = 0, *data, *ptr;
 	DATA32 *prev_frame = NULL;
 	Imlib_Image im;
 	int i, j, bg, r, g, b;
@@ -421,7 +439,11 @@ bool img_load(img_t *img, const fileinfo_t *file)
 
 	imlib_image_set_changes_on_disk();
 
-#if HAVE_LIBEXIF
+/* since v1.7.5, Imlib2 can parse exif orientation from jpeg files.
+ * this version also happens to be the first one which defines the
+ * IMLIB2_VERSION macro.
+ */
+#if HAVE_LIBEXIF && !defined(IMLIB2_VERSION)
 	exif_auto_orientate(file);
 #endif
 
@@ -433,6 +455,10 @@ bool img_load(img_t *img, const fileinfo_t *file)
 #if HAVE_LIBWEBP
 		if (STREQ(fmt, "webp"))
 			img_load_webp(img, file);
+#endif
+#if HAVE_LIBEXIF && defined(IMLIB2_VERSION)
+		if (!STREQ(fmt, "jpeg") && !STREQ(fmt, "jpg"))
+			exif_auto_orientate(file);
 #endif
 	}
 	img->w = imlib_image_get_width();
@@ -533,7 +559,6 @@ void img_render(img_t *img)
 	int sx, sy, sw, sh;
 	int dx, dy, dw, dh;
 	Imlib_Image bg;
-	XColor c;
 
 	win = img->win;
 	img_fit(img);
@@ -601,7 +626,7 @@ void img_render(img_t *img)
 			}
 			imlib_image_put_back_data(data);
 		} else {
-			c = win->win_bg;
+			XColor c = win->win_bg;
 			imlib_context_set_color(c.red >> 8, c.green >> 8, c.blue >> 8, 0xFF);
 			imlib_image_fill_rectangle(0, 0, dw, dh);
 		}
@@ -717,6 +742,14 @@ bool img_pan(img_t *img, direction_t dir, int d)
 			return img_move(img, 0.0, -y);
 	}
 	return false;
+}
+
+bool img_pan_center(img_t *img)
+{
+	float x, y;
+	x = (img->win->w - img->w * img->zoom) / 2.0;
+	y = (img->win->h - img->h * img->zoom) / 2.0;
+	return img_pos(img, x, y);
 }
 
 bool img_pan_edge(img_t *img, direction_t dir)
