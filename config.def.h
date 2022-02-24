@@ -16,6 +16,8 @@ static const char *DEFAULT_BAR_FG     = NULL;  /* NULL means it will default to 
 static const char *DEFAULT_FONT       = "monospace-8";
 #endif
 
+static const bool TOP_STATUSBAR = true;
+
 #endif
 #ifdef _IMAGE_CONFIG
 
