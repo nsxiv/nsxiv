@@ -428,7 +428,8 @@ void tns_render(tns_t *tns)
 	}
 	r = cnt % tns->cols ? 1 : 0;
 	tns->x = x = (win->w - MIN(cnt, tns->cols) * tns->dim) / 2 + tns->bw + 3;
-	tns->y = y = (win->h - (cnt / tns->cols + r) * tns->dim) / 2 + tns->bw + 3;
+	tns->y = y = (win->h - (cnt / tns->cols + r) * tns->dim) / 2 + tns->bw + 3 +
+	             (win->bar.top ? win->bar.h : 0);
 	tns->loadnext = *tns->cnt;
 	tns->end = tns->first + cnt;
 
