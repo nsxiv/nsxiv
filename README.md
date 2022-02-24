@@ -162,7 +162,7 @@ Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/ns
 * Can I pipe images into nsxiv? <br>
 Yes, see [nsxiv-pipe](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe)
 
-* nsxiv crashes when viewing images with emojis in its name. <br>
+* nsxiv crashes when viewing images with emojis in their name. <br>
 This is an issue in libXft, install [libxft-bgra](https://github.com/uditkarode/libxft-bgra)
 
 
