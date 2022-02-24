@@ -163,7 +163,9 @@ Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/ns
 Yes, see [nsxiv-pipe](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe)
 
 * nsxiv crashes when viewing images with emojis in their name. <br>
-This is an issue with libXft, install [libxft-bgra](https://github.com/uditkarode/libxft-bgra)
+This is an issue with libXft. Either wait for
+[this](https://gitlab.freedesktop.org/xorg/lib/libxft/-/merge_requests/1) fix to
+be merged, or install [libxft-bgra](https://github.com/uditkarode/libxft-bgra)
 
 
 Customization
