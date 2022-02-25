@@ -424,9 +424,9 @@ struct win {
 
 	struct {
 		unsigned int h;
+		bool top;
 		win_bar_t l;
 		win_bar_t r;
-		bool top;
 	} bar;
 };
 
