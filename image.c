@@ -553,12 +553,80 @@ static bool img_fit(img_t *img)
 	}
 }
 
+void render_core(win_t* win, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh,
+                 bool alpha)
+{
+	Imlib_Image im, bg, bbg;
+	Imlib_Color_Modifier cmod;
+	XColor c;
+
+	if (imlib_image_has_alpha()) {
+		im = imlib_context_get_image();
+		cmod = imlib_context_get_color_modifier();
+		if ((bg = imlib_create_image(dw, dh)) == NULL)
+			error(EXIT_FAILURE, ENOMEM, NULL);
+		imlib_context_set_image(bg);
+		imlib_image_set_has_alpha(1);
+
+		if (alpha) {
+			int i, c, r;
+			DATA32 col[2] = { 0xFF666666, 0xFF999999 };
+			DATA32 * data = imlib_image_get_data();
+
+			for (r = 0; r < dh; r++) {
+				i = r * dw;
+				if (r == 0 || r == 8) {
+					for (c = 0; c < dw; c++)
+						data[i++] = col[!(c & 8) ^ !r];
+				} else {
+					memcpy(&data[i], &data[(r & 8) * dw], dw * sizeof(data[0]));
+				}
+			}
+			imlib_image_put_back_data(data);
+		} else {
+			imlib_image_clear();
+			c = win->win_bg_postmul;
+			imlib_context_set_color(c.red >> 8, c.green >> 8, c.blue >> 8,
+			                        win->win_alpha);
+			imlib_image_fill_rectangle(0, 0, dw, dh);
+		}
+
+		imlib_blend_image_onto_image(im, 1, sx, sy, sw, sh, 0, 0, dw, dh);
+		imlib_context_set_color_modifier(NULL);
+
+		if (!alpha && win->win_alpha < 0xFF) {
+			/* blend onto black to get premultiplied alpha */
+			if ((bbg = imlib_create_image(dw, dh)) == NULL)
+				error(EXIT_FAILURE, ENOMEM, NULL);
+			imlib_context_set_image(bbg);
+			imlib_image_set_has_alpha(1);
+			imlib_context_set_color(0, 0, 0, 0xFF);
+			imlib_image_fill_rectangle(0, 0, dw, dh);
+			imlib_blend_image_onto_image(bg, 1, 0, 0, dw, dh, 0, 0, dw, dh);
+			imlib_image_copy_alpha_to_image(bg, 0, 0);
+			imlib_context_set_image(bg);
+			imlib_free_image();
+			imlib_context_set_image(bbg);
+		}
+
+		imlib_context_set_blend(0);
+		imlib_render_image_on_drawable(dx, dy);
+		imlib_context_set_blend(1);
+		imlib_free_image();
+		imlib_context_set_color_modifier(cmod);
+	} else {
+		imlib_image_set_has_alpha(1);
+		imlib_context_set_blend(0);
+		imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh, dx, dy, dw, dh);
+		imlib_context_set_blend(1);
+	}
+}
+
 void img_render(img_t *img)
 {
 	win_t *win;
 	int sx, sy, sw, sh;
 	int dx, dy, dw, dh;
-	Imlib_Image bg;
 
 	win = img->win;
 	img_fit(img);
@@ -604,40 +672,7 @@ void img_render(img_t *img)
 	imlib_context_set_anti_alias(img->aa);
 	imlib_context_set_drawable(win->buf.pm);
 
-	if (imlib_image_has_alpha()) {
-		if ((bg = imlib_create_image(dw, dh)) == NULL)
-			error(EXIT_FAILURE, ENOMEM, NULL);
-		imlib_context_set_image(bg);
-		imlib_image_set_has_alpha(0);
-
-		if (img->alpha) {
-			int i, c, r;
-			DATA32 col[2] = { 0xFF666666, 0xFF999999 };
-			DATA32 * data = imlib_image_get_data();
-
-			for (r = 0; r < dh; r++) {
-				i = r * dw;
-				if (r == 0 || r == 8) {
-					for (c = 0; c < dw; c++)
-						data[i++] = col[!(c & 8) ^ !r];
-				} else {
-					memcpy(&data[i], &data[(r & 8) * dw], dw * sizeof(data[0]));
-				}
-			}
-			imlib_image_put_back_data(data);
-		} else {
-			XColor c = win->win_bg;
-			imlib_context_set_color(c.red >> 8, c.green >> 8, c.blue >> 8, 0xFF);
-			imlib_image_fill_rectangle(0, 0, dw, dh);
-		}
-		imlib_blend_image_onto_image(img->im, 0, sx, sy, sw, sh, 0, 0, dw, dh);
-		imlib_context_set_color_modifier(NULL);
-		imlib_render_image_on_drawable(dx, dy);
-		imlib_free_image();
-		imlib_context_set_color_modifier(img->cmod);
-	} else {
-		imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh, dx, dy, dw, dh);
-	}
+ 	render_core(win, sx, sy, sw, sh, dx, dy, dw, dh, img->alpha);
 	img->dirty = false;
 }
 

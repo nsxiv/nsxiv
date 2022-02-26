@@ -445,7 +445,7 @@ void tns_render(tns_t *tns)
 			t->x = x + (thumb_sizes[tns->zl] - t->w) / 2;
 			t->y = y + (thumb_sizes[tns->zl] - t->h) / 2;
 			imlib_context_set_image(t->im);
-			render_core(win, 0, 0, t->w, t->h, t->x, t->y, t->w, t->h, false);
+			imlib_render_image_on_drawable_at_size(t->x, t->y, t->w, t->h);
 			if (tns->files[i].flags & FF_MARK)
 				tns_mark(tns, i, true);
 		} else {

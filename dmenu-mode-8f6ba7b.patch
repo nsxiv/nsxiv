@@ -1,0 +1,201 @@
+From cf036dbf6e16c6216de56b591cd1ff03de5c7406 Mon Sep 17 00:00:00 2001
+From: NRK <nrk@disroot.org>
+Date: Fri, 17 Sep 2021 04:03:14 +0600
+Subject: [PATCH 1/2] new keybind Shift-Return, print to stdout and exit
+
+---
+ commands.c   | 6 ++++++
+ commands.h   | 2 ++
+ config.def.h | 1 +
+ nsxiv.1      | 3 +++
+ 4 files changed, 12 insertions(+)
+
+diff --git a/commands.c b/commands.c
+index f44cee1..95c431c 100644
+--- a/commands.c
++++ b/commands.c
+@@ -85,6 +85,12 @@ bool cg_switch_mode(arg_t _)
+ 	return true;
+ }
+ 
++bool cg_pick_quit(arg_t _)
++{
++	printf("%s\n", files[fileidx].name);
++	exit(EXIT_SUCCESS);
++}
++
+ bool cg_toggle_fullscreen(arg_t _)
+ {
+ 	win_toggle_fullscreen(&win);
+diff --git a/commands.h b/commands.h
+index bc0e340..738f38b 100644
+--- a/commands.h
++++ b/commands.h
+@@ -10,6 +10,7 @@ bool cg_n_or_last();
+ bool cg_navigate_marked();
+ bool cg_prefix_external();
+ bool cg_quit();
++bool cg_pick_quit();
+ bool cg_reload_image();
+ bool cg_remove_image();
+ bool cg_reverse_marks();
+@@ -48,6 +49,7 @@ bool ct_reload_all();
+ #define g_navigate_marked { cg_navigate_marked, MODE_ALL }
+ #define g_prefix_external { cg_prefix_external, MODE_ALL }
+ #define g_quit { cg_quit, MODE_ALL }
++#define g_pick_quit { cg_pick_quit, MODE_ALL }
+ #define g_reload_image { cg_reload_image, MODE_ALL }
+ #define g_remove_image { cg_remove_image, MODE_ALL }
+ #define g_reverse_marks { cg_reverse_marks, MODE_ALL }
+diff --git a/config.def.h b/config.def.h
+index 1ccf5a4..4f1e7a0 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -82,6 +82,7 @@ static const keymap_t keys[] = {
+ 	/* modifiers    key               function              argument */
+ 	{ 0,            XK_q,             g_quit,               None },
+ 	{ 0,            XK_Return,        g_switch_mode,        None },
++	{ ShiftMask,    XK_Return,        g_pick_quit,          None },
+ 	{ 0,            XK_f,             g_toggle_fullscreen,  None },
+ 	{ 0,            XK_b,             g_toggle_bar,         None },
+ 	{ ControlMask,  XK_x,             g_prefix_external,    None },
+diff --git a/nsxiv.1 b/nsxiv.1
+index 280ba23..8012de4 100644
+--- a/nsxiv.1
++++ b/nsxiv.1
+@@ -140,6 +140,9 @@ Prefix the next command with a number (denoted via
+ .B q
+ Quit nsxiv.
+ .TP
++.B Shift-Return
++Print the current filename to standard out and quit sxiv.
++.TP
+ .B Return
+ Switch to thumbnail mode / open selected image in image mode.
+ .TP
+-- 
+2.33.1
+
+
+From 3e552e6e9947a21a4e9e44544e442ce06f6c1d8e Mon Sep 17 00:00:00 2001
+From: NRK <nrk@disroot.org>
+Date: Fri, 17 Sep 2021 04:04:15 +0600
+Subject: [PATCH 2/2] new flag -O for dmenu mode
+
+---
+ commands.c | 4 ++++
+ main.c     | 4 ++++
+ nsxiv.1    | 6 ++++++
+ nsxiv.h    | 1 +
+ options.c  | 8 ++++++--
+ 5 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/commands.c b/commands.c
+index 95c431c..cc2f815 100644
+--- a/commands.c
++++ b/commands.c
+@@ -203,6 +203,8 @@ bool cg_reverse_marks(arg_t _)
+ {
+ 	int i;
+ 
++	if (options->dmenu)
++		return false;
+ 	for (i = 0; i < filecnt; i++) {
+ 		files[i].flags ^= FF_MARK;
+ 		markcnt += files[i].flags & FF_MARK ? 1 : -1;
+@@ -226,6 +228,8 @@ bool cg_unmark_all(arg_t _)
+ {
+ 	int i;
+ 
++	if (options->dmenu)
++		return false;
+ 	for (i = 0; i < filecnt; i++)
+ 		files[i].flags &= ~FF_MARK;
+ 	markcnt = 0;
+diff --git a/main.c b/main.c
+index 2643cad..7ac2513 100644
+--- a/main.c
++++ b/main.c
+@@ -329,6 +329,10 @@ void load_image(int new)
+ bool mark_image(int n, bool on)
+ {
+ 	markidx = n;
++	if (options->dmenu) {
++		on = true;
++		printf("%s\n", files[n].name);
++	}
+ 	if (!!(files[n].flags & FF_MARK) != on) {
+ 		files[n].flags ^= FF_MARK;
+ 		markcnt += on ? 1 : -1;
+diff --git a/nsxiv.1 b/nsxiv.1
+index 8012de4..7a7282e 100644
+--- a/nsxiv.1
++++ b/nsxiv.1
+@@ -94,6 +94,12 @@ with
+ .B \-i
+ nsxiv can be used as a visual filter/pipe.
+ .TP
++.B \-O
++Activate dmenu mode. Marking an image will immediately output it's name to
++standard output. Images cannot be unmarked in this mode. Reverse marking
++.RB ( Ctrl\-m )
++is also disabled.
++.TP
+ .B \-p
+ Enable private mode, in which nsxiv does not write any cache or temporary files.
+ .TP
+diff --git a/nsxiv.h b/nsxiv.h
+index e38460a..dc17549 100644
+--- a/nsxiv.h
++++ b/nsxiv.h
+@@ -255,6 +255,7 @@ struct opt {
+ 	/* file list: */
+ 	char **filenames;
+ 	bool from_stdin;
++	bool dmenu;
+ 	bool to_stdout;
+ 	bool using_null;
+ 	bool recursive;
+diff --git a/options.c b/options.c
+index 2d313de..74c6b56 100644
+--- a/options.c
++++ b/options.c
+@@ -31,7 +31,7 @@ const opt_t *options = (const opt_t*) &_options;
+ 
+ void print_usage(void)
+ {
+-	printf("usage: nsxiv [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
++	printf("usage: nsxiv [-abcfhiOopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+ 	       "[-g GEOMETRY] [-N NAME] [-T TITLE] [-n NUM] [-S DELAY] [-s MODE] "
+ 	       "[-z ZOOM] FILES...\n");
+ }
+@@ -51,6 +51,7 @@ void parse_options(int argc, char **argv)
+ 	progname = progname ? progname + 1 : argv[0];
+ 
+ 	_options.from_stdin = false;
++	_options.dmenu = false;
+ 	_options.to_stdout = false;
+ 	_options.using_null = false;
+ 	_options.recursive = false;
+@@ -76,7 +77,7 @@ void parse_options(int argc, char **argv)
+ 	_options.clean_cache = false;
+ 	_options.private_mode = false;
+ 
+-	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:opqrS:s:T:tvZz:0")) != -1) {
++	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:OopqrS:s:T:tvZz:0")) != -1) {
+ 		switch (opt) {
+ 			case '?':
+ 				print_usage();
+@@ -129,6 +130,9 @@ void parse_options(int argc, char **argv)
+ 			case 'N':
+ 				_options.res_name = optarg;
+ 				break;
++			case 'O':
++				_options.dmenu = true;
++				break;
+ 			case 'o':
+ 				_options.to_stdout = true;
+ 				break;
+-- 
+2.33.1
+
