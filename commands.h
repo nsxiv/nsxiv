@@ -10,6 +10,7 @@ bool cg_n_or_last(arg_t);
 bool cg_navigate_marked(arg_t);
 bool cg_prefix_external(arg_t);
 bool cg_quit(arg_t);
+bool cg_pick_quit(arg_t);
 bool cg_reload_image(arg_t);
 bool cg_remove_image(arg_t);
 bool cg_reverse_marks(arg_t);
@@ -20,6 +21,7 @@ bool cg_toggle_fullscreen(arg_t);
 bool cg_toggle_image_mark(arg_t);
 bool cg_unmark_all(arg_t);
 bool cg_zoom(arg_t);
+bool cg_toggle_winbg(arg_t);
 /* image mode */
 bool ci_alternate(arg_t);
 bool ci_cursor_navigate(arg_t);
@@ -52,6 +54,7 @@ bool ct_select(arg_t);
 #define g_navigate_marked { cg_navigate_marked, MODE_ALL }
 #define g_prefix_external { cg_prefix_external, MODE_ALL }
 #define g_quit { cg_quit, MODE_ALL }
+#define g_pick_quit { cg_pick_quit, MODE_ALL }
 #define g_reload_image { cg_reload_image, MODE_ALL }
 #define g_remove_image { cg_remove_image, MODE_ALL }
 #define g_reverse_marks { cg_reverse_marks, MODE_ALL }
@@ -62,6 +65,7 @@ bool ct_select(arg_t);
 #define g_toggle_image_mark { cg_toggle_image_mark, MODE_ALL }
 #define g_unmark_all { cg_unmark_all, MODE_ALL }
 #define g_zoom { cg_zoom, MODE_ALL }
+#define g_toggle_winbg { cg_toggle_winbg, MODE_ALL }
 
 /* image mode */
 #define i_alternate { ci_alternate, MODE_IMAGE }

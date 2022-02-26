@@ -87,6 +87,12 @@ bool cg_switch_mode(arg_t _)
 	return true;
 }
 
+bool cg_pick_quit(arg_t _)
+{
+	printf("%s\n", files[fileidx].name);
+	exit(EXIT_SUCCESS);
+}
+
 bool cg_toggle_fullscreen(arg_t _)
 {
 	win_toggle_fullscreen(&win);
@@ -199,6 +205,8 @@ bool cg_reverse_marks(arg_t _)
 {
 	int i;
 
+	if (options->dmenu)
+		return false;
 	for (i = 0; i < filecnt; i++) {
 		files[i].flags ^= FF_MARK;
 		markcnt += files[i].flags & FF_MARK ? 1 : -1;
@@ -222,6 +230,8 @@ bool cg_unmark_all(arg_t _)
 {
 	int i;
 
+	if (options->dmenu)
+		return false;
 	for (i = 0; i < filecnt; i++)
 		files[i].flags &= ~FF_MARK;
 	markcnt = 0;
@@ -266,6 +276,16 @@ bool cg_change_gamma(arg_t d)
 	} else {
 		return false;
 	}
+}
+
+bool cg_toggle_winbg(arg_t _)
+{
+	win.win_bg.pixel ^= ~0;
+	win.win_bg.red   ^= ~0;
+	win.win_bg.green ^= ~0;
+	win.win_bg.blue  ^= ~0;
+	img.dirty = true;
+	return true;
 }
 
 bool ci_navigate(arg_t n)
