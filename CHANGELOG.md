@@ -22,6 +22,7 @@ there may be more changes. Please use `git log` to view them.
 * Added:
 
   * Ability to customize thumbnail mode mouse-bindings via `config.h`. (#167)
+  * Option to set statusbar position to top via `config.h`. (#231)
   * New keybinding <kbd>z</kbd> to scroll to center. (#203)
 
 * Fixes:
