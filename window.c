@@ -159,6 +159,7 @@ void win_init(win_t *win)
 	win->bar.r.buf = emalloc(win->bar.r.size + 3);
 	win->bar.r.buf[0] = '\0';
 	win->bar.h = options->hide_bar ? 0 : barheight;
+	win->bar.top = TOP_STATUSBAR;
 #endif /* HAVE_LIBFONTS */
 
 	XrmDestroyDatabase(db);
@@ -445,12 +446,12 @@ static void win_draw_bar(win_t *win)
 		return;
 
 	e = &win->env;
-	y = win->h + font->ascent + V_TEXT_PAD;
+	y = (win->bar.top ? 0 : win->h) + font->ascent + V_TEXT_PAD;
 	w = win->w - 2*H_TEXT_PAD;
 	d = XftDrawCreate(e->dpy, win->buf.pm, e->vis, e->cmap);
 
 	XSetForeground(e->dpy, gc, win->bar_bg.pixel);
-	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->h, win->w, win->bar.h);
+	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->bar.top ? 0 : win->h, win->w, win->bar.h);
 
 	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XSetBackground(e->dpy, gc, win->bar_bg.pixel);

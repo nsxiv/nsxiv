@@ -589,12 +589,12 @@ void img_render(img_t *img)
 	if (img->y <= 0) {
 		sy = -img->y / img->zoom + 0.5;
 		sh = win->h / img->zoom;
-		dy = 0;
+		dy = win->bar.top ? win->bar.h : 0;
 		dh = win->h;
 	} else {
 		sy = 0;
 		sh = img->h;
-		dy = img->y;
+		dy = img->y + (win->bar.top ? win->bar.h : 0);
 		dh = MAX(img->h * img->zoom, 1);
 	}
 
