@@ -4,6 +4,9 @@
 [![license](https://img.shields.io/badge/license-GPL--2.0-lightgreen?style=flat-square)](https://github.com/nsxiv/nsxiv/blob/master/LICENSE)
 [![loc](https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&style=flat-square)](https://github.com/nsxiv/nsxiv)
 
+> This fork adds the alpha patch, in addition to the dmenu mode and toggle background patches,
+> although the last two I'm not sure how are supposed to work/be used.
+
 **Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
 --------------------------------------------------------------------
 
