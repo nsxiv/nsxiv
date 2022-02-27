@@ -233,7 +233,7 @@ static bool check_timeouts(struct timeval *t)
 	return tmin > 0;
 }
 
-size_t get_win_title(char *buf, int len)
+size_t get_win_title(unsigned char *buf, int len)
 {
 	char *argv[8];
 	spawn_t pfd;
