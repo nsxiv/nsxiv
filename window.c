@@ -30,7 +30,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-extern size_t get_win_title(char *, int);
+extern size_t get_win_title(unsigned char *, int);
 
 #if HAVE_LIBFONTS
 #include "utf8.h"
@@ -170,6 +170,7 @@ void win_init(win_t *win)
 	INIT_ATOM_(_NET_WM_STATE);
 	INIT_ATOM_(_NET_WM_PID);
 	INIT_ATOM_(_NET_WM_STATE_FULLSCREEN);
+	INIT_ATOM_(UTF8_STRING);
 }
 
 void win_open(win_t *win)
@@ -504,18 +505,16 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 
 void win_set_title(win_t *win)
 {
-	char title[512];
+	unsigned char title[512];
 	size_t len;
 
 	if ((len = get_win_title(title, ARRLEN(title))) <= 0)
 		return;
 
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
-	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
-	                PropModeReplace, (unsigned char *) title, len);
+	                atoms[ATOM_UTF8_STRING], 8, PropModeReplace, title, len);
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_ICON_NAME],
-	                XInternAtom(win->env.dpy, "UTF8_STRING", False), 8,
-	                PropModeReplace, (unsigned char *) title, len);
+	                atoms[ATOM_UTF8_STRING], 8, PropModeReplace, title, len);
 }
 
 void win_set_cursor(win_t *win, cursor_t cursor)
