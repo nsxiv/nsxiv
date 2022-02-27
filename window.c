@@ -30,7 +30,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-extern size_t get_win_title(unsigned char *, int);
+extern size_t get_win_title(unsigned char *, int, bool);
 
 #if HAVE_LIBFONTS
 #include "utf8.h"
@@ -289,9 +289,9 @@ void win_open(win_t *win)
 	}
 	free(icon_data);
 
-	/* These two atoms won't change and thus only need to be set once. */
 	XStoreName(win->env.dpy, win->xwin, res_name);
 	XSetIconName(win->env.dpy, win->xwin, res_name);
+	win_set_title(win, true);
 
 	classhint.res_class = res_class;
 	classhint.res_name = options->res_name != NULL ? options->res_name : res_name;
@@ -503,12 +503,12 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
 }
 
-void win_set_title(win_t *win)
+void win_set_title(win_t *win, bool init)
 {
 	unsigned char title[512];
 	size_t len;
 
-	if ((len = get_win_title(title, ARRLEN(title))) <= 0)
+	if ((len = get_win_title(title, ARRLEN(title), init)) <= 0)
 		return;
 
 	XChangeProperty(win->env.dpy, win->xwin, atoms[ATOM__NET_WM_NAME],
