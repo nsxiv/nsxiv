@@ -18,6 +18,7 @@ there may be more changes. Please use `git log` to view them.
     more info. (#213)
   * Imlib2 cache size is now set based on total memory percentage, by default
     set to 3%. (#184)
+  * Removed some non-POSIX extensions in the Makefile. (#225)
 
 * Added:
 
