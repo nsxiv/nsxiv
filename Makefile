@@ -1,25 +1,27 @@
+.POSIX:
+
 # nsxiv version
 VERSION = 28
 
 # PREFIX for install
-PREFIX ?= /usr/local
-MANPREFIX ?= $(PREFIX)/share/man
-EGPREFIX ?= $(PREFIX)/share/doc/nsxiv/examples
+PREFIX = /usr/local
+MANPREFIX = $(PREFIX)/share/man
+EGPREFIX = $(PREFIX)/share/doc/nsxiv/examples
 
 # default value for optional dependencies. 1 = enabled, 0 = disabled
-OPT_DEP_DEFAULT ?= 1
+OPT_DEP_DEFAULT = 1
 
 # autoreload backend: 1 = inotify, 0 = none
-HAVE_INOTIFY ?= $(OPT_DEP_DEFAULT)
+HAVE_INOTIFY = $(OPT_DEP_DEFAULT)
 
 # optional dependencies, see README for more info
-HAVE_LIBFONTS ?= $(OPT_DEP_DEFAULT)
-HAVE_LIBGIF ?= $(OPT_DEP_DEFAULT)
-HAVE_LIBEXIF ?= $(OPT_DEP_DEFAULT)
-HAVE_LIBWEBP ?= $(OPT_DEP_DEFAULT)
+HAVE_LIBFONTS = $(OPT_DEP_DEFAULT)
+HAVE_LIBGIF   = $(OPT_DEP_DEFAULT)
+HAVE_LIBEXIF  = $(OPT_DEP_DEFAULT)
+HAVE_LIBWEBP  = $(OPT_DEP_DEFAULT)
 
 # CFLAGS, any optimization flags goes here
-CFLAGS ?= -std=c99 -Wall -pedantic
+CFLAGS = -std=c99 -Wall -pedantic
 
 # icons that will be installed via `make icon`
 ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
@@ -42,15 +44,14 @@ lib_webp_0 =
 lib_webp_1 = -lwebpdemux -lwebp
 autoreload_0 = nop
 autoreload_1 = inotify
-# using += because certain *BSD distros may need to add additional flags
-LDLIBS += -lImlib2 -lX11 \
+
+NSXIV_LDLIBS = -lImlib2 -lX11 \
   $(lib_exif_$(HAVE_LIBEXIF)) $(lib_gif_$(HAVE_LIBGIF)) \
   $(lib_webp_$(HAVE_LIBWEBP)) $(lib_fonts_$(HAVE_LIBFONTS))
 
 OBJS = autoreload_$(autoreload_$(HAVE_INOTIFY)).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
-.PHONY: all clean install uninstall install-all install-icon uninstall-icon install-desktop
 .SUFFIXES:
 .SUFFIXES: .c .o
 
@@ -58,7 +59,7 @@ all: nsxiv
 
 nsxiv: $(OBJS)
 	@echo "LINK $@"
-	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS) $(NSXIV_LDLIBS)
 
 .c.o:
 	@echo "CC $@"
@@ -74,7 +75,7 @@ config.h:
 
 version.h: Makefile .git/index
 	@echo "GEN $@"
-	v="$$(git describe 2>/dev/null)"; \
+	v="$$(git describe 2>/dev/null || true)"; \
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
 .git/index:
