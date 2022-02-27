@@ -52,7 +52,6 @@ NSXIV_LDLIBS = -lImlib2 -lX11 \
 OBJS = autoreload_$(autoreload_$(HAVE_INOTIFY)).o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
-.PHONY: all clean install uninstall install-all install-icon uninstall-icon install-desktop
 .SUFFIXES:
 .SUFFIXES: .c .o
 
