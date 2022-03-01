@@ -56,6 +56,7 @@
 }
 
 typedef enum {
+	/* NOTE: the order of current entries must not change */
 	MODE_ALL,
 	MODE_IMAGE,
 	MODE_THUMB
@@ -85,7 +86,9 @@ typedef enum {
 	SCALE_FILL,
 	SCALE_WIDTH,
 	SCALE_HEIGHT,
-	SCALE_ZOOM
+	SCALE_ZOOM,
+	/* NOTE: any new entires must be added after this. the order of current entries must not change */
+	SCALE_COUNT
 } scalemode_t;
 
 typedef enum {
@@ -260,7 +263,8 @@ struct opt {
 	char *geometry;
 	char *res_name;
 
-	/* misc flags: */
+	/* misc: */
+	const char *ssn_id;
 	bool quiet;
 	bool thumb_mode;
 	bool clean_cache;

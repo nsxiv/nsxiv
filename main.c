@@ -52,6 +52,8 @@ void animate(void);
 void slideshow(void);
 void clear_resize(void);
 
+CLEANUP static void ssn_close(const char *);
+
 appmode_t mode;
 arl_t arl;
 img_t img;
@@ -99,21 +101,35 @@ static timeout_t timeouts[] = {
 	{ { 0, 0 }, false, clear_resize },
 };
 
+static struct {
+	const char *const files[3];
+	struct { char *str; size_t len; size_t size; } dir;
+	FILE *misc_fp;
+	int tns_zl;
+} ssn = {
+	{ /* NOTE: order of this must not change */
+		"filelist",
+		"marklist",
+		"misc"
+	},
+};
+
 /**************************
   function implementations
  **************************/
 static void cleanup(void)
 {
+	ssn_close(options->ssn_id);
 	img_close(&img, false);
 	arl_cleanup(&arl);
 	tns_free(&tns);
 	win_close(&win);
 }
 
-static bool xgetline(char **lineptr, size_t *n)
+static bool xgetline(char **lineptr, size_t *n, int delim, FILE *f)
 {
-	ssize_t len = getdelim(lineptr, n, options->using_null ? '\0' : '\n', stdin);
-	if (!options->using_null && len > 0 && (*lineptr)[len-1] == '\n')
+	ssize_t len = getdelim(lineptr, n, delim, f);
+	if (delim != '\0' && len > 0 && (*lineptr)[len-1] == '\n')
 		(*lineptr)[len-1] = '\0';
 	return len > 0;
 }
@@ -688,6 +704,152 @@ static void on_buttonpress(const XButtonEvent *bev)
 	prefix = 0;
 }
 
+CLEANUP static void ssn_close(const char *ssn_id)
+{
+	unsigned int i;
+	char sep = '\0';
+	FILE *fv[ARRLEN(ssn.files)];
+
+	if (ssn_id == NULL)
+		return;
+
+	for (i = 0; i < ARRLEN(fv); ++i) {
+		strncpy(ssn.dir.str + ssn.dir.len, ssn.files[i], ssn.dir.size - ssn.dir.len);
+		if ((fv[i] = fopen(ssn.dir.str, "w")) == NULL)
+			error(0, errno, "couldn't open %s", ssn.files[i]);
+	}
+
+	if (fv[0] != NULL) { /* filelist */
+		for (i = 0; i < filecnt; ++i)
+			fprintf(fv[0], "%s%c", files[i].path, sep);
+		fclose(fv[0]);
+	}
+
+	if (fv[1] != NULL) { /* marklist */
+		for (i = 0; i < filecnt; ++i) {
+			if (files[i].flags & FF_MARK)
+				fprintf(fv[1], "%d%c", i, sep);
+		}
+		fclose(fv[1]);
+	}
+
+	if (fv[2] != NULL) { /* misc */
+		sep = ',';
+		fprintf(fv[2], "%d%c", fileidx+1, sep);
+		fprintf(fv[2], "%d%c", mode, sep);
+		fprintf(fv[2], "%d%c", img.scalemode, sep);
+		fprintf(fv[2], "%d%c", img.multi.animate, sep);
+		fprintf(fv[2], "%d%c", (int)(img.zoom * 100), sep);
+		fprintf(fv[2], "%d%c", img.gamma, sep);
+		fprintf(fv[2], "%d%c", img.alpha, sep);
+		fprintf(fv[2], "%d%c", img.aa, sep);
+		fprintf(fv[2], "%d%c", tns.zl, sep);
+		fclose(fv[2]);
+	}
+}
+
+CLEANUP static void ssn_unlock(void)
+{
+	strncpy(ssn.dir.str + ssn.dir.len, "lock", ssn.dir.size - ssn.dir.len);
+	if (unlink(ssn.dir.str) < 0)
+		error(0, errno, "couldn't delete `%s`", ssn.dir.str);
+}
+
+static void ssn_open(const char *ssn_id)
+{
+	const char *dhome, *dsuffix = "";
+	const char *s = "/nsxiv/sessions/";
+	FILE *fv[ARRLEN(ssn.files)];
+	size_t n, i;
+	int lock;
+
+	if (ssn_id == NULL)
+		return;
+
+	if ((dhome = getenv("XDG_DATA_HOME")) == NULL || dhome[0] == '\0') {
+		dhome = getenv("HOME");
+		dsuffix = "/.local/share";
+	}
+	if (dhome == NULL || dhome[0] == '\0') {
+		error(0, 0, "data directory not found");
+		return;
+	}
+
+	for (i = n = 0; i < ARRLEN(ssn.files); ++i)
+		n = strlen(ssn.files[i]) > n ? strlen(ssn.files[i]) : n;
+	ssn.dir.size = strlen(dhome) + strlen(dsuffix) + strlen(s) + strlen(ssn_id) + n + 2;
+	ssn.dir.str = emalloc(ssn.dir.size);
+	ssn.dir.len = snprintf(ssn.dir.str, ssn.dir.size, "%s%s%s%s/", dhome, dsuffix, s, ssn_id);
+	if (r_mkdir(ssn.dir.str) < 0)
+		error(EXIT_FAILURE, errno, "couldn't create folder '%s'", ssn.dir.str);
+	strncpy(ssn.dir.str + ssn.dir.len, "lock", ssn.dir.size - ssn.dir.len);
+	lock = open(ssn.dir.str, O_CREAT | O_EXCL, 0600);
+	if (lock < 0)
+		error(EXIT_FAILURE, 0, "error: session `%s` is owned by another instance", ssn_id);
+	close(lock);
+	atexit(ssn_unlock);
+
+	for (i = 0; i < ARRLEN(fv); ++i) {
+		strncpy(ssn.dir.str + ssn.dir.len, ssn.files[i], ssn.dir.size - ssn.dir.len);
+		fv[i] = fopen(ssn.dir.str, "r"); /* TODO: write some warning if some files are missing */
+	}
+
+	if (fv[0] != NULL) { /* filelist */
+		char *filename = NULL;
+		n = 0;
+		while (xgetline(&filename, &n, '\0', fv[0]))
+			check_add_file(filename, true);
+		free(filename);
+		fclose(fv[0]);
+	}
+	if (fv[1] != NULL) { /* marklist */
+		char *markstr = NULL, *end;
+		long midx;
+		n = 0;
+		while (xgetline(&markstr, &n, '\0', fv[1])) {
+			midx = strtol(markstr, &end, 0);
+			if (*end != '\0' || midx < 0 || midx >= fileidx)
+				error(EXIT_FAILURE, 0, "invalid option in marklist '%s'", markstr);
+			files[midx].flags |= FF_MARK;
+		}
+		free(markstr);
+		fclose(fv[1]);
+	}
+	if (fv[2] != NULL) { /* misc */
+		ssn.misc_fp = fv[2];
+	}
+}
+
+static void ssn_misc(void)
+{
+	int fidx, md, smode, anim, zoom, gamma, alpha, aa, tns_zl;
+	int ret;
+
+	if (ssn.misc_fp == NULL)
+		return;
+
+	ret = fscanf(ssn.misc_fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d", &fidx, &md, &smode,
+	             &anim, &zoom, &gamma, &alpha, &aa, &tns_zl);
+	if (ret == EOF || ret != 9)
+		error(EXIT_FAILURE, 0, "corrupted session `%s`", options->ssn_id);
+
+	if (fidx < 1 || fidx > filecnt)
+		error(EXIT_FAILURE, 0, "invalid fileidx in session `%s`", options->ssn_id);
+	fileidx = fidx - 1;
+	if (md == MODE_THUMB)
+		mode = MODE_THUMB;
+	if (smode < 0 || smode > SCALE_COUNT)
+		error(EXIT_FAILURE, 0, "invalid scalemode in session `%s`", options->ssn_id);
+	img.scalemode = smode;
+	if (img.scalemode == SCALE_ZOOM) /* TODO: this results in crash, the window isn't opened yet */
+		img_zoom_to(&img, (float)zoom / 100.0);
+	img_change_gamma(&img, gamma);
+	img.alpha = !!alpha;
+	ssn.tns_zl = tns_zl; /* tns isn't initialized yet */
+
+	fclose(ssn.misc_fp);
+}
+
 static void run(void)
 {
 	int xfd;
@@ -849,12 +1011,12 @@ int main(int argc, char *argv[])
 		exit(EXIT_SUCCESS);
 	}
 
-	if (options->filecnt == 0 && !options->from_stdin) {
+	if (options->filecnt == 0 && !options->from_stdin && options->ssn_id == NULL) {
 		print_usage();
 		exit(EXIT_FAILURE);
 	}
 
-	if (options->recursive || options->from_stdin)
+	if (options->recursive || options->from_stdin || options->ssn_id != NULL)
 		filecnt = 1024;
 	else
 		filecnt = options->filecnt;
@@ -862,10 +1024,12 @@ int main(int argc, char *argv[])
 	files = ecalloc(filecnt, sizeof(*files));
 	fileidx = 0;
 
+	ssn_open(options->ssn_id);
+
 	if (options->from_stdin) {
 		n = 0;
 		filename = NULL;
-		while (xgetline(&filename, &n))
+		while (xgetline(&filename, &n, options->using_null ? '\0' : '\n', stdin))
 			check_add_file(filename, true);
 		free(filename);
 	}
@@ -904,6 +1068,7 @@ int main(int argc, char *argv[])
 	win_init(&win);
 	img_init(&img, &win);
 	arl_init(&arl);
+	ssn_misc();
 
 	if ((homedir = getenv("XDG_CONFIG_HOME")) == NULL || homedir[0] == '\0') {
 		homedir = getenv("HOME");
@@ -926,9 +1091,13 @@ int main(int argc, char *argv[])
 	}
 	info.fd = -1;
 
-	if (options->thumb_mode) {
+	if (options->thumb_mode || mode == MODE_THUMB) {
 		mode = MODE_THUMB;
 		tns_init(&tns, files, &filecnt, &fileidx, &win);
+		if (options->ssn_id != NULL) {
+			tns.zl = ssn.tns_zl;
+			tns_zoom(&tns, 0);
+		}
 		while (!tns_load(&tns, fileidx, false, false))
 			remove_file(fileidx, false);
 	} else {

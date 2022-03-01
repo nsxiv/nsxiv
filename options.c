@@ -81,12 +81,14 @@ void parse_options(int argc, char **argv)
 	_options.geometry = NULL;
 	_options.res_name = NULL;
 
+	_options.ssn_id = NULL;
 	_options.quiet = false;
 	_options.thumb_mode = false;
 	_options.clean_cache = false;
 	_options.private_mode = false;
 
-	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:opqrS:s:T:tvZz:0")) != -1) {
+	/* TODO: add -R to usage and manpage */
+	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:opqR:rS:s:T:tvZz:0")) != -1) {
 		switch (opt) {
 			case '?':
 				print_usage();
@@ -147,6 +149,11 @@ void parse_options(int argc, char **argv)
 				break;
 			case 'q':
 				_options.quiet = true;
+				break;
+			case 'R':
+				if (strchr(optarg, '/') != NULL)
+					error(EXIT_FAILURE, 0, "Argument of -R contains invalid charecter '/'");
+				_options.ssn_id = optarg;
 				break;
 			case 'r':
 				_options.recursive = true;
