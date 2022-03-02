@@ -33,6 +33,7 @@ there may be more changes. Please use `git log` to view them.
   * Wrong jpeg exif orientation with `Imlib2 v1.7.5`. (#188)
   * Animation slowdown when zoomed in. (#200)
   * Reset statusbar after failed keyhandler. (#191)
+  * Window title not working on certain WMs. (#234)
   * Various compiler warnings. (#197)
 
 - - -
