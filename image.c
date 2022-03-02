@@ -73,16 +73,16 @@ void img_init(img_t *img, win_t *win)
 
 	img->im = NULL;
 	img->win = win;
-	img->scalemode = options->scalemode;
-	img->zoom = options->zoom;
+	img->scalemode = ssn_misc.valid ? ssn_misc.items[SSN_scalemode] : options->scalemode;
+	img->zoom = ssn_misc.valid ? ssn_misc.items[SSN_zoom] / 100.0 : options->zoom;
 	img->zoom = MAX(img->zoom, ZOOM_MIN);
 	img->zoom = MIN(img->zoom, ZOOM_MAX);
 	img->checkpan = false;
 	img->dirty = false;
-	img->aa = ANTI_ALIAS;
-	img->alpha = ALPHA_LAYER;
+	img->aa = ssn_misc.valid ? ssn_misc.items[SSN_aa] : ANTI_ALIAS;
+	img->alpha = ssn_misc.valid ? ssn_misc.items[SSN_alpha] : ALPHA_LAYER;
 	img->multi.cap = img->multi.cnt = 0;
-	img->multi.animate = options->animate;
+	img->multi.animate = ssn_misc.valid ? ssn_misc.items[SSN_animate] : options->animate;
 	img->multi.framedelay = options->framerate > 0 ? 1000 / options->framerate : 0;
 	img->multi.length = 0;
 

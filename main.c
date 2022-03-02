@@ -72,6 +72,8 @@ static bool extprefix;
 
 static bool resized = false;
 
+ssn_misc_t ssn_misc;
+
 typedef struct {
 	int err;
 	char *cmd;
@@ -105,7 +107,6 @@ static struct {
 	const char *const files[3];
 	struct { char *str; size_t len; size_t size; } dir;
 	FILE *misc_fp;
-	int tns_zl;
 } ssn = {
 	{ /* NOTE: order of this must not change */
 		"filelist",
@@ -820,32 +821,27 @@ static void ssn_open(const char *ssn_id)
 	}
 }
 
-static void ssn_misc(void)
+static void ssn_misc_init(void)
 {
-	int fidx, md, smode, anim, zoom, gamma, alpha, aa, tns_zl;
-	int ret;
+	int n, i;
 
 	if (ssn.misc_fp == NULL)
 		return;
 
-	ret = fscanf(ssn.misc_fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d", &fidx, &md, &smode,
-	             &anim, &zoom, &gamma, &alpha, &aa, &tns_zl);
-	if (ret == EOF || ret != 9)
+	for (n = i = 0; i < SSN_COUNT; ++i) {
+		int tmp = fscanf(ssn.misc_fp, "%d,", ssn_misc.items + i);
+		if (tmp == EOF)
+			break;
+		else
+			n += tmp;
+	}
+	if (n != SSN_COUNT)
 		error(EXIT_FAILURE, 0, "corrupted session `%s`", options->ssn_id);
+	ssn_misc.valid = true;
 
-	if (fidx < 1 || fidx > filecnt)
-		error(EXIT_FAILURE, 0, "invalid fileidx in session `%s`", options->ssn_id);
-	fileidx = fidx - 1;
-	if (md == MODE_THUMB)
-		mode = MODE_THUMB;
-	if (smode < 0 || smode > SCALE_COUNT)
-		error(EXIT_FAILURE, 0, "invalid scalemode in session `%s`", options->ssn_id);
-	img.scalemode = smode;
-	if (img.scalemode == SCALE_ZOOM) /* TODO: this results in crash, the window isn't opened yet */
-		img_zoom_to(&img, (float)zoom / 100.0);
-	img_change_gamma(&img, gamma);
-	img.alpha = !!alpha;
-	ssn.tns_zl = tns_zl; /* tns isn't initialized yet */
+	if (ssn_misc.items[SSN_fileidx] < 1 || ssn_misc.items[SSN_fileidx] > filecnt)
+		error(EXIT_FAILURE, 0, "bad fileidx value in session %s: %d", options->ssn_id, ssn_misc.items[SSN_fileidx]);
+	fileidx = ssn_misc.items[SSN_fileidx] - 1;
 
 	fclose(ssn.misc_fp);
 }
@@ -1068,7 +1064,7 @@ int main(int argc, char *argv[])
 	win_init(&win);
 	img_init(&img, &win);
 	arl_init(&arl);
-	ssn_misc();
+	ssn_misc_init();
 
 	if ((homedir = getenv("XDG_CONFIG_HOME")) == NULL || homedir[0] == '\0') {
 		homedir = getenv("HOME");
@@ -1091,13 +1087,9 @@ int main(int argc, char *argv[])
 	}
 	info.fd = -1;
 
-	if (options->thumb_mode || mode == MODE_THUMB) {
+	if (options->thumb_mode || (ssn_misc.valid && ssn_misc.items[SSN_mode] == MODE_THUMB)) {
 		mode = MODE_THUMB;
 		tns_init(&tns, files, &filecnt, &fileidx, &win);
-		if (options->ssn_id != NULL) {
-			tns.zl = ssn.tns_zl;
-			tns_zoom(&tns, 0);
-		}
 		while (!tns_load(&tns, fileidx, false, false))
 			remove_file(fileidx, false);
 	} else {

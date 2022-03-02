@@ -160,7 +160,7 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 	tns->win = win;
 	tns->dirty = false;
 
-	tns->zl = THUMB_SIZE;
+	tns->zl = ssn_misc.valid ? ssn_misc.items[SSN_zl] : THUMB_SIZE;
 	tns_zoom(tns, 0);
 
 	if ((homedir = getenv("XDG_CACHE_HOME")) == NULL || homedir[0] == '\0') {

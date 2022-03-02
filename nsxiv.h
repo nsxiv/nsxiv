@@ -449,4 +449,27 @@ void win_set_title(win_t*);
 void win_set_cursor(win_t*, cursor_t);
 void win_cursor_pos(win_t*, int*, int*);
 
+/* main.c */
+
+enum {
+	SSN_fileidx,
+	SSN_mode,
+	SSN_scalemode,
+	SSN_animate,
+	SSN_zoom,
+	SSN_gamma,
+	SSN_alpha,
+	SSN_aa,
+	SSN_zl,
+	/* the order of this must not change */
+	SSN_COUNT
+};
+
+typedef struct {
+	bool valid;
+	int items[SSN_COUNT];
+} ssn_misc_t;
+
+extern ssn_misc_t ssn_misc;
+
 #endif /* NSXIV_H */
