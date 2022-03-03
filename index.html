@@ -14,7 +14,7 @@
 <a href="https://github.com/nsxiv/nsxiv"><img src="https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&amp;style=flat-square" alt="loc" /></a></p>
 
 <p><a href="https://nsxiv.github.io/nsxiv/man">View Man Page</a></p>
-<h2 id="%3Cstrong%3ENeo%20(or%20New%20or%20Not)%20Simple%20(or%20Small%20or%20Suckless)%20X%20Image%20Viewer%3C/strong%3E"><strong>Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer</strong></h2>
+<h2 id="neo-or-new-or-not-simple-or-small-or-suckless-x-image-viewer"><strong>Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer</strong></h2>
 
 <p>nsxiv is a fork of now unmaintained <a href="https://github.com/muennich/sxiv">sxiv</a>
 with the purpose of being a drop-in replacement of sxiv, maintaining it and
@@ -26,7 +26,7 @@ expected in <em>this</em> repository, after making sure you are using the latest
 release of nsxiv. Contributions are welcome, see
 <a href="CONTRIBUTING.md#Contribution-Guideline">CONTRIBUTING.md</a> for details.</p>
 
-<h2 id="Features">Features</h2>
+<h2 id="features">Features</h2>
 
 <ul>
 <li>Basic image operations, e.g. zooming, panning, rotating</li>
@@ -39,7 +39,7 @@ release of nsxiv. Contributions are welcome, see
 <li>Display image name&#47;path in X title</li>
 </ul>
 
-<h2 id="Screenshots">Screenshots</h2>
+<h2 id="screenshots">Screenshots</h2>
 
 <p><strong>Image mode: (Default colors)</strong></p>
 
@@ -49,7 +49,7 @@ release of nsxiv. Contributions are welcome, see
 
 <p><img src="https://raw.githubusercontent.com/nsxiv/nsxiv/gh-pages/img/thumb.png" alt="Thumb" title="Thumb mode" /></p>
 
-<h2 id="Installing%20via%20package%20manager">Installing via package manager</h2>
+<h2 id="installing-via-package-manager">Installing via package manager</h2>
 
 <p>nsxiv is available on the following distributions&#47;repositories. If you don&#8217;t see
 your distro listed here, either contact your distro&#8217;s package maintainer or
@@ -63,7 +63,7 @@ consider packaging it yourself and adding it to the respective community repo.</
 <li>Fedora: Enable the copr repo via <code>dnf copr enable mamg22&#47;nsxiv</code>.</li>
 </ul>
 
-<h2 id="Dependencies">Dependencies</h2>
+<h2 id="dependencies">Dependencies</h2>
 
 <p>nsxiv requires the following software to be installed:</p>
 
@@ -92,7 +92,7 @@ Disabled via <code>HAVE_LIBWEBP=0</code>.</li>
 you want to build nsxiv on a distribution with separate runtime and development
 packages (e.g. *-dev on Debian).</p>
 
-<h2 id="Building">Building</h2>
+<h2 id="building">Building</h2>
 
 <p>nsxiv is built using the commands:</p>
 
@@ -152,7 +152,7 @@ the following command:</p>
 <pre><code>$ make config.h
 </code></pre>
 
-<h2 id="Usage">Usage</h2>
+<h2 id="usage">Usage</h2>
 
 <p>Please see man page for information on how to use nsxiv. To do so, execute the
 following after the installation:</p>
@@ -160,7 +160,7 @@ following after the installation:</p>
 <pre><code>$ man nsxiv
 </code></pre>
 
-<h2 id="F.A.Q">F.A.Q</h2>
+<h2 id="f.a.q">F.A.Q</h2>
 
 <ul>
 <li><p>Can I open remote urls with nsxiv? 
@@ -171,9 +171,13 @@ Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv
 Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-env">nsxiv-env</a></p></li>
 <li><p>Can I pipe images into nsxiv? 
 Yes, see <a href="https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe">nsxiv-pipe</a></p></li>
+<li><p>nsxiv crashes when viewing images with emojis in their name. 
+This is an issue with libXft. Either wait for
+<a href="https://gitlab.freedesktop.org/xorg/lib/libxft/-/merge_requests/1">this</a> fix to
+be merged, or install <a href="https://github.com/uditkarode/libxft-bgra">libxft-bgra</a></p></li>
 </ul>
 
-<h2 id="Customization">Customization</h2>
+<h2 id="customization">Customization</h2>
 
 <p>The main method of customizing nsxiv is by setting values for the variables in <em>config.h</em>,
 or by using Xresources as explained in the manual. If these options are not sufficient,
@@ -192,7 +196,7 @@ merge it to mainline.</p>
 <p>Description on how to use or submit patches can be found on
 nsxiv-extra&#8217;s <a href="https://github.com/nsxiv/nsxiv-extra">README</a>.</p>
 
-<h2 id="Download">Download</h2>
+<h2 id="download">Download</h2>
 
 <p>You can <a href="https://github.com/nsxiv/nsxiv">browse</a> the source code repository
 on GitHub or get a copy using git with the following command:</p>
@@ -202,7 +206,7 @@ on GitHub or get a copy using git with the following command:</p>
 
 <p>You can view the changelog <a href="CHANGELOG.md">here</a></p>
 
-<h2 id="Related%20projects">Related projects</h2>
+<h2 id="related-projects">Related projects</h2>
 
 <p>If nsxiv isn&#8217;t able to fit your needs, check out the image viewer section of
 <a href="https://suckless.org/rocks">suckless rocks</a> to find other minimal image viewers

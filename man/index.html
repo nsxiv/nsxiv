@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.22.4 -->
-<!-- CreationDate: Sun Jan  2 05:09:48 2022 -->
+<!-- CreationDate: Thu Mar  3 13:19:07 2022 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -27,6 +27,7 @@
 <a href="#KEYBOARD COMMANDS">KEYBOARD COMMANDS</a><br>
 <a href="#MOUSE COMMANDS">MOUSE COMMANDS</a><br>
 <a href="#CONFIGURATION">CONFIGURATION</a><br>
+<a href="#WINDOW TITLE">WINDOW TITLE</a><br>
 <a href="#STATUS BAR">STATUS BAR</a><br>
 <a href="#EXTERNAL KEY HANDLER">EXTERNAL KEY HANDLER</a><br>
 <a href="#THUMBNAIL CACHING">THUMBNAIL CACHING</a><br>
@@ -58,8 +59,8 @@ Neo Simple X Image Viewer</p>
 [<b>&minus;G</b> <i>GAMMA</i>] [<b>&minus;g</b>
 <i>GEOMETRY</i>] [<b>&minus;N</b> <i>NAME</i>]
 [<b>&minus;n</b> <i>NUM</i>] [<b>&minus;S</b> <i>DELAY</i>]
-[<b>&minus;s</b> <i>MODE</i>] [<b>&minus;T</b> <i>TITLE</i>]
-[<b>&minus;z</b> <i>ZOOM</i>] <i>FILE</i>...</p>
+[<b>&minus;s</b> <i>MODE</i>] [<b>&minus;z</b> <i>ZOOM</i>]
+<i>FILE</i>...</p>
 
 <h2>DESCRIPTION
 <a name="DESCRIPTION"></a>
@@ -269,24 +270,6 @@ the delay between images to <i>DELAY</i> seconds.
 <p style="margin-left:22%;">Set scale mode according to
 MODE character. Supported modes are: [d]own, [f]it, [F]ill,
 [w]idth, [h]eight.</p>
-
-<p style="margin-left:11%;"><b>&minus;T</b>
-<i>TITLE</i></p>
-
-<p style="margin-left:22%;">Set the window title to TITLE.
-Use the format &lsquo;prefix:suffixmode&rsquo;. Any string
-literal is accepted for prefix, and the format of suffixmode
-is:</p>
-
-<p style="margin-left:22%; margin-top: 1em">Value Format
-<br>
-0 Empty <br>
-1 Basename of file <br>
-2 Full path to file</p>
-
-<p style="margin-left:22%; margin-top: 1em">By default,
-prefix is set to &quot;nsxiv - &quot; and suffixmode is set
-to 1 (basename).</p>
 
 <table width="100%" border="0" rules="none" frame="void"
        cellspacing="0" cellpadding="0">
@@ -851,6 +834,19 @@ width or <i>count</i> pixels right.</p>
 <p>Scroll to right image edge.</p></td>
 <td width="35%">
 </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p><b>z</b></p></td>
+<td width="10%"></td>
+<td width="43%">
+
+
+<p>Scroll to image center.</p></td>
+<td width="35%">
+</td></tr>
 </table>
 
 <p style="margin-left:11%;">Zooming:</p>
@@ -1151,6 +1147,32 @@ Defaults to window.foreground</p>
 
 <p style="margin-left:11%;">Please see xrdb(1) on how to
 change them.</p>
+
+<h2>WINDOW TITLE
+<a name="WINDOW TITLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The window
+title can be replaced with the output of a user-provided
+script, which is called by nsxiv whenever there&rsquo;s a
+redraw. The path of this script is
+<i>$XDG_CONFIG_HOME/nsxiv/exec/win-title</i> and the
+arguments given to it (where &quot;Optional&quot; arguments
+might be empty) are: 1) resolved absolute path of the
+current file, 2) current file number, 3) total file count,
+4) image width (Optional: Disabled on thumbnails mode), 5)
+image height (Optional: Disabled on thumbnails mode), 6)
+current zoom (Optional: Disabled on thumbnails mode).</p>
+
+<p style="margin-left:11%; margin-top: 1em">The term file
+is used rather than image as nsxiv does not precheck that
+the input files are valid images. Total file count may be
+different from the actual count of valid images.</p>
+
+<p style="margin-left:11%; margin-top: 1em">There is also
+an example script installed together with nsxiv as
+<i>EGPREFIX/win-title</i>.</p>
 
 <h2>STATUS BAR
 <a name="STATUS BAR"></a>
