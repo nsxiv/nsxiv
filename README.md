@@ -80,6 +80,13 @@ The following dependencies are optional.
   * libwebp : Used for animated webp playback.
     (NOTE: animated webp also requires Imlib2 v1.7.5 or above)
     Disabled via `HAVE_LIBWEBP=0`.
+  * Imlib2 v1.8.0(+) : Can be used for multi-frame images via `HAVE_IMLIB2_MULTI_FRAME=1`. <br>
+    Imlib2 v1.8.0 currently supports multi-frame gif, webp, png and ico. However
+    image loading performance currently is not optimal, image ***reloading***
+    on the other hand is noticeably faster due to imlib2's cache. <br>
+    We will be making this the default once image loading performance has been
+    resolved and depricate `HAVE_LIBGIF` and `HAVE_LIBWEBP` in favor of using
+    Imlib2 for animated images.
 
 Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development

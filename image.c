@@ -32,12 +32,12 @@
 #include <libexif/exif-data.h>
 #endif
 
-#if HAVE_LIBGIF
+#if HAVE_LIBGIF && !HAVE_IMLIB2_MULTI_FRAME
 #include <gif_lib.h>
 enum { DEF_GIF_DELAY = 75 };
 #endif
 
-#if HAVE_LIBWEBP
+#if HAVE_LIBWEBP && !HAVE_IMLIB2_MULTI_FRAME
 #include <webp/decode.h>
 #include <webp/demux.h>
 enum { DEF_WEBP_DELAY = 75 };
@@ -135,7 +135,7 @@ void exif_auto_orientate(const fileinfo_t *file)
 }
 #endif
 
-#if HAVE_LIBGIF || HAVE_LIBWEBP
+#if HAVE_LIBGIF || HAVE_LIBWEBP || HAVE_IMLIB2_MULTI_FRAME
 static void img_multiframe_context_set(img_t *img)
 {
 	if (img->multi.cnt > 1) {
@@ -152,7 +152,32 @@ static void img_multiframe_context_set(img_t *img)
 }
 #endif
 
-#if HAVE_LIBGIF
+#if (HAVE_LIBGIF || HAVE_LIBWEBP) && !HAVE_IMLIB2_MULTI_FRAME
+static void img_multiframe_deprecation_notice(void)
+{
+	static bool warned;
+	/* NOTE: enable the deprecation notice, and update imlib2 version below
+	 *       once the imlib2 multi-frame loading performance is resolved.
+	 */
+	return;
+
+	if (!warned) {
+		error(0, 0, "\n"
+		      "################################################################\n"
+		      "#                      DEPRECATION NOTICE                      #\n"
+		      "################################################################\n"
+		      "# Internal multi-frame gif and webp loaders are deprecated and #\n"
+		      "# will be removed soon. Please upgrade to Imlib2 vX.X.X for    #\n"
+		      "# multi-frame/animated image support. For more information,    #\n"
+		      "# visit: https://github.com/nsxiv/nsxiv/issues/193             #\n"
+		      "################################################################"
+		      );
+		warned = true;
+	}
+}
+#endif
+
+#if HAVE_LIBGIF && !HAVE_IMLIB2_MULTI_FRAME
 static bool img_load_gif(img_t *img, const fileinfo_t *file)
 {
 	GifFileType *gif;
@@ -171,6 +196,8 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 	unsigned int disposal = 0, prev_disposal = 0;
 	unsigned int delay = 0;
 	bool err = false;
+
+	img_multiframe_deprecation_notice();
 
 	if (img->multi.cap == 0) {
 		img->multi.cap = 8;
@@ -321,8 +348,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 }
 #endif /* HAVE_LIBGIF */
 
-
-#if HAVE_LIBWEBP
+#if HAVE_LIBWEBP && !HAVE_IMLIB2_MULTI_FRAME
 static bool img_load_webp(img_t *img, const fileinfo_t *file)
 {
 	FILE *webp_file;
@@ -338,6 +364,8 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	unsigned long flags;
 	unsigned int delay;
 	bool err = false;
+
+	img_multiframe_deprecation_notice();
 
 	if ((webp_file = fopen(file->path, "rb")) == NULL) {
 		error(0, errno, "%s: Error opening webp image", file->name);
@@ -408,6 +436,104 @@ fail:
 }
 #endif /* HAVE_LIBWEBP */
 
+#if HAVE_IMLIB2_MULTI_FRAME
+static void img_area_clear(int x, int y, int w, int h)
+{
+	imlib_image_set_has_alpha(1);
+	imlib_context_set_blend(0);
+	imlib_context_set_color(0, 0, 0, 0);
+	imlib_image_fill_rectangle(x, y, w, h);
+}
+
+static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
+{
+	unsigned int n;
+	unsigned int fcnt;
+	Imlib_Image im, canvas;
+	Imlib_Frame_Info finfo;
+	bool dispose, has_alpha;
+	int px, py, pw, ph;
+
+	imlib_context_set_image(img->im);
+	imlib_image_get_frame_info(&finfo);
+	if ((fcnt = finfo.frame_count) <= 1)
+		return false;
+	has_alpha = imlib_image_has_alpha();
+	img->w = finfo.canvas_w;
+	img->h = finfo.canvas_h;
+
+	if (fcnt > img->multi.cap) {
+		img->multi.cap = fcnt;
+		img->multi.frames = erealloc(img->multi.frames,
+		                             img->multi.cap * sizeof(img_frame_t));
+	}
+
+	imlib_context_set_dither(0);
+	imlib_context_set_anti_alias(0);
+	imlib_context_set_color_modifier(NULL);
+
+	if ((canvas = imlib_create_image(img->w, img->h)) == NULL)
+		error(EXIT_FAILURE, ENOMEM, NULL);
+	imlib_context_set_image(canvas);
+	img_area_clear(0, 0, img->w, img->h);
+
+	dispose = false;
+	img->multi.cnt = img->multi.sel = 0;
+	for (n = 1; n <= fcnt; ++n) {
+		Imlib_Image tmp;
+		Imlib_Image prev = n == 1 ? canvas : img->multi.frames[img->multi.cnt - 1].im;
+		int sx, sy, sw, sh;
+
+		/* TODO: loading performance is currently pretty bad.
+		 * seems to be due to IO. i assume imlib_load_image_frame() doesn't
+		 * cache the file and is making a read everytime.
+		 */
+		if ((im = imlib_load_image_frame(file->path, n)) == NULL) {
+			error(0, 0, "%s: error loading frame %d", file->name, n);
+			break;
+		}
+		imlib_context_set_image(im);
+		imlib_image_get_frame_info(&finfo);
+		sx = finfo.frame_x;
+		sy = finfo.frame_y;
+		sw = finfo.frame_w;
+		sh = finfo.frame_h;
+
+		/* blend on top of the previous image */
+		imlib_context_set_image(prev);
+		if ((tmp = imlib_clone_image()) == NULL)
+			error(EXIT_FAILURE, ENOMEM, NULL);
+		imlib_context_set_image(tmp);
+		if (dispose)
+			img_area_clear(px, py, pw, ph);
+		imlib_image_set_has_alpha(has_alpha);
+		/* FIXME: bg of apng images are set to black instead of being transparent */
+		imlib_context_set_blend(!!(finfo.frame_flags & IMLIB_FRAME_BLEND));
+		imlib_blend_image_onto_image(im, has_alpha, 0, 0, sw, sh, sx, sy, sw, sh);
+		img->multi.frames[img->multi.cnt].im = tmp;
+
+		dispose = finfo.frame_flags & IMLIB_FRAME_DISPOSE_CLEAR;
+		if (dispose) { /* remember these so we can "dispose" them before blending next frame */
+			px = sx;
+			py = sy;
+			pw = sw;
+			ph = sh;
+		}
+		img->multi.frames[img->multi.cnt].delay = finfo.frame_delay;
+		img->multi.length += img->multi.frames[img->multi.cnt].delay;
+		img->multi.cnt++;
+
+		imlib_context_set_image(im);
+		imlib_free_image();
+	}
+	imlib_context_set_image(canvas);
+	imlib_free_image();
+	img_multiframe_context_set(img);
+
+	return true;
+}
+#endif /* HAVE_IMLIB2_MULTI_FRAME */
+
 Imlib_Image img_open(const fileinfo_t *file)
 {
 	struct stat st;
@@ -416,7 +542,11 @@ Imlib_Image img_open(const fileinfo_t *file)
 	if (access(file->path, R_OK) == 0 &&
 	    stat(file->path, &st) == 0 && S_ISREG(st.st_mode))
 	{
+#if HAVE_IMLIB2_MULTI_FRAME
+		im = imlib_load_image_frame(file->path, 1);
+#else
 		im = imlib_load_image(file->path);
+#endif
 		if (im != NULL) {
 			imlib_context_set_image(im);
 			if (imlib_image_get_data_for_reading_only() == NULL) {
@@ -433,6 +563,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 bool img_load(img_t *img, const fileinfo_t *file)
 {
 	const char *fmt;
+	bool animated = false;
 
 	if ((img->im = img_open(file)) == NULL)
 		return false;
@@ -447,12 +578,16 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	exif_auto_orientate(file);
 #endif
 
+#if HAVE_IMLIB2_MULTI_FRAME
+	animated = img_load_multiframe(img, file);
+#endif
+
 	if ((fmt = imlib_image_format()) != NULL) {
-#if HAVE_LIBGIF
+#if HAVE_LIBGIF && !HAVE_IMLIB2_MULTI_FRAME
 		if (STREQ(fmt, "gif"))
 			img_load_gif(img, file);
 #endif
-#if HAVE_LIBWEBP
+#if HAVE_LIBWEBP && !HAVE_IMLIB2_MULTI_FRAME
 		if (STREQ(fmt, "webp"))
 			img_load_webp(img, file);
 #endif
@@ -461,8 +596,11 @@ bool img_load(img_t *img, const fileinfo_t *file)
 			exif_auto_orientate(file);
 #endif
 	}
-	img->w = imlib_image_get_width();
-	img->h = imlib_image_get_height();
+	/* img_load_multiframe() sets (the correct) img->w and img->h already */
+	if (!animated) {
+		img->w = imlib_image_get_width();
+		img->h = imlib_image_get_height();
+	}
 	img->checkpan = true;
 	img->dirty = true;
 
@@ -476,6 +614,11 @@ CLEANUP void img_close(img_t *img, bool decache)
 	if (img->multi.cnt > 0) {
 		for (i = 0; i < img->multi.cnt; i++) {
 			imlib_context_set_image(img->multi.frames[i].im);
+#if HAVE_IMLIB2_MULTI_FRAME
+			if (decache)
+				imlib_free_image_and_decache();
+			else
+#endif
 			imlib_free_image();
 		}
 		img->multi.cnt = 0;
