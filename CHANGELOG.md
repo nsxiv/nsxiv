@@ -30,7 +30,7 @@ there may be more changes. Please use `git log` to view them.
 
   * Manpage cleanup: avoid confusing wording and document thumbnail mode
     mouse-bindings. (#186)
-  * Wrong jpeg exif orientation with `Imlib2 v1.7.5`. (#188)
+  * Wrong jpeg exif orientation with Imlib2 v1.7.5 (and above). (#188)
   * Animation slowdown when zoomed in. (#200)
   * Reset statusbar after failed keyhandler. (#191)
   * Window title not working on certain WMs. (#234)
