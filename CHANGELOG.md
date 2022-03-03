@@ -9,7 +9,7 @@ there may be more changes. Please use `git log` to view them.
 - - -
 
 **[v29](https://github.com/nsxiv/nsxiv/archive/v29.tar.gz)**
-*(TODO: put date in here)*
+*(March 03, 2022)*
 
 * Changes:
 
