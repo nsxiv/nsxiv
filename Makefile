@@ -13,15 +13,19 @@ lib_gif_1 = -lgif
 lib_webp_0 =
 lib_webp_1 = -lwebpdemux -lwebp
 
+# TODO: hardcoded -I and -L for convenience, remove them before merging
 nsxiv_cppflags = -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
   -DHAVE_INOTIFY=$(HAVE_INOTIFY) $(inc_fonts_$(HAVE_LIBFONTS)) \
+  -DHAVE_IMLIB2_MULTI_FRAME=$(HAVE_IMLIB2_MULTI_FRAME) \
+  -I/usr/local/include \
   $(CPPFLAGS)
 
 nsxiv_ldlibs = -lImlib2 -lX11 \
   $(lib_exif_$(HAVE_LIBEXIF)) $(lib_gif_$(HAVE_LIBGIF)) \
   $(lib_webp_$(HAVE_LIBWEBP)) $(lib_fonts_$(HAVE_LIBFONTS)) \
+  -L/usr/local/lib \
   $(LDLIBS)
 
 objs = autoreload.o commands.o image.o main.o options.o \
