@@ -8,6 +8,36 @@ there may be more changes. Please use `git log` to view them.
 
 - - -
 
+**[v29](https://github.com/nsxiv/nsxiv/archive/v29.tar.gz)**
+*(March 03, 2022)*
+
+* Changes:
+
+  * Window title is now customizeable via `win-title`, cli flag `-T` and related
+    config.h options are removed. See `WINDOW TITLE` section of the manpage for
+    more info. (#213)
+  * Imlib2 cache size is now set based on total memory percentage, by default
+    set to 3%. (#184)
+  * Removed some non-POSIX extensions in the Makefile. (#225)
+
+* Added:
+
+  * Ability to customize thumbnail mode mouse-bindings via `config.h`. (#167)
+  * Option to set statusbar position to top via `config.h`. (#231)
+  * New keybinding <kbd>z</kbd> to scroll to center. (#203)
+
+* Fixes:
+
+  * Manpage cleanup: avoid confusing wording and document thumbnail mode
+    mouse-bindings. (#186)
+  * Wrong jpeg exif orientation with Imlib2 v1.7.5 (and above). (#188)
+  * Animation slowdown when zoomed in. (#200)
+  * Reset statusbar after failed keyhandler. (#191)
+  * Window title not working on certain WMs. (#234)
+  * Various compiler warnings. (#197)
+
+- - -
+
 **[v28](https://github.com/nsxiv/nsxiv/archive/v28.tar.gz)**
 *(December 12, 2021)*
 

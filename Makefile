@@ -1,7 +1,7 @@
 .POSIX:
 
 # nsxiv version
-VERSION = 28
+VERSION = 29
 
 # PREFIX for install
 PREFIX = /usr/local
