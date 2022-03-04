@@ -69,6 +69,8 @@ The following dependencies are optional.
 
   * inotify : Used for auto-reloading images on change.
     Disabled via `HAVE_INOTIFY=0`
+  * memfd\_create : Used for pipe support. See FAQ for more details.
+    Disabled via `HAVE_MEMFD=0`
   * libXft, freetype2, fontconfig : Used for the status bar.
     Disabled via `HAVE_LIBFONTS=0`
   * giflib : Used for animated gif playback.
@@ -77,7 +79,7 @@ The following dependencies are optional.
     Disable via `HAVE_LIBEXIF=0`
   * libwebp : Used for animated webp playback.
     (NOTE: animated webp also requires Imlib2 v1.7.5 or above)
-    Disabled via `HAVE_LIBWEBP=0`.
+    Disabled via `HAVE_LIBWEBP=0`
 
 Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development
@@ -160,7 +162,9 @@ Yes, see [nsxiv-rifle](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/
 Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-env)
 
 * Can I pipe images into nsxiv? <br>
-Yes, see [nsxiv-pipe](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe)
+Yes, since nsxiv v30, also requires Imlib2 v1.7.0+ and `memfd_create()` which
+is Linux specific. For non-linux OSes, see
+[nsxiv-pipe](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe)
 
 * nsxiv crashes when viewing images with emojis in their name. <br>
 This is an issue with libXft. Either wait for
