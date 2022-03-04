@@ -192,7 +192,10 @@ void parse_options(int argc, char **argv)
 	_options.filenames = argv + optind;
 	_options.filecnt = argc - optind;
 
-	if (_options.filecnt == 1 && STREQ(_options.filenames[0], "-")) {
+	if (_options.filecnt == 0 && !isatty(0)) {
+		_options.filecnt++;
+		_options.filenames[0] = estrdup("/dev/stdin");
+	} else if (_options.filecnt == 1 && STREQ(_options.filenames[0], "-")) {
 		_options.filenames++;
 		_options.filecnt--;
 		_options.from_stdin = true;

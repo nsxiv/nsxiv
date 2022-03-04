@@ -29,6 +29,7 @@
 #include <errno.h>
 #include <locale.h>
 #include <signal.h>
+#include <sys/mman.h>
 #include <sys/select.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -120,14 +121,39 @@ static bool xgetline(char **lineptr, size_t *n)
 
 static void check_add_file(char *filename, bool given)
 {
-	char *path;
+	char *path = NULL;
+	struct stat st;
+	int fd = -1, src_fd, n;
+	unsigned char buf[4096];
 
 	if (*filename == '\0')
 		return;
 
-	if (access(filename, R_OK) < 0 ||
-	    (path = realpath(filename, NULL)) == NULL)
-	{
+	if (access(filename, R_OK) == 0 && stat(filename, &st) == 0) {
+		switch (st.st_mode & S_IFMT) {
+			case S_IFREG:
+				path = realpath(filename, NULL);
+				break;
+			case S_IFIFO:
+#if HAVE_MEMFD
+				if ((fd = memfd_create(filename, MFD_CLOEXEC)) >= 0 &&
+				    ((src_fd = open(filename, O_RDONLY)) >= 0))
+				{
+					while ((n = read(src_fd, buf, sizeof(buf))) > 0) {
+						if (write(fd, buf, n) < 0)
+							error(0, 0, "error draining the pipe: %s", filename);
+					}
+					close(src_fd);
+				}
+				path = estrdup(filename);
+#else
+				(void)buf; (void)src_fd; (void)n;
+#endif /* HAVE_MEMFD */
+				break;
+		}
+	}
+
+	if (path == NULL) {
 		if (given)
 			error(0, errno, "%s", filename);
 		return;
@@ -141,6 +167,10 @@ static void check_add_file(char *filename, bool given)
 
 	files[fileidx].name = estrdup(filename);
 	files[fileidx].path = path;
+	if (fd >= 0) {
+		files[fileidx].flags |= FF_PIPE;
+		files[fileidx].fd = fd;
+	}
 	if (given)
 		files[fileidx].flags |= FF_WARN;
 	fileidx++;
@@ -159,6 +189,8 @@ void remove_file(int n, bool manual)
 	if (files[n].flags & FF_MARK)
 		markcnt--;
 
+	if (files[n].flags & FF_PIPE)
+		close(files[n].fd);
 	if (files[n].path != files[n].name)
 		free((void*) files[n].path);
 	free((void*) files[n].name);

@@ -412,17 +412,20 @@ Imlib_Image img_open(const fileinfo_t *file)
 {
 	struct stat st;
 	Imlib_Image im = NULL;
+	int fd;
 
-	if (access(file->path, R_OK) == 0 &&
-	    stat(file->path, &st) == 0 && S_ISREG(st.st_mode))
+	if ((file->flags & FF_PIPE) && (fd = dup(file->fd)) >= 0) {
+		im = imlib_load_image_fd(fd, file->name);
+	} else if (access(file->path, R_OK) == 0 &&
+	           stat(file->path, &st) == 0 && S_ISREG(st.st_mode))
 	{
 		im = imlib_load_image(file->path);
-		if (im != NULL) {
-			imlib_context_set_image(im);
-			if (imlib_image_get_data_for_reading_only() == NULL) {
-				imlib_free_image();
-				im = NULL;
-			}
+	}
+	if (im != NULL) {
+		imlib_context_set_image(im);
+		if (imlib_image_get_data_for_reading_only() == NULL) {
+			imlib_free_image();
+			im = NULL;
 		}
 	}
 	if (im == NULL && (file->flags & FF_WARN))

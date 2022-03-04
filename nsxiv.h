@@ -108,12 +108,14 @@ typedef enum {
 typedef enum {
 	FF_WARN    = 1,
 	FF_MARK    = 2,
-	FF_TN_INIT = 4
+	FF_TN_INIT = 4,
+	FF_PIPE    = 8
 } fileflags_t;
 
 typedef struct {
 	const char *name; /* as given by user */
 	const char *path; /* always absolute */
+	int fd;
 	fileflags_t flags;
 } fileinfo_t;
 

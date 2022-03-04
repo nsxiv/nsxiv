@@ -19,6 +19,7 @@ HAVE_LIBFONTS = $(OPT_DEP_DEFAULT)
 HAVE_LIBGIF   = $(OPT_DEP_DEFAULT)
 HAVE_LIBEXIF  = $(OPT_DEP_DEFAULT)
 HAVE_LIBWEBP  = $(OPT_DEP_DEFAULT)
+HAVE_MEMFD    = $(OPT_DEP_DEFAULT)
 
 # CFLAGS, any optimization flags goes here
 CFLAGS = -std=c99 -Wall -pedantic
@@ -28,11 +29,14 @@ ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
 
 inc_fonts_0 =
 inc_fonts_1 = -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
+memfd_cppflag_0 =
+memfd_cppflag_1 = -D_GNU_SOURCE
 
 CPPFLAGS = -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
-  $(inc_fonts_$(HAVE_LIBFONTS))
+  -DHAVE_MEMFD=$(HAVE_MEMFD) \
+  $(memfd_cppflag_$(HAVE_MEMFD)) $(inc_fonts_$(HAVE_LIBFONTS))
 
 lib_fonts_0 =
 lib_fonts_1 = -lXft -lfontconfig
