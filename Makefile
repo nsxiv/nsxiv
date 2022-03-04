@@ -67,6 +67,7 @@ nsxiv: $(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJS): Makefile nsxiv.h config.h commands.h
+options.o: $(OBJS:.o=.c)
 window.o: icon/data.h
 
 config.h:
