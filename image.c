@@ -472,8 +472,10 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 	imlib_context_set_anti_alias(0);
 	imlib_context_set_color_modifier(NULL);
 
-	if ((canvas = imlib_create_image(img->w, img->h)) == NULL)
-		error(EXIT_FAILURE, ENOMEM, NULL);
+	if ((canvas = imlib_create_image(img->w, img->h)) == NULL) {
+		error(0, 0, "%s: couldn't create image", file->name);
+		return true;
+	}
 	imlib_context_set_image(canvas);
 	img_area_clear(0, 0, img->w, img->h);
 
@@ -483,15 +485,14 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		Imlib_Image tmp;
 		Imlib_Image prev = n == 1 ? canvas : img->multi.frames[img->multi.cnt - 1].im;
 		int sx, sy, sw, sh;
+		bool err = true;
 
 		/* TODO: loading performance is currently pretty bad.
 		 * seems to be due to IO. i assume imlib_load_image_frame() doesn't
 		 * cache the file and is making a read everytime.
 		 */
-		if ((im = imlib_load_image_frame(file->path, n)) == NULL) {
-			error(0, 0, "%s: error loading frame %d", file->name, n);
-			break;
-		}
+		if ((im = imlib_load_image_frame(file->path, n)) == NULL)
+			goto loop_cleanup;
 		imlib_context_set_image(im);
 		imlib_image_get_frame_info(&finfo);
 		sx = finfo.frame_x;
@@ -502,7 +503,7 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		/* blend on top of the previous image */
 		imlib_context_set_image(prev);
 		if ((tmp = imlib_clone_image()) == NULL)
-			error(EXIT_FAILURE, ENOMEM, NULL);
+			goto loop_cleanup;
 		imlib_context_set_image(tmp);
 		if (dispose)
 			img_area_clear(px, py, pw, ph);
@@ -523,8 +524,16 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		img->multi.length += img->multi.frames[img->multi.cnt].delay;
 		img->multi.cnt++;
 
-		imlib_context_set_image(im);
-		imlib_free_image();
+		err = false;
+loop_cleanup:
+		if (im != NULL) {
+			imlib_context_set_image(im);
+			imlib_free_image();
+		}
+		if (err) {
+			error(0, 0, "%s: error loading frame %d", file->name, n);
+			break;
+		}
 	}
 	imlib_context_set_image(canvas);
 	imlib_free_image();
