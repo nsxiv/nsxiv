@@ -162,6 +162,8 @@ Yes, see [nsxiv-env](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/ns
 * Can I pipe images into nsxiv? <br>
 Yes, see [nsxiv-pipe](https://github.com/nsxiv/nsxiv-extra/tree/master/scripts/nsxiv-pipe)
 
+You may also wish to see the [known issues](https://github.com/nsxiv/nsxiv/issues/242).
+
 
 Customization
 -------------
