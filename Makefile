@@ -79,6 +79,7 @@ version.h: Makefile .git/index
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
 
 .git/index:
+	if [ ! -d .git ] || [ ! -f $@ ]; then mkdir .git && touch $@ ; fi
 
 clean:
 	rm -f *.o nsxiv version.h
