@@ -30,7 +30,6 @@ inc_fonts_0 =
 inc_fonts_1 = -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
 
 CPPFLAGS = -D_XOPEN_SOURCE=700 \
-  -DVERSION=\""$$(git describe 2>/dev/null || printf '%s' "$(VERSION)")"\" \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
   $(inc_fonts_$(HAVE_LIBFONTS))
@@ -67,15 +66,22 @@ nsxiv: $(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJS): Makefile nsxiv.h config.h commands.h
-options.o: $(OBJS:.o=.c)
+options.o: version.h
 window.o: icon/data.h
 
 config.h:
 	@echo "GEN $@"
 	cp config.def.h $@
 
+version.h: Makefile .git/index
+	@echo "GEN $@"
+	v="$$(git describe 2>/dev/null || true)"; \
+	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@
+
+.git/index:
+
 clean:
-	rm -f *.o nsxiv
+	rm -f *.o nsxiv version.h
 
 install-all: install install-desktop install-icon
 
