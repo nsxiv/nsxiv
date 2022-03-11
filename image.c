@@ -604,9 +604,14 @@ void img_render(img_t *img)
 	imlib_context_set_anti_alias(img->aa);
 	imlib_context_set_drawable(win->buf.pm);
 
+	/* manual blending, for performance reasons.
+	 * see https://phab.enlightenment.org/T8969#156167 for more details.
+	 */
 	if (imlib_image_has_alpha()) {
-		if ((bg = imlib_create_image(dw, dh)) == NULL)
-			error(EXIT_FAILURE, ENOMEM, NULL);
+		if ((bg = imlib_create_image(dw, dh)) == NULL) {
+			error(0, ENOMEM, "Failed to create image");
+			goto fallback;
+		}
 		imlib_context_set_image(bg);
 		imlib_image_set_has_alpha(0);
 
@@ -636,6 +641,7 @@ void img_render(img_t *img)
 		imlib_free_image();
 		imlib_context_set_color_modifier(img->cmod);
 	} else {
+fallback:
 		imlib_render_image_part_on_drawable_at_size(sx, sy, sw, sh, dx, dy, dw, dh);
 	}
 	img->dirty = false;
