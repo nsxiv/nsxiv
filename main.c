@@ -260,6 +260,7 @@ size_t get_win_title(unsigned char *buf, int len, bool init)
 		if (pfd.readfd >= 0) {
 			if ((n = read(pfd.readfd, buf, len-1)) > 0)
 				buf[n] = '\0';
+			close(pfd.readfd);
 		}
 	}
 
