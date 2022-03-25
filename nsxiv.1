@@ -429,12 +429,18 @@ The window title can be replaced with the output of a user-provided script,
 which is called by nsxiv whenever there's a redraw. The path of this script is
 .I $XDG_CONFIG_HOME/nsxiv/exec/win-title
 and the arguments given to it (where "Optional" arguments might be empty) are:
-1) resolved absolute path of the current file,
-2) current file number,
-3) total file count,
-4) image width (Optional: Disabled on thumbnails mode),
-5) image height (Optional: Disabled on thumbnails mode), and
-6) current zoom (Optional: Disabled on thumbnails mode).
+.IP $1 4
+resolved absolute path of the current file
+.IP $2 4
+current file number
+.IP $3 4
+total file count
+.IP $4 4
+image width (Optional: Disabled on thumbnails mode)
+.IP $5 4
+image height (Optional: Disabled on thumbnails mode)
+.IP $6 4
+current zoom (Optional: Disabled on thumbnails mode)
 .P
 The term file is used rather than image as nsxiv does not precheck that the
 input files are valid images. Total file count may be different from the actual
@@ -447,8 +453,13 @@ The information displayed on the left side of the status bar can be replaced
 with the output of a user-provided script, which is called by nsxiv whenever an
 image gets loaded. The path of this script is
 .I $XDG_CONFIG_HOME/nsxiv/exec/image-info
-and the arguments given to it are: 1) path to image file, 2) image width, and
-3) image height.
+and the arguments given to it are:
+.IP $1 4
+path to image file
+.IP $2 4
+image width
+.IP $3 4
+image height
 .P
 There is also an example script installed together with nsxiv as
 .IR EGPREFIX/image-info .
