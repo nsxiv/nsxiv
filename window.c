@@ -73,7 +73,6 @@ static void win_init_font(const win_env_t *e, const char *fontstr)
 	fontheight = font->ascent + font->descent;
 	FcPatternGetDouble(font->pattern, FC_SIZE, 0, &fontsize);
 	barheight = fontheight + 2 * V_TEXT_PAD;
-	XftFontClose(e->dpy, font);
 }
 
 static void xft_alloc_color(const win_env_t *e, const char *name, XftColor *col)
@@ -333,7 +332,9 @@ CLEANUP void win_close(win_t *win)
 		XFreeCursor(win->env.dpy, cursors[i].icon);
 
 	XFreeGC(win->env.dpy, gc);
-
+#if HAVE_LIBFONTS
+	XftFontClose(win->env.dpy, font);
+#endif
 	XDestroyWindow(win->env.dpy, win->xwin);
 	XCloseDisplay(win->env.dpy);
 }
