@@ -9,7 +9,7 @@
 # reloads them.
 
 # By default nsxiv(1) will send one image per-line to stdin, however when using
-# -0 the image list will be NULL separated and the enviornment variable
+# -0 the image list will be NULL separated and the environment variable
 # "$NSXIV_USING_NULL" will be set to 1.
 
 # The key combo argument has the following form: "[C-][M-][S-]KEY",
