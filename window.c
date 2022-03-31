@@ -189,7 +189,7 @@ void win_open(win_t *win)
 	int gmask;
 	XSizeHints sizehints;
 	XWMHints hints;
-	pid_t pid;
+	long pid;
 	char hostname[256];
 	XSetWindowAttributes attrs;
 	char res_class[] = RES_CLASS;
@@ -247,7 +247,7 @@ void win_open(win_t *win)
 	/* set the _NET_WM_PID */
 	pid = getpid();
 	XChangeProperty(e->dpy, win->xwin, atoms[ATOM__NET_WM_PID], XA_CARDINAL,
-	                sizeof(pid_t) * 8, PropModeReplace, (unsigned char *) &pid, 1);
+	                32, PropModeReplace, (unsigned char *) &pid, 1);
 	if (gethostname(hostname, ARRLEN(hostname)) == 0) {
 		XTextProperty tp;
 		tp.value = (unsigned char *)hostname;
