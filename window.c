@@ -309,6 +309,12 @@ void win_open(win_t *win)
 	hints.initial_state = NormalState;
 	XSetWMHints(win->env.dpy, win->xwin, &hints);
 
+	if (options->fullscreen) {
+		XChangeProperty(e->dpy, win->xwin, atoms[ATOM__NET_WM_STATE],
+		                XA_ATOM, 32, PropModeReplace,
+		                (unsigned char *) &atoms[ATOM__NET_WM_STATE_FULLSCREEN], 1);
+	}
+
 	win->h -= win->bar.h;
 
 	win->buf.w = e->scrw;
@@ -320,9 +326,6 @@ void win_open(win_t *win)
 	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
 	XMapWindow(e->dpy, win->xwin);
 	XFlush(e->dpy);
-
-	if (options->fullscreen)
-		win_toggle_fullscreen(win);
 }
 
 CLEANUP void win_close(win_t *win)
