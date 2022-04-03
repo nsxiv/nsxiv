@@ -109,8 +109,10 @@ void win_init(win_t *win)
 {
 	win_env_t *e;
 	const char *win_bg, *win_fg, *mrk_fg;
+	const char *env_win_bg, *env_win_fg, *env_mrk_fg;
 #if HAVE_LIBFONTS
 	const char *bar_fg, *bar_bg, *f;
+	const char *env_bar_fg, *env_bar_bg, *env_f;
 #endif
 	char *res_man;
 	XrmDatabase db;
@@ -135,20 +137,26 @@ void win_init(win_t *win)
 	res_man = XResourceManagerString(e->dpy);
 	db = res_man == NULL ? NULL : XrmGetStringDatabase(res_man);
 
-	win_bg = win_res(db, RES_CLASS ".window.background", DEFAULT_WIN_BG);
-	win_fg = win_res(db, RES_CLASS ".window.foreground", DEFAULT_WIN_FG);
-	mrk_fg = win_res(db, RES_CLASS ".mark.foreground",   DEFAULT_MARK_COLOR ? DEFAULT_MARK_COLOR : win_fg);
+	env_win_bg = getenv(WIN_BG_ENV_NAME);
+	env_win_fg = getenv(WIN_FG_ENV_NAME);
+	env_mrk_fg = getenv(MARK_COLOR_ENV_NAME);
+	win_bg = win_res(db, RES_CLASS ".window.background", env_win_bg ? env_win_bg : DEFAULT_WIN_BG);
+	win_fg = win_res(db, RES_CLASS ".window.foreground", env_win_fg ? env_win_fg : DEFAULT_WIN_FG);
+	mrk_fg = win_res(db, RES_CLASS ".mark.foreground",   env_mrk_fg ? env_mrk_fg : (DEFAULT_MARK_COLOR ? DEFAULT_MARK_COLOR : win_fg));
 	win_alloc_color(e, win_bg, &win->win_bg);
 	win_alloc_color(e, win_fg, &win->win_fg);
 	win_alloc_color(e, mrk_fg, &win->mrk_fg);
 
 #if HAVE_LIBFONTS
-	bar_bg = win_res(db, RES_CLASS ".bar.background", DEFAULT_BAR_BG ? DEFAULT_BAR_BG : win_bg);
-	bar_fg = win_res(db, RES_CLASS ".bar.foreground", DEFAULT_BAR_FG ? DEFAULT_BAR_FG : win_fg);
+	env_bar_bg = getenv(BAR_BG_ENV_NAME);
+	env_bar_fg = getenv(BAR_FG_ENV_NAME);
+	bar_bg = win_res(db, RES_CLASS ".bar.background", env_bar_bg ? env_bar_bg : (DEFAULT_BAR_BG ? DEFAULT_BAR_BG : win_bg));
+	bar_fg = win_res(db, RES_CLASS ".bar.foreground", env_bar_fg ? env_bar_fg : (DEFAULT_BAR_FG ? DEFAULT_BAR_FG : win_fg));
 	xft_alloc_color(e, bar_bg, &win->bar_bg);
 	xft_alloc_color(e, bar_fg, &win->bar_fg);
 
-	f = win_res(db, RES_CLASS ".bar.font", DEFAULT_FONT);
+	env_f = getenv(FONT_ENV_NAME);
+	f = win_res(db, RES_CLASS ".bar.font", env_f ? env_f : DEFAULT_FONT);
 	win_init_font(e, f);
 
 	win->bar.l.size = BAR_L_LEN;
