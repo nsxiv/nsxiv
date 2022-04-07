@@ -35,6 +35,7 @@ void exif_auto_orientate(const fileinfo_t*);
 #endif
 Imlib_Image img_open(const fileinfo_t*);
 
+extern const char *homedir;
 static char *cache_dir;
 
 static char* tns_cache_filepath(const char *filepath)
@@ -146,7 +147,7 @@ void tns_clean_cache(void)
 void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *win)
 {
 	int len;
-	const char *homedir, *dsuffix = "";
+	const char *cacheenv, *dsuffix = "";
 
 	if (cnt != NULL && *cnt > 0)
 		tns->thumbs = ecalloc(*cnt, sizeof(thumb_t));
@@ -163,16 +164,16 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 	tns->zl = THUMB_SIZE;
 	tns_zoom(tns, 0);
 
-	if ((homedir = getenv("XDG_CACHE_HOME")) == NULL || homedir[0] == '\0') {
-		homedir = getenv("HOME");
+	if ((cacheenv = getenv("XDG_CACHE_HOME")) == NULL || cacheenv[0] == '\0') {
+		cacheenv = homedir;
 		dsuffix = "/.cache";
 	}
-	if (homedir != NULL) {
+	if (cacheenv != NULL) {
 		const char *s = "/nsxiv";
 		free(cache_dir);
-		len = strlen(homedir) + strlen(dsuffix) + strlen(s) + 1;
+		len = strlen(cacheenv) + strlen(dsuffix) + strlen(s) + 1;
 		cache_dir = emalloc(len);
-		snprintf(cache_dir, len, "%s%s%s", homedir, dsuffix, s);
+		snprintf(cache_dir, len, "%s%s%s", cacheenv, dsuffix, s);
 	} else {
 		error(0, 0, "Cache directory not found");
 	}

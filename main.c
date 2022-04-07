@@ -58,6 +58,7 @@ img_t img;
 tns_t tns;
 win_t win;
 const XButtonEvent *xbutton_ev;
+const char *homedir;
 
 fileinfo_t *files;
 int filecnt, fileidx;
@@ -407,12 +408,20 @@ static void update_info(void)
 	l->p = l->buf;
 	r->p = r->buf;
 	if (mode == MODE_THUMB) {
-		if (tns.loadnext < tns.end)
+		if (tns.loadnext < tns.end) {
 			bar_put(l, "Loading... %0*d", fw, tns.loadnext + 1);
-		else if (tns.initnext < filecnt)
+		} else if (tns.initnext < filecnt) {
 			bar_put(l, "Caching... %0*d", fw, tns.initnext + 1);
-		else
-			strncpy(l->buf, files[fileidx].name, l->size);
+		} else {
+			const char *filename = files[fileidx].name;
+			if ((homedir != NULL) && (strncmp(homedir, filename, strlen(homedir)) == 0 ))
+			{
+				bar_put(l, "~%s", (filename + strlen(homedir)));
+			} else {
+				strncpy(l->buf, filename, l->size);
+				l->buf[(strlen(filename) + 1) < l->size ? strlen(filename): l->size - 1] = 0;
+			}
+		}
 		bar_put(r, "%s%0*d/%d", mark, fw, fileidx + 1, filecnt);
 	} else {
 		bar_put(r, "%s", mark);
@@ -843,7 +852,7 @@ int main(int argc, char *argv[])
 	int i, start;
 	size_t n;
 	char *filename;
-	const char *homedir, *dsuffix = "";
+	const char *configdir, *dsuffix = "";
 	struct stat fstats;
 	r_dir_t dir;
 
@@ -916,19 +925,20 @@ int main(int argc, char *argv[])
 	img_init(&img, &win);
 	arl_init(&arl);
 
-	if ((homedir = getenv("XDG_CONFIG_HOME")) == NULL || homedir[0] == '\0') {
-		homedir = getenv("HOME");
+	homedir = getenv("HOME");
+	if ((configdir = getenv("XDG_CONFIG_HOME")) == NULL || configdir[0] == '\0') {
+		configdir = homedir;
 		dsuffix = "/.config";
 	}
-	if (homedir != NULL) {
+	if (configdir != NULL) {
 		extcmd_t *cmd[] = { &info.f, &keyhandler.f, &wintitle.f };
 		const char *name[] = { "image-info", "key-handler", "win-title" };
 		const char *s = "/nsxiv/exec/";
 
 		for (i = 0; i < ARRLEN(cmd); i++) {
-			n = strlen(homedir) + strlen(dsuffix) + strlen(s) + strlen(name[i]) + 1;
+			n = strlen(configdir) + strlen(dsuffix) + strlen(s) + strlen(name[i]) + 1;
 			cmd[i]->cmd = emalloc(n);
-			snprintf(cmd[i]->cmd, n, "%s%s%s%s", homedir, dsuffix, s, name[i]);
+			snprintf(cmd[i]->cmd, n, "%s%s%s%s", configdir, dsuffix, s, name[i]);
 			if (access(cmd[i]->cmd, X_OK) != 0)
 				cmd[i]->err = errno;
 		}
