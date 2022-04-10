@@ -356,7 +356,7 @@ void* emalloc(size_t);
 void* ecalloc(size_t, size_t);
 void* erealloc(void*, size_t);
 char* estrdup(const char*);
-void xstrncpy(char*, const char*, size_t);
+char* xstrncpy(char*, const char*, size_t);
 void error(int, int, const char*, ...);
 int r_opendir(r_dir_t*, const char*, bool);
 int r_closedir(r_dir_t*);
