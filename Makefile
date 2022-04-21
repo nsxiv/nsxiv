@@ -32,7 +32,7 @@ inc_fonts_1 = -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
 CPPFLAGS = -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
-  $(inc_fonts_$(HAVE_LIBFONTS))
+  -DHAVE_INOTIFY=$(HAVE_INOTIFY) $(inc_fonts_$(HAVE_LIBFONTS))
 
 lib_fonts_0 =
 lib_fonts_1 = -lXft -lfontconfig
@@ -42,14 +42,12 @@ lib_gif_0 =
 lib_gif_1 = -lgif
 lib_webp_0 =
 lib_webp_1 = -lwebpdemux -lwebp
-autoreload_0 = nop
-autoreload_1 = inotify
 
 NSXIV_LDLIBS = -lImlib2 -lX11 \
   $(lib_exif_$(HAVE_LIBEXIF)) $(lib_gif_$(HAVE_LIBGIF)) \
   $(lib_webp_$(HAVE_LIBWEBP)) $(lib_fonts_$(HAVE_LIBFONTS))
 
-OBJS = autoreload_$(autoreload_$(HAVE_INOTIFY)).o commands.o image.o main.o options.o \
+OBJS = autoreload.o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
 .SUFFIXES:

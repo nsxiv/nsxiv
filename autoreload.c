@@ -18,6 +18,8 @@
 
 #include "nsxiv.h"
 
+#if HAVE_INOTIFY
+
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -109,3 +111,29 @@ bool arl_handle(arl_t *arl)
 	}
 	return reload;
 }
+
+#else
+
+void arl_init(arl_t *arl)
+{
+	arl->fd = -1;
+}
+
+void arl_cleanup(arl_t *arl)
+{
+	(void) arl;
+}
+
+void arl_setup(arl_t *arl, const char *filepath)
+{
+	(void) arl;
+	(void) filepath;
+}
+
+bool arl_handle(arl_t *arl)
+{
+	(void) arl;
+	return false;
+}
+
+#endif /* INOTIFY */
