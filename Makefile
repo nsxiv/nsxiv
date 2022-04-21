@@ -1,39 +1,9 @@
 .POSIX:
 
-# nsxiv version
-VERSION = 29
-
-# PREFIX for install
-PREFIX = /usr/local
-MANPREFIX = $(PREFIX)/share/man
-EGPREFIX = $(PREFIX)/share/doc/nsxiv/examples
-
-# default value for optional dependencies. 1 = enabled, 0 = disabled
-OPT_DEP_DEFAULT = 1
-
-# autoreload backend: 1 = inotify, 0 = none
-HAVE_INOTIFY = $(OPT_DEP_DEFAULT)
-
-# optional dependencies, see README for more info
-HAVE_LIBFONTS = $(OPT_DEP_DEFAULT)
-HAVE_LIBGIF   = $(OPT_DEP_DEFAULT)
-HAVE_LIBEXIF  = $(OPT_DEP_DEFAULT)
-HAVE_LIBWEBP  = $(OPT_DEP_DEFAULT)
-
-# CFLAGS, any optimization flags goes here
-CFLAGS = -std=c99 -Wall -pedantic
-
-# icons that will be installed via `make icon`
-ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
+include config.mk
 
 inc_fonts_0 =
 inc_fonts_1 = -I/usr/include/freetype2 -I$(PREFIX)/include/freetype2
-
-CPPFLAGS = -D_XOPEN_SOURCE=700 \
-  -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
-  -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
-  -DHAVE_INOTIFY=$(HAVE_INOTIFY) $(inc_fonts_$(HAVE_LIBFONTS))
-
 lib_fonts_0 =
 lib_fonts_1 = -lXft -lfontconfig
 lib_exif_0 =
@@ -42,6 +12,11 @@ lib_gif_0 =
 lib_gif_1 = -lgif
 lib_webp_0 =
 lib_webp_1 = -lwebpdemux -lwebp
+
+CPPFLAGS = -D_XOPEN_SOURCE=700 \
+  -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
+  -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
+  -DHAVE_INOTIFY=$(HAVE_INOTIFY) $(inc_fonts_$(HAVE_LIBFONTS))
 
 NSXIV_LDLIBS = -lImlib2 -lX11 \
   $(lib_exif_$(HAVE_LIBEXIF)) $(lib_gif_$(HAVE_LIBGIF)) \
@@ -63,7 +38,7 @@ nsxiv: $(OBJS)
 	@echo "CC $@"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
-$(OBJS): Makefile nsxiv.h config.h commands.h
+$(OBJS): Makefile config.mk nsxiv.h config.h commands.h
 options.o: version.h
 window.o: icon/data.h
 
@@ -71,7 +46,7 @@ config.h:
 	@echo "GEN $@"
 	cp config.def.h $@
 
-version.h: Makefile .git/index
+version.h: config.mk .git/index
 	@echo "GEN $@"
 	v="$$(git describe 2>/dev/null || true)"; \
 	echo "#define VERSION \"$${v:-$(VERSION)}\"" >$@

@@ -99,8 +99,8 @@ For example:
     $ make HAVE_LIBEXIF=0
 
 will disable `libexif` support. Alternatively they can be disabled via editing
-the `Makefile` directly. `OPT_DEP_DEFAULT=0` can be used to disable all
-optional dependencies.
+`config.mk`. `OPT_DEP_DEFAULT=0` can be used to disable all optional
+dependencies.
 
 Installing nsxiv:
 
