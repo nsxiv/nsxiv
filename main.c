@@ -18,8 +18,8 @@
  */
 
 #include "nsxiv.h"
-#include "commands.h"
 #define _MAPPINGS_CONFIG
+#include "commands.h"
 #include "config.h"
 
 #include <stdlib.h>
