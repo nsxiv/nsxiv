@@ -45,13 +45,6 @@ typedef struct {
 	timeout_f handler;
 } timeout_t;
 
-/* timeout handler functions: */
-void redraw(void);
-void reset_cursor(void);
-void animate(void);
-void slideshow(void);
-void clear_resize(void);
-
 appmode_t mode;
 arl_t arl;
 img_t img;
@@ -522,7 +515,7 @@ void clear_resize(void)
 	resized = false;
 }
 
-Bool is_input_ev(Display *dpy, XEvent *ev, XPointer arg)
+static Bool is_input_ev(Display *dpy, XEvent *ev, XPointer arg)
 {
 	return ev->type == ButtonPress || ev->type == KeyPress;
 }
@@ -822,7 +815,7 @@ static int fncmp(const void *a, const void *b)
 	return strcoll(((fileinfo_t*) a)->name, ((fileinfo_t*) b)->name);
 }
 
-void sigchld(int sig)
+static void sigchld(int sig)
 {
 	while (waitpid(-1, NULL, WNOHANG) > 0);
 }

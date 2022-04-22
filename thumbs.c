@@ -33,7 +33,6 @@
 #include <libexif/exif-data.h>
 void exif_auto_orientate(const fileinfo_t*);
 #endif
-Imlib_Image img_open(const fileinfo_t*);
 
 static char *cache_dir;
 

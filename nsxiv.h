@@ -231,6 +231,7 @@ void img_toggle_antialias(img_t*);
 bool img_change_gamma(img_t*, int);
 bool img_frame_navigate(img_t*, int);
 bool img_frame_animate(img_t*);
+Imlib_Image img_open(const fileinfo_t*);
 
 
 /* options.c */
@@ -447,5 +448,25 @@ void win_draw_rect(win_t*, int, int, int, int, bool, int, unsigned long);
 void win_set_title(win_t*, bool);
 void win_set_cursor(win_t*, cursor_t);
 void win_cursor_pos(win_t*, int*, int*);
+
+/* main.c */
+
+/* timeout handler functions: */
+void redraw(void);
+void reset_cursor(void);
+void animate(void);
+void slideshow(void);
+void clear_resize(void);
+
+void remove_file(int, bool);
+void set_timeout(timeout_f, int, bool);
+void reset_timeout(timeout_f);
+size_t get_win_title(unsigned char*, int, bool);
+void close_info(void);
+void open_info(void);
+void load_image(int);
+bool mark_image(int, bool);
+int nav_button(void);
+void handle_key_handler(bool);
 
 #endif /* NSXIV_H */

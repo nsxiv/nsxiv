@@ -27,9 +27,10 @@ jobs:
         CFLAGS="-std=c99 -Wall -pedantic"
         # extra flags
         CFLAGS+=" -O3 -flto"
-        CFLAGS+=" -Werror -Wextra -Wshadow -Wvla -Wpointer-arith -Wstrict-prototypes"
+        CFLAGS+=" -Werror -Wextra -Wshadow -Wvla -Wpointer-arith"
         CFLAGS+=" -Wundef -Wstrict-overflow=4 -Wwrite-strings -Wunreachable-code"
         CFLAGS+=" -Wbad-function-cast -Wdeclaration-after-statement"
+        CFLAGS+=" -Wmissing-prototypes -Wstrict-prototypes"
         # silence
         CFLAGS+=" -Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers"
         echo "###  GCC BUILD  ###" && make clean && make -s CC=gcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=1
@@ -55,9 +56,10 @@ jobs:
         CFLAGS="-std=c99 -Wall -pedantic"
         # extra flags
         CFLAGS+=" -O3 -flto"
-        CFLAGS+=" -Werror -Wextra -Wshadow -Wvla -Wpointer-arith -Wstrict-prototypes"
+        CFLAGS+=" -Werror -Wextra -Wshadow -Wvla -Wpointer-arith"
         CFLAGS+=" -Wundef -Wstrict-overflow=4 -Wwrite-strings -Wunreachable-code"
         CFLAGS+=" -Wbad-function-cast -Wdeclaration-after-statement"
+        CFLAGS+=" -Wmissing-prototypes -Wstrict-prototypes"
         # silence
         CFLAGS+=" -Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers"
         echo "###  GCC BUILD  ###" && make clean && make -s CC=gcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=0
