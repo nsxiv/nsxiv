@@ -31,7 +31,6 @@
 
 #if HAVE_LIBEXIF
 #include <libexif/exif-data.h>
-void exif_auto_orientate(const fileinfo_t*);
 #endif
 
 static char *cache_dir;

@@ -232,6 +232,9 @@ bool img_change_gamma(img_t*, int);
 bool img_frame_navigate(img_t*, int);
 bool img_frame_animate(img_t*);
 Imlib_Image img_open(const fileinfo_t*);
+#if HAVE_LIBEXIF
+void exif_auto_orientate(const fileinfo_t*);
+#endif
 
 
 /* options.c */
