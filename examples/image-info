@@ -4,9 +4,10 @@
 # Called by nsxiv(1) whenever an image gets loaded.
 # The output is displayed in nsxiv's status bar.
 # Arguments:
-#   $1: path to image file
+#   $1: path to image file (as provided by the user)
 #   $2: image width
 #   $3: image height
+#   $4: fully resolved path to the image file
 
 s="  " # field separator
 
