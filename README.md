@@ -28,7 +28,7 @@ Features
 * Ability to cache thumbnails for fast re-loading
 * Basic support for animated/multi-frame images (GIF/WebP)
 * Display image information in status bar
-* Display image name/path in X title
+* Customizable window title
 
 
 Screenshots
@@ -46,11 +46,13 @@ Screenshots
 Installing via package manager
 ------------------------------
 
+<a href="https://repology.org/project/nsxiv/versions">
+    <img align="right" width="192" src="https://repology.org/badge/vertical-allrepos/nsxiv.svg">
+</a>
+
 nsxiv is available on the following distributions/repositories. If you don't see
 your distro listed here, either contact your distro's package maintainer or
 consider packaging it yourself and adding it to the respective community repo.
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/nsxiv.svg)](https://repology.org/project/nsxiv/versions)
 
 Repos not tracked by repology:
 
@@ -196,12 +198,12 @@ on GitHub or get a copy using git with the following command:
 
 You can view the changelog [here](CHANGELOG.md)
 
-Related projects
+Similar projects
 ----------------
 
 If nsxiv isn't able to fit your needs, check out the image viewer section of
-[suckless rocks](https://suckless.org/rocks) to find other minimal image viewers
-to try out.
+**[suckless rocks](https://suckless.org/rocks)** to find other minimal image
+viewers to try out.
 
 Below are a couple other lesser known projects not listed in suckless rocks.
 
