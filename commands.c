@@ -26,20 +26,9 @@
 
 #include "commands.h"
 
-extern appmode_t mode;
 extern img_t img;
 extern tns_t tns;
 extern win_t win;
-extern const XButtonEvent *xbutton_ev;
-
-extern fileinfo_t *files;
-extern int filecnt, fileidx;
-extern int alternate;
-extern int markcnt;
-extern int markidx;
-
-extern int prefix;
-extern bool extprefix;
 
 bool cg_quit(arg_t status)
 {

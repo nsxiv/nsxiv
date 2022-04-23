@@ -45,11 +45,18 @@ typedef struct {
 	timeout_f handler;
 } timeout_t;
 
-appmode_t mode;
+typedef struct {
+	int err;
+	char *cmd;
+} extcmd_t;
+
+/* these are not declared in nsxiv.h, as it causes too many -Wshadow warnings */
 arl_t arl;
 img_t img;
 tns_t tns;
 win_t win;
+
+appmode_t mode;
 const XButtonEvent *xbutton_ev;
 
 fileinfo_t *files;
@@ -62,11 +69,6 @@ int prefix;
 static bool extprefix;
 
 static bool resized = false;
-
-typedef struct {
-	int err;
-	char *cmd;
-} extcmd_t;
 
 static struct {
 	extcmd_t f;

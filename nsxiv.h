@@ -472,4 +472,13 @@ bool mark_image(int, bool);
 int nav_button(void);
 void handle_key_handler(bool);
 
+extern appmode_t mode;
+extern const XButtonEvent *xbutton_ev;
+extern fileinfo_t *files;
+extern int filecnt, fileidx;
+extern int alternate;
+extern int markcnt;
+extern int markidx;
+extern int prefix;
+
 #endif /* NSXIV_H */
