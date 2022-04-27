@@ -735,7 +735,8 @@ static void run(void)
 				pfd[FD_ARL].fd = arl.fd;
 				pfd[FD_X].events = pfd[FD_INFO].events = pfd[FD_ARL].events = POLLIN;
 
-				poll(pfd, ARRLEN(pfd), to_set ? TV_TO_MS(&timeout) : -1);
+				if (poll(pfd, ARRLEN(pfd), to_set ? TV_TO_MS(&timeout) : -1) < 0)
+					continue;
 				if (pfd[FD_INFO].revents & POLLIN)
 					read_info();
 				if (pfd[FD_ARL].revents & POLLIN) {
