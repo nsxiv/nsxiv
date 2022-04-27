@@ -898,23 +898,15 @@ bool img_frame_navigate(img_t *img, int d)
 		return false;
 
 	d += img->multi.sel;
-	if (d < 0)
-		d = 0;
-	else if (d >= img->multi.cnt)
-		d = img->multi.cnt - 1;
+	d = MAX(0, MIN(d, img->multi.cnt - 1));
 
 	return img_frame_goto(img, d);
 }
 
 bool img_frame_animate(img_t *img)
 {
-	if (img->multi.cnt == 0)
-		return false;
-
-	if (img->multi.sel + 1 >= img->multi.cnt)
-		img_frame_goto(img, 0);
+	if (img->multi.cnt > 0)
+		return img_frame_goto(img, (img->multi.sel + 1) % img->multi.cnt);
 	else
-		img_frame_goto(img, img->multi.sel + 1);
-	img->dirty = true;
-	return true;
+		return false;
 }
