@@ -136,4 +136,4 @@ bool arl_handle(arl_t *arl)
 	return false;
 }
 
-#endif /* INOTIFY */
+#endif /* HAVE_INOTIFY */
