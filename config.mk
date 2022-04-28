@@ -18,8 +18,10 @@ HAVE_LIBGIF   = $(OPT_DEP_DEFAULT)
 HAVE_LIBEXIF  = $(OPT_DEP_DEFAULT)
 HAVE_LIBWEBP  = $(OPT_DEP_DEFAULT)
 
+# Compiler and linker
+CC = c99
 # CFLAGS, any optimization flags goes here
-CFLAGS = -std=c99 -Wall -pedantic
+CFLAGS = -Wall -pedantic
 
 # icons that will be installed via `make icon`
 ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
