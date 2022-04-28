@@ -29,7 +29,7 @@
 #include <errno.h>
 #include <locale.h>
 #include <signal.h>
-#include <sys/select.h>
+#include <poll.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
@@ -701,9 +701,9 @@ static void on_buttonpress(const XButtonEvent *bev)
 
 static void run(void)
 {
-	int xfd;
-	fd_set fds;
-	struct timeval timeout;
+	enum { FD_X, FD_INFO, FD_ARL, FD_CNT };
+	struct pollfd pfd[FD_CNT];
+	struct timeval timeout = {0};
 	const struct timespec ten_ms = {0, 10000000};
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
@@ -730,21 +730,16 @@ static void run(void)
 				if (!tns_load(&tns, tns.initnext, false, true))
 					remove_file(tns.initnext, false);
 			} else {
-				xfd = ConnectionNumber(win.env.dpy);
-				FD_ZERO(&fds);
-				FD_SET(xfd, &fds);
-				if (info.fd != -1) {
-					FD_SET(info.fd, &fds);
-					xfd = MAX(xfd, info.fd);
-				}
-				if (arl.fd != -1) {
-					FD_SET(arl.fd, &fds);
-					xfd = MAX(xfd, arl.fd);
-				}
-				select(xfd + 1, &fds, 0, 0, to_set ? &timeout : NULL);
-				if (info.fd != -1 && FD_ISSET(info.fd, &fds))
+				pfd[FD_X].fd = ConnectionNumber(win.env.dpy);
+				pfd[FD_INFO].fd = info.fd;
+				pfd[FD_ARL].fd = arl.fd;
+				pfd[FD_X].events = pfd[FD_INFO].events = pfd[FD_ARL].events = POLLIN;
+
+				if (poll(pfd, ARRLEN(pfd), to_set ? TV_TO_MS(&timeout) : -1) < 0)
+					continue;
+				if (pfd[FD_INFO].revents & POLLIN)
 					read_info();
-				if (arl.fd != -1 && FD_ISSET(arl.fd, &fds)) {
+				if (pfd[FD_ARL].revents & POLLIN) {
 					if (arl_handle(&arl)) {
 						/* when too fast, imlib2 can't load the image */
 						nanosleep(&ten_ms, NULL);
