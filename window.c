@@ -30,8 +30,6 @@
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
 
-extern size_t get_win_title(unsigned char *, int, bool);
-
 #if HAVE_LIBFONTS
 #include "utf8.h"
 static XftFont *font;

@@ -18,8 +18,8 @@
  */
 
 #include "nsxiv.h"
-#include "commands.h"
 #define _MAPPINGS_CONFIG
+#include "commands.h"
 #include "config.h"
 
 #include <stdlib.h>
@@ -45,18 +45,18 @@ typedef struct {
 	timeout_f handler;
 } timeout_t;
 
-/* timeout handler functions: */
-void redraw(void);
-void reset_cursor(void);
-void animate(void);
-void slideshow(void);
-void clear_resize(void);
+typedef struct {
+	int err;
+	char *cmd;
+} extcmd_t;
 
-appmode_t mode;
+/* these are not declared in nsxiv.h, as it causes too many -Wshadow warnings */
 arl_t arl;
 img_t img;
 tns_t tns;
 win_t win;
+
+appmode_t mode;
 const XButtonEvent *xbutton_ev;
 
 fileinfo_t *files;
@@ -69,11 +69,6 @@ int prefix;
 static bool extprefix;
 
 static bool resized = false;
-
-typedef struct {
-	int err;
-	char *cmd;
-} extcmd_t;
 
 static struct {
 	extcmd_t f, ft;
@@ -527,7 +522,7 @@ void clear_resize(void)
 	resized = false;
 }
 
-Bool is_input_ev(Display *dpy, XEvent *ev, XPointer arg)
+static Bool is_input_ev(Display *dpy, XEvent *ev, XPointer arg)
 {
 	return ev->type == ButtonPress || ev->type == KeyPress;
 }
@@ -822,7 +817,7 @@ static int fncmp(const void *a, const void *b)
 	return strcoll(((fileinfo_t*) a)->name, ((fileinfo_t*) b)->name);
 }
 
-void sigchld(int sig)
+static void sigchld(int sig)
 {
 	while (waitpid(-1, NULL, WNOHANG) > 0);
 }

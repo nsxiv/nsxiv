@@ -24,34 +24,11 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-void remove_file(int, bool);
-void load_image(int);
-bool mark_image(int, bool);
-void close_info(void);
-void open_info(void);
-int nav_button(void);
-void redraw(void);
-void reset_cursor(void);
-void animate(void);
-void slideshow(void);
-void set_timeout(timeout_f, int, bool);
-void reset_timeout(timeout_f);
-void handle_key_handler(bool);
+#include "commands.h"
 
-extern appmode_t mode;
 extern img_t img;
 extern tns_t tns;
 extern win_t win;
-extern const XButtonEvent *xbutton_ev;
-
-extern fileinfo_t *files;
-extern int filecnt, fileidx;
-extern int alternate;
-extern int markcnt;
-extern int markidx;
-
-extern int prefix;
-extern bool extprefix;
 
 bool cg_quit(arg_t status)
 {

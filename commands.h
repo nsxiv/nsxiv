@@ -44,6 +44,7 @@ bool ct_scroll(arg_t);
 bool ct_drag_mark_image(arg_t);
 bool ct_select(arg_t);
 
+#ifdef _MAPPINGS_CONFIG
 /* global */
 #define g_change_gamma { cg_change_gamma, MODE_ALL }
 #define g_first { cg_first, MODE_ALL }
@@ -88,4 +89,5 @@ bool ct_select(arg_t);
 #define t_drag_mark_image { ct_drag_mark_image, MODE_THUMB }
 #define t_select { ct_select, MODE_THUMB }
 
+#endif /* _MAPPINGS_CONFIG */
 #endif /* COMMANDS_H */

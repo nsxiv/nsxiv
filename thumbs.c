@@ -31,9 +31,7 @@
 
 #if HAVE_LIBEXIF
 #include <libexif/exif-data.h>
-void exif_auto_orientate(const fileinfo_t*);
 #endif
-Imlib_Image img_open(const fileinfo_t*);
 
 static char *cache_dir;
 
@@ -143,7 +141,7 @@ void tns_clean_cache(void)
 	r_closedir(&dir);
 }
 
-void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *win)
+void tns_init(tns_t *tns, fileinfo_t *tns_files, const int *cnt, int *sel, win_t *win)
 {
 	int len;
 	const char *homedir, *dsuffix = "";
@@ -152,7 +150,7 @@ void tns_init(tns_t *tns, fileinfo_t *files, const int *cnt, int *sel, win_t *wi
 		tns->thumbs = ecalloc(*cnt, sizeof(thumb_t));
 	else
 		tns->thumbs = NULL;
-	tns->files = files;
+	tns->files = tns_files;
 	tns->cnt = cnt;
 	tns->initnext = tns->loadnext = 0;
 	tns->first = tns->end = tns->r_first = tns->r_end = 0;
