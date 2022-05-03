@@ -450,19 +450,36 @@ There is also an example script installed together with nsxiv as
 .IR EGPREFIX/win-title .
 .SH STATUS BAR
 The information displayed on the left side of the status bar can be replaced
-with the output of a user-provided script, which is called by nsxiv whenever an
-image gets loaded. The path of this script is
+with the output of user-provided script.
+.P
+The script that is called by nsxiv whenever an image gets loaded is located at
 .I $XDG_CONFIG_HOME/nsxiv/exec/image-info
 and the arguments given to it are:
 .IP $1 4
-path to image file
+path to image file (as provided by the user)
 .IP $2 4
 image width
 .IP $3 4
 image height
+.IP $4 4
+fully resolved path to the image file
 .P
-There is also an example script installed together with nsxiv as
-.IR EGPREFIX/image-info .
+In thumbnail mode, the script that is called is located at
+.I $XDG_CONFIG_HOME/nsxiv/exec/thumb-info
+and the arguments given to it are:
+.IP $1 4
+path to image file (as provided by the user)
+.IP $2 4
+empty
+.IP $3 4
+empty
+.IP $4 4
+fully resolved path to the image file
+.P
+There are also example scripts installed together with nsxiv as
+.IR EGPREFIX/image-info
+and
+.IR EGPREFIX/thumb-info .
 .SH EXTERNAL KEY HANDLER
 Additional external keyboard commands can be defined using a handler program
 located in

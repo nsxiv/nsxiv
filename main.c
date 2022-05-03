@@ -76,7 +76,7 @@ typedef struct {
 } extcmd_t;
 
 static struct {
-	extcmd_t f;
+	extcmd_t f, ft;
 	int fd;
 	unsigned int i, lastsep;
 	pid_t pid;
@@ -283,16 +283,21 @@ void close_info(void)
 void open_info(void)
 {
 	spawn_t pfd;
-	char w[12], h[12];
-	char *argv[5];
+	char w[12] = "", h[12] = "";
+	char *argv[6];
+	char *cmd = mode == MODE_IMAGE ? info.f.cmd : info.ft.cmd;
+	bool ferr = mode == MODE_IMAGE ? info.f.err : info.ft.err;
 
-	if (info.f.err || info.fd >= 0 || win.bar.h == 0)
+	if (ferr || info.fd >= 0 || win.bar.h == 0)
 		return;
 	win.bar.l.buf[0] = '\0';
-	snprintf(w, sizeof(w), "%d", img.w);
-	snprintf(h, sizeof(h), "%d", img.h);
-	construct_argv(argv, ARRLEN(argv), info.f.cmd, files[fileidx].name, w, h, NULL);
-	pfd = spawn(info.f.cmd, argv, X_READ);
+	if (mode == MODE_IMAGE) {
+		snprintf(w, sizeof(w), "%d", img.w);
+		snprintf(h, sizeof(h), "%d", img.h);
+	}
+	construct_argv(argv, ARRLEN(argv), cmd, files[fileidx].name, w, h,
+	               files[fileidx].path, NULL);
+	pfd = spawn(cmd, argv, X_READ);
 	if (pfd.readfd >= 0) {
 		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
 		info.fd = pfd.readfd;
@@ -396,7 +401,7 @@ static void bar_put(win_bar_t *bar, const char *fmt, ...)
 static void update_info(void)
 {
 	unsigned int i, fn, fw;
-	const char * mark;
+	const char *mark;
 	win_bar_t *l = &win.bar.l, *r = &win.bar.r;
 
 	/* update bar contents */
@@ -411,7 +416,7 @@ static void update_info(void)
 			bar_put(l, "Loading... %0*d", fw, tns.loadnext + 1);
 		else if (tns.initnext < filecnt)
 			bar_put(l, "Caching... %0*d", fw, tns.initnext + 1);
-		else
+		else if (info.ft.err)
 			strncpy(l->buf, files[fileidx].name, l->size);
 		bar_put(r, "%s%0*d/%d", mark, fw, fileidx + 1, filecnt);
 	} else {
@@ -916,8 +921,8 @@ int main(int argc, char *argv[])
 		dsuffix = "/.config";
 	}
 	if (homedir != NULL) {
-		extcmd_t *cmd[] = { &info.f, &keyhandler.f, &wintitle.f };
-		const char *name[] = { "image-info", "key-handler", "win-title" };
+		extcmd_t *cmd[] = { &info.f, &info.ft, &keyhandler.f, &wintitle.f };
+		const char *name[] = { "image-info", "thumb-info", "key-handler", "win-title" };
 		const char *s = "/nsxiv/exec/";
 
 		for (i = 0; i < ARRLEN(cmd); i++) {

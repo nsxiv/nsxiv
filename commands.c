@@ -84,6 +84,8 @@ bool cg_switch_mode(arg_t _)
 		load_image(fileidx);
 		mode = MODE_IMAGE;
 	}
+	close_info();
+	open_info();
 	return true;
 }
 
@@ -429,7 +431,12 @@ bool ci_slideshow(arg_t _)
 
 bool ct_move_sel(arg_t dir)
 {
-	return tns_move_selection(&tns, dir, prefix);
+	bool dirty = tns_move_selection(&tns, dir, prefix);
+	if (dirty) {
+		close_info();
+		open_info();
+	}
+	return dirty;
 }
 
 bool ct_reload_all(arg_t _)
