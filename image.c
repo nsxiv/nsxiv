@@ -155,12 +155,11 @@ static void img_multiframe_context_set(img_t *img)
 #if (HAVE_LIBGIF || HAVE_LIBWEBP) && !HAVE_IMLIB2_MULTI_FRAME
 static void img_multiframe_deprecation_notice(void)
 {
+/* NOTE: enable the deprecation notice, and update imlib2 version below
+ *       once the imlib2 multi-frame loading performance is resolved.
+ */
+#if 0
 	static bool warned;
-	/* NOTE: enable the deprecation notice, and update imlib2 version below
-	 *       once the imlib2 multi-frame loading performance is resolved.
-	 */
-	return;
-
 	if (!warned) {
 		error(0, 0, "\n"
 		      "################################################################\n"
@@ -174,6 +173,7 @@ static void img_multiframe_deprecation_notice(void)
 		      );
 		warned = true;
 	}
+#endif
 }
 #endif
 
