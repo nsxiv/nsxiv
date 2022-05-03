@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, imlib2-multiframe ]
 
 # NOTE: "stable" tcc is too old and fails at linking. instead fetching a recent known working commit.
 jobs:
@@ -19,6 +19,9 @@ jobs:
         TCC_SHA="027b8fb9b88fe137447fb8bb1b61079be9702472"
         wget "https://github.com/TinyCC/tinycc/archive/${TCC_SHA}.tar.gz" && tar xzf "${TCC_SHA}.tar.gz"
         ( cd "tinycc-$TCC_SHA" && ./configure && make && sudo make install; )
+        # TODO: ubuntu imlib2 too old and doesn't support multiframe.
+        git clone --depth 1 'http://git.enlightenment.org/old/legacy-imlib2.git' imlib2
+        ( cd imlib2 && ./autogen.sh && make && sudo make install )
     - name: build
       run: |
         CFLAGS="$(sed '/^#/d' .woodpecker/CFLAGS | paste -d ' ' -s)"
