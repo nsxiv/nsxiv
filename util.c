@@ -68,13 +68,6 @@ char* estrdup(const char *s)
 	return d;
 }
 
-char *xstrncpy(char *dst, const char *src, size_t n)
-{
-	if (memccpy(dst, src, '\0', n) == NULL)
-		dst[n - 1] = '\0';
-	return dst;
-}
-
 void error(int eval, int err, const char* fmt, ...)
 {
 	va_list ap;
