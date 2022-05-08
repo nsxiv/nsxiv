@@ -482,8 +482,4 @@ extern int markcnt;
 extern int markidx;
 extern int prefix;
 
-/* strlcpy.c */
-
-size_t strlcpy(char *, const char *, size_t);
-
 #endif /* NSXIV_H */

@@ -407,12 +407,14 @@ static void update_info(void)
 	l->p = l->buf;
 	r->p = r->buf;
 	if (mode == MODE_THUMB) {
-		if (tns.loadnext < tns.end)
+		if (tns.loadnext < tns.end) {
 			bar_put(l, "Loading... %0*d", fw, tns.loadnext + 1);
-		else if (tns.initnext < filecnt)
+		} else if (tns.initnext < filecnt) {
 			bar_put(l, "Caching... %0*d", fw, tns.initnext + 1);
-		else if (info.ft.err)
-			strlcpy(l->buf, files[fileidx].name, l->size);
+		} else if (info.ft.err) {
+			strncpy(l->buf, files[fileidx].name, l->size);
+			l->buf[l->size - 1] = '\0';
+		}
 		bar_put(r, "%s%0*d/%d", mark, fw, fileidx + 1, filecnt);
 	} else {
 		bar_put(r, "%s", mark);
@@ -430,8 +432,10 @@ static void update_info(void)
 			bar_put(r, "%0*d/%d" BAR_SEP, fn, img.multi.sel + 1, img.multi.cnt);
 		}
 		bar_put(r, "%0*d/%d", fw, fileidx + 1, filecnt);
-		if (info.f.err)
-			strlcpy(l->buf, files[fileidx].name, l->size);
+		if (info.f.err) {
+			strncpy(l->buf, files[fileidx].name, l->size);
+			l->buf[l->size - 1] = '\0';
+		}
 	}
 }
 
@@ -567,7 +571,8 @@ static bool run_key_handler(const char *key, unsigned int mask)
 		return false;
 
 	close_info();
-	strlcpy(win.bar.l.buf, "Running key handler...", win.bar.l.size);
+	strncpy(win.bar.l.buf, "Running key handler...", win.bar.l.size);
+	win.bar.l.buf[win.bar.l.size - 1] = '\0';
 	win_draw(&win);
 	win_set_cursor(&win, CURSOR_WATCH);
 	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);

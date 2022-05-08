@@ -48,7 +48,7 @@ NSXIV_LDLIBS = -lImlib2 -lX11 \
   $(lib_webp_$(HAVE_LIBWEBP)) $(lib_fonts_$(HAVE_LIBFONTS))
 
 OBJS = autoreload.o commands.o image.o main.o options.o \
-  thumbs.o util.o window.o strlcpy.o
+  thumbs.o util.o window.o
 
 .SUFFIXES:
 .SUFFIXES: .c .o
