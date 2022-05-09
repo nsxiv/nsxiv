@@ -73,7 +73,6 @@ static bool resized = false;
 static struct {
 	extcmd_t f, ft;
 	int fd;
-	unsigned int i, lastsep;
 	pid_t pid;
 } info;
 
@@ -296,7 +295,6 @@ void open_info(void)
 	if (pfd.readfd >= 0) {
 		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
 		info.fd = pfd.readfd;
-		info.i = info.lastsep = 0;
 		info.pid = pfd.pid;
 	}
 }
@@ -304,32 +302,15 @@ void open_info(void)
 static void read_info(void)
 {
 	ssize_t i, n;
-	char buf[BAR_L_LEN];
 
-	while (true) {
-		n = read(info.fd, buf, sizeof(buf));
-		if (n < 0 && errno == EAGAIN)
-			return;
-		else if (n == 0)
-			goto end;
-		for (i = 0; i < n; i++) {
-			if (buf[i] == '\n') {
-				if (info.lastsep == 0) {
-					win.bar.l.buf[info.i++] = ' ';
-					info.lastsep = 1;
-				}
-			} else {
-				win.bar.l.buf[info.i++] = buf[i];
-				info.lastsep = 0;
-			}
-			if (info.i + 1 == win.bar.l.size)
-				goto end;
+	if ((n = read(info.fd, win.bar.l.buf, win.bar.l.size - 1)) > 0) {
+		win.bar.l.buf[n] = '\0';
+		for (i = 0; i < n; ++i) {
+			if (win.bar.l.buf[i] == '\n')
+				win.bar.l.buf[i] = ' ';
 		}
+		win_draw(&win);
 	}
-end:
-	info.i -= info.lastsep;
-	win.bar.l.buf[info.i] = '\0';
-	win_draw(&win);
 	close_info();
 }
 
