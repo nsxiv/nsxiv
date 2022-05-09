@@ -618,10 +618,10 @@ static bool run_key_handler(const char *key, unsigned int mask)
 		if (changed) {
 			img_close(&img, true);
 			load_image(fileidx);
-		} else {
-			open_info();
 		}
 	}
+	if (mode == MODE_THUMB || !changed)
+		open_info();
 	free(oldst);
 	reset_cursor();
 	return true;
