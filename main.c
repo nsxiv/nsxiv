@@ -207,7 +207,7 @@ void reset_timeout(timeout_f handler)
 	}
 }
 
-static bool check_timeouts(struct timeval *t)
+static bool check_timeouts(int *t)
 {
 	int i = 0, tdiff, tmin = -1;
 	struct timeval now;
@@ -228,7 +228,7 @@ static bool check_timeouts(struct timeval *t)
 		i++;
 	}
 	if (tmin > 0 && t != NULL)
-		TV_SET_MSEC(t, tmin);
+		*t = tmin;
 	return tmin > 0;
 }
 
@@ -703,7 +703,7 @@ static void run(void)
 {
 	enum { FD_X, FD_INFO, FD_ARL, FD_CNT };
 	struct pollfd pfd[FD_CNT];
-	struct timeval timeout = {0};
+	int timeout = 0;
 	const struct timespec ten_ms = {0, 10000000};
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
@@ -735,7 +735,7 @@ static void run(void)
 				pfd[FD_ARL].fd = arl.fd;
 				pfd[FD_X].events = pfd[FD_INFO].events = pfd[FD_ARL].events = POLLIN;
 
-				if (poll(pfd, ARRLEN(pfd), to_set ? TV_TO_MS(&timeout) : -1) < 0)
+				if (poll(pfd, ARRLEN(pfd), to_set ? timeout : -1) < 0)
 					continue;
 				if (pfd[FD_INFO].revents & POLLIN)
 					read_info();
