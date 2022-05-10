@@ -17,3 +17,5 @@ This branch will be rebased regularly, so make sure you're good with git to be
 able to deal with that. This branch will also be kept upto date with latest
 imlib2 git and may not work on your system imlib2 version.
 
+To package maintainers: DO NOT PACKAGE THIS BRANCH.
+This branch is only for users who willingly want to take the risk.
