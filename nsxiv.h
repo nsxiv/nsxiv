@@ -44,12 +44,6 @@
 
 #define TV_DIFF(t1,t2) (((t1)->tv_sec  - (t2)->tv_sec ) * 1000 + \
                         ((t1)->tv_usec - (t2)->tv_usec) / 1000)
-#define TV_TO_MS(tv)   (((tv)->tv_sec * 1000) + ((tv)->tv_usec / 1000))
-
-#define TV_SET_MSEC(tv,t) {             \
-  (tv)->tv_sec  = (t) / 1000;           \
-  (tv)->tv_usec = (t) % 1000 * 1000;    \
-}
 
 #define TV_ADD_MSEC(tv,t) {             \
   (tv)->tv_sec  += (t) / 1000;          \
