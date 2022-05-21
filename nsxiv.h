@@ -367,11 +367,6 @@ spawn_t spawn(const char*, char *const [], unsigned int);
 #endif
 
 enum {
-	BAR_L_LEN = 512,
-	BAR_R_LEN = 64
-};
-
-enum {
 	ATOM_WM_DELETE_WINDOW,
 	ATOM__NET_WM_NAME,
 	ATOM__NET_WM_ICON_NAME,

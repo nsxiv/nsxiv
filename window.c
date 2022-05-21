@@ -78,6 +78,16 @@ static void xft_alloc_color(const win_env_t *e, const char *name, XftColor *col)
 	if (!XftColorAllocName(e->dpy, e->vis, e->cmap, name, col))
 		error(EXIT_FAILURE, 0, "Error allocating color '%s'", name);
 }
+
+static void win_init_bar_buf(win_t *win)
+{
+	enum { BAR_L_LEN = 512, BAR_R_LEN = 64 };
+	static char lbuf[BAR_L_LEN + 3], rbuf[BAR_R_LEN + 3]; /* 3 padding bytes needed by utf8_decode */
+	win->bar.l.buf = lbuf;
+	win->bar.l.size = BAR_L_LEN;
+	win->bar.r.buf = rbuf;
+	win->bar.r.size = BAR_R_LEN;
+}
 #endif /* HAVE_LIBFONTS */
 
 static void win_alloc_color(const win_env_t *e, const char *name, XColor *col)
@@ -148,13 +158,7 @@ void win_init(win_t *win)
 	f = win_res(db, RES_CLASS ".bar.font", DEFAULT_FONT);
 	win_init_font(e, f);
 
-	win->bar.l.size = BAR_L_LEN;
-	win->bar.r.size = BAR_R_LEN;
-	/* 3 padding bytes needed by utf8_decode */
-	win->bar.l.buf = emalloc(win->bar.l.size + 3);
-	win->bar.l.buf[0] = '\0';
-	win->bar.r.buf = emalloc(win->bar.r.size + 3);
-	win->bar.r.buf[0] = '\0';
+	win_init_bar_buf(win);
 	win->bar.h = options->hide_bar ? 0 : barheight;
 	win->bar.top = TOP_STATUSBAR;
 #endif /* HAVE_LIBFONTS */
