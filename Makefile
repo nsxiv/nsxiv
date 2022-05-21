@@ -65,7 +65,7 @@ nsxiv: $(OBJS)
 
 $(OBJS): Makefile nsxiv.h config.h commands.h
 options.o: version.h
-window.o: icon/data.h
+window.o: icon/data.h utf8.h
 
 config.h:
 	@echo "GEN $@"
