@@ -33,4 +33,4 @@ ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
 # inc_fonts_bsd_0 =
 # inc_fonts_bsd_1 = -I/usr/X11R6/include/freetype2
 # LDLIBS = -lz -L/usr/local/lib -L/usr/X11R6/lib $(lib_fonts_bsd_$(HAVE_LIBFONTS))
-# INCLUDES = -I/usr/local/include -I/usr/X11R6/include $(inc_fonts_bsd_$(HAVE_LIBFONTS))
+# CPPFLAGS = -I/usr/local/include -I/usr/X11R6/include $(inc_fonts_bsd_$(HAVE_LIBFONTS))
