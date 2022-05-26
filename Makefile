@@ -13,16 +13,18 @@ lib_gif_1 = -lgif
 lib_webp_0 =
 lib_webp_1 = -lwebpdemux -lwebp
 
-CPPFLAGS = -D_XOPEN_SOURCE=700 $(INCLUDES) \
+nsxiv_cppflags = -D_XOPEN_SOURCE=700 \
   -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
   -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
-  -DHAVE_INOTIFY=$(HAVE_INOTIFY) $(inc_fonts_$(HAVE_LIBFONTS))
+  -DHAVE_INOTIFY=$(HAVE_INOTIFY) $(inc_fonts_$(HAVE_LIBFONTS)) \
+  $(CPPFLAGS)
 
-NSXIV_LDLIBS = -lImlib2 -lX11 \
+nsxiv_ldlibs = -lImlib2 -lX11 \
   $(lib_exif_$(HAVE_LIBEXIF)) $(lib_gif_$(HAVE_LIBGIF)) \
-  $(lib_webp_$(HAVE_LIBWEBP)) $(lib_fonts_$(HAVE_LIBFONTS))
+  $(lib_webp_$(HAVE_LIBWEBP)) $(lib_fonts_$(HAVE_LIBFONTS)) \
+  $(LDLIBS)
 
-OBJS = autoreload.o commands.o image.o main.o options.o \
+objs = autoreload.o commands.o image.o main.o options.o \
   thumbs.o util.o window.o
 
 .SUFFIXES:
@@ -30,15 +32,15 @@ OBJS = autoreload.o commands.o image.o main.o options.o \
 
 all: nsxiv
 
-nsxiv: $(OBJS)
+nsxiv: $(objs)
 	@echo "LINK $@"
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS) $(NSXIV_LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $(objs) $(nsxiv_ldlibs)
 
 .c.o:
 	@echo "CC $@"
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(nsxiv_cppflags) -c -o $@ $<
 
-$(OBJS): Makefile config.mk nsxiv.h config.h commands.h
+$(objs): Makefile config.mk nsxiv.h config.h commands.h
 options.o: version.h
 window.o: icon/data.h
 
