@@ -287,3 +287,16 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 	status.writefd = pfd_write[1];
 	return status;
 }
+
+/* simple implementation of strscpy. see: https://www.kernel.org/doc/htmldocs/kernel-api/API-strscpy.html */
+ssize_t strscpy(char *d, const char *s, size_t n)
+{
+	char *p;
+	if (n == 0 || n > SSIZE_MAX)
+		return -E2BIG;
+	if ((p = memccpy(d, s, '\0', n)) == NULL) {
+		d[n - 1] = '\0';
+		return -E2BIG;
+	}
+	return p - d - 1;
+}
