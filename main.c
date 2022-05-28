@@ -88,8 +88,8 @@ static struct {
 static timeout_t timeouts[] = {
 	{ { 0, 0 }, false, redraw       },
 	{ { 0, 0 }, false, reset_cursor },
-	{ { 0, 0 }, false, animate      },
 	{ { 0, 0 }, false, slideshow    },
+	{ { 0, 0 }, false, animate      },
 	{ { 0, 0 }, false, clear_resize },
 };
 
