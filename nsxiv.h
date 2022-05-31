@@ -20,11 +20,8 @@
 #ifndef NSXIV_H
 #define NSXIV_H
 
-#include <stdarg.h>
+#include <stddef.h>
 #include <stdbool.h>
-#include <stdio.h>
-#include <sys/time.h>
-#include <sys/types.h>
 #include <Imlib2.h>
 #include <X11/Xlib.h>
 
@@ -39,16 +36,7 @@
 #define ABS(a) ((a) > 0 ? (a) : -(a))
 
 #define ARRLEN(a) (sizeof(a) / sizeof((a)[0]))
-
 #define STREQ(s1,s2) (strcmp((s1), (s2)) == 0)
-
-#define TV_DIFF(t1,t2) (((t1)->tv_sec  - (t2)->tv_sec ) * 1000 + \
-                        ((t1)->tv_usec - (t2)->tv_usec) / 1000)
-
-#define TV_ADD_MSEC(tv,t) {             \
-  (tv)->tv_sec  += (t) / 1000;          \
-  (tv)->tv_usec += (t) % 1000 * 1000;   \
-}
 
 typedef enum {
 	MODE_ALL,
