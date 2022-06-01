@@ -233,35 +233,30 @@ static bool check_timeouts(int *t)
 	return tmin > 0;
 }
 
-size_t get_win_title(unsigned char *buf, int len, bool init)
+static size_t get_win_title(char *buf, size_t len)
 {
 	char *argv[8];
 	spawn_t pfd;
 	char w[12] = "", h[12] = "", z[12] = "", fidx[12], fcnt[12];
 	ssize_t n = -1;
 
-	if (buf == NULL || len <= 0)
+	if (wintitle.f.err || buf == NULL || len == 0)
 		return 0;
 
-	if (init) {
-		n = snprintf((char *)buf, len, "%s", options->res_name != NULL ?
-		             options->res_name : "nsxiv");
-	} else if (!wintitle.f.err) {
-		if (mode == MODE_IMAGE) {
-			snprintf(w, ARRLEN(w), "%d", img.w);
-			snprintf(h, ARRLEN(h), "%d", img.h);
-			snprintf(z, ARRLEN(z), "%d", (int)(img.zoom * 100));
-		}
-		snprintf(fidx, ARRLEN(fidx), "%d", fileidx+1);
-		snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
-		construct_argv(argv, ARRLEN(argv), wintitle.f.cmd, files[fileidx].path,
-		               fidx, fcnt, w, h, z, NULL);
-		pfd = spawn(wintitle.f.cmd, argv, X_READ);
-		if (pfd.readfd >= 0) {
-			if ((n = read(pfd.readfd, buf, len-1)) > 0)
-				buf[n] = '\0';
-			close(pfd.readfd);
-		}
+	if (mode == MODE_IMAGE) {
+		snprintf(w, ARRLEN(w), "%d", img.w);
+		snprintf(h, ARRLEN(h), "%d", img.h);
+		snprintf(z, ARRLEN(z), "%d", (int)(img.zoom * 100));
+	}
+	snprintf(fidx, ARRLEN(fidx), "%d", fileidx+1);
+	snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
+	construct_argv(argv, ARRLEN(argv), wintitle.f.cmd, files[fileidx].path,
+	               fidx, fcnt, w, h, z, NULL);
+	pfd = spawn(wintitle.f.cmd, argv, X_READ);
+	if (pfd.readfd >= 0) {
+		if ((n = read(pfd.readfd, buf, len-1)) > 0)
+			buf[n] = '\0';
+		close(pfd.readfd);
 	}
 
 	return MAX(0, n);
@@ -455,7 +450,11 @@ void redraw(void)
 	}
 	update_info();
 	if (title_dirty) {
-		win_set_title(&win, false);
+		size_t n;
+		char buf[512];
+
+		if ((n = get_win_title(buf, sizeof(buf))) > 0)
+			win_set_title(&win, buf, n);
 		title_dirty = false;
 	}
 	win_draw(&win);
