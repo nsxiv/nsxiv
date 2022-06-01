@@ -288,7 +288,7 @@ void win_open(win_t *win)
 	}
 	free(icon_data);
 
-	win_set_title(win, true);
+	win_set_title(win, res_name, strlen(res_name));
 	classhint.res_class = res_class;
 	classhint.res_name = options->res_name != NULL ? options->res_name : res_name;
 	XSetClassHint(e->dpy, win->xwin, &classhint);
@@ -504,17 +504,14 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
 }
 
-void win_set_title(win_t *win, bool init)
+void win_set_title(win_t *win, const char *title, size_t len)
 {
-	size_t len, i;
-	unsigned char title[512];
-	int targets[] = { ATOM_WM_NAME, ATOM_WM_ICON_NAME, ATOM__NET_WM_NAME, ATOM__NET_WM_ICON_NAME };
+	int i, targets[] = { ATOM_WM_NAME, ATOM_WM_ICON_NAME, ATOM__NET_WM_NAME, ATOM__NET_WM_ICON_NAME };
 
-	if ((len = get_win_title(title, ARRLEN(title), init)) > 0) {
-		for (i = 0; i < ARRLEN(targets); ++i) {
-			XChangeProperty(win->env.dpy, win->xwin, atoms[targets[i]],
-			                atoms[ATOM_UTF8_STRING], 8, PropModeReplace, title, len);
-		}
+	for (i = 0; i < ARRLEN(targets); ++i) {
+		XChangeProperty(win->env.dpy, win->xwin, atoms[targets[i]],
+		                atoms[ATOM_UTF8_STRING], 8, PropModeReplace,
+		                (unsigned char *)title, len);
 	}
 }
 

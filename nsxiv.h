@@ -438,7 +438,7 @@ void win_toggle_bar(win_t*);
 void win_clear(win_t*);
 void win_draw(win_t*);
 void win_draw_rect(win_t*, int, int, int, int, bool, int, unsigned long);
-void win_set_title(win_t*, bool);
+void win_set_title(win_t*, const char*, size_t);
 void win_set_cursor(win_t*, cursor_t);
 void win_cursor_pos(win_t*, int*, int*);
 
@@ -454,7 +454,6 @@ void clear_resize(void);
 void remove_file(int, bool);
 void set_timeout(timeout_f, int, bool);
 void reset_timeout(timeout_f);
-size_t get_win_title(unsigned char*, int, bool);
 void close_info(void);
 void open_info(void);
 void load_image(int);
