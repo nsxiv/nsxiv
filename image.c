@@ -546,7 +546,7 @@ static bool img_fit(img_t *img)
 
 	if (ABS(img->zoom - z) > 1.0/MAX(img->w, img->h)) {
 		img->zoom = z;
-		img->dirty = true;
+		img->dirty = title_dirty = true;
 		return true;
 	} else {
 		return false;
@@ -677,8 +677,7 @@ bool img_zoom_to(img_t *img, float z)
 		img->y = y - (y - img->y) * z / img->zoom;
 		img->zoom = z;
 		img->scalemode = SCALE_ZOOM;
-		img->checkpan = true;
-		img->dirty = true;
+		img->dirty = img->checkpan = title_dirty = true;
 		return true;
 	} else {
 		return false;
