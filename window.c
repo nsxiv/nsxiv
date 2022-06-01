@@ -106,11 +106,13 @@ void win_init(win_t *win)
 {
 	win_env_t *e;
 	const char *win_bg, *win_fg, *mrk_fg;
-#if HAVE_LIBFONTS
-	const char *bar_fg, *bar_bg, *f;
-#endif
 	char *res_man;
 	XrmDatabase db;
+#if HAVE_LIBFONTS
+	const char *bar_fg, *bar_bg, *f;
+
+	static char lbuf[512 + 3], rbuf[64 + 3];
+#endif
 
 	memset(win, 0, sizeof(win_t));
 
@@ -148,13 +150,11 @@ void win_init(win_t *win)
 	f = win_res(db, RES_CLASS ".bar.font", DEFAULT_FONT);
 	win_init_font(e, f);
 
-	win->bar.l.size = BAR_L_LEN;
-	win->bar.r.size = BAR_R_LEN;
+	win->bar.l.buf = lbuf;
+	win->bar.r.buf = rbuf;
 	/* 3 padding bytes needed by utf8_decode */
-	win->bar.l.buf = emalloc(win->bar.l.size + 3);
-	win->bar.l.buf[0] = '\0';
-	win->bar.r.buf = emalloc(win->bar.r.size + 3);
-	win->bar.r.buf[0] = '\0';
+	win->bar.l.size = sizeof(lbuf) - 3;
+	win->bar.r.size = sizeof(rbuf) - 3;
 	win->bar.h = options->hide_bar ? 0 : barheight;
 	win->bar.top = TOP_STATUSBAR;
 #endif /* HAVE_LIBFONTS */
