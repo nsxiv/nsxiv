@@ -63,6 +63,7 @@ bool cg_switch_mode(arg_t _)
 	}
 	close_info();
 	open_info();
+	title_dirty = true;
 	return true;
 }
 

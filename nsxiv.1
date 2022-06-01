@@ -426,7 +426,8 @@ Color of the mark foreground. Defaults to window.foreground
 Please see xrdb(1) on how to change them.
 .SH WINDOW TITLE
 The window title can be replaced with the output of a user-provided script,
-which is called by nsxiv whenever there's a redraw. The path of this script is
+which is called by nsxiv whenever any of the relevant information changes.
+The path of this script is
 .I $XDG_CONFIG_HOME/nsxiv/exec/win-title
 and the arguments given to it (where "Optional" arguments might be empty) are:
 .IP $1 4

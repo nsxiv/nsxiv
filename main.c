@@ -85,6 +85,8 @@ static struct {
 	extcmd_t f;
 } wintitle;
 
+bool title_dirty;
+
 static timeout_t timeouts[] = {
 	{ { 0, 0 }, false, redraw       },
 	{ { 0, 0 }, false, reset_cursor },
@@ -343,6 +345,7 @@ void load_image(int new)
 	close_info();
 	open_info();
 	arl_setup(&arl, files[fileidx].path);
+	title_dirty = true;
 
 	if (img.multi.cnt > 0 && img.multi.animate)
 		set_timeout(animate, img.multi.frames[img.multi.sel].delay, true);
@@ -451,7 +454,10 @@ void redraw(void)
 		tns_render(&tns);
 	}
 	update_info();
-	win_set_title(&win, false);
+	if (title_dirty) {
+		win_set_title(&win, false);
+		title_dirty = false;
+	}
 	win_draw(&win);
 	reset_timeout(redraw);
 	reset_cursor();
