@@ -60,7 +60,7 @@ For releases, the process is the following:
   * Tag the release with a "vN" tag, where N is the version number. Also set
     the commit message and tag description for the release commit to "Release
     version N". Make sure to use an annotated tag.
-  * Update `VERSION` macro in the `Makefile`.
+  * Update `VERSION` macro in `config.mk`.
   * Update the changelog (`CHANGELOG.md`):
     * Include link to the release tarball and add the release date.
     * Document only the changes or fixes between releases. Don't document

@@ -8,6 +8,35 @@ there may be more changes. Please use `git log` to view them.
 
 - - -
 
+**[v30](https://github.com/nsxiv/nsxiv/archive/v30.tar.gz)**
+<!-- TODO: add date -->
+
+* Changes:
+
+  * `autoreload_{inotify,nop}.c` merged into a single file, `autoreload.c`. (#263)
+  * Moved all configuration related macros to `config.mk`. (#264)
+  * `win-title` is now called only when there's change rather than being called
+    on each redraw. (#266)
+
+* Added:
+
+  * Added more mimetypes to the `.desktop` entry. (#260)
+  * Added `thumb-info` for customizing the statusbar in thumbnail-mode. (#265)
+  * Added comments for building on OpenBSD. (#264)
+
+* Fixes:
+
+  * "Too many open file" error due to not closing the win-title script. (#245)
+  * `-f` now directly starts in fullscreen mode rather than opening a normal
+    window and then going fullscreen. (#251)
+  * Memory leak when removing an image in thumbnail mode. (#247)
+  * Correctly setting `_NET_WM_PID`. (#251)
+  * Potential misbehavior regarding font. (#250)
+  * Don't override statusbar if info script doesn't exist. (#271)
+  * Broken slideshow on slow systems or fast animations. (#282)
+
+- - -
+
 **[v29](https://github.com/nsxiv/nsxiv/archive/v29.tar.gz)**
 *(March 03, 2022)*
 
