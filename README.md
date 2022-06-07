@@ -4,6 +4,11 @@
 [![license](https://img.shields.io/badge/license-GPL--2.0-lightgreen?style=flat-square)](https://github.com/nsxiv/nsxiv/blob/master/LICENSE)
 [![loc](https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&style=flat-square)](https://github.com/nsxiv/nsxiv)
 
+<p align="center">
+<a href="https://github.com/nsxiv/nsxiv" alt="GitHub"><img src="https://img.shields.io/badge/Github-2B3137?style=for-the-badge&logo=Github&logoColor=FFFFFF"></a>
+<a href="https://codeberg.org/nsxiv/nsxiv" alt="CodeBerg"><img src="https://img.shields.io/badge/Codeberg-2185D0?style=for-the-badge&logo=codeberg&logoColor=F2F8FC"></a>
+</p>
+
 **Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
 --------------------------------------------------------------------
 
