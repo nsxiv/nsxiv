@@ -12,6 +12,10 @@ Note: Since we aim to be a drop-in replacement for sxiv, we intend to keep all
 sxiv's behaviors/features even in cases where removing them would make the
 code-base simpler.
 
+Also note that (n)sxiv uses `imlib2` for loading images. Thus any request or
+patches for adding support for new image formats should go into
+[imlib2's repo](https://git.enlightenment.org/old/legacy-imlib2) instead.
+
 
 Contribution Guideline
 ----------------------
@@ -28,16 +32,17 @@ If your contribution is not suitable for general use, it will not be included in
 For changes that are very much up to preference, such as changing values in config.h,
 please do not open a pull request unless you have an objective explanation.
 
-See the [open issues](https://github.com/nsxiv/nsxiv/issues) to find something
+See the [open issues](https://codeberg.org/nsxiv/nsxiv/issues) to find something
 to work on. You can also filter the issues via label:
 
-* [Good first issue](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22):
+* [Good first issue](https://codeberg.org/nsxiv/nsxiv/issues?labels=49698):
   (Easy) Issues which do not require much if any experience.
-* [Up for grabs](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22up+for+grabs%22):
+* [Up for grabs](https://codeberg.org/nsxiv/nsxiv/issues?labels=49705):
   (Intermediate) Issues which are free for anyone who wants to pick it up.
   Might require some experience.
-* [Help wanted](https://github.com/nsxiv/nsxiv/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22):
+* [Help wanted](https://codeberg.org/nsxiv/nsxiv/issues?labels=49699):
   (Intermediate/Experienced) Issues where we require some help.
+
 
 Development workflow for maintainers
 ------------------------------------
@@ -69,6 +74,21 @@ For releases, the process is the following:
       release, the "Added" section for new features, and the "Fixes" section
       for fixed bugs or regressions. Include pull request IDs.
 
+Mirroring to GitHub:
+
+Assuming `origin` is the name of the codeberg remote and `github` is the name
+of the github remote; run the following commands to mirror the codeberg repo to
+github:
+
+```console
+$ git fetch --prune origin
+$ git push --prune github '+refs/remotes/origin/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
+```
+
+The first command updates the local repo and the second command pushes
+everything on `origin` without pushing any of the local branches.
+
+- - -
+
 For mundane development related talks which don't warrant their own issue, use
-the [general-dev](https://github.com/nsxiv/nsxiv/discussions/119) discussion
-thread.
+the [general discussion](https://codeberg.org/nsxiv/nsxiv/issues/294) thread.
