@@ -16,7 +16,7 @@ and aims to be easy to modify and customize.
 Please file a bug report if something does not work as documented or
 expected in *this* repository, after making sure you are using the latest
 release of nsxiv. Contributions are welcome, see
-[CONTRIBUTING.md](CONTRIBUTING.md#Contribution-Guideline) for details.
+[CONTRIBUTING.md](CONTRIBUTING.md#contribution-guideline) for details.
 
 
 Features
@@ -176,7 +176,7 @@ or by using Xresources as explained in the manual. If these options are not suff
 you may implement your own features by following
 [this guide](https://codeberg.org/nsxiv/nsxiv-extra/blob/master/CUSTOMIZATION.md).
 
-Due to our limited [project scope](CONTRIBUTING.md#Project-Scope), certain features or
+Due to our limited [project scope](CONTRIBUTING.md#project-scope), certain features or
 customization cannot be merged into nsxiv mainline. Following the spirit of suckless
 software, we host the [nsxiv-extra](https://codeberg.org/nsxiv/nsxiv-extra) repo where users
 are free to submit whatever patches or scripts they wish.
