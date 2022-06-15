@@ -18,7 +18,7 @@
  */
 
 #include "nsxiv.h"
-#define _THUMBS_CONFIG
+#define INCLUDE_THUMBS_CONFIG
 #include "config.h"
 
 #include <errno.h>

@@ -18,7 +18,7 @@
  */
 
 #include "nsxiv.h"
-#define _MAPPINGS_CONFIG
+#define INCLUDE_MAPPINGS_CONFIG
 #include "commands.h"
 #include "config.h"
 

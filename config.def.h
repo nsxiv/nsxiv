@@ -1,4 +1,4 @@
-#ifdef _WINDOW_CONFIG
+#ifdef INCLUDE_WINDOW_CONFIG
 
 /* default window dimensions (overwritten via -g option): */
 static const int WIN_WIDTH  = 800;
@@ -20,7 +20,7 @@ static const bool TOP_STATUSBAR = false;
 #endif /* HAVE_LIBFONTS */
 
 #endif
-#ifdef _IMAGE_CONFIG
+#ifdef INCLUDE_IMAGE_CONFIG
 
 /* levels (in percent) to use when zooming via '-' and '+':
  * (first/last value is used as min/max zoom level)
@@ -62,7 +62,7 @@ static const int CACHE_SIZE_LIMIT = 256 * 1024 * 1024;   /* but not above 256MiB
 static const int CACHE_SIZE_FALLBACK = 32 * 1024 * 1024; /* fallback to 32MiB if we can't determine total memory */
 
 #endif
-#ifdef _THUMBS_CONFIG
+#ifdef INCLUDE_THUMBS_CONFIG
 
 /* thumbnail sizes in pixels (width == height): */
 static const int thumb_sizes[] = { 32, 64, 96, 128, 160 };
@@ -71,7 +71,7 @@ static const int thumb_sizes[] = { 32, 64, 96, 128, 160 };
 static const int THUMB_SIZE = 3;
 
 #endif
-#ifdef _MAPPINGS_CONFIG
+#ifdef INCLUDE_MAPPINGS_CONFIG
 
 /* these modifiers will be used when processing keybindings */
 static const unsigned int USED_MODMASK = ShiftMask | ControlMask | Mod1Mask;
