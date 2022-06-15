@@ -1,10 +1,51 @@
 nsxiv
 -----
 
-**[git](https://github.com/nsxiv/nsxiv.git)**
+**[git](https://codeberg.org/nsxiv/nsxiv.git)**
 
 Changes will only be documented on stable releases. If you're on git/master then
 there may be more changes. Please use `git log` to view them.
+
+- - -
+
+***SPECIAL NOTE***: Due to [this incident](https://codeberg.org/nsxiv/nsxiv-tmp/issues/1)
+we have moved development over to [codeberg](https://codeberg.org/nsxiv/nsxiv).
+A lot of the references below may now be 404 or you may notice some users
+talking to themselves.
+
+Any threads which survived the wipe have been migrated over to codeberg and can
+be reached via `https://codeberg.org/nsxiv/nsxiv/pulls/ID`.
+
+- - -
+
+**[v30](https://codeberg.org/nsxiv/nsxiv/archive/v30.tar.gz)**
+*(June 15, 2022)*
+
+* Changes:
+
+  * Development and main repository moved over to Codeberg.
+    See the special note above for more info.
+  * `autoreload_{inotify,nop}.c` merged into a single file, `autoreload.c`. (#263)
+  * Moved all configuration related macros to `config.mk`. (#264)
+  * `win-title` is now called only when there's change rather than being called
+    on each redraw. (#266)
+
+* Added:
+
+  * Added more mimetypes to the `.desktop` entry. (#260)
+  * Added `thumb-info` for customizing the statusbar in thumbnail-mode. (#265)
+  * Added comments for building on OpenBSD. (#264)
+
+* Fixes:
+
+  * "Too many open file" error due to not closing the win-title script. (#245)
+  * `-f` now directly starts in fullscreen mode rather than opening a normal
+    window and then going fullscreen. (#251)
+  * Broken slideshow on slow systems or fast animations. (#282)
+  * Memory leak when removing an image in thumbnail mode. (#247)
+  * Correctly setting `_NET_WM_PID`. (#251)
+  * Don't override statusbar if info script doesn't exist. (#271)
+  * Potential misbehavior regarding font. (#250)
 
 - - -
 

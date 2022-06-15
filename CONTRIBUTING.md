@@ -55,6 +55,8 @@ Our workflow regarding pull requests is the following:
 
   * Code related changes require two approvals, but documentation related
     changes (e.g. typo) can be merged with just one.
+  * If a pull request has a single approval, no objections and has been open
+    for more than 7 days, then it may be force-merged.
   * Always prefer squashing when merging. In the case a PR makes more than one
     significant change, use the "don't squash" tag and rebase instead.
   * When merging, make sure the commit message is cleaned up properly so that
@@ -65,7 +67,7 @@ For releases, the process is the following:
   * Tag the release with a "vN" tag, where N is the version number. Also set
     the commit message and tag description for the release commit to "Release
     version N". Make sure to use an annotated tag.
-  * Update `VERSION` macro in the `Makefile`.
+  * Update `VERSION` macro in `config.mk`.
   * Update the changelog (`CHANGELOG.md`):
     * Include link to the release tarball and add the release date.
     * Document only the changes or fixes between releases. Don't document
