@@ -55,6 +55,9 @@ version.h: config.mk .git/index
 
 .git/index:
 
+dump_cppflags:
+	@echo $(nsxiv_cppflags)
+
 clean:
 	rm -f *.o nsxiv version.h
 

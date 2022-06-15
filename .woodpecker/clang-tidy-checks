@@ -1,0 +1,16 @@
+# checks
+clang-analyzer-*,clang-diagnostic-*,bugprone-*,performance-*,modernize-*
+misc-*,readability-*,android-cloexec-*,cert-*
+
+# silence
+-misc-unused-parameters
+-bugprone-easily-swappable-parameters,-bugprone-narrowing-conversions,-bugprone-incorrect-roundings
+-bugprone-implicit-widening-of-multiplication-result,-bugprone-integer-division
+-readability-braces-around-statements,-readability-magic-numbers,-readability-isolate-declaration
+-readability-function-cognitive-complexity,-readability-else-after-return
+-readability-uppercase-literal-suffix,-readability-avoid-const-params-in-decls
+-android-cloexec-fopen,-android-cloexec-pipe
+
+# false positive warnings
+-clang-analyzer-valist.Uninitialized
+-misc-no-recursion
