@@ -14,6 +14,7 @@ pipeline:
           --force --quiet --inline-suppr --error-exitcode=1 \
           --max-ctu-depth=8 -j"$(nproc)" \
           $(make OPT_DEP_DEFAULT="$1" dump_cppflags) \
+          --suppress=varFuncNullUB \
           *.c
       }
       run_tidy() {
