@@ -98,9 +98,6 @@ void parse_options(int argc, char **argv)
 	static opt_t _options;
 
 	options = &_options;
-	progname = strrchr(argv[0], '/');
-	progname = progname ? progname + 1 : argv[0];
-
 	_options.from_stdin = false;
 	_options.to_stdout = false;
 	_options.using_null = false;
@@ -124,6 +121,11 @@ void parse_options(int argc, char **argv)
 	_options.thumb_mode = false;
 	_options.clean_cache = false;
 	_options.private_mode = false;
+
+	if (argc > 0) {
+		s = strrchr(argv[0], '/');
+		progname = s != NULL && s[1] != '\0' ? s + 1 : argv[0];
+	}
 
 	optparse_init(&op, argv);
 	while ((opt = optparse_long(&op, longopts, NULL)) != -1) {

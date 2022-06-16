@@ -28,7 +28,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-const char *progname;
+const char *progname = "nsxiv";
 
 void* emalloc(size_t size)
 {
