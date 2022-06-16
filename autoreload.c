@@ -23,8 +23,8 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/inotify.h>
+#include <unistd.h>
 
 static union {
 	char d[4096]; /* aligned buffer */

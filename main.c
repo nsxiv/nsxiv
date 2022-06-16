@@ -22,22 +22,23 @@
 #include "commands.h"
 #include "config.h"
 
-#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <locale.h>
+#include <poll.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-#include <locale.h>
-#include <signal.h>
-#include <poll.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/wait.h>
 #include <time.h>
-#include <sys/time.h>
-#include <X11/keysym.h>
+#include <unistd.h>
+
 #include <X11/XF86keysym.h>
+#include <X11/keysym.h>
 
 #define MODMASK(mask) ((mask) & USED_MODMASK)
 #define BAR_SEP "  "

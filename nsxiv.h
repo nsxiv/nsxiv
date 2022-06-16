@@ -20,8 +20,9 @@
 #ifndef NSXIV_H
 #define NSXIV_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
+
 #include <Imlib2.h>
 #include <X11/Xlib.h>
 

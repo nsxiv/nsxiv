@@ -22,13 +22,14 @@
 #include "config.h"
 #include "icon/data.h"
 
+#include <locale.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
 #include <unistd.h>
-#include <X11/cursorfont.h>
+
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
+#include <X11/cursorfont.h>
 
 #if HAVE_LIBFONTS
 #include "utf8.h"

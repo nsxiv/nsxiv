@@ -1,6 +1,7 @@
 # checks
 clang-analyzer-*,clang-diagnostic-*,bugprone-*,performance-*,modernize-*
 misc-*,readability-*,android-cloexec-*,cert-*
+llvm-include-order
 
 # silence
 -misc-unused-parameters

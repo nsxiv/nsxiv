@@ -19,13 +19,13 @@
 
 #include "nsxiv.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
-
 #include "commands.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 extern img_t img;
 extern tns_t tns;
