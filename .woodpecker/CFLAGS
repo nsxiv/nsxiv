@@ -1,0 +1,13 @@
+# vanilla flags
+-std=c99 -Wall -pedantic
+# optimizations: enables extra warnings and deeper analysis thus catches more errors/warnings
+-O3 -flto
+# treat warnings as errors
+-Werror
+# extra flags
+-Wextra -Wshadow -Wvla -Wpointer-arith
+-Wundef -Wstrict-overflow=4 -Wwrite-strings -Wunreachable-code
+-Wbad-function-cast -Wdeclaration-after-statement
+-Wmissing-prototypes -Wstrict-prototypes
+# silence
+-Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers

@@ -3,12 +3,10 @@ name: Build
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 # NOTE: "stable" tcc is too old and fails at linking. instead fetching a recent known working commit.
 jobs:
-  full-build:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -23,45 +21,15 @@ jobs:
         ( cd "tinycc-$TCC_SHA" && ./configure && make && sudo make install; )
     - name: build
       run: |
-        # vanilla flags
-        CFLAGS="-std=c99 -Wall -pedantic"
-        # extra flags
-        CFLAGS+=" -O3 -flto"
-        CFLAGS+=" -Werror -Wextra -Wshadow -Wvla -Wpointer-arith"
-        CFLAGS+=" -Wundef -Wstrict-overflow=4 -Wwrite-strings -Wunreachable-code"
-        CFLAGS+=" -Wbad-function-cast -Wdeclaration-after-statement"
-        CFLAGS+=" -Wmissing-prototypes -Wstrict-prototypes"
-        # silence
-        CFLAGS+=" -Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers"
-        echo "###  GCC BUILD  ###" && make clean && make -s CC=gcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=1
-        echo "### CLANG BUILD ###" && make clean && make -s CC=clang CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=1
-        echo "###  TCC BUILD  ###" && make clean && make -s CC=tcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=1
-
-  minimal-build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: dep
-      run: |
-        sudo apt-get update
-        sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
-                             gcc clang git
-        sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev
-        TCC_SHA="027b8fb9b88fe137447fb8bb1b61079be9702472"
-        wget "https://github.com/TinyCC/tinycc/archive/${TCC_SHA}.tar.gz" && tar xzf "${TCC_SHA}.tar.gz"
-        ( cd "tinycc-$TCC_SHA" && ./configure && make && sudo make install; )
-    - name: build
-      run: |
-        # vanilla flags
-        CFLAGS="-std=c99 -Wall -pedantic"
-        # extra flags
-        CFLAGS+=" -O3 -flto"
-        CFLAGS+=" -Werror -Wextra -Wshadow -Wvla -Wpointer-arith"
-        CFLAGS+=" -Wundef -Wstrict-overflow=4 -Wwrite-strings -Wunreachable-code"
-        CFLAGS+=" -Wbad-function-cast -Wdeclaration-after-statement"
-        CFLAGS+=" -Wmissing-prototypes -Wstrict-prototypes"
-        # silence
-        CFLAGS+=" -Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers"
-        echo "###  GCC BUILD  ###" && make clean && make -s CC=gcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=0
-        echo "### CLANG BUILD ###" && make clean && make -s CC=clang CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=0
-        echo "###  TCC BUILD  ###" && make clean && make -s CC=tcc   CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT=0
+        CFLAGS="$(sed '/^#/d' .woodpecker/CFLAGS | paste -d ' ' -s)"
+        build () {
+          for cc in "gcc" "clang" "tcc"; do
+            echo "### $cc - $2 build ###"
+            make clean && make -s -j"$(nproc)" CC="$cc" CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT="$1"
+          done
+        }
+        # full-build #
+        build "1" "full"
+        # ensure minimal-build works without opt deps installed
+        sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev >/dev/null
+        build "0" "minimal"
