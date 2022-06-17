@@ -1,11 +1,11 @@
+branches: master
+
 # NOTE: "stable" tcc is too old and fails at linking. instead fetching a recent known working commit.
 pipeline:
   build:
     image: alpine
     environment:
       - TCC_SHA=027b8fb9b88fe137447fb8bb1b61079be9702472
-    when:
-      branch: master
     commands: |
       apk add --no-cache \
           imlib2 imlib2-dev xorgproto \

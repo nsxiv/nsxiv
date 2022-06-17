@@ -1,8 +1,8 @@
+branches: master
+
 pipeline:
   analysis:
     image: alpine
-    when:
-      branch: master
     commands: |
       apk add --no-cache build-base cppcheck clang-extra-tools \
           imlib2-dev xorgproto \
