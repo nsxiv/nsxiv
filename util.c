@@ -159,8 +159,10 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 			         rdir->name[strlen(rdir->name)-1] == '/' ? "" : "/",
 			         dentry->d_name);
 
-			if (stat(filename, &fstats) < 0)
+			if (stat(filename, &fstats) < 0) {
+				free(filename);
 				continue;
+			}
 			if (S_ISDIR(fstats.st_mode)) {
 				/* put subdirectory on the stack */
 				if (rdir->stlen == rdir->stcap) {
