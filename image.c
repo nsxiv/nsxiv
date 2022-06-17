@@ -21,6 +21,7 @@
 #define INCLUDE_IMAGE_CONFIG
 #include "config.h"
 
+#include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -262,6 +263,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 							*ptr = bgpixel;
 						}
 					} else {
+						assert(cmap != NULL);
 						r = cmap->Colors[rows[i-y][j-x]].Red;
 						g = cmap->Colors[rows[i-y][j-x]].Green;
 						b = cmap->Colors[rows[i-y][j-x]].Blue;
@@ -447,7 +449,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	exif_auto_orientate(file);
 #endif
 
-	if ((fmt = imlib_image_format()) != NULL) {
+	if ((fmt = imlib_image_format()) != NULL) { /* NOLINT: fmt might be unused, not worth fixing */
 #if HAVE_LIBGIF
 		if (STREQ(fmt, "gif"))
 			img_load_gif(img, file);

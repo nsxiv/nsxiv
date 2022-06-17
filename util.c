@@ -19,6 +19,7 @@
 
 #include "nsxiv.h"
 
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -178,6 +179,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 
 		if (rdir->recursive && rdir->stlen > 0) {
 			/* open next subdirectory */
+			assert(rdir->dir != NULL);
 			closedir(rdir->dir);
 			if (rdir->d != 0)
 				free(rdir->name);
