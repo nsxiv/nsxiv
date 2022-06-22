@@ -193,10 +193,11 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 
 int r_mkdir(char *path)
 {
+	int rc = 0;
 	char c, *s = path;
 	struct stat st;
 
-	while (*s != '\0') {
+	while (*s != '\0' && rc == 0) {
 		if (*s == '/') {
 			s++;
 			continue;
@@ -204,12 +205,15 @@ int r_mkdir(char *path)
 		for (; *s != '\0' && *s != '/'; s++);
 		c = *s;
 		*s = '\0';
-		if (mkdir(path, 0755) == -1)
-			if (errno != EEXIST || stat(path, &st) == -1 || !S_ISDIR(st.st_mode))
-				return -1;
+		if (mkdir(path, 0755) == -1) {
+			if (errno != EEXIST || stat(path, &st) == -1 || !S_ISDIR(st.st_mode)) {
+				error(0, errno, "%s", path);
+				rc = -1;
+			}
+		}
 		*s = c;
 	}
-	return 0;
+	return rc;
 }
 
 void construct_argv(char **argv, unsigned int len, ...)
