@@ -21,6 +21,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <spawn.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,6 +29,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+extern char **environ;
 const char *progname = "nsxiv";
 
 void* emalloc(size_t size)
@@ -228,60 +230,65 @@ void construct_argv(char **argv, unsigned int len, ...)
 		error(EXIT_FAILURE, 0, "argv not NULL terminated");
 }
 
-spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
+static int mkspawn_pipe(posix_spawn_file_actions_t *fa, const char *cmd, int *pfd, int dupidx)
 {
-	pid_t pid;
-	spawn_t status = { -1, -1, -1 };
-	int pfd_read[2] = { -1, -1 }, pfd_write[2] = { -1, -1 };
-	const bool r = flags & X_READ;
-	const bool w = flags & X_WRITE;
-
-	if (cmd == NULL || argv == NULL || flags == 0)
-		return status;
-
-	if (r && pipe(pfd_read) < 0) {
+	int err;
+	if (pipe(pfd) < 0) {
 		error(0, errno, "pipe: %s", cmd);
-		return status;
+		return -1;
+	}
+	err = posix_spawn_file_actions_adddup2(fa, pfd[dupidx], dupidx);
+	err = err ? err : posix_spawn_file_actions_addclose(fa, pfd[0]);
+	err = err ? err : posix_spawn_file_actions_addclose(fa, pfd[1]);
+	if (err) {
+		error(0, err, "posix_spawn_file_actions: %s", cmd);
+		close(pfd[0]);
+		close(pfd[1]);
+	}
+	return err ? -1 : 0;
+}
+
+pid_t spawn(int *readfd, int *writefd, char *const argv[])
+{
+	pid_t pid = -1;
+	const char *cmd;
+	int err, pfd_read[2], pfd_write[2];
+	posix_spawn_file_actions_t fa;
+
+	assert(argv != NULL && argv[0] != NULL);
+	cmd = argv[0];
+
+	if ((err = posix_spawn_file_actions_init(&fa)) != 0) {
+		error(0, err, "spawn: %s", cmd);
+		return pid;
 	}
 
-	if (w && pipe(pfd_write) < 0) {
-		error(0, errno, "pipe: %s", cmd);
-		if (r) {
-			close(pfd_read[0]);
-			close(pfd_read[1]);
-		}
-		return status;
+	if (readfd != NULL && mkspawn_pipe(&fa, cmd, pfd_read, 1) < 0)
+		goto err_destroy_fa;
+	if (writefd != NULL && mkspawn_pipe(&fa, cmd, pfd_write, 0) < 0)
+		goto err_close_readfd;
+
+	if ((err = posix_spawn(&pid, cmd, &fa, NULL, argv, environ)) != 0) {
+		error(0, err, "spawn: %s", cmd);
+	} else {
+		if (readfd != NULL)
+			*readfd = pfd_read[0];
+		if (writefd != NULL)
+			*writefd = pfd_write[1];
 	}
 
-	if ((pid = fork()) == 0) { /* in child */
-		if ((r && dup2(pfd_read[1], 1) < 0) || (w && dup2(pfd_write[0], 0) < 0))
-			error(EXIT_FAILURE, errno, "dup2: %s", cmd);
-
-		if (r) {
-			close(pfd_read[0]);
-			close(pfd_read[1]);
-		}
-		if (w) {
-			close(pfd_write[0]);
-			close(pfd_write[1]);
-		}
-		execv(cmd, argv);
-		error(EXIT_FAILURE, errno, "exec: %s", cmd);
-	} else if (pid < 0) { /* fork failed */
-		error(0, errno, "fork: %s", cmd);
-		if (r)
-			close(pfd_read[0]);
-		if (w)
-			close(pfd_write[1]);
-	} else { /* in parent */
-		status.pid = pid;
-		status.readfd = pfd_read[0];
-		status.writefd = pfd_write[1];
-	}
-
-	if (r)
-		close(pfd_read[1]);
-	if (w)
+	if (writefd != NULL) {
 		close(pfd_write[0]);
-	return status;
+		if (pid < 0)
+			close(pfd_write[1]);
+	}
+err_close_readfd:
+	if (readfd != NULL) {
+		if (pid < 0)
+			close(pfd_read[0]);
+		close(pfd_read[1]);
+	}
+err_destroy_fa:
+	posix_spawn_file_actions_destroy(&fa);
+	return pid;
 }

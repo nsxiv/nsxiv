@@ -277,9 +277,9 @@ static bool check_timeouts(int *t)
 static size_t get_win_title(char *buf, size_t len)
 {
 	char *argv[8];
-	spawn_t pfd;
 	char w[12] = "", h[12] = "", z[12] = "", fidx[12], fcnt[12];
 	ssize_t n = -1;
+	int readfd;
 
 	if (wintitle.f.err || buf == NULL || len == 0)
 		return 0;
@@ -293,11 +293,10 @@ static size_t get_win_title(char *buf, size_t len)
 	snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
 	construct_argv(argv, ARRLEN(argv), wintitle.f.cmd, files[fileidx].path,
 	               fidx, fcnt, w, h, z, NULL);
-	pfd = spawn(wintitle.f.cmd, argv, X_READ);
-	if (pfd.readfd >= 0) {
-		if ((n = read(pfd.readfd, buf, len-1)) > 0)
+	if (spawn(&readfd, NULL, argv) > 0) {
+		if ((n = read(readfd, buf, len-1)) > 0)
 			buf[n] = '\0';
-		close(pfd.readfd);
+		close(readfd);
 	}
 
 	return MAX(0, n);
@@ -314,9 +313,7 @@ void close_info(void)
 
 void open_info(void)
 {
-	spawn_t pfd;
-	char w[12] = "", h[12] = "";
-	char *argv[6];
+	char *argv[6], w[12] = "", h[12] = "";
 	char *cmd = mode == MODE_IMAGE ? info.f.cmd : info.ft.cmd;
 	bool ferr = mode == MODE_IMAGE ? info.f.err : info.ft.err;
 
@@ -329,12 +326,8 @@ void open_info(void)
 	}
 	construct_argv(argv, ARRLEN(argv), cmd, files[fileidx].name, w, h,
 	               files[fileidx].path, NULL);
-	pfd = spawn(cmd, argv, X_READ);
-	if (pfd.readfd >= 0) {
-		fcntl(pfd.readfd, F_SETFL, O_NONBLOCK);
-		info.fd = pfd.readfd;
-		info.pid = pfd.pid;
-	}
+	if ((info.pid = spawn(&info.fd, NULL, argv)) > 0)
+		fcntl(info.fd, F_SETFL, O_NONBLOCK);
 }
 
 static void read_info(void)
@@ -579,13 +572,13 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	FILE *pfs;
 	bool marked = mode == MODE_THUMB && markcnt > 0;
 	bool changed = false;
-	int f, i;
+	pid_t pid;
+	int writefd, f, i;
 	int fcnt = marked ? markcnt : 1;
 	char kstr[32];
 	struct stat *oldst, st;
 	XEvent dump;
 	char *argv[3];
-	spawn_t pfd;
 
 	if (keyhandler.f.err) {
 		if (!keyhandler.warned) {
@@ -608,12 +601,11 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	         mask & Mod1Mask    ? "M-" : "",
 	         mask & ShiftMask   ? "S-" : "", key);
 	construct_argv(argv, ARRLEN(argv), keyhandler.f.cmd, kstr, NULL);
-	pfd = spawn(keyhandler.f.cmd, argv, X_WRITE);
-	if (pfd.writefd < 0)
+	if ((pid = spawn(NULL, &writefd, argv)) < 0)
 		return false;
-	if ((pfs = fdopen(pfd.writefd, "w")) == NULL) {
+	if ((pfs = fdopen(writefd, "w")) == NULL) {
 		error(0, errno, "open pipe");
-		close(pfd.writefd);
+		close(writefd);
 		return false;
 	}
 
@@ -626,7 +618,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 		}
 	}
 	fclose(pfs);
-	while (waitpid(pfd.pid, NULL, 0) == -1 && errno == EINTR);
+	while (waitpid(pid, NULL, 0) == -1 && errno == EINTR);
 
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
