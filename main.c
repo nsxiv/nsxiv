@@ -567,8 +567,8 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	if (pfd.writefd < 0)
 		return false;
 	if ((pfs = fdopen(pfd.writefd, "w")) == NULL) {
-		close(pfd.writefd);
 		error(0, errno, "open pipe");
+		close(pfd.writefd);
 		return false;
 	}
 

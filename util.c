@@ -233,8 +233,7 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 {
 	pid_t pid;
 	spawn_t status = { -1, -1, -1 };
-	int pfd_read[2] = { -1, -1 };
-	int pfd_write[2] = { -1, -1 };
+	int pfd_read[2] = { -1, -1 }, pfd_write[2] = { -1, -1 };
 	const bool r = flags & X_READ;
 	const bool w = flags & X_WRITE;
 
@@ -247,16 +246,18 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 	}
 
 	if (w && pipe(pfd_write) < 0) {
+		error(0, errno, "pipe: %s", cmd);
 		if (r) {
 			close(pfd_read[0]);
 			close(pfd_read[1]);
 		}
-		error(0, errno, "pipe: %s", cmd);
 		return status;
 	}
 
-	if ((pid = fork()) == 0) {
-		bool err = (r && dup2(pfd_read[1], 1) < 0) || (w && dup2(pfd_write[0], 0) < 0);
+	if ((pid = fork()) == 0) { /* in child */
+		if ((r && dup2(pfd_read[1], 1) < 0) || (w && dup2(pfd_write[0], 0) < 0))
+			error(EXIT_FAILURE, errno, "dup2: %s", cmd);
+
 		if (r) {
 			close(pfd_read[0]);
 			close(pfd_read[1]);
@@ -265,29 +266,23 @@ spawn_t spawn(const char *cmd, char *const argv[], unsigned int flags)
 			close(pfd_write[0]);
 			close(pfd_write[1]);
 		}
-
-		if (err)
-			error(EXIT_FAILURE, errno, "dup2: %s", cmd);
 		execv(cmd, argv);
 		error(EXIT_FAILURE, errno, "exec: %s", cmd);
+	} else if (pid < 0) { /* fork failed */
+		error(0, errno, "fork: %s", cmd);
+		if (r)
+			close(pfd_read[0]);
+		if (w)
+			close(pfd_write[1]);
+	} else { /* in parent */
+		status.pid = pid;
+		status.readfd = pfd_read[0];
+		status.writefd = pfd_write[1];
 	}
 
 	if (r)
 		close(pfd_read[1]);
 	if (w)
 		close(pfd_write[0]);
-
-	if (pid < 0) {
-		if (r)
-			close(pfd_read[0]);
-		if (w)
-			close(pfd_write[1]);
-		error(0, errno, "fork: %s", cmd);
-		return status;
-	}
-
-	status.pid = pid;
-	status.readfd = pfd_read[0];
-	status.writefd = pfd_write[1];
 	return status;
 }
