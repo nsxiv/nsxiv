@@ -1,5 +1,5 @@
-nsxiv
------
+nsxiv - Changelog
+-----------------
 
 **[git](https://codeberg.org/nsxiv/nsxiv.git)**
 
@@ -9,12 +9,13 @@ there may be more changes. Please use `git log` to view them.
 - - -
 
 ***SPECIAL NOTE***: Due to [this incident](https://codeberg.org/nsxiv/nsxiv-tmp/issues/1)
-we have moved development over to [codeberg](https://codeberg.org/nsxiv/nsxiv).
-A lot of the references below may now be 404 or you may notice some users
-talking to themselves.
+we have moved development over to [CodeBerg](https://codeberg.org/nsxiv/nsxiv).
 
-Any threads which survived the wipe have been migrated over to codeberg and can
-be reached via `https://codeberg.org/nsxiv/nsxiv/pulls/ID`.
+A lot of the references *below* may now be 404 on GitHub. Any threads which
+survived the wipe have been migrated over to [nsxiv-record]. All of the
+references *above* can be found on the new main nsxiv repository on CodeBerg.
+
+[nsxiv-record]: https://codeberg.org/nsxiv/nsxiv-record/
 
 - - -
 
