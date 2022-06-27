@@ -96,12 +96,12 @@ be reached via `https://codeberg.org/nsxiv/nsxiv/pulls/ID`.
   * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag. (#117)
   * Ability to configure colors and fonts in `config.h`. (#115)
   * Ability to configure navigation width area in `config.h`. (#155)
-  * Ability to customize the set of modifers used when processing keybindings
+  * Ability to customize the set of modifiers used when processing keybindings
     in `config.h` via `USED_MODMASK`. (#150)
   * Ability to configure Imlib2's cache size for better image (re)loading
     performance in `config.h`. (#171)
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`),
-    and key-handler and recieving null-seperated file-list via stdin (`-i`).
+    and key-handler and receiving null-seperated file-list via stdin (`-i`).
     (#68) (#141) (#164)
   * Export environment variable `NSXIV_USING_NULL` to key-handler. (#164)
   * Embed new nsxiv icon. (#163)
