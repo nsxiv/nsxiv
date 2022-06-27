@@ -74,7 +74,8 @@ For releases, the process is the following:
       changes which never made it into a release.
     * Use the "Changes" section to document behavior changes since the last
       release, the "Added" section for new features, and the "Fixes" section
-      for fixed bugs or regressions. Include pull request IDs.
+      for fixed bugs or regressions.
+    * Include pull request IDs with reference style links.
 
 Mirroring to GitHub:
 

@@ -26,27 +26,40 @@ references *above* can be found on the new main nsxiv repository on CodeBerg.
 
   * Development and main repository moved over to Codeberg.
     See the special note above for more info.
-  * `autoreload_{inotify,nop}.c` merged into a single file, `autoreload.c`. (#263)
-  * Moved all configuration related macros to `config.mk`. (#264)
+  * `autoreload_{inotify,nop}.c` merged into a single file, `autoreload.c`. [#263]
+  * Moved all configuration related macros to `config.mk`. [#264]
   * `win-title` is now called only when there's change rather than being called
-    on each redraw. (#266)
+    on each redraw. [#266]
 
 * Added:
 
-  * Added more mimetypes to the `.desktop` entry. (#260)
-  * Added `thumb-info` for customizing the statusbar in thumbnail-mode. (#265)
-  * Added comments for building on OpenBSD. (#264)
+  * Added more mimetypes to the `.desktop` entry. [#260]
+  * Added `thumb-info` for customizing the statusbar in thumbnail-mode. [#265]
+  * Added comments for building on OpenBSD. [#264]
 
 * Fixes:
 
-  * "Too many open file" error due to not closing the win-title script. (#245)
+  * "Too many open file" error due to not closing the win-title script. [#245]
   * `-f` now directly starts in fullscreen mode rather than opening a normal
-    window and then going fullscreen. (#251)
-  * Broken slideshow on slow systems or fast animations. (#282)
-  * Memory leak when removing an image in thumbnail mode. (#247)
-  * Correctly setting `_NET_WM_PID`. (#251)
-  * Don't override statusbar if info script doesn't exist. (#271)
-  * Potential misbehavior regarding font. (#250)
+    window and then going fullscreen. [#251]
+  * Broken slideshow on slow systems or fast animations. [#282]
+  * Memory leak when removing an image in thumbnail mode. [#247]
+  * Correctly setting `_NET_WM_PID`. [#251]
+  * Don't override statusbar if info script doesn't exist. [#271]
+  * Potential misbehavior regarding font. [#250]
+
+[#245]: https://codeberg.org/nsxiv/nsxiv-record/pulls/245
+[#247]: https://codeberg.org/nsxiv/nsxiv-record/pulls/247
+[#250]: https://codeberg.org/nsxiv/nsxiv-record/pulls/250
+[#251]: https://codeberg.org/nsxiv/nsxiv-record/pulls/251
+[#263]: https://codeberg.org/nsxiv/nsxiv-record/pulls/263
+[#264]: https://codeberg.org/nsxiv/nsxiv-record/pulls/264
+[#260]: https://codeberg.org/nsxiv/nsxiv-record/pulls/260
+[#264]: https://codeberg.org/nsxiv/nsxiv-record/pulls/264
+[#265]: https://codeberg.org/nsxiv/nsxiv-record/pulls/265
+[#266]: https://codeberg.org/nsxiv/nsxiv-record/pulls/266
+[#271]: https://codeberg.org/nsxiv/nsxiv-record/pulls/271
+[#282]: https://codeberg.org/nsxiv/nsxiv-record/pulls/282
 
 - - -
 
@@ -57,26 +70,39 @@ references *above* can be found on the new main nsxiv repository on CodeBerg.
 
   * Window title is now customizeable via `win-title`, cli flag `-T` and related
     config.h options are removed. See `WINDOW TITLE` section of the manpage for
-    more info. (#213)
+    more info. [#213]
   * Imlib2 cache size is now set based on total memory percentage, by default
-    set to 3%. (#184)
-  * Removed some non-POSIX extensions in the Makefile. (#225)
+    set to 3%. [#184]
+  * Removed some non-POSIX extensions in the Makefile. [#225]
 
 * Added:
 
-  * Ability to customize thumbnail mode mouse-bindings via `config.h`. (#167)
-  * Option to set statusbar position to top via `config.h`. (#231)
-  * New keybinding <kbd>z</kbd> to scroll to center. (#203)
+  * Ability to customize thumbnail mode mouse-bindings via `config.h`. [#167]
+  * Option to set statusbar position to top via `config.h`. [#231]
+  * New keybinding <kbd>z</kbd> to scroll to center. [#203]
 
 * Fixes:
 
   * Manpage cleanup: avoid confusing wording and document thumbnail mode
-    mouse-bindings. (#186)
-  * Wrong jpeg exif orientation with Imlib2 v1.7.5 (and above). (#188)
-  * Animation slowdown when zoomed in. (#200)
-  * Reset statusbar after failed keyhandler. (#191)
-  * Window title not working on certain WMs. (#234)
-  * Various compiler warnings. (#197)
+    mouse-bindings. [#186]
+  * Wrong jpeg exif orientation with Imlib2 v1.7.5 (and above). [#188]
+  * Animation slowdown when zoomed in. [#200]
+  * Reset statusbar after failed keyhandler. [#191]
+  * Window title not working on certain WMs. [#234]
+  * Various compiler warnings. [#197]
+
+[#167]: https://codeberg.org/nsxiv/nsxiv-record/pulls/167
+[#184]: https://codeberg.org/nsxiv/nsxiv-record/pulls/184
+[#186]: https://codeberg.org/nsxiv/nsxiv-record/pulls/186
+[#188]: https://codeberg.org/nsxiv/nsxiv-record/pulls/188
+[#191]: https://codeberg.org/nsxiv/nsxiv-record/pulls/191
+[#197]: https://codeberg.org/nsxiv/nsxiv-record/pulls/197
+[#200]: https://codeberg.org/nsxiv/nsxiv-record/pulls/200
+[#203]: https://codeberg.org/nsxiv/nsxiv-record/pulls/203
+[#213]: https://codeberg.org/nsxiv/nsxiv-record/pulls/213
+[#225]: https://codeberg.org/nsxiv/nsxiv-record/pulls/225
+[#231]: https://codeberg.org/nsxiv/nsxiv-record/pulls/231
+[#234]: https://codeberg.org/nsxiv/nsxiv-record/pulls/234
 
 - - -
 
@@ -85,47 +111,74 @@ references *above* can be found on the new main nsxiv repository on CodeBerg.
 
 * Changes:
 
-  * Statusbar made optional via `HAVE_LIBFONTS`. (#95)
-  * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead. (#71)
+  * Statusbar made optional via `HAVE_LIBFONTS`. [#95]
+  * Remove library auto-detection, use `OPT_DEP_DEFAULT` instead. [#71]
   * Example scripts will now be installed into `EGPREFIX`
     (`$(PREFIX)/share/doc/nsxiv/examples` by default). See README for more
-    info. (#86)
+    info. [#86]
 
 * Added:
 
-  * Animated webp support (optional via `HAVE_LIBWEBP`). (#20)
-  * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag. (#117)
-  * Ability to configure colors and fonts in `config.h`. (#115)
-  * Ability to configure navigation width area in `config.h`. (#155)
+  * Animated webp support (optional via `HAVE_LIBWEBP`). [#20]
+  * New mouse-binding <kbd>Ctrl-Button1</kbd> for relative drag. [#117]
+  * Ability to configure colors and fonts in `config.h`. [#115]
+  * Ability to configure navigation width area in `config.h`. [#155]
   * Ability to customize the set of modifiers used when processing keybindings
-    in `config.h` via `USED_MODMASK`. (#150)
+    in `config.h` via `USED_MODMASK`. [#150]
   * Ability to configure Imlib2's cache size for better image (re)loading
-    performance in `config.h`. (#171)
+    performance in `config.h`. [#171]
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`),
     and key-handler and receiving null-seperated file-list via stdin (`-i`).
-    (#68) (#141) (#164)
-  * Export environment variable `NSXIV_USING_NULL` to key-handler. (#164)
-  * Embed new nsxiv icon. (#163)
-  * `make install-icon` to install icons. (#80) (#96)
-  * `make install-desktop` to install .desktop entry. (#80) (#96)
-  * `make install-all` to install everything. (#80) (#96)
-  * Configurable `KEYHANDLER_ABORT` in `config.h`. (#91) (#172)
-  * Statusbar message upon key-handler activation. (#98)
+    [#68] [#141] [#164]
+  * Export environment variable `NSXIV_USING_NULL` to key-handler. [#164]
+  * Embed new nsxiv icon. [#163]
+  * `make install-icon` to install icons. [#80] [#96]
+  * `make install-desktop` to install .desktop entry. [#80] [#96]
+  * `make install-all` to install everything. [#80] [#96]
+  * Configurable `KEYHANDLER_ABORT` in `config.h`. [#91] [#172]
+  * Statusbar message upon key-handler activation. [#98]
   * Ability to write custom C functions in `config.h` and use them via
-    keybindings. (#76)
+    keybindings. [#76]
 
 * Fixes:
 
   * Not able to use `KEYHANDLER_ABORT` key (<kbd>Escape</kbd> by default) in
-    regular keybindings. (#91)
-  * Memory leak related to Xresources. (#134)
-  * Memory leak in gif loader. (#165)
-  * Better handle gif colormap and prevent out-of-bound access. (#165)
-  * Prevent crash when zooming out in very small images. (#178)
-  * Removed non-POSIX commands and extensions from `Makefile`. (#71)
-  * Regression where nsxiv wouldn't run on non-TrueColor X server. (#114)
+    regular keybindings. [#91]
+  * Memory leak related to Xresources. [#134]
+  * Memory leak in gif loader. [#165]
+  * Better handle gif colormap and prevent out-of-bound access. [#165]
+  * Prevent crash when zooming out in very small images. [#178]
+  * Removed non-POSIX commands and extensions from `Makefile`. [#71]
+  * Regression where nsxiv wouldn't run on non-TrueColor X server. [#114]
   * Wrong comments in `config.h` and description in `manpage`.
-    (#105) (#106) (#152)
+    [#105] [#106] [#152]
+
+[#20]: https://codeberg.org/nsxiv/nsxiv-record/pulls/20
+[#68]: https://codeberg.org/nsxiv/nsxiv-record/pulls/68
+[#71]: https://codeberg.org/nsxiv/nsxiv-record/pulls/71
+[#76]: https://codeberg.org/nsxiv/nsxiv-record/pulls/76
+[#80]: https://codeberg.org/nsxiv/nsxiv-record/pulls/80
+[#86]: https://codeberg.org/nsxiv/nsxiv-record/pulls/86
+[#91]: https://codeberg.org/nsxiv/nsxiv-record/pulls/91
+[#95]: https://codeberg.org/nsxiv/nsxiv-record/pulls/95
+[#96]: https://codeberg.org/nsxiv/nsxiv-record/pulls/96
+[#98]: https://codeberg.org/nsxiv/nsxiv-record/pulls/98
+[#105]: https://codeberg.org/nsxiv/nsxiv-record/pulls/105
+[#106]: https://codeberg.org/nsxiv/nsxiv-record/pulls/106
+[#114]: https://codeberg.org/nsxiv/nsxiv-record/pulls/114
+[#115]: https://codeberg.org/nsxiv/nsxiv-record/pulls/115
+[#117]: https://codeberg.org/nsxiv/nsxiv-record/pulls/117
+[#134]: https://codeberg.org/nsxiv/nsxiv-record/pulls/134
+[#141]: https://codeberg.org/nsxiv/nsxiv-record/pulls/141
+[#150]: https://codeberg.org/nsxiv/nsxiv-record/pulls/150
+[#152]: https://codeberg.org/nsxiv/nsxiv-record/pulls/152
+[#155]: https://codeberg.org/nsxiv/nsxiv-record/pulls/155
+[#163]: https://codeberg.org/nsxiv/nsxiv-record/pulls/163
+[#164]: https://codeberg.org/nsxiv/nsxiv-record/pulls/164
+[#165]: https://codeberg.org/nsxiv/nsxiv-record/pulls/165
+[#171]: https://codeberg.org/nsxiv/nsxiv-record/pulls/171
+[#172]: https://codeberg.org/nsxiv/nsxiv-record/pulls/172
+[#178]: https://codeberg.org/nsxiv/nsxiv-record/pulls/178
 
 - - -
 
@@ -134,7 +187,9 @@ references *above* can be found on the new main nsxiv repository on CodeBerg.
 
 * Fixes:
 
-  * Source tarball failing build ([#66](https://github.com/nsxiv/nsxiv/pull/66))
+  * Source tarball failing build [#66]
+
+[#66]: https://codeberg.org/nsxiv/nsxiv-record/pulls/66
 
 - - -
 
@@ -143,32 +198,47 @@ references *above* can be found on the new main nsxiv repository on CodeBerg.
 
 * Changes:
 
-  * Re-release under the name nsxiv
+  * Re-release under the name nsxiv.
   * Xresources `Sxiv.foreground` and `Sxiv.background` changed
-    to `Nsxiv.window.foreground` and `Nsxiv.window.background`
-  * Xresources `Sxiv.font` changed to `Nsxiv.bar.font`
-  * Rework the build system ([#19](https://github.com/nsxiv/nsxiv/pull/19)). Now by default we'll build
-    with only optional dependencies that are already installed
+    to `Nsxiv.window.foreground` and `Nsxiv.window.background`.
+  * Xresources `Sxiv.font` changed to `Nsxiv.bar.font`.
+  * Rework the build system. Now by default we'll build with only optional
+    dependencies that are already installed. [#19]
 
 * Added:
 
-  * Fill scale mode ([#2](https://github.com/nsxiv/nsxiv/pull/2))
-  * Configurable X window title (via `config.h` and the `-T` flag) ([#23](https://github.com/nsxiv/nsxiv/pull/23))
-  * Support custom bar colors via Xresources ([#19](https://github.com/nsxiv/nsxiv/pull/19))
-  * Support custom mark color via Xresources ([#51](https://github.com/nsxiv/nsxiv/pull/51))
-  * Toggle animation playback with <kbd>Ctrl-a</kbd> ([#33](https://github.com/nsxiv/nsxiv/pull/33))
-  * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties ([#13](https://github.com/nsxiv/nsxiv/pull/13))
-  * Set `ICCCM WM manager` hints ([#12](https://github.com/nsxiv/nsxiv/pull/12))
+  * Fill scale mode. [#2]
+  * Configurable X window title (via `config.h` and the `-T` flag). [#23]
+  * Support custom bar colors via Xresources. [#19]
+  * Support custom mark color via Xresources. [#51]
+  * Toggle animation playback with <kbd>Ctrl-a</kbd>. [#33]
+  * Set `_NET_WM_PID` and `WM_CLIENT_MACHINE` X properties. [#13]
+  * Set `ICCCM WM manager` hints. [#12]
 
 * Fixes:
 
-  * Cli flag `-G` not initially setting gamma ([#31](https://github.com/nsxiv/nsxiv/pull/31))
-  * Wrong keybinding description in the manpage ([#14](https://github.com/nsxiv/nsxiv/pull/14))
-  * .desktop entry not advertising webp support ([#15](https://github.com/nsxiv/nsxiv/pull/15))
-  * Prevent crash when embedded into transparent window ([#3](https://github.com/nsxiv/nsxiv/pull/3))
-  * Small memory leak ([#57](https://github.com/nsxiv/nsxiv/pull/57))
-  * Rare crash when showing some GIFs ([#41](https://github.com/nsxiv/nsxiv/pull/41))
-  * Rare event where nsxiv wouldn't close after window being destroyed ([#53](https://github.com/nsxiv/nsxiv/pull/53))
+  * Cli flag `-G` not initially setting gamma. [#31]
+  * Wrong keybinding description in the manpage. [#14]
+  * .desktop entry not advertising webp support. [#15]
+  * Prevent crash when embedded into transparent window. [#3]
+  * Small memory leak. [#57]
+  * Rare crash when showing some GIFs. [#41]
+  * Rare event where nsxiv wouldn't close after window being destroyed. [#53]
+
+[#2]: https://codeberg.org/nsxiv/nsxiv-record/pulls/2
+[#3]: https://codeberg.org/nsxiv/nsxiv-record/pulls/3
+[#12]: https://codeberg.org/nsxiv/nsxiv-record/pulls/12
+[#13]: https://codeberg.org/nsxiv/nsxiv-record/pulls/13
+[#14]: https://codeberg.org/nsxiv/nsxiv-record/pulls/14
+[#15]: https://codeberg.org/nsxiv/nsxiv-record/pulls/15
+[#19]: https://codeberg.org/nsxiv/nsxiv-record/pulls/19
+[#23]: https://codeberg.org/nsxiv/nsxiv-record/pulls/23
+[#31]: https://codeberg.org/nsxiv/nsxiv-record/pulls/31
+[#33]: https://codeberg.org/nsxiv/nsxiv-record/pulls/33
+[#41]: https://codeberg.org/nsxiv/nsxiv-record/pulls/41
+[#51]: https://codeberg.org/nsxiv/nsxiv-record/pulls/51
+[#53]: https://codeberg.org/nsxiv/nsxiv-record/pulls/53
+[#57]: https://codeberg.org/nsxiv/nsxiv-record/pulls/57
 
 
 sxiv
