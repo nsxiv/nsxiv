@@ -8,38 +8,41 @@
 **Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
 --------------------------------------------------------------------
 
-nsxiv is a fork of now unmaintained [sxiv](https://github.com/muennich/sxiv)
-with the purpose of being a drop-in replacement of sxiv, maintaining it and
-adding simple, sensible features. nsxiv is free software licensed under GPLv2
-and aims to be easy to modify and customize.
+nsxiv is a fork of the now-unmaintained [sxiv](https://github.com/muennich/sxiv)
+with the purpose of being a (mostly) drop-in replacement for sxiv, maintaining its
+interface and adding simple, sensible features. nsxiv is free software licensed
+under GPLv2 and aims to be easy to modify and customize.
 
-Please file a bug report if something does not work as documented or
-expected in *this* repository, after making sure you are using the latest
-release of nsxiv. Contributions are welcome, see
-[CONTRIBUTING.md](CONTRIBUTING.md#contribution-guideline) for details.
+Please file a bug report if something does not work as documented or expected on
+[Codeberg] after making sure you are using the latest release.  Contributions
+are welcome, see [CONTRIBUTING.md] to get started.
+
+[Codeberg]: https://codeberg.org/nsxiv/nsxiv/issues/new
+[CONTRIBUTING.md]: CONTRIBUTING.md#contribution-guideline
 
 
 Features
 --------
 
-* Basic image operations, e.g. zooming, panning, rotating
-* Customizable key and mouse button mappings (in *config.h*)
-* Script-ability via `key-handler`
+* Basic image operations like zooming, panning, rotating
+* Basic support for animated/multi-frame images
 * Thumbnail mode: grid of selectable previews of all images
 * Ability to cache thumbnails for fast re-loading
-* Basic support for animated/multi-frame images (GIF/WebP)
-* Display image information in status bar
-* Customizable window title
+* Automatically refreshing modified images
+* Customizable keyboard and mouse mappings via `config.h`
+* Scriptability via `key-handler`
+* Displaying image information in status bar via `image-info` & `thumb-info`
+* Customizable window title via `win-title`
 
 
 Screenshots
 -----------
 
-**Image mode: (Default colors)**
+**Image mode with default colors:**
 
 ![Image](https://codeberg.org/nsxiv/pages/raw/branch/master/img/image.png "Image mode")
 
-**Thumbnail mode: (Custom colors)**
+**Thumbnail mode with custom colors:**
 
 ![Thumb](https://codeberg.org/nsxiv/pages/raw/branch/master/img/thumb.png "Thumb mode")
 
@@ -70,21 +73,28 @@ nsxiv requires the following software to be installed:
 
 The following dependencies are optional.
 
-  * inotify : Used for auto-reloading images on change.
-    Disabled via `HAVE_INOTIFY=0`
-  * libXft, freetype2, fontconfig : Used for the status bar.
-    Disabled via `HAVE_LIBFONTS=0`
-  * giflib : Used for animated gif playback.
+  * `inotify`<sup>ℹ</sup>: Used for auto-reloading images on change.
+    Disabled via `HAVE_INOTIFY=0`.
+  * `libXft`, `freetype2`, `fontconfig`: Used for the status bar.
+    Disabled via `HAVE_LIBFONTS=0`.
+  * `giflib`: Used for animated gif playback.
     Disabled via `HAVE_LIBGIF=0`.
-  * libexif : Used for auto-orientation and exif thumbnails.
-    Disable via `HAVE_LIBEXIF=0`
-  * libwebp : Used for animated webp playback.
-    (NOTE: animated webp also requires Imlib2 v1.7.5 or above)
+  * `libexif`: Used for auto-orientation and exif thumbnails.
+    Disable via `HAVE_LIBEXIF=0`.
+  * `libwebp`: Used for animated webp playback.
+    (***NOTE***: animated webp also requires Imlib2 v1.7.5 or above)
     Disabled via `HAVE_LIBWEBP=0`.
 
 Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development
 packages (e.g. \*-dev on Debian).
+
+\[ℹ]: [inotify][] is a Linux-specific API for monitoring filesystem changes.
+  It's not natively available on `*BSD` systems but can be enabed via installing
+  and linking against [libinotify-kqueue][].
+
+[inotify]: https://www.man7.org/linux/man-pages/man7/inotify.7.html
+[libinotify-kqueue]: https://github.com/libinotify-kqueue/libinotify-kqueue
 
 
 Building
@@ -144,14 +154,13 @@ the following command:
 Usage
 -----
 
-Please see man page for information on how to use nsxiv. To do so, execute the
-following after the installation:
+Refer to the man page for the documentation:
 
     $ man nsxiv
 
 
-F.A.Q
------
+F.A.Q.
+------
 
 * Can I open remote urls with nsxiv? <br>
 Yes, see [nsxiv-url](https://codeberg.org/nsxiv/nsxiv-extra/src/branch/master/scripts/nsxiv-url)
@@ -199,6 +208,7 @@ on CodeBerg or get a copy using git with the following command:
 
 You can view the changelog [here](CHANGELOG.md)
 
+
 Similar projects
 ----------------
 
@@ -208,10 +218,10 @@ viewers to try out.
 
 Below are a couple other lesser known projects not listed in suckless rocks.
 
-* [MAGE](https://github.com/explosion-mental/mage) :
+* [MAGE](https://github.com/explosion-mental/mage):
   A smaller/more-suckless version of sxiv.
-* [div](https://github.com/TAAPArthur/div) :
+* [div](https://github.com/TAAPArthur/div):
   Minimal and extensive, aimed at C devs willing to build their own features.
-* [mpv-image-viewer](https://github.com/occivink/mpv-image-viewer) :
+* [mpv-image-viewer](https://github.com/occivink/mpv-image-viewer):
   Lua script to turn mpv into an image viewer. Supports thumbnails via
   [mpv-gallery-view](https://github.com/occivink/mpv-gallery-view).
