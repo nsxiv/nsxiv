@@ -226,8 +226,8 @@ void win_open(win_t *win)
 	if (gmask & YValue) {
 		if (gmask & YNegative) {
 			win->y += e->scrh - win->h;
-			sizehints.win_gravity = sizehints.win_gravity == NorthEastGravity
-			                        ? SouthEastGravity : SouthWestGravity;
+			sizehints.win_gravity = sizehints.win_gravity == NorthEastGravity ?
+			                        SouthEastGravity : SouthWestGravity;
 		}
 		sizehints.flags |= USPosition;
 	} else {

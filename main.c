@@ -40,15 +40,15 @@
 #include <X11/XF86keysym.h>
 #include <X11/keysym.h>
 
-#define MODMASK(mask) ((mask) & USED_MODMASK)
+#define MODMASK(mask) (USED_MODMASK & (mask))
 #define BAR_SEP "  "
 
 #define TV_DIFF(t1,t2) (((t1)->tv_sec  - (t2)->tv_sec ) * 1000 + \
                         ((t1)->tv_usec - (t2)->tv_usec) / 1000)
-#define TV_ADD_MSEC(tv,t) {             \
+#define TV_ADD_MSEC(tv,t) do {             \
   (tv)->tv_sec  += (t) / 1000;          \
   (tv)->tv_usec += (t) % 1000 * 1000;   \
-}
+} while (0)
 
 typedef struct {
 	int err;
@@ -200,8 +200,8 @@ void remove_file(int n, bool manual)
 
 	if (n + 1 < filecnt) {
 		if (tns.thumbs != NULL) {
-			memmove(tns.thumbs + n, tns.thumbs + n + 1, (filecnt - n - 1) *
-			        sizeof(*tns.thumbs));
+			memmove(tns.thumbs + n, tns.thumbs + n + 1,
+			        (filecnt - n - 1) * sizeof(*tns.thumbs));
 			memset(tns.thumbs + filecnt - 1, 0, sizeof(*tns.thumbs));
 		}
 		memmove(files + n, files + n + 1, (filecnt - n - 1) * sizeof(*files));
@@ -377,7 +377,7 @@ void load_image(int new)
 		if (new >= filecnt)
 			new = filecnt - 1;
 		else if (new > 0 && prev)
-			new--;
+			new -= 1;
 	}
 	files[new].flags &= ~FF_WARN;
 	fileidx = current = new;
@@ -562,8 +562,9 @@ void handle_key_handler(bool init)
 		return;
 	if (init) {
 		close_info();
-		snprintf(win.bar.l.buf, win.bar.l.size, "Getting key handler input "
-		         "(%s to abort)...", XKeysymToString(KEYHANDLER_ABORT));
+		snprintf(win.bar.l.buf, win.bar.l.size,
+		         "Getting key handler input (%s to abort)...",
+		         XKeysymToString(KEYHANDLER_ABORT));
 	} else { /* abort */
 		open_info();
 		update_info();
@@ -739,8 +740,8 @@ static void run(void)
 		init_thumb = mode == MODE_THUMB && tns.initnext < filecnt;
 		load_thumb = mode == MODE_THUMB && tns.loadnext < tns.end;
 
-		if ((init_thumb || load_thumb || to_set || info.fd != -1 ||
-		     arl.fd != -1) && XPending(win.env.dpy) == 0)
+		if ((init_thumb || load_thumb || to_set || info.fd != -1 || arl.fd != -1) &&
+		    XPending(win.env.dpy) == 0)
 		{
 			if (load_thumb) {
 				set_timeout(redraw, TO_REDRAW_THUMBS, false);
@@ -793,8 +794,8 @@ static void run(void)
 					discard = ev.type == nextev.type;
 					break;
 				case KeyPress:
-					discard = (nextev.type == KeyPress || nextev.type == KeyRelease)
-					          && ev.xkey.keycode == nextev.xkey.keycode;
+					discard = (nextev.type == KeyPress || nextev.type == KeyRelease) &&
+					           ev.xkey.keycode == nextev.xkey.keycode;
 					break;
 				}
 			}
