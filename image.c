@@ -38,6 +38,7 @@ enum { DEF_GIF_DELAY = 75 };
 #endif
 
 #if HAVE_LIBWEBP
+#include <stdio.h>
 #include <webp/decode.h>
 #include <webp/demux.h>
 enum { DEF_WEBP_DELAY = 75 };
