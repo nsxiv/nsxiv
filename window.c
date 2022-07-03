@@ -407,7 +407,7 @@ void win_clear(win_t *win)
 static int win_draw_text(win_t *win, XftDraw *d, const XftColor *color,
                          int x, int y, char *text, int len, int w)
 {
-	int err, tw = 0;
+	int err, tw = 0, warned = 0;
 	char *t, *next;
 	uint32_t rune;
 	XftFont *f;
@@ -415,7 +415,14 @@ static int win_draw_text(win_t *win, XftDraw *d, const XftColor *color,
 	XGlyphInfo ext;
 
 	for (t = text; t - text < len; t = next) {
+		err = 0;
 		next = utf8_decode(t, &rune, &err);
+		if (err) {
+			if (!warned)
+				error(0, 0, "error decoding utf8 status-bar text");
+			warned = 1;
+			continue;
+		}
 		if (XftCharExists(win->env.dpy, font, rune)) {
 			f = font;
 		} else { /* fallback font */
