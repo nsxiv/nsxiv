@@ -95,7 +95,7 @@ static const char* win_res(XrmDatabase db, const char *name, const char *def)
 
 	if (db != NULL &&
 	    XrmGetResource(db, name, name, &type, &ret) &&
-	    STREQ(type, "String"))
+	    STREQ(type, "String") && *ret.addr != '\0')
 	{
 		return ret.addr;
 	} else {
