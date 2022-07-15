@@ -162,9 +162,9 @@ typedef struct {
 
 typedef struct {
 	img_frame_t *frames;
-	int cap;
-	int cnt;
-	int sel;
+	unsigned int cap;
+	unsigned int cnt;
+	unsigned int sel;
 	bool animate;
 	unsigned int framedelay;
 	int length;
@@ -403,8 +403,8 @@ struct win {
 	unsigned int bw;
 
 	struct {
-		int w;
-		int h;
+		unsigned int w;
+		unsigned int h;
 		Pixmap pm;
 	} buf;
 

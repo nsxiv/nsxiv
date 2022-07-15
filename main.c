@@ -224,7 +224,7 @@ static bool check_timeouts(int *t)
 	int i = 0, tdiff, tmin = -1;
 	struct timeval now;
 
-	while (i < ARRLEN(timeouts)) {
+	while (i < (int)ARRLEN(timeouts)) {
 		if (timeouts[i].active) {
 			gettimeofday(&now, 0);
 			tdiff = TV_DIFF(&timeouts[i].when, &now);
@@ -434,11 +434,11 @@ int nav_button(void)
 
 	win_cursor_pos(&win, &x, &y);
 	nw = NAV_IS_REL ? win.w * NAV_WIDTH / 100 : NAV_WIDTH;
-	nw = MIN(nw, (win.w + 1) / 2);
+	nw = MIN(nw, ((int)win.w + 1) / 2);
 
 	if (x < nw)
 		return 0;
-	else if (x < win.w-nw)
+	else if (x < (int)win.w - nw)
 		return 1;
 	else
 		return 2;
@@ -917,7 +917,7 @@ int main(int argc, char *argv[])
 		const char *name[] = { "image-info", "thumb-info", "key-handler", "win-title" };
 		const char *s = "/nsxiv/exec/";
 
-		for (i = 0; i < ARRLEN(cmd); i++) {
+		for (i = 0; i < (int)ARRLEN(cmd); i++) {
 			n = strlen(homedir) + strlen(dsuffix) + strlen(s) + strlen(name[i]) + 1;
 			cmd[i]->cmd = emalloc(n);
 			snprintf(cmd[i]->cmd, n, "%s%s%s%s", homedir, dsuffix, s, name[i]);

@@ -259,7 +259,7 @@ void win_open(win_t *win)
 	             ButtonReleaseMask | ButtonPressMask | KeyPressMask |
 	             PointerMotionMask | StructureNotifyMask);
 
-	for (i = 0; i < ARRLEN(cursors); i++) {
+	for (i = 0; i < (int)ARRLEN(cursors); i++) {
 		if (i != CURSOR_NONE)
 			cursors[i].icon = XCreateFontCursor(e->dpy, cursors[i].name);
 	}
@@ -274,12 +274,12 @@ void win_open(win_t *win)
 	n = icons[ARRLEN(icons)-1].size;
 	icon_data = emalloc((n * n + 2) * sizeof(*icon_data));
 
-	for (i = 0; i < ARRLEN(icons); i++) {
+	for (i = 0; i < (int)ARRLEN(icons); i++) {
 		n = 0;
 		icon_data[n++] = icons[i].size;
 		icon_data[n++] = icons[i].size;
 
-		for (j = 0; j < icons[i].cnt; j++) {
+		for (j = 0; j < (int)icons[i].cnt; j++) {
 			for (c = icons[i].data[j] >> 4; c >= 0; c--)
 				icon_data[n++] = icon_colors[icons[i].data[j] & 0x0F];
 		}
@@ -345,7 +345,7 @@ bool win_configure(win_t *win, XConfigureEvent *c)
 {
 	bool changed;
 
-	changed = win->w != c->width || win->h + win->bar.h != c->height;
+	changed = win->w != (unsigned int)c->width || win->h + win->bar.h != (unsigned int)c->height;
 
 	win->x = c->x;
 	win->y = c->y;
@@ -516,7 +516,7 @@ void win_set_title(win_t *win, const char *title, size_t len)
 {
 	int i, targets[] = { ATOM_WM_NAME, ATOM_WM_ICON_NAME, ATOM__NET_WM_NAME, ATOM__NET_WM_ICON_NAME };
 
-	for (i = 0; i < ARRLEN(targets); ++i) {
+	for (i = 0; i < (int)ARRLEN(targets); ++i) {
 		XChangeProperty(win->env.dpy, win->xwin, atoms[targets[i]],
 		                atoms[ATOM_UTF8_STRING], 8, PropModeReplace,
 		                (unsigned char *)title, len);

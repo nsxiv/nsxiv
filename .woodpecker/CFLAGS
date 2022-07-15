@@ -10,4 +10,4 @@
 -Wbad-function-cast -Wdeclaration-after-statement
 -Wmissing-prototypes -Wstrict-prototypes
 # silence
--Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers
+-Wno-unused-parameter -Wno-missing-field-initializers

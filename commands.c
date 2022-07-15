@@ -36,7 +36,7 @@ bool cg_quit(arg_t status)
 	unsigned int i;
 
 	if (options->to_stdout && markcnt > 0) {
-		for (i = 0; i < filecnt; i++) {
+		for (i = 0; i < (unsigned int)filecnt; i++) {
 			if (files[i].flags & FF_MARK)
 				printf("%s%c", files[i].name, options->using_null ? '\0' : '\n');
 		}
@@ -319,7 +319,7 @@ bool ci_drag(arg_t drag_mode)
 	float px, py;
 	XEvent e;
 
-	if ((int)(img.w * img.zoom) <= win.w && (int)(img.h * img.zoom) <= win.h)
+	if ((int)(img.w * img.zoom) <= (int)win.w && (int)(img.h * img.zoom) <= (int)win.h)
 		return false;
 
 	win_set_cursor(&win, drag_mode == DRAG_ABSOLUTE ? CURSOR_DRAG_ABSOLUTE : CURSOR_DRAG_RELATIVE);

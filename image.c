@@ -473,7 +473,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 
 CLEANUP void img_close(img_t *img, bool decache)
 {
-	int i;
+	unsigned int i;
 
 	if (img->multi.cnt > 0) {
 		for (i = 0; i < img->multi.cnt; i++) {
@@ -671,7 +671,9 @@ bool img_zoom_to(img_t *img, float z)
 	int x, y;
 	if (ZOOM_MIN <= z && z <= ZOOM_MAX) {
 		win_cursor_pos(img->win, &x, &y);
-		if (x < 0 || x >= img->win->w || y < 0 || y >= img->win->h) {
+		if (x < 0 || (unsigned int)x >= img->win->w ||
+		    y < 0 || (unsigned int)y >= img->win->h)
+		{
 			x = img->win->w / 2;
 			y = img->win->h / 2;
 		}
@@ -688,13 +690,13 @@ bool img_zoom_to(img_t *img, float z)
 
 bool img_zoom(img_t *img, int d)
 {
-	int i = d > 0 ? 0 : ARRLEN(zoom_levels)-1;
-	while (i >= 0 && i < ARRLEN(zoom_levels) && (d > 0 ?
-	       zoom_levels[i]/100 <= img->zoom : zoom_levels[i]/100 >= img->zoom))
+	int i = d > 0 ? 0 : (int)ARRLEN(zoom_levels)-1;
+	while (i >= 0 && i < (int)ARRLEN(zoom_levels) &&
+	       (d > 0 ? zoom_levels[i]/100 <= img->zoom : zoom_levels[i]/100 >= img->zoom))
 	{
 		i += d;
 	}
-	i = MIN(MAX(i, 0), ARRLEN(zoom_levels)-1);
+	i = MIN(MAX(i, 0), (int)ARRLEN(zoom_levels)-1);
 	return img_zoom_to(img, zoom_levels[i]/100);
 }
 
@@ -787,7 +789,7 @@ bool img_pan_edge(img_t *img, direction_t dir)
 
 void img_rotate(img_t *img, degree_t d)
 {
-	int i, tmp;
+	unsigned int i, tmp;
 	float ox, oy;
 
 	imlib_context_set_image(img->im);
@@ -816,7 +818,7 @@ void img_rotate(img_t *img, degree_t d)
 
 void img_flip(img_t *img, flipdir_t d)
 {
-	int i;
+	unsigned int i;
 	void (*imlib_flip_op[3])(void) = {
 		imlib_image_flip_horizontal,
 		imlib_image_flip_vertical,
@@ -878,7 +880,7 @@ bool img_change_gamma(img_t *img, int d)
 
 static bool img_frame_goto(img_t *img, int n)
 {
-	if (n < 0 || n >= img->multi.cnt || n == img->multi.sel)
+	if (n < 0 || (unsigned int)n >= img->multi.cnt || (unsigned int)n == img->multi.sel)
 		return false;
 
 	img->multi.sel = n;
@@ -899,7 +901,7 @@ bool img_frame_navigate(img_t *img, int d)
 		return false;
 
 	d += img->multi.sel;
-	d = MAX(0, MIN(d, img->multi.cnt - 1));
+	d = MAX(0, MIN(d, (int)img->multi.cnt - 1));
 
 	return img_frame_goto(img, d);
 }
