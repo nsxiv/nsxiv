@@ -158,7 +158,7 @@ void remove_file(int n, bool manual)
 
 	if (filecnt == 1) {
 		if (!manual)
-			fprintf(stderr, "nsxiv: no more files to display, aborting\n");
+			fprintf(stderr, "%s: no more files to display, aborting\n", progname);
 		exit(manual ? EXIT_SUCCESS : EXIT_FAILURE);
 	}
 	if (files[n].flags & FF_MARK)

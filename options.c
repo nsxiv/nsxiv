@@ -38,9 +38,9 @@ const opt_t *options;
 
 void print_usage(void)
 {
-	printf("usage: nsxiv [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+	printf("usage: %s [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
 	       "[-g GEOMETRY] [-N NAME] [-n NUM] [-S DELAY] [-s MODE] "
-	       "[-z ZOOM] FILES...\n");
+	       "[-z ZOOM] FILES...\n", progname);
 }
 
 static void title_deprecation_notice(void)
@@ -58,7 +58,7 @@ static void title_deprecation_notice(void)
 
 static void print_version(void)
 {
-	puts("nsxiv " VERSION);
+	printf("%s %s\n", progname, VERSION);
 }
 
 void parse_options(int argc, char **argv)
