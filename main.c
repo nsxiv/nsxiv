@@ -720,8 +720,10 @@ static void run(void)
 					remove_file(tns.loadnext, false);
 					tns.dirty = true;
 				}
-				if (tns.loadnext >= tns.end)
+				if (tns.loadnext >= tns.end) {
+					open_info();
 					redraw();
+				}
 			} else if (init_thumb) {
 				set_timeout(redraw, TO_REDRAW_THUMBS, false);
 				if (!tns_load(&tns, tns.initnext, false, true))
