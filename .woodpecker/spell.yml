@@ -5,7 +5,5 @@ pipeline:
   spell-check:
     image: alpine:edge
     commands: |
-      apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing py3-codespell >/dev/null
-      find . \( -name '*.patch' -o -name '*.diff' -o -name '*.md' \) -print | \
-        xargs -I{} codespell {}
-      codespell nsxiv.1 config.mk Makefile
+      apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing py3-codespell git >/dev/null
+      git ls-files | sed '/\.png$/d' | xargs codespell
