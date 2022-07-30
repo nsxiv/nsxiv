@@ -350,7 +350,7 @@ void load_image(int new)
 
 	close_info();
 	open_info();
-	arl_setup(&arl, files[fileidx].path);
+	arl_add(&arl, files[fileidx].path);
 	title_dirty = true;
 
 	if (img.multi.cnt > 0 && img.multi.animate)

@@ -1,4 +1,5 @@
 /* Copyright 2017 Max Voit, Bert Muennich
+ * Copyright 2022 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
@@ -20,16 +21,14 @@
 
 #if HAVE_INOTIFY
 
+#include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/inotify.h>
 #include <unistd.h>
 
-static union {
-	char d[4096]; /* aligned buffer */
-	struct inotify_event e;
-} buf;
+static struct { char *buf; size_t len; } scratch;
 
 void arl_init(arl_t *arl)
 {
@@ -43,7 +42,7 @@ CLEANUP void arl_cleanup(arl_t *arl)
 {
 	if (arl->fd != -1)
 		close(arl->fd);
-	free(arl->filename);
+	free(scratch.buf);
 }
 
 static void rm_watch(int fd, int *wd)
@@ -61,26 +60,32 @@ static void add_watch(int fd, int *wd, const char *path, uint32_t mask)
 		error(0, errno, "inotify: %s", path);
 }
 
-void arl_setup(arl_t *arl, const char *filepath)
+static char *arl_scratch_push(const char *filepath, size_t len)
 {
-	char *base = strrchr(filepath, '/');
+	if (scratch.len < len + 1) {
+		scratch.len = len + 1;
+		scratch.buf = erealloc(scratch.buf, scratch.len);
+	}
+	scratch.buf[len] = '\0';
+	return memcpy(scratch.buf, filepath, len);
+}
+
+void arl_add(arl_t *arl, const char *filepath)
+{
+	char *base, *dir;
 
 	if (arl->fd == -1)
 		return;
 
 	rm_watch(arl->fd, &arl->wd_dir);
 	rm_watch(arl->fd, &arl->wd_file);
-
 	add_watch(arl->fd, &arl->wd_file, filepath, IN_CLOSE_WRITE | IN_DELETE_SELF);
 
-	free(arl->filename);
-	arl->filename = estrdup(filepath);
-
-	if (base != NULL) {
-		arl->filename[++base - filepath] = '\0';
-		add_watch(arl->fd, &arl->wd_dir, arl->filename, IN_CREATE | IN_MOVED_TO);
-		strcpy(arl->filename, base); /* NOLINT: basename will always be shorter than fullpath */
-	}
+	base = strrchr(filepath, '/');
+	assert(base != NULL); /* filepath must be result of `realpath(3)` */
+	dir = arl_scratch_push(filepath, base - filepath);
+	add_watch(arl->fd, &arl->wd_dir, dir, IN_CREATE | IN_MOVED_TO);
+	arl->filename = arl_scratch_push(base + 1, strlen(base + 1));
 }
 
 bool arl_handle(arl_t *arl)
@@ -88,6 +93,8 @@ bool arl_handle(arl_t *arl)
 	bool reload = false;
 	char *ptr;
 	const struct inotify_event *e;
+	/* inotify_event aligned buffer */
+	static union { char d[4096]; struct inotify_event e; } buf;
 
 	while (true) {
 		ssize_t len = read(arl->fd, buf.d, sizeof(buf.d));
@@ -124,7 +131,7 @@ void arl_cleanup(arl_t *arl)
 	(void) arl;
 }
 
-void arl_setup(arl_t *arl, const char *filepath)
+void arl_add(arl_t *arl, const char *filepath)
 {
 	(void) arl;
 	(void) filepath;
