@@ -183,7 +183,7 @@ Customization
 The main method of customizing nsxiv is by setting values for the variables in *config.h*,
 or by using Xresources as explained in the manual. If these options are not sufficient,
 you may implement your own features by following
-[this guide](https://codeberg.org/nsxiv/nsxiv-extra/blob/master/CUSTOMIZATION.md).
+[this guide](https://codeberg.org/nsxiv/nsxiv-extra/src/branch/master/CUSTOMIZATION.md).
 
 Due to our limited [project scope](CONTRIBUTING.md#project-scope), certain features or
 customization cannot be merged into nsxiv mainline. Following the spirit of suckless
