@@ -33,3 +33,18 @@ jobs:
         # ensure minimal-build works without opt deps installed
         sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev >/dev/null
         build "0" "minimal"
+  macOS-build:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: dep
+        run: |
+          brew update
+          brew install imlib2 libx11 libxft libexif giflib webp
+      - name: build
+        run: |
+          # libinotify-kqueue isn't available on homebrew
+          make clean && make -s CC=gcc OPT_DEP_DEFAULT=1 HAVE_INOTIFY=0
+          # force uninstallation with --ignore-dependencies
+          brew uninstall --ignore-dependencies libxft libexif giflib webp
+          make clean && make -s CC=gcc OPT_DEP_DEFAULT=0
