@@ -49,14 +49,14 @@ enum { DEF_WEBP_DELAY = 75 };
 
 static int calc_cache_size(void)
 {
-	int cache;
-	long pages, page_size;
+	long cache, pages = -1, page_size = -1;
 
 	if (CACHE_SIZE_MEM_PERCENTAGE <= 0)
 		return 0;
-
+#ifdef _SC_PHYS_PAGES /* _SC_PHYS_PAGES isn't POSIX */
 	pages = sysconf(_SC_PHYS_PAGES);
 	page_size = sysconf(_SC_PAGE_SIZE);
+#endif
 	if (pages < 0 || page_size < 0)
 		return CACHE_SIZE_FALLBACK;
 	cache = (pages/100) * CACHE_SIZE_MEM_PERCENTAGE;

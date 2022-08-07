@@ -56,6 +56,9 @@ static const bool ALPHA_LAYER = false;
  *   3 means use 3% of total memory which is about 245MiB on 8GiB machine.
  *   0 or less means disable cache.
  * 100 means use all available memory (but not above CACHE_SIZE_LIMIT).
+ *
+ * NOTE: higher cache size means better image reloading performance, but also
+ * higher memory usage.
  */
 static const int CACHE_SIZE_MEM_PERCENTAGE = 3;          /* use 3% of total memory for cache */
 static const int CACHE_SIZE_LIMIT = 256 * 1024 * 1024;   /* but not above 256MiB */
