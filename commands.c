@@ -83,15 +83,14 @@ bool cg_toggle_fullscreen(arg_t _)
 bool cg_toggle_bar(arg_t _)
 {
 	win_toggle_bar(&win);
-	if (mode == MODE_IMAGE) {
-		if (win.bar.h > 0)
-			open_info();
-		else
-			close_info();
+	if (mode == MODE_IMAGE)
 		img.checkpan = img.dirty = true;
-	} else {
+	else
 		tns.dirty = true;
-	}
+	if (win.bar.h > 0)
+		open_info();
+	else
+		close_info();
 	return true;
 }
 
