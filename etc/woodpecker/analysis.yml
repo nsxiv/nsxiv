@@ -18,7 +18,7 @@ pipeline:
           *.c
       }
       run_tidy() {
-        checks="$(sed '/^#/d' .woodpecker/clang-tidy-checks | paste -d ',' -s)"
+        checks="$(sed '/^#/d' etc/woodpecker/clang-tidy-checks | paste -d ',' -s)"
         clang-tidy --warnings-as-errors="*" --checks="$checks" --quiet *.c \
                    -- -std="$std" $(make OPT_DEP_DEFAULT="$1" dump_cppflags)
       }

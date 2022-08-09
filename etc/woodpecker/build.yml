@@ -14,7 +14,7 @@ pipeline:
       wget "https://github.com/TinyCC/tinycc/archive/$TCC_SHA.tar.gz" >/dev/null
       tar xzf "$TCC_SHA.tar.gz" >/dev/null
       ( cd "tinycc-$TCC_SHA" && ./configure --config-musl && make -s -j"$(nproc)" && make install; ) >/dev/null
-      CFLAGS="$(sed '/^#/d' .woodpecker/CFLAGS | paste -d ' ' -s)"
+      CFLAGS="$(sed '/^#/d' etc/woodpecker/CFLAGS | paste -d ' ' -s)"
       build () {
         for cc in "gcc" "clang" "tcc"; do
           echo "### $cc - $2 build ###"

@@ -66,7 +66,7 @@ install-all: install install-desktop install-icon
 install-desktop:
 	@echo "INSTALL nsxiv.desktop"
 	mkdir -p $(DESTDIR)$(PREFIX)/share/applications
-	cp nsxiv.desktop $(DESTDIR)$(PREFIX)/share/applications
+	cp etc/nsxiv.desktop $(DESTDIR)$(PREFIX)/share/applications
 
 install-icon:
 	@echo "INSTALL icon"
@@ -91,12 +91,12 @@ install: all
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/nsxiv
 	@echo "INSTALL nsxiv.1"
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s!EGPREFIX!$(EGPREFIX)!g; s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" nsxiv.1 \
-		>$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
+	sed "s!EGPREFIX!$(EGPREFIX)!g; s!PREFIX!$(PREFIX)!g; s!VERSION!$(VERSION)!g" \
+		etc/nsxiv.1 >$(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/nsxiv.1
 	@echo "INSTALL share/nsxiv/"
 	mkdir -p $(DESTDIR)$(EGPREFIX)
-	cp examples/* $(DESTDIR)$(EGPREFIX)
+	cp etc/examples/* $(DESTDIR)$(EGPREFIX)
 	chmod 755 $(DESTDIR)$(EGPREFIX)/*
 
 uninstall: uninstall-icon

@@ -23,7 +23,7 @@ Contribution Guideline
 When contributing, make sure:
 
   * Your contribution falls under nsxiv's scope and aim
-  * You follow the existing code style (see [.editorconfig](.editorconfig))
+  * You follow the existing code style (see [.editorconfig](../.editorconfig))
   * You open the pull request from a new branch, not from master
   * To avoid using force pushes, especially for bigger patches. Only use them
     when there's merge conflicts.
@@ -68,7 +68,7 @@ For releases, the process is the following:
     the commit message and tag description for the release commit to "Release
     version N". Make sure to use an annotated tag.
   * Update `VERSION` macro in `config.mk`.
-  * Update the changelog (`CHANGELOG.md`):
+  * Update the changelog (`etc/CHANGELOG.md`):
     * Include link to the release tarball and add the release date.
     * Document only the changes or fixes between releases. Don't document
       changes which never made it into a release.

@@ -21,7 +21,7 @@ jobs:
         ( cd "tinycc-$TCC_SHA" && ./configure && make && sudo make install; )
     - name: build
       run: |
-        CFLAGS="$(sed '/^#/d' .woodpecker/CFLAGS | paste -d ' ' -s)"
+        CFLAGS="$(sed '/^#/d' etc/woodpecker/CFLAGS | paste -d ' ' -s)"
         build () {
           for cc in "gcc" "clang" "tcc"; do
             echo "### $cc - $2 build ###"

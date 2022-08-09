@@ -15,10 +15,10 @@ under GPLv2 and aims to be easy to modify and customize.
 
 Please file a bug report if something does not work as documented or expected on
 [Codeberg] after making sure you are using the latest release.  Contributions
-are welcome, see [CONTRIBUTING.md] to get started.
+are welcome, see [CONTRIBUTING] to get started.
 
 [Codeberg]: https://codeberg.org/nsxiv/nsxiv/issues/new
-[CONTRIBUTING.md]: CONTRIBUTING.md#contribution-guideline
+[CONTRIBUTING]: etc/CONTRIBUTING.md#contribution-guideline
 
 
 Features
@@ -185,7 +185,7 @@ or by using Xresources as explained in the manual. If these options are not suff
 you may implement your own features by following
 [this guide](https://codeberg.org/nsxiv/nsxiv-extra/src/branch/master/CUSTOMIZATION.md).
 
-Due to our limited [project scope](CONTRIBUTING.md#project-scope), certain features or
+Due to our limited [project scope](etc/CONTRIBUTING.md#project-scope), certain features or
 customization cannot be merged into nsxiv mainline. Following the spirit of suckless
 software, we host the [nsxiv-extra](https://codeberg.org/nsxiv/nsxiv-extra) repo where users
 are free to submit whatever patches or scripts they wish.
@@ -206,7 +206,7 @@ on CodeBerg or get a copy using git with the following command:
 
     $ git clone https://codeberg.org/nsxiv/nsxiv.git
 
-You can view the changelog [here](CHANGELOG.md)
+You can view the changelog [here](etc/CHANGELOG.md)
 
 
 Similar projects
