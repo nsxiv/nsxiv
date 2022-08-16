@@ -132,105 +132,105 @@ void parse_options(int argc, char **argv)
 				assert(op.optarg != NULL);
 		}
 		switch (opt) {
-			case '?':
-				fprintf(stderr, "%s\n", op.errmsg);
-				print_usage();
-				exit(EXIT_FAILURE);
-			case 'A':
-				n = strtol(op.optarg, &end, 0);
-				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -A: %s", op.optarg);
-				_options.framerate = n;
-				/* fall through */
-			case 'a':
-				_options.animate = true;
-				break;
-			case 'b':
-				_options.hide_bar = true;
-				break;
-			case 'c':
-				_options.clean_cache = true;
-				break;
-			case 'e':
-				n = strtol(op.optarg, &end, 0);
-				if (*end != '\0')
-					error(EXIT_FAILURE, 0, "Invalid argument for option -e: %s", op.optarg);
-				_options.embed = n;
-				break;
-			case 'f':
-				_options.fullscreen = true;
-				break;
-			case 'G':
-				n = strtol(op.optarg, &end, 0);
-				if (*end != '\0')
-					error(EXIT_FAILURE, 0, "Invalid argument for option -G: %s", op.optarg);
-				_options.gamma = n;
-				break;
-			case 'g':
-				_options.geometry = op.optarg;
-				break;
-			case 'h':
-				print_usage();
-				exit(EXIT_SUCCESS);
-			case 'i':
-				_options.from_stdin = true;
-				break;
-			case 'n':
-				n = strtol(op.optarg, &end, 0);
-				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -n: %s", op.optarg);
-				_options.startnum = n - 1;
-				break;
-			case 'N':
-				_options.res_name = op.optarg;
-				break;
-			case 'o':
-				_options.to_stdout = true;
-				break;
-			case 'p':
-				_options.private_mode = true;
-				break;
-			case 'q':
-				_options.quiet = true;
-				break;
-			case 'r':
-				_options.recursive = true;
-				break;
-			case 'S':
-				n = strtof(op.optarg, &end) * 10;
-				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -S: %s", op.optarg);
-				_options.slideshow = n;
-				break;
-			case 's':
-				s = strchr(scalemodes, op.optarg[0]);
-				if (s == NULL || *s == '\0' || strlen(op.optarg) != 1)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -s: %s", op.optarg);
-				_options.scalemode = s - scalemodes;
-				break;
-			case 'T':
-				title_deprecation_notice(); /* TODO(v31): remove this option */
-				break;
-			case 't':
-				_options.thumb_mode = true;
-				break;
-			case 'v':
-				print_version();
-				exit(EXIT_SUCCESS);
-			case 'Z':
-				_options.scalemode = SCALE_ZOOM;
-				_options.zoom = 1.0f;
-				break;
-			case 'z':
-				n = strtol(op.optarg, &end, 0);
-				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -z: %s", op.optarg);
-				_options.scalemode = SCALE_ZOOM;
-				_options.zoom = (float) n / 100.0f;
-				break;
-			case '0':
-				_options.using_null = true;
-				break;
+		case '?':
+			fprintf(stderr, "%s\n", op.errmsg);
+			print_usage();
+			exit(EXIT_FAILURE);
+		case 'A':
+			n = strtol(op.optarg, &end, 0);
+			if (*end != '\0' || n <= 0)
+				error(EXIT_FAILURE, 0, "Invalid argument for option -A: %s", op.optarg);
+			_options.framerate = n;
+			/* fall through */
+		case 'a':
+			_options.animate = true;
+			break;
+		case 'b':
+			_options.hide_bar = true;
+			break;
+		case 'c':
+			_options.clean_cache = true;
+			break;
+		case 'e':
+			n = strtol(op.optarg, &end, 0);
+			if (*end != '\0')
+				error(EXIT_FAILURE, 0, "Invalid argument for option -e: %s", op.optarg);
+			_options.embed = n;
+			break;
+		case 'f':
+			_options.fullscreen = true;
+			break;
+		case 'G':
+			n = strtol(op.optarg, &end, 0);
+			if (*end != '\0')
+				error(EXIT_FAILURE, 0, "Invalid argument for option -G: %s", op.optarg);
+			_options.gamma = n;
+			break;
+		case 'g':
+			_options.geometry = op.optarg;
+			break;
+		case 'h':
+			print_usage();
+			exit(EXIT_SUCCESS);
+		case 'i':
+			_options.from_stdin = true;
+			break;
+		case 'n':
+			n = strtol(op.optarg, &end, 0);
+			if (*end != '\0' || n <= 0)
+				error(EXIT_FAILURE, 0, "Invalid argument for option -n: %s", op.optarg);
+			_options.startnum = n - 1;
+			break;
+		case 'N':
+			_options.res_name = op.optarg;
+			break;
+		case 'o':
+			_options.to_stdout = true;
+			break;
+		case 'p':
+			_options.private_mode = true;
+			break;
+		case 'q':
+			_options.quiet = true;
+			break;
+		case 'r':
+			_options.recursive = true;
+			break;
+		case 'S':
+			n = strtof(op.optarg, &end) * 10;
+			if (*end != '\0' || n <= 0)
+				error(EXIT_FAILURE, 0, "Invalid argument for option -S: %s", op.optarg);
+			_options.slideshow = n;
+			break;
+		case 's':
+			s = strchr(scalemodes, op.optarg[0]);
+			if (s == NULL || *s == '\0' || strlen(op.optarg) != 1)
+				error(EXIT_FAILURE, 0, "Invalid argument for option -s: %s", op.optarg);
+			_options.scalemode = s - scalemodes;
+			break;
+		case 'T':
+			title_deprecation_notice(); /* TODO(v31): remove this option */
+			break;
+		case 't':
+			_options.thumb_mode = true;
+			break;
+		case 'v':
+			print_version();
+			exit(EXIT_SUCCESS);
+		case 'Z':
+			_options.scalemode = SCALE_ZOOM;
+			_options.zoom = 1.0f;
+			break;
+		case 'z':
+			n = strtol(op.optarg, &end, 0);
+			if (*end != '\0' || n <= 0)
+				error(EXIT_FAILURE, 0, "Invalid argument for option -z: %s", op.optarg);
+			_options.scalemode = SCALE_ZOOM;
+			_options.zoom = (float) n / 100.0f;
+			break;
+		case '0':
+			_options.using_null = true;
+			break;
 		}
 	}
 

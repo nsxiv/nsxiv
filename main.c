@@ -753,56 +753,55 @@ static void run(void)
 			if (XEventsQueued(win.env.dpy, QueuedAlready) > 0) {
 				XPeekEvent(win.env.dpy, &nextev);
 				switch (ev.type) {
-					case ConfigureNotify:
-					case MotionNotify:
-						discard = ev.type == nextev.type;
-						break;
-					case KeyPress:
-						discard = (nextev.type == KeyPress || nextev.type == KeyRelease)
-						          && ev.xkey.keycode == nextev.xkey.keycode;
-						break;
+				case ConfigureNotify:
+				case MotionNotify:
+					discard = ev.type == nextev.type;
+					break;
+				case KeyPress:
+					discard = (nextev.type == KeyPress || nextev.type == KeyRelease)
+					          && ev.xkey.keycode == nextev.xkey.keycode;
+					break;
 				}
 			}
 		} while (discard);
 
-		switch (ev.type) {
-			/* handle events */
-			case ButtonPress:
-				on_buttonpress(&ev.xbutton);
-				break;
-			case ClientMessage:
-				if ((Atom) ev.xclient.data.l[0] == atoms[ATOM_WM_DELETE_WINDOW])
-					cg_quit(EXIT_SUCCESS);
-				break;
-			case DestroyNotify:
-				cg_quit(EXIT_FAILURE);
-				break;
-			case ConfigureNotify:
-				if (win_configure(&win, &ev.xconfigure)) {
-					if (mode == MODE_IMAGE) {
-						img.dirty = true;
-						img.checkpan = true;
-					} else {
-						tns.dirty = true;
-					}
-					if (!resized) {
-						redraw();
-						set_timeout(clear_resize, TO_REDRAW_RESIZE, false);
-						resized = true;
-					} else {
-						set_timeout(redraw, TO_REDRAW_RESIZE, false);
-					}
-				}
-				break;
-			case KeyPress:
-				on_keypress(&ev.xkey);
-				break;
-			case MotionNotify:
+		switch (ev.type) { /* handle events */
+		case ButtonPress:
+			on_buttonpress(&ev.xbutton);
+			break;
+		case ClientMessage:
+			if ((Atom) ev.xclient.data.l[0] == atoms[ATOM_WM_DELETE_WINDOW])
+				cg_quit(EXIT_SUCCESS);
+			break;
+		case DestroyNotify:
+			cg_quit(EXIT_FAILURE);
+			break;
+		case ConfigureNotify:
+			if (win_configure(&win, &ev.xconfigure)) {
 				if (mode == MODE_IMAGE) {
-					set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
-					reset_cursor();
+					img.dirty = true;
+					img.checkpan = true;
+				} else {
+					tns.dirty = true;
 				}
-				break;
+				if (!resized) {
+					redraw();
+					set_timeout(clear_resize, TO_REDRAW_RESIZE, false);
+					resized = true;
+				} else {
+					set_timeout(redraw, TO_REDRAW_RESIZE, false);
+				}
+			}
+			break;
+		case KeyPress:
+			on_keypress(&ev.xkey);
+			break;
+		case MotionNotify:
+			if (mode == MODE_IMAGE) {
+				set_timeout(reset_cursor, TO_CURSOR_HIDE, true);
+				reset_cursor();
+			}
+			break;
 		}
 	}
 }

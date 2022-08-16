@@ -111,27 +111,27 @@ void exif_auto_orientate(const fileinfo_t *file)
 	exif_data_unref(ed);
 
 	switch (orientation) {
-		case 5:
-			imlib_image_orientate(1);
-			/* fall through */
-		case 2:
-			imlib_image_flip_vertical();
-			break;
-		case 3:
-			imlib_image_orientate(2);
-			break;
-		case 7:
-			imlib_image_orientate(1);
-			/* fall through */
-		case 4:
-			imlib_image_flip_horizontal();
-			break;
-		case 6:
-			imlib_image_orientate(1);
-			break;
-		case 8:
-			imlib_image_orientate(3);
-			break;
+	case 5:
+		imlib_image_orientate(1);
+		/* fall through */
+	case 2:
+		imlib_image_flip_vertical();
+		break;
+	case 3:
+		imlib_image_orientate(2);
+		break;
+	case 7:
+		imlib_image_orientate(1);
+		/* fall through */
+	case 4:
+		imlib_image_flip_horizontal();
+		break;
+	case 6:
+		imlib_image_orientate(1);
+		break;
+	case 8:
+		imlib_image_orientate(3);
+		break;
 	}
 }
 #endif
@@ -531,18 +531,18 @@ static bool img_fit(img_t *img)
 	zh = (float) img->win->h / (float) img->h;
 
 	switch (img->scalemode) {
-		case SCALE_FILL:
-			z = MAX(zw, zh);
-			break;
-		case SCALE_WIDTH:
-			z = zw;
-			break;
-		case SCALE_HEIGHT:
-			z = zh;
-			break;
-		default:
-			z = MIN(zw, zh);
-			break;
+	case SCALE_FILL:
+		z = MAX(zw, zh);
+		break;
+	case SCALE_WIDTH:
+		z = zw;
+		break;
+	case SCALE_HEIGHT:
+		z = zh;
+		break;
+	default:
+		z = MIN(zw, zh);
+		break;
 	}
 	z = MIN(z, img->scalemode == SCALE_DOWN ? 1.0 : ZOOM_MAX);
 
@@ -741,14 +741,14 @@ bool img_pan(img_t *img, direction_t dir, int d)
 	}
 
 	switch (dir) {
-		case DIR_LEFT:
-			return img_move(img, x, 0.0);
-		case DIR_RIGHT:
-			return img_move(img, -x, 0.0);
-		case DIR_UP:
-			return img_move(img, 0.0, y);
-		case DIR_DOWN:
-			return img_move(img, 0.0, -y);
+	case DIR_LEFT:
+		return img_move(img, x, 0.0);
+	case DIR_RIGHT:
+		return img_move(img, -x, 0.0);
+	case DIR_UP:
+		return img_move(img, 0.0, y);
+	case DIR_DOWN:
+		return img_move(img, 0.0, -y);
 	}
 	return false;
 }
