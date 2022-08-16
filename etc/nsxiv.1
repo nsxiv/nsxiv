@@ -34,84 +34,84 @@ Please note, that the fullscreen mode requires an EWMH/NetWM-compliant window
 manager.
 .SH OPTIONS
 .TP
-.BI "\-A " FRAMERATE
+.BI "\-A, \-\-framerate " FRAMERATE
 Play animations with a constant frame rate set to
 .IR FRAMERATE .
 .TP
-.B \-a
+.B "\-a, \-\-animate"
 Play animations of multi-frame images.
 .TP
-.B \-b
+.B "\-b, \-\-no\-bar"
 Do not show statusbar at the bottom of the window.
 .TP
-.B \-c
+.B "\-c, \-\-clean\-cache"
 Remove all orphaned cache files from the thumbnail cache directory and exit.
 .TP
-.BI "\-e " WID
+.BI "\-e, \-\-embed " WID
 Embed nsxiv's window into window whose ID is
 .IR WID .
 .TP
-.B \-f
+.B "\-f, \-\-fullscreen"
 Start in fullscreen mode.
 .TP
-.BI "\-G " GAMMA
+.BI "\-G, \-\-gamma " GAMMA
 Set image gamma to GAMMA (\-32..32).
 .TP
-.BI "\-g " GEOMETRY
+.BI "\-g, \-\-geometry " GEOMETRY
 Set window position and size. See section GEOMETRY SPECIFICATIONS of X(7) for
 more information on GEOMETRY argument.
 .TP
-.BI "\-N " NAME
-Set the resource name of nsxiv's X window to NAME.
-.TP
-.BI "\-n " NUM
-Start at picture number NUM.
-.TP
-.B \-h
+.B "\-h, \-\-help"
 Print brief usage information to standard output and exit.
 .TP
-.B \-i
+.B "\-i, \-\-stdin"
 Read names of files to open from standard input. Also done if FILE is `-'.
 .TP
-.B \-o
+.BI "\-N, \-\-class " NAME
+Set the resource name (WM_CLASS) of nsxiv's X window to NAME.
+.TP
+.BI "\-n, \-\-start\-at " NUM
+Start at picture number NUM.
+.TP
+.B "\-o, \-\-stdout"
 Write list of all marked files to standard output when quitting. In combination
 with
-.B \-i
+.B "\-i, \-\-stdin"
 nsxiv can be used as a visual filter/pipe.
 .TP
-.B \-p
+.B "\-p, \-\-private"
 Enable private mode, in which nsxiv does not write any cache or temporary files.
 .TP
-.B \-q
+.B "\-q, \-\-quiet"
 Be quiet, and disable warnings to standard error stream.
 .TP
-.B \-r
+.B "\-r, \-\-recursive"
 Search the given directories recursively for images to view.
 .TP
-.BI "\-S " DELAY
+.BI "\-S, \-\-ss\-delay " DELAY
 Start in slideshow mode. Set the delay between images to
 .I DELAY
 seconds.
 .I DELAY
 may be a floating-point number.
 .TP
-.BI "\-s " MODE
+.BI "\-s, \-\-scale\-mode " MODE
 Set scale mode according to MODE character. Supported modes are: [d]own,
 [f]it, [F]ill, [w]idth, [h]eight.
 .TP
-.B \-t
+.B "\-t, \-\-thumbnail"
 Start in thumbnail mode.
 .TP
-.B \-v
+.B "\-v, \-\-version"
 Print version information to standard output and exit.
 .TP
-.B \-Z
+.B "\-Z, \-\-zoom\-100"
 The same as `\-z 100'.
 .TP
-.BI "\-z " ZOOM
+.BI "\-z, \-\-zoom " ZOOM
 Set zoom level to ZOOM percent.
 .TP
-.B \-0
+.B "\-0, \-\-null"
 Use NULL-separator. With this option, output of \-o and file-list sent to the
 key-handler and the input of \-i will be separated by a NULL character.
 .SH KEYBOARD COMMANDS

@@ -20,10 +20,19 @@
 #include "nsxiv.h"
 #include "version.h"
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#define OPTPARSE_IMPLEMENTATION
+#define OPTPARSE_API static
+#pragma GCC diagnostic push /* also works on clang */
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Wunused-function"
+#include "optparse.h"
+#pragma GCC diagnostic pop
 
 const opt_t *options;
 
@@ -54,12 +63,41 @@ static void print_version(void)
 
 void parse_options(int argc, char **argv)
 {
+	static const struct optparse_long longopts[] = {
+		{ "framerate",      'A', OPTPARSE_REQUIRED },
+		{ "animate",        'a', OPTPARSE_NONE },
+		{ "no-bar",         'b', OPTPARSE_NONE },
+		{ "clean-cache",    'c', OPTPARSE_NONE },
+		{ "embed",          'e', OPTPARSE_REQUIRED },
+		{ "fullscreen",     'f', OPTPARSE_NONE },
+		{ "gamma",          'G', OPTPARSE_REQUIRED },
+		{ "geometry",       'g', OPTPARSE_REQUIRED },
+		{ "help",           'h', OPTPARSE_NONE },
+		{ "stdin",          'i', OPTPARSE_NONE },
+		{ "class",          'N', OPTPARSE_REQUIRED },
+		{ "start-at",       'n', OPTPARSE_REQUIRED },
+		{ "stdout",         'o', OPTPARSE_NONE },
+		{ "private",        'p', OPTPARSE_NONE },
+		{ "quiet",          'q', OPTPARSE_NONE },
+		{ "recursive",      'r', OPTPARSE_NONE },
+		{ "ss-delay",       'S', OPTPARSE_REQUIRED },
+		{ "scale-mode",     's', OPTPARSE_REQUIRED },
+		{ NULL,             'T', OPTPARSE_REQUIRED },
+		{ "thumbnail",      't', OPTPARSE_NONE },
+		{ "version",        'v', OPTPARSE_NONE },
+		{ "zoom-100",       'Z', OPTPARSE_NONE },
+		{ "zoom",           'z', OPTPARSE_REQUIRED },
+		{ "null",           '0', OPTPARSE_NONE },
+		{ 0 }, /* end */
+	};
+
 	int n, opt;
 	char *end, *s;
-	const char *scalemodes = "dfFwh";
+	struct optparse op;
+	const char scalemodes[] = "dfFwh"; /* must be sorted according to scalemode_t */
 	static opt_t _options;
-	options = &_options;
 
+	options = &_options;
 	progname = strrchr(argv[0], '/');
 	progname = progname ? progname + 1 : argv[0];
 
@@ -87,15 +125,21 @@ void parse_options(int argc, char **argv)
 	_options.clean_cache = false;
 	_options.private_mode = false;
 
-	while ((opt = getopt(argc, argv, "A:abce:fG:g:hin:N:opqrS:s:T:tvZz:0")) != -1) {
+	optparse_init(&op, argv);
+	while ((opt = optparse_long(&op, longopts, NULL)) != -1) {
+		for (n = 0; n < (int)ARRLEN(longopts); ++n) { /* clang-tidy finds some non-sensical branch and thinks optarg == NULL is possible */
+			if (opt == longopts[n].shortname && longopts[n].argtype == OPTPARSE_REQUIRED)
+				assert(op.optarg != NULL);
+		}
 		switch (opt) {
 			case '?':
+				fprintf(stderr, "%s\n", op.errmsg);
 				print_usage();
 				exit(EXIT_FAILURE);
 			case 'A':
-				n = strtol(optarg, &end, 0);
+				n = strtol(op.optarg, &end, 0);
 				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -A: %s", optarg);
+					error(EXIT_FAILURE, 0, "Invalid argument for option -A: %s", op.optarg);
 				_options.framerate = n;
 				/* fall through */
 			case 'a':
@@ -108,22 +152,22 @@ void parse_options(int argc, char **argv)
 				_options.clean_cache = true;
 				break;
 			case 'e':
-				n = strtol(optarg, &end, 0);
+				n = strtol(op.optarg, &end, 0);
 				if (*end != '\0')
-					error(EXIT_FAILURE, 0, "Invalid argument for option -e: %s", optarg);
+					error(EXIT_FAILURE, 0, "Invalid argument for option -e: %s", op.optarg);
 				_options.embed = n;
 				break;
 			case 'f':
 				_options.fullscreen = true;
 				break;
 			case 'G':
-				n = strtol(optarg, &end, 0);
+				n = strtol(op.optarg, &end, 0);
 				if (*end != '\0')
-					error(EXIT_FAILURE, 0, "Invalid argument for option -G: %s", optarg);
+					error(EXIT_FAILURE, 0, "Invalid argument for option -G: %s", op.optarg);
 				_options.gamma = n;
 				break;
 			case 'g':
-				_options.geometry = optarg;
+				_options.geometry = op.optarg;
 				break;
 			case 'h':
 				print_usage();
@@ -132,13 +176,13 @@ void parse_options(int argc, char **argv)
 				_options.from_stdin = true;
 				break;
 			case 'n':
-				n = strtol(optarg, &end, 0);
+				n = strtol(op.optarg, &end, 0);
 				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -n: %s", optarg);
+					error(EXIT_FAILURE, 0, "Invalid argument for option -n: %s", op.optarg);
 				_options.startnum = n - 1;
 				break;
 			case 'N':
-				_options.res_name = optarg;
+				_options.res_name = op.optarg;
 				break;
 			case 'o':
 				_options.to_stdout = true;
@@ -153,15 +197,15 @@ void parse_options(int argc, char **argv)
 				_options.recursive = true;
 				break;
 			case 'S':
-				n = strtof(optarg, &end) * 10;
+				n = strtof(op.optarg, &end) * 10;
 				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -S: %s", optarg);
+					error(EXIT_FAILURE, 0, "Invalid argument for option -S: %s", op.optarg);
 				_options.slideshow = n;
 				break;
 			case 's':
-				s = strchr(scalemodes, optarg[0]);
-				if (s == NULL || *s == '\0' || strlen(optarg) != 1)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -s: %s", optarg);
+				s = strchr(scalemodes, op.optarg[0]);
+				if (s == NULL || *s == '\0' || strlen(op.optarg) != 1)
+					error(EXIT_FAILURE, 0, "Invalid argument for option -s: %s", op.optarg);
 				_options.scalemode = s - scalemodes;
 				break;
 			case 'T':
@@ -175,14 +219,14 @@ void parse_options(int argc, char **argv)
 				exit(EXIT_SUCCESS);
 			case 'Z':
 				_options.scalemode = SCALE_ZOOM;
-				_options.zoom = 1.0;
+				_options.zoom = 1.0f;
 				break;
 			case 'z':
-				n = strtol(optarg, &end, 0);
+				n = strtol(op.optarg, &end, 0);
 				if (*end != '\0' || n <= 0)
-					error(EXIT_FAILURE, 0, "Invalid argument for option -z: %s", optarg);
+					error(EXIT_FAILURE, 0, "Invalid argument for option -z: %s", op.optarg);
 				_options.scalemode = SCALE_ZOOM;
-				_options.zoom = (float) n / 100.0;
+				_options.zoom = (float) n / 100.0f;
 				break;
 			case '0':
 				_options.using_null = true;
@@ -190,8 +234,8 @@ void parse_options(int argc, char **argv)
 		}
 	}
 
-	_options.filenames = argv + optind;
-	_options.filecnt = argc - optind;
+	_options.filenames = argv + op.optind;
+	_options.filecnt = argc - op.optind;
 
 	if (_options.filecnt == 1 && STREQ(_options.filenames[0], "-")) {
 		_options.filenames++;
