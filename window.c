@@ -33,6 +33,7 @@
 
 #if HAVE_LIBFONTS
 #include "utf8.h"
+#define UTF8_PADDING 4  /* utf8_decode requires 4 bytes of zero padding */
 static XftFont *font;
 static double fontsize;
 #define TEXTWIDTH(win, text, len) \
@@ -112,7 +113,7 @@ void win_init(win_t *win)
 #if HAVE_LIBFONTS
 	const char *bar_fg, *bar_bg, *f;
 
-	static char lbuf[512 + 3], rbuf[64 + 3];
+	static char lbuf[512 + UTF8_PADDING], rbuf[64 + UTF8_PADDING];
 #endif
 
 	memset(win, 0, sizeof(win_t));
@@ -153,9 +154,8 @@ void win_init(win_t *win)
 
 	win->bar.l.buf = lbuf;
 	win->bar.r.buf = rbuf;
-	/* 3 padding bytes needed by utf8_decode */
-	win->bar.l.size = sizeof(lbuf) - 3;
-	win->bar.r.size = sizeof(rbuf) - 3;
+	win->bar.l.size = sizeof(lbuf) - UTF8_PADDING;
+	win->bar.r.size = sizeof(rbuf) - UTF8_PADDING;
 	win->bar.h = options->hide_bar ? 0 : barheight;
 	win->bar.top = TOP_STATUSBAR;
 #endif /* HAVE_LIBFONTS */
@@ -388,9 +388,7 @@ void win_toggle_bar(win_t *win)
 
 void win_clear(win_t *win)
 {
-	win_env_t *e;
-
-	e = &win->env;
+	win_env_t *e = &win->env;
 
 	if (win->w > win->buf.w || win->h + win->bar.h > win->buf.h) {
 		XFreePixmap(e->dpy, win->buf.pm);

@@ -51,12 +51,6 @@
 }
 
 typedef struct {
-	struct timeval when;
-	bool active;
-	timeout_f handler;
-} timeout_t;
-
-typedef struct {
 	int err;
 	char *cmd;
 } extcmd_t;
@@ -98,12 +92,16 @@ static struct {
 
 bool title_dirty;
 
-static timeout_t timeouts[] = {
-	{ { 0, 0 }, false, redraw       },
-	{ { 0, 0 }, false, reset_cursor },
-	{ { 0, 0 }, false, slideshow    },
-	{ { 0, 0 }, false, animate      },
-	{ { 0, 0 }, false, clear_resize },
+static struct {
+	timeout_f handler;
+	struct timeval when;
+	bool active;
+} timeouts[] = {
+	{ redraw       },
+	{ reset_cursor },
+	{ slideshow    },
+	{ animate      },
+	{ clear_resize },
 };
 
 /**************************
@@ -611,14 +609,12 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	/* drop user input events that occurred while running the key handler */
 	while (XCheckIfEvent(win.env.dpy, &dump, is_input_ev, NULL));
 
-	if (mode == MODE_IMAGE) {
-		if (changed) {
-			img_close(&img, true);
-			load_image(fileidx);
-		}
-	}
-	if (mode == MODE_THUMB || !changed)
+	if (mode == MODE_IMAGE && changed) {
+		img_close(&img, true);
+		load_image(fileidx);
+	} else {
 		open_info();
+	}
 	free(oldst);
 	reset_cursor();
 	return true;
@@ -633,7 +629,7 @@ static bool process_bindings(const keymap_t *bindings, unsigned int len, KeySym 
 	for (i = 0; i < len; i++) {
 		if (bindings[i].ksym_or_button == ksym_or_button &&
 		    MODMASK(bindings[i].mask | implicit_mod) == MODMASK(state) &&
-		    bindings[i].cmd.func &&
+		    bindings[i].cmd.func != NULL &&
 		    (bindings[i].cmd.mode == MODE_ALL || bindings[i].cmd.mode == mode))
 		{
 			if (bindings[i].cmd.func(bindings[i].arg))
