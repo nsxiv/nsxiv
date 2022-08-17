@@ -19,8 +19,11 @@
 
 #include "nsxiv.h"
 #include "version.h"
+#define INCLUDE_OPTIONS_CONFIG
+#include "config.h"
 
 #include <assert.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -63,31 +66,35 @@ static void print_version(void)
 
 void parse_options(int argc, char **argv)
 {
+	enum { /* ensure these can't be represented in a single byte */
+		OPT_AA = UCHAR_MAX + 1
+	};
 	static const struct optparse_long longopts[] = {
-		{ "framerate",      'A', OPTPARSE_REQUIRED },
-		{ "animate",        'a', OPTPARSE_NONE },
-		{ "no-bar",         'b', OPTPARSE_NONE },
-		{ "clean-cache",    'c', OPTPARSE_NONE },
-		{ "embed",          'e', OPTPARSE_REQUIRED },
-		{ "fullscreen",     'f', OPTPARSE_NONE },
-		{ "gamma",          'G', OPTPARSE_REQUIRED },
-		{ "geometry",       'g', OPTPARSE_REQUIRED },
-		{ "help",           'h', OPTPARSE_NONE },
-		{ "stdin",          'i', OPTPARSE_NONE },
-		{ "class",          'N', OPTPARSE_REQUIRED },
-		{ "start-at",       'n', OPTPARSE_REQUIRED },
-		{ "stdout",         'o', OPTPARSE_NONE },
-		{ "private",        'p', OPTPARSE_NONE },
-		{ "quiet",          'q', OPTPARSE_NONE },
-		{ "recursive",      'r', OPTPARSE_NONE },
-		{ "ss-delay",       'S', OPTPARSE_REQUIRED },
-		{ "scale-mode",     's', OPTPARSE_REQUIRED },
-		{ NULL,             'T', OPTPARSE_REQUIRED },
-		{ "thumbnail",      't', OPTPARSE_NONE },
-		{ "version",        'v', OPTPARSE_NONE },
-		{ "zoom-100",       'Z', OPTPARSE_NONE },
-		{ "zoom",           'z', OPTPARSE_REQUIRED },
-		{ "null",           '0', OPTPARSE_NONE },
+		{ "framerate",      'A',     OPTPARSE_REQUIRED },
+		{ "animate",        'a',     OPTPARSE_NONE },
+		{ "no-bar",         'b',     OPTPARSE_NONE },
+		{ "clean-cache",    'c',     OPTPARSE_NONE },
+		{ "embed",          'e',     OPTPARSE_REQUIRED },
+		{ "fullscreen",     'f',     OPTPARSE_NONE },
+		{ "gamma",          'G',     OPTPARSE_REQUIRED },
+		{ "geometry",       'g',     OPTPARSE_REQUIRED },
+		{ "help",           'h',     OPTPARSE_NONE },
+		{ "stdin",          'i',     OPTPARSE_NONE },
+		{ "class",          'N',     OPTPARSE_REQUIRED },
+		{ "start-at",       'n',     OPTPARSE_REQUIRED },
+		{ "stdout",         'o',     OPTPARSE_NONE },
+		{ "private",        'p',     OPTPARSE_NONE },
+		{ "quiet",          'q',     OPTPARSE_NONE },
+		{ "recursive",      'r',     OPTPARSE_NONE },
+		{ "ss-delay",       'S',     OPTPARSE_REQUIRED },
+		{ "scale-mode",     's',     OPTPARSE_REQUIRED },
+		{ NULL,             'T',     OPTPARSE_REQUIRED },
+		{ "thumbnail",      't',     OPTPARSE_NONE },
+		{ "version",        'v',     OPTPARSE_NONE },
+		{ "zoom-100",       'Z',     OPTPARSE_NONE },
+		{ "zoom",           'z',     OPTPARSE_REQUIRED },
+		{ "null",           '0',     OPTPARSE_NONE },
+		{ "anti-alias",    OPT_AA,   OPTPARSE_OPTIONAL },
 		{ 0 }, /* end */
 	};
 
@@ -106,6 +113,7 @@ void parse_options(int argc, char **argv)
 
 	_options.scalemode = SCALE_DOWN;
 	_options.zoom = 1.0;
+	_options.aa = ANTI_ALIAS;
 	_options.animate = false;
 	_options.gamma = 0;
 	_options.slideshow = 0;
@@ -232,6 +240,11 @@ void parse_options(int argc, char **argv)
 			break;
 		case '0':
 			_options.using_null = true;
+			break;
+		case OPT_AA:
+			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
+				error(EXIT_FAILURE, 0, "Invalid argument for option --anti-alias: %s", op.optarg);
+			_options.aa = op.optarg == NULL;
 			break;
 		}
 	}

@@ -80,7 +80,7 @@ void img_init(img_t *img, win_t *win)
 	img->zoom = MIN(img->zoom, ZOOM_MAX);
 	img->checkpan = false;
 	img->dirty = false;
-	img->aa = ANTI_ALIAS;
+	img->aa = options->aa;
 	img->alpha = ALPHA_LAYER;
 	img->multi.cap = img->multi.cnt = 0;
 	img->multi.animate = options->animate;

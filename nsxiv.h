@@ -237,6 +237,7 @@ struct opt {
 	scalemode_t scalemode;
 	float zoom;
 	bool animate;
+	bool aa;
 	int gamma;
 	int slideshow;
 	int framerate;
