@@ -129,13 +129,13 @@ references *above* can be found on the new main nsxiv repository on CodeBerg.
     performance in `config.h`. [#171]
   * Cli flag `-0` for sending null-seperated file-list to standard out (`-o`),
     and key-handler and receiving null-seperated file-list via stdin (`-i`).
-    [#68] [#141] [#164]
+    [#68],[#141],[#164]
   * Export environment variable `NSXIV_USING_NULL` to key-handler. [#164]
   * Embed new nsxiv icon. [#163]
-  * `make install-icon` to install icons. [#80] [#96]
-  * `make install-desktop` to install .desktop entry. [#80] [#96]
-  * `make install-all` to install everything. [#80] [#96]
-  * Configurable `KEYHANDLER_ABORT` in `config.h`. [#91] [#172]
+  * `make install-icon` to install icons. [#80],[#96]
+  * `make install-desktop` to install .desktop entry. [#80],[#96]
+  * `make install-all` to install everything. [#80],[#96]
+  * Configurable `KEYHANDLER_ABORT` in `config.h`. [#91],[#172]
   * Statusbar message upon key-handler activation. [#98]
   * Ability to write custom C functions in `config.h` and use them via
     keybindings. [#76]
@@ -151,7 +151,7 @@ references *above* can be found on the new main nsxiv repository on CodeBerg.
   * Removed non-POSIX commands and extensions from `Makefile`. [#71]
   * Regression where nsxiv wouldn't run on non-TrueColor X server. [#114]
   * Wrong comments in `config.h` and description in `manpage`.
-    [#105] [#106] [#152]
+    [#105],[#106],[#152]
 
 [#20]: https://codeberg.org/nsxiv/nsxiv-record/pulls/20
 [#68]: https://codeberg.org/nsxiv/nsxiv-record/pulls/68

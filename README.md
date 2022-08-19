@@ -154,9 +154,13 @@ the following command:
 Usage
 -----
 
-Refer to the man page for the documentation:
+Refer to the man-page for the documentation:
 
     $ man nsxiv
+
+You may also view the man-page [online](https://nsxiv.codeberg.page/man/).
+However, note that the online man-page might not accurately represent your local
+copy.
 
 
 F.A.Q.
@@ -218,9 +222,9 @@ viewers to try out.
 
 Below are a couple other lesser known projects not listed in suckless rocks.
 
-* [MAGE](https://github.com/explosion-mental/mage):
+* [MAGE](https://codeberg.org/explosion-mental/mage):
   A smaller/more-suckless version of sxiv.
-* [div](https://github.com/TAAPArthur/div):
+* [div](https://codeberg.org/TAAPArthur/div):
   Minimal and extensive, aimed at C devs willing to build their own features.
 * [mpv-image-viewer](https://github.com/occivink/mpv-image-viewer):
   Lua script to turn mpv into an image viewer. Supports thumbnails via
