@@ -113,7 +113,7 @@ void parse_options(int argc, char **argv)
 
 	_options.scalemode = SCALE_DOWN;
 	_options.zoom = 1.0;
-	_options.aa = ANTI_ALIAS;
+	_options.anti_alias = ANTI_ALIAS;
 	_options.animate = false;
 	_options.gamma = 0;
 	_options.slideshow = 0;
@@ -244,7 +244,7 @@ void parse_options(int argc, char **argv)
 		case OPT_AA:
 			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
 				error(EXIT_FAILURE, 0, "Invalid argument for option --anti-alias: %s", op.optarg);
-			_options.aa = op.optarg == NULL;
+			_options.anti_alias = op.optarg == NULL;
 			break;
 		}
 	}

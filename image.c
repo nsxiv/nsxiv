@@ -80,7 +80,7 @@ void img_init(img_t *img, win_t *win)
 	img->zoom = MIN(img->zoom, ZOOM_MAX);
 	img->checkpan = false;
 	img->dirty = false;
-	img->aa = options->aa;
+	img->anti_alias = options->anti_alias;
 	img->alpha = ALPHA_LAYER;
 	img->multi.cap = img->multi.cnt = 0;
 	img->multi.animate = options->animate;
@@ -603,7 +603,7 @@ void img_render(img_t *img)
 	win_clear(win);
 
 	imlib_context_set_image(img->im);
-	imlib_context_set_anti_alias(img->aa);
+	imlib_context_set_anti_alias(img->anti_alias);
 	imlib_context_set_drawable(win->buf.pm);
 
 	/* manual blending, for performance reasons.
@@ -844,9 +844,9 @@ void img_flip(img_t *img, flipdir_t d)
 
 void img_toggle_antialias(img_t *img)
 {
-	img->aa = !img->aa;
+	img->anti_alias = !img->anti_alias;
 	imlib_context_set_image(img->im);
-	imlib_context_set_anti_alias(img->aa);
+	imlib_context_set_anti_alias(img->anti_alias);
 	img->dirty = true;
 }
 

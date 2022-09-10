@@ -187,7 +187,7 @@ struct img {
 
 	bool checkpan;
 	bool dirty;
-	bool aa;
+	bool anti_alias;
 	bool alpha;
 
 	struct {
@@ -237,7 +237,7 @@ struct opt {
 	scalemode_t scalemode;
 	float zoom;
 	bool animate;
-	bool aa;
+	bool anti_alias;
 	int gamma;
 	int slideshow;
 	int framerate;
