@@ -98,7 +98,8 @@ void parse_options(int argc, char **argv)
 		{ 0 }, /* end */
 	};
 
-	int n, opt;
+	long n, opt;
+	float f;
 	char *end, *s;
 	struct optparse op;
 	const char scalemodes[] = "dfFwh"; /* must be sorted according to scalemode_t */
@@ -148,7 +149,7 @@ void parse_options(int argc, char **argv)
 			exit(EXIT_FAILURE);
 		case 'A':
 			n = strtol(op.optarg, &end, 0);
-			if (*end != '\0' || n <= 0)
+			if (*end != '\0' || n <= 0 || n > INT_MAX)
 				error(EXIT_FAILURE, 0, "Invalid argument for option -A: %s", op.optarg);
 			_options.framerate = n;
 			/* fall through */
@@ -172,7 +173,7 @@ void parse_options(int argc, char **argv)
 			break;
 		case 'G':
 			n = strtol(op.optarg, &end, 0);
-			if (*end != '\0')
+			if (*end != '\0' || n < INT_MIN || n > INT_MAX)
 				error(EXIT_FAILURE, 0, "Invalid argument for option -G: %s", op.optarg);
 			_options.gamma = n;
 			break;
@@ -187,7 +188,7 @@ void parse_options(int argc, char **argv)
 			break;
 		case 'n':
 			n = strtol(op.optarg, &end, 0);
-			if (*end != '\0' || n <= 0)
+			if (*end != '\0' || n <= 0 || n > INT_MAX)
 				error(EXIT_FAILURE, 0, "Invalid argument for option -n: %s", op.optarg);
 			_options.startnum = n - 1;
 			break;
@@ -207,10 +208,10 @@ void parse_options(int argc, char **argv)
 			_options.recursive = true;
 			break;
 		case 'S':
-			n = strtof(op.optarg, &end) * 10;
-			if (*end != '\0' || n <= 0)
+			f = strtof(op.optarg, &end) * 10.0f;
+			if (*end != '\0' || f <= 0 || f >= (float)UINT_MAX)
 				error(EXIT_FAILURE, 0, "Invalid argument for option -S: %s", op.optarg);
-			_options.slideshow = n;
+			_options.slideshow = (unsigned int)f;
 			break;
 		case 's':
 			s = strchr(scalemodes, op.optarg[0]);

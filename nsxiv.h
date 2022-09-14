@@ -239,7 +239,7 @@ struct opt {
 	bool animate;
 	bool anti_alias;
 	int gamma;
-	int slideshow;
+	unsigned int slideshow;
 	int framerate;
 
 	/* window: */
