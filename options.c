@@ -150,7 +150,7 @@ void parse_options(int argc, char **argv)
 		case 'A':
 			n = strtol(op.optarg, &end, 0);
 			if (*end != '\0' || n <= 0 || n > INT_MAX)
-				error(EXIT_FAILURE, 0, "Invalid argument for option -A: %s", op.optarg);
+				error(EXIT_FAILURE, 0, "Invalid framerate: %s", op.optarg);
 			_options.framerate = n;
 			/* fall through */
 		case 'a':
@@ -165,7 +165,7 @@ void parse_options(int argc, char **argv)
 		case 'e':
 			n = strtol(op.optarg, &end, 0);
 			if (*end != '\0')
-				error(EXIT_FAILURE, 0, "Invalid argument for option -e: %s", op.optarg);
+				error(EXIT_FAILURE, 0, "Invalid window id: %s", op.optarg);
 			_options.embed = n;
 			break;
 		case 'f':
@@ -174,7 +174,7 @@ void parse_options(int argc, char **argv)
 		case 'G':
 			n = strtol(op.optarg, &end, 0);
 			if (*end != '\0' || n < INT_MIN || n > INT_MAX)
-				error(EXIT_FAILURE, 0, "Invalid argument for option -G: %s", op.optarg);
+				error(EXIT_FAILURE, 0, "Invalid gamma: %s", op.optarg);
 			_options.gamma = n;
 			break;
 		case 'g':
@@ -189,7 +189,7 @@ void parse_options(int argc, char **argv)
 		case 'n':
 			n = strtol(op.optarg, &end, 0);
 			if (*end != '\0' || n <= 0 || n > INT_MAX)
-				error(EXIT_FAILURE, 0, "Invalid argument for option -n: %s", op.optarg);
+				error(EXIT_FAILURE, 0, "Invalid starting number: %s", op.optarg);
 			_options.startnum = n - 1;
 			break;
 		case 'N':
@@ -210,13 +210,13 @@ void parse_options(int argc, char **argv)
 		case 'S':
 			f = strtof(op.optarg, &end) * 10.0f;
 			if (*end != '\0' || f <= 0 || f >= (float)UINT_MAX)
-				error(EXIT_FAILURE, 0, "Invalid argument for option -S: %s", op.optarg);
+				error(EXIT_FAILURE, 0, "Invalid slideshow delay: %s", op.optarg);
 			_options.slideshow = (unsigned int)f;
 			break;
 		case 's':
 			s = strchr(scalemodes, op.optarg[0]);
 			if (s == NULL || *s == '\0' || strlen(op.optarg) != 1)
-				error(EXIT_FAILURE, 0, "Invalid argument for option -s: %s", op.optarg);
+				error(EXIT_FAILURE, 0, "Invalid scale mode: %s", op.optarg);
 			_options.scalemode = s - scalemodes;
 			break;
 		case 'T':
@@ -235,7 +235,7 @@ void parse_options(int argc, char **argv)
 		case 'z':
 			n = strtol(op.optarg, &end, 0);
 			if (*end != '\0' || n <= 0)
-				error(EXIT_FAILURE, 0, "Invalid argument for option -z: %s", op.optarg);
+				error(EXIT_FAILURE, 0, "Invalid zoom level: %s", op.optarg);
 			_options.scalemode = SCALE_ZOOM;
 			_options.zoom = (float) n / 100.0f;
 			break;
