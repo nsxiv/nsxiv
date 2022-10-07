@@ -10,18 +10,20 @@ pipeline:
       apk add --no-cache \
           imlib2 imlib2-dev xorgproto \
           libxft libxft-dev libexif libexif-dev giflib giflib-dev libwebp libwebp-dev \
-          gcc clang llvm llvm-dev build-base wget ca-certificates >/dev/null
+          gcc clang llvm llvm-dev build-base wget ca-certificates bc >/dev/null
       wget "https://github.com/TinyCC/tinycc/archive/$TCC_SHA.tar.gz" >/dev/null
       tar xzf "$TCC_SHA.tar.gz" >/dev/null
       ( cd "tinycc-$TCC_SHA" && ./configure --config-musl && make -s -j"$(nproc)" && make install; ) >/dev/null
       CFLAGS="$(sed '/^#/d' etc/woodpecker/CFLAGS | paste -d ' ' -s)"
       build () {
-        for cc in "gcc" "clang" "tcc"; do
+        for cc in "gcc" "clang"; do
           echo "### $cc - $2 build ###"
           make clean && make -s -j"$(nproc)" CC="$cc" CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT="$1"
         done
       }
-      # full-build #
+      # try all combination with tcc #
+      etc/woodpecker/try-all-builds.sh
+      # full-build with gcc and clang #
       build "1" "full"
       # ensure minimal-build works without opt deps installed
       apk del libxft libxft-dev libexif libexif-dev giflib giflib-dev libwebp libwebp-dev >/dev/null

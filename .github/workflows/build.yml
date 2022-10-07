@@ -15,20 +15,22 @@ jobs:
         sudo apt-get update
         sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
                              libxft2 libxft-dev libexif12 libexif-dev \
-                             gcc clang git
+                             gcc clang git bc
         TCC_SHA="027b8fb9b88fe137447fb8bb1b61079be9702472"
         wget "https://github.com/TinyCC/tinycc/archive/${TCC_SHA}.tar.gz" && tar xzf "${TCC_SHA}.tar.gz"
-        ( cd "tinycc-$TCC_SHA" && ./configure && make && sudo make install; )
+        ( cd "tinycc-$TCC_SHA" && ./configure && make -j"$(nproc)" && sudo make install; )
     - name: build
       run: |
         CFLAGS="$(sed '/^#/d' etc/woodpecker/CFLAGS | paste -d ' ' -s)"
         build () {
-          for cc in "gcc" "clang" "tcc"; do
+          for cc in "gcc" "clang"; do
             echo "### $cc - $2 build ###"
             make clean && make -s -j"$(nproc)" CC="$cc" CFLAGS="$CFLAGS" LDFLAGS="$CFLAGS" OPT_DEP_DEFAULT="$1"
           done
         }
-        # full-build #
+        # try all combination with tcc #
+        etc/woodpecker/try-all-builds.sh
+        # full-build with gcc and clang #
         build "1" "full"
         # ensure minimal-build works without opt deps installed
         sudo apt-get remove libxft2 libxft-dev libexif12 libexif-dev >/dev/null
