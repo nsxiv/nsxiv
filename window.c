@@ -34,14 +34,11 @@
 #if HAVE_LIBFONTS
 #include "utf8.h"
 #define UTF8_PADDING 4  /* utf8_decode requires 4 bytes of zero padding */
-static XftFont *font;
-static double fontsize;
 #define TEXTWIDTH(win, text, len) \
 	win_draw_text(win, NULL, NULL, 0, 0, text, len, 0)
 #endif
 
 #define RES_CLASS "Nsxiv"
-
 #define INIT_ATOM_(atom) \
 	atoms[ATOM_##atom] = XInternAtom(e->dpy, #atom, False);
 
@@ -50,6 +47,10 @@ enum {
 	V_TEXT_PAD = 1
 };
 
+Atom atoms[ATOM_COUNT];
+
+static GC gc;
+static int barheight;
 static struct {
 	int name;
 	Cursor icon;
@@ -58,11 +59,10 @@ static struct {
 	{ XC_sb_left_arrow }, { XC_sb_right_arrow }
 };
 
-static GC gc;
-
-static int barheight;
-
-Atom atoms[ATOM_COUNT];
+#if HAVE_LIBFONTS
+static XftFont *font;
+static double fontsize;
+#endif
 
 #if HAVE_LIBFONTS
 static void win_init_font(const win_env_t *e, const char *fontstr)
@@ -116,7 +116,7 @@ void win_init(win_t *win)
 	static char lbuf[512 + UTF8_PADDING], rbuf[64 + UTF8_PADDING];
 #endif
 
-	memset(win, 0, sizeof(win_t));
+	memset(win, 0, sizeof(*win));
 
 	e = &win->env;
 	if ((e->dpy = XOpenDisplay(NULL)) == NULL)

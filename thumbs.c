@@ -145,7 +145,7 @@ void tns_init(tns_t *tns, fileinfo_t *tns_files, const int *cnt, int *sel, win_t
 	const char *homedir, *dsuffix = "";
 
 	if (cnt != NULL && *cnt > 0)
-		tns->thumbs = ecalloc(*cnt, sizeof(thumb_t));
+		tns->thumbs = ecalloc(*cnt, sizeof(*tns->thumbs));
 	else
 		tns->thumbs = NULL;
 	tns->files = tns_files;

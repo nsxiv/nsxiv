@@ -97,7 +97,7 @@ int r_opendir(r_dir_t *rdir, const char *dirname, bool recursive)
 	}
 
 	rdir->stcap = 512;
-	rdir->stack = emalloc(rdir->stcap * sizeof(char*));
+	rdir->stack = emalloc(rdir->stcap * sizeof(*rdir->stack));
 	rdir->stlen = 0;
 
 	rdir->name = (char*) dirname;
@@ -164,7 +164,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 				if (rdir->stlen == rdir->stcap) {
 					rdir->stcap *= 2;
 					rdir->stack = erealloc(rdir->stack,
-					                       rdir->stcap * sizeof(char*));
+					                       rdir->stcap * sizeof(*rdir->stack));
 				}
 				rdir->stack[rdir->stlen++] = filename;
 				continue;

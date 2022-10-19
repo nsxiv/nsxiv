@@ -62,17 +62,16 @@ tns_t tns;
 win_t win;
 
 appmode_t mode;
-const XButtonEvent *xbutton_ev;
-
 fileinfo_t *files;
 int filecnt, fileidx;
 int alternate;
 int markcnt;
 int markidx;
-
 int prefix;
-static bool extprefix;
+bool title_dirty;
+const XButtonEvent *xbutton_ev;
 
+static bool extprefix;
 static bool resized = false;
 
 static struct {
@@ -90,8 +89,6 @@ static struct {
 	extcmd_t f;
 } wintitle;
 
-bool title_dirty;
-
 static struct {
 	timeout_f handler;
 	struct timeval when;
@@ -104,9 +101,10 @@ static struct {
 	{ clear_resize },
 };
 
-/**************************
-  function implementations
- **************************/
+/*
+ * function implementations
+ */
+
 static void cleanup(void)
 {
 	img_close(&img, false);
@@ -891,7 +889,7 @@ int main(int argc, char *argv[])
 			}
 			r_closedir(&dir);
 			if (fileidx - start > 1)
-				qsort(files + start, fileidx - start, sizeof(fileinfo_t), fncmp);
+				qsort(files + start, fileidx - start, sizeof(*files), fncmp);
 		}
 	}
 

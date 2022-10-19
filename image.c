@@ -23,6 +23,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -92,7 +93,7 @@ void img_init(img_t *img, win_t *win)
 	img_change_gamma(img, options->gamma);
 
 	img->ss.on = options->slideshow > 0;
-	img->ss.delay = options->slideshow > 0 ? options->slideshow : SLIDESHOW_DELAY * 10;
+	img->ss.delay = options->slideshow > 0 ? options->slideshow : SLIDESHOW_DELAY * 10u;
 }
 
 #if HAVE_LIBEXIF
@@ -160,8 +161,8 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 	GifRowType *rows = NULL;
 	GifRecordType rec;
 	ColorMapObject *cmap;
-	DATA32 bgpixel = 0, *data, *ptr;
-	DATA32 *prev_frame = NULL;
+	uint32_t bgpixel = 0, *data, *ptr;
+	uint32_t *prev_frame = NULL;
 	Imlib_Image im;
 	int i, j, bg, r, g, b;
 	int x, y, w, h, sw, sh;
@@ -172,13 +173,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 	unsigned int disposal = 0, prev_disposal = 0;
 	unsigned int delay = 0;
 	bool err = false;
-
-	if (img->multi.cap == 0) {
-		img->multi.cap = 8;
-		img->multi.frames = emalloc(img->multi.cap * sizeof(img_frame_t));
-	}
-	img->multi.cnt = img->multi.sel = 0;
-	img->multi.length = 0;
+	multi_img_t *m = &img->multi;
 
 #if defined(GIFLIB_MAJOR) && GIFLIB_MAJOR >= 5
 	gif = DGifOpenFileName(file->path, NULL);
@@ -194,6 +189,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 	sh = gif->SHeight;
 	px = py = pw = ph = 0;
 
+	m->length = m->cnt = m->sel = 0;
 	do {
 		if (DGifGetRecordType(gif, &rec) == GIF_ERROR) {
 			err = true;
@@ -227,9 +223,9 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 			w = gif->Image.Width;
 			h = gif->Image.Height;
 
-			rows = emalloc(h * sizeof(GifRowType));
+			rows = emalloc(h * sizeof(*rows));
 			for (i = 0; i < h; i++)
-				rows[i] = emalloc(w * sizeof(GifPixelType));
+				rows[i] = emalloc(w * sizeof(*rows[i]));
 			if (gif->Image.Interlace) {
 				for (i = 0; i < 4; i++) {
 					for (j = intoffset[i]; j < h; j += intjump[i])
@@ -240,7 +236,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 					DGifGetLine(gif, rows[i], w);
 			}
 
-			ptr = data = emalloc(sw * sh * sizeof(DATA32));
+			ptr = data = emalloc(sw * sh * sizeof(*data));
 			cmap = gif->Image.ColorMap ? gif->Image.ColorMap : gif->SColorMap;
 			/* if bg > cmap->ColorCount, it is transparent black already */
 			if (cmap && bg >= 0 && bg < cmap->ColorCount) {
@@ -295,16 +291,16 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 			prev_disposal = disposal;
 			px = x, py = y, pw = w, ph = h;
 
-			if (img->multi.cnt == img->multi.cap) {
-				img->multi.cap *= 2;
-				img->multi.frames = erealloc(img->multi.frames,
-				                             img->multi.cap * sizeof(img_frame_t));
+			assert(m->cnt <= m->cap);
+			if (m->cnt == m->cap) {
+				m->cap = m->cap == 0 ? 16 : (m->cap * 2);
+				m->frames = erealloc(m->frames, m->cap * sizeof(*m->frames));
 			}
-			img->multi.frames[img->multi.cnt].im = im;
-			delay = img->multi.framedelay > 0 ? img->multi.framedelay : delay;
-			img->multi.frames[img->multi.cnt].delay = delay > 0 ? delay : DEF_GIF_DELAY;
-			img->multi.length += img->multi.frames[img->multi.cnt].delay;
-			img->multi.cnt++;
+			m->frames[m->cnt].im = im;
+			delay = m->framedelay > 0 ? m->framedelay : delay;
+			m->frames[m->cnt].delay = delay > 0 ? delay : DEF_GIF_DELAY;
+			m->length += m->frames[m->cnt].delay;
+			m->cnt++;
 		}
 	} while (rec != TERMINATE_RECORD_TYPE);
 
@@ -340,6 +336,7 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	unsigned long flags;
 	unsigned int delay;
 	bool err = false;
+	multi_img_t *m = &img->multi;
 
 	if ((webp_file = fopen(file->path, "rb")) == NULL) {
 		error(0, errno, "%s: Error opening webp image", file->name);
@@ -375,28 +372,27 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	img->w = WebPDemuxGetI(demux, WEBP_FF_CANVAS_WIDTH);
 	img->h = WebPDemuxGetI(demux, WEBP_FF_CANVAS_HEIGHT);
 
-	if (info.frame_count > img->multi.cap) {
-		img->multi.cap = info.frame_count;
-		img->multi.frames = erealloc(img->multi.frames,
-		                             img->multi.cap * sizeof(img_frame_t));
+	if (info.frame_count > m->cap) {
+		m->cap = info.frame_count;
+		m->frames = erealloc(m->frames, m->cap * sizeof(*m->frames));
 	}
 
 	/* Load and decode frames (also works on images with only 1 frame) */
-	img->multi.cnt = img->multi.sel = 0;
+	m->cnt = m->sel = 0;
 	while (WebPAnimDecoderGetNext(dec, &buf, &ts)) {
 		im = imlib_create_image_using_copied_data(
-		     info.canvas_width, info.canvas_height, (DATA32*)buf);
+		     info.canvas_width, info.canvas_height, (uint32_t *)buf);
 		imlib_context_set_image(im);
 		imlib_image_set_format("webp");
 		/* Get an iterator of this frame - used for frame info (duration, etc.) */
-		WebPDemuxGetFrame(demux, img->multi.cnt+1, &iter);
+		WebPDemuxGetFrame(demux, m->cnt+1, &iter);
 		imlib_image_set_has_alpha((flags & ALPHA_FLAG) == ALPHA_FLAG);
 		/* Store info for this frame */
-		img->multi.frames[img->multi.cnt].im = im;
+		m->frames[m->cnt].im = im;
 		delay = iter.duration > 0 ? iter.duration : DEF_WEBP_DELAY;
-		img->multi.frames[img->multi.cnt].delay = delay;
-		img->multi.length += img->multi.frames[img->multi.cnt].delay;
-		img->multi.cnt++;
+		m->frames[m->cnt].delay = delay;
+		m->length += m->frames[m->cnt].delay;
+		m->cnt++;
 	}
 	WebPDemuxReleaseIterator(&iter);
 
@@ -619,8 +615,8 @@ void img_render(img_t *img)
 
 		if (img->alpha) {
 			int i, c, r;
-			DATA32 col[2] = { 0xFF666666, 0xFF999999 };
-			DATA32 * data = imlib_image_get_data();
+			uint32_t col[2] = { 0xFF666666, 0xFF999999 };
+			uint32_t *data = imlib_image_get_data();
 
 			for (r = 0; r < dh; r++) {
 				i = r * dw;
