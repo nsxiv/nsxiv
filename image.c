@@ -378,7 +378,7 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	}
 
 	/* Load and decode frames (also works on images with only 1 frame) */
-	m->cnt = m->sel = 0;
+	m->length = m->cnt = m->sel = 0;
 	while (WebPAnimDecoderGetNext(dec, &buf, &ts)) {
 		im = imlib_create_image_using_copied_data(
 		     info.canvas_width, info.canvas_height, (uint32_t *)buf);
