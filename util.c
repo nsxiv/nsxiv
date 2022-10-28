@@ -268,7 +268,7 @@ pid_t spawn(int *readfd, int *writefd, char *const argv[])
 	if (writefd != NULL && mkspawn_pipe(&fa, cmd, pfd_write, 0) < 0)
 		goto err_close_readfd;
 
-	if ((err = posix_spawn(&pid, cmd, &fa, NULL, argv, environ)) != 0) {
+	if ((err = posix_spawnp(&pid, cmd, &fa, NULL, argv, environ)) != 0) {
 		error(0, err, "spawn: %s", cmd);
 	} else {
 		if (readfd != NULL)
