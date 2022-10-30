@@ -121,7 +121,12 @@ static bool xgetline(char **lineptr, size_t *n)
 	return len > 0;
 }
 
-static void check_add_file(char *filename, bool given)
+static int fncmp(const void *a, const void *b)
+{
+	return strcoll(((fileinfo_t *)a)->name, ((fileinfo_t *)b)->name);
+}
+
+static void check_add_file(const char *filename, bool given)
 {
 	char *path;
 
@@ -147,6 +152,35 @@ static void check_add_file(char *filename, bool given)
 	if (given)
 		files[fileidx].flags |= FF_WARN;
 	fileidx++;
+}
+
+static void add_entry(const char *entry_name)
+{
+	int start;
+	char *filename;
+	struct stat fstats;
+	r_dir_t dir;
+
+	if (stat(entry_name, &fstats) < 0) {
+		error(0, errno, "%s", entry_name);
+		return;
+	}
+	if (!S_ISDIR(fstats.st_mode)) {
+		check_add_file(entry_name, true);
+	} else {
+		if (r_opendir(&dir, entry_name, options->recursive) < 0) {
+			error(0, errno, "%s", entry_name);
+			return;
+		}
+		start = fileidx;
+		while ((filename = r_readdir(&dir, true)) != NULL) {
+			check_add_file(filename, false);
+			free(filename);
+		}
+		r_closedir(&dir);
+		if (fileidx - start > 1)
+			qsort(files + start, fileidx - start, sizeof(*files), fncmp);
+	}
 }
 
 void remove_file(int n, bool manual)
@@ -804,11 +838,6 @@ static void run(void)
 	}
 }
 
-static int fncmp(const void *a, const void *b)
-{
-	return strcoll(((fileinfo_t*) a)->name, ((fileinfo_t*) b)->name);
-}
-
 static void sigchld(int sig)
 {
 	while (waitpid(-1, NULL, WNOHANG) > 0);
@@ -827,12 +856,9 @@ static void setup_signal(int sig, void (*handler)(int sig))
 
 int main(int argc, char *argv[])
 {
-	int i, start;
+	int i;
 	size_t n;
-	char *filename;
 	const char *homedir, *dsuffix = "";
-	struct stat fstats;
-	r_dir_t dir;
 
 	setup_signal(SIGCHLD, sigchld);
 	setup_signal(SIGPIPE, SIG_IGN);
@@ -861,37 +887,15 @@ int main(int argc, char *argv[])
 	fileidx = 0;
 
 	if (options->from_stdin) {
+		char *filename = NULL;
 		n = 0;
-		filename = NULL;
 		while (xgetline(&filename, &n))
-			check_add_file(filename, true);
+			add_entry(filename);
 		free(filename);
 	}
 
-	for (i = 0; i < options->filecnt; i++) {
-		filename = options->filenames[i];
-
-		if (stat(filename, &fstats) < 0) {
-			error(0, errno, "%s", filename);
-			continue;
-		}
-		if (!S_ISDIR(fstats.st_mode)) {
-			check_add_file(filename, true);
-		} else {
-			if (r_opendir(&dir, filename, options->recursive) < 0) {
-				error(0, errno, "%s", filename);
-				continue;
-			}
-			start = fileidx;
-			while ((filename = r_readdir(&dir, true)) != NULL) {
-				check_add_file(filename, false);
-				free((void*) filename);
-			}
-			r_closedir(&dir);
-			if (fileidx - start > 1)
-				qsort(files + start, fileidx - start, sizeof(*files), fncmp);
-		}
-	}
+	for (i = 0; i < options->filecnt; i++)
+		add_entry(options->filenames[i]);
 
 	if (fileidx == 0)
 		error(EXIT_FAILURE, 0, "No valid image file given, aborting");
