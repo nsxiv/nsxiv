@@ -31,6 +31,20 @@ extern img_t img;
 extern tns_t tns;
 extern win_t win;
 
+static bool navigate_to(arg_t n)
+{
+	if (n >= 0 && n < filecnt && n != fileidx) {
+		if (mode == MODE_IMAGE) {
+			load_image(n);
+		} else if (mode == MODE_THUMB) {
+			fileidx = n;
+			tns.dirty = true;
+		}
+		return true;
+	}
+	return false;
+}
+
 bool cg_quit(arg_t status)
 {
 	unsigned int i;
@@ -126,32 +140,13 @@ bool cg_remove_image(arg_t _)
 
 bool cg_first(arg_t _)
 {
-	if (mode == MODE_IMAGE && fileidx != 0) {
-		load_image(0);
-		return true;
-	} else if (mode == MODE_THUMB && fileidx != 0) {
-		fileidx = 0;
-		tns.dirty = true;
-		return true;
-	} else {
-		return false;
-	}
+	return navigate_to(0);
 }
 
 bool cg_n_or_last(arg_t _)
 {
 	int n = prefix != 0 && prefix - 1 < filecnt ? prefix - 1 : filecnt - 1;
-
-	if (mode == MODE_IMAGE && fileidx != n) {
-		load_image(n);
-		return true;
-	} else if (mode == MODE_THUMB && fileidx != n) {
-		fileidx = n;
-		tns.dirty = true;
-		return true;
-	} else {
-		return false;
-	}
+	return navigate_to(n);
 }
 
 bool cg_scroll_screen(arg_t dir)
@@ -224,17 +219,7 @@ bool cg_navigate_marked(arg_t n)
 			new = i;
 		}
 	}
-	if (new != fileidx) {
-		if (mode == MODE_IMAGE) {
-			load_image(new);
-		} else {
-			fileidx = new;
-			tns.dirty = true;
-		}
-		return true;
-	} else {
-		return false;
-	}
+	return navigate_to(new);
 }
 
 bool cg_change_gamma(arg_t d)
