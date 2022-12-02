@@ -8,6 +8,7 @@ misc-*,android-cloexec-*,cert-*,llvm-include-order
 -bugprone-easily-swappable-parameters,-bugprone-narrowing-conversions,-bugprone-incorrect-roundings
 -bugprone-implicit-widening-of-multiplication-result,-bugprone-integer-division
 -android-cloexec-fopen,-android-cloexec-pipe,-cert-err33-c
+-bugprone-assignment-in-if-condition
 
 # false positive warnings
 -clang-analyzer-valist.Uninitialized
