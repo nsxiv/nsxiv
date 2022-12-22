@@ -4,6 +4,8 @@
 
 /* global */
 bool cg_change_gamma(arg_t);
+bool cg_change_brightness(arg_t);
+bool cg_change_contrast(arg_t);
 bool cg_first(arg_t);
 bool cg_mark_range(arg_t);
 bool cg_n_or_last(arg_t);
@@ -47,6 +49,8 @@ bool ct_select(arg_t);
 #ifdef INCLUDE_MAPPINGS_CONFIG
 /* global */
 #define g_change_gamma { cg_change_gamma, MODE_ALL }
+#define g_change_brightness { cg_change_brightness, MODE_ALL }
+#define g_change_contrast { cg_change_contrast, MODE_ALL }
 #define g_first { cg_first, MODE_ALL }
 #define g_mark_range { cg_mark_range, MODE_ALL }
 #define g_n_or_last { cg_n_or_last, MODE_ALL }

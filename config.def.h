@@ -33,11 +33,14 @@ static const float zoom_levels[] = {
 /* default slideshow delay (in sec, overwritten via -S option): */
 static const int SLIDESHOW_DELAY = 5;
 
-/* gamma correction: the user-visible ranges [-GAMMA_RANGE, 0] and
- * (0, GAMMA_RANGE] are mapped to the ranges [0, 1], and (1, GAMMA_MAX].
+/* color correction: the user-visible ranges [-CC_STEPS, 0] and
+ * (0, CC_STEPS] are mapped to the ranges [0, 1], and (1, *_MAX].
+ * Higher step count will have higher granulairy.
  */
-static const double GAMMA_MAX   = 10.0;
-static const int    GAMMA_RANGE = 32;
+static const int    CC_STEPS        = 32;
+static const double GAMMA_MAX       = 10.0;
+static const double BRIGHTNESS_MAX  = 2.0;
+static const double CONTRAST_MAX    = 4.0;
 
 /* command i_scroll pans image 1/PAN_FRACTION of screen width/height */
 static const int PAN_FRACTION = 5;
@@ -118,6 +121,10 @@ static const keymap_t keys[] = {
 	{ 0,            XK_braceleft,     g_change_gamma,       -1 },
 	{ 0,            XK_braceright,    g_change_gamma,       +1 },
 	{ ControlMask,  XK_g,             g_change_gamma,        0 },
+	{ ControlMask,  XK_bracketright,  g_change_brightness,  +1 },
+	{ ControlMask,  XK_bracketleft,   g_change_brightness,  -1 },
+	{ 0,            XK_parenleft,     g_change_contrast,    -1 },
+	{ 0,            XK_parenright,    g_change_contrast,    +1 },
 
 	{ 0,            XK_h,             t_move_sel,           DIR_LEFT },
 	{ 0,            XK_Left,          t_move_sel,           DIR_LEFT },

@@ -444,6 +444,10 @@ static void update_info(void)
 		}
 		if (img.gamma)
 			bar_put(r, "G%+d" BAR_SEP, img.gamma);
+		if (img.brightness)
+			bar_put(r, "B%+d" BAR_SEP, img.brightness);
+		if (img.contrast)
+			bar_put(r, "C%+d" BAR_SEP, img.contrast);
 		bar_put(r, "%3d%%" BAR_SEP, (int) (img.zoom * 100.0));
 		if (img.multi.cnt > 0) {
 			for (fn = 0, i = img.multi.cnt; i > 0; fn++, i /= 10);

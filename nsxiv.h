@@ -181,6 +181,8 @@ struct img {
 
 	Imlib_Color_Modifier cmod;
 	int gamma;
+	int brightness;
+	int contrast;
 
 	scalemode_t scalemode;
 	float zoom;
@@ -212,7 +214,8 @@ bool img_pan_edge(img_t*, direction_t);
 void img_rotate(img_t*, degree_t);
 void img_flip(img_t*, flipdir_t);
 void img_toggle_antialias(img_t*);
-bool img_change_gamma(img_t*, int);
+void img_update_color_modifiers(img_t*);
+bool img_change_color_modifier(img_t*, int, int*);
 bool img_frame_navigate(img_t*, int);
 bool img_frame_animate(img_t*);
 Imlib_Image img_open(const fileinfo_t*);

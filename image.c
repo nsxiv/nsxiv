@@ -90,7 +90,9 @@ void img_init(img_t *img, win_t *win)
 
 	img->cmod = imlib_create_color_modifier();
 	imlib_context_set_color_modifier(img->cmod);
-	img_change_gamma(img, options->gamma);
+	img->brightness = 0;
+	img->contrast = 0;
+	img_change_color_modifier(img, options->gamma, &img->gamma);
 
 	img->ss.on = options->slideshow > 0;
 	img->ss.delay = options->slideshow > 0 ? options->slideshow : SLIDESHOW_DELAY * 10u;
@@ -840,32 +842,36 @@ void img_toggle_antialias(img_t *img)
 	img->dirty = true;
 }
 
-bool img_change_gamma(img_t *img, int d)
+static double steps_to_range(int d, double max, double offset)
 {
-	/* d < 0: decrease gamma
-	 * d = 0: reset gamma
-	 * d > 0: increase gamma
-	 */
-	int gamma;
-	double range;
+	return offset + d * ((d <= 0 ? 1.0 : (max - 1.0)) / CC_STEPS);
+}
 
-	if (d == 0)
-		gamma = 0;
-	else
-		gamma = MIN(MAX(img->gamma + d, -GAMMA_RANGE), GAMMA_RANGE);
+void img_update_color_modifiers(img_t *img)
+{
+	assert(imlib_context_get_color_modifier() == img->cmod);
+	imlib_reset_color_modifier();
 
-	if (img->gamma != gamma) {
-		imlib_reset_color_modifier();
-		if (gamma) {
-			range = gamma <= 0 ? 1.0 : GAMMA_MAX - 1.0;
-			imlib_modify_color_modifier_gamma(1.0 + gamma * (range / GAMMA_RANGE));
-		}
-		img->gamma = gamma;
-		img->dirty = true;
-		return true;
-	} else {
+	if (img->gamma != 0)
+		imlib_modify_color_modifier_gamma(steps_to_range(img->gamma, GAMMA_MAX, 1.0));
+	if (img->brightness != 0)
+		imlib_modify_color_modifier_brightness(steps_to_range(img->brightness, BRIGHTNESS_MAX, 0.0));
+	if (img->contrast != 0)
+		imlib_modify_color_modifier_contrast(steps_to_range(img->contrast, CONTRAST_MAX, 1.0));
+
+	img->dirty = true;
+}
+
+bool img_change_color_modifier(img_t *img, int d, int *target)
+{
+	int value = d == 0 ? 0 : MIN(MAX(*target + d, -CC_STEPS), CC_STEPS);
+
+	if (*target == value)
 		return false;
-	}
+
+	*target = value;
+	img_update_color_modifiers(img);
+	return true;
 }
 
 static bool img_frame_goto(img_t *img, int n)
