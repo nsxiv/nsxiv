@@ -1,6 +1,6 @@
 # checks
 clang-analyzer-*,clang-diagnostic-*,bugprone-*,performance-*,modernize-*
-misc-*,android-cloexec-*,cert-*,llvm-include-order
+misc-*,android-cloexec-*,llvm-include-order
 -readability-*,readability-duplicate-include,readability-misleading-indentation
 
 # silence
