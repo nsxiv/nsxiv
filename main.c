@@ -78,16 +78,12 @@ static struct {
 	extcmd_t f, ft;
 	int fd;
 	pid_t pid;
-} info;
+} info, wintitle;
 
 static struct {
 	extcmd_t f;
 	bool warned;
 } keyhandler;
-
-static struct {
-	extcmd_t f;
-} wintitle;
 
 static struct {
 	timeout_f handler;
@@ -274,16 +270,41 @@ static bool check_timeouts(int *t)
 	return tmin > 0;
 }
 
-static size_t get_win_title(char *buf, size_t len)
+static void kill_close(pid_t pid, int *fd)
+{
+	if (fd != NULL && *fd != -1) {
+		kill(pid, SIGTERM);
+		close(*fd);
+		*fd = -1;
+	}
+}
+
+static void close_title(void)
+{
+	kill_close(wintitle.pid, &wintitle.fd);
+}
+
+static void read_title(void)
+{
+	ssize_t n;
+	char buf[512];
+
+	if ((n = read(wintitle.fd, buf, sizeof(buf)-1)) > 0) {
+		buf[n] = '\0';
+		win_set_title(&win, buf, n);
+	}
+	close_title();
+}
+
+static void open_title(void)
 {
 	char *argv[8];
 	char w[12] = "", h[12] = "", z[12] = "", fidx[12], fcnt[12];
-	ssize_t n = -1;
-	int readfd;
 
-	if (wintitle.f.err || buf == NULL || len == 0)
-		return 0;
+	if (wintitle.f.err || !title_dirty)
+		return;
 
+	close_title();
 	if (mode == MODE_IMAGE) {
 		snprintf(w, ARRLEN(w), "%d", img.w);
 		snprintf(h, ARRLEN(h), "%d", img.h);
@@ -293,22 +314,14 @@ static size_t get_win_title(char *buf, size_t len)
 	snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
 	construct_argv(argv, ARRLEN(argv), wintitle.f.cmd, files[fileidx].path,
 	               fidx, fcnt, w, h, z, NULL);
-	if (spawn(&readfd, NULL, argv) > 0) {
-		if ((n = read(readfd, buf, len-1)) > 0)
-			buf[n] = '\0';
-		close(readfd);
-	}
-
-	return MAX(0, n);
+	if ((wintitle.pid = spawn(&wintitle.fd, NULL, argv)) > 0)
+		fcntl(wintitle.fd, F_SETFL, O_NONBLOCK);
+	title_dirty = false;
 }
 
 void close_info(void)
 {
-	if (info.fd != -1) {
-		kill(info.pid, SIGTERM);
-		close(info.fd);
-		info.fd = -1;
-	}
+	kill_close(info.pid, &info.fd);
 }
 
 void open_info(void)
@@ -487,14 +500,7 @@ void redraw(void)
 		tns_render(&tns);
 	}
 	update_info();
-	if (title_dirty) {
-		size_t n;
-		char buf[512];
-
-		if ((n = get_win_title(buf, sizeof(buf))) > 0)
-			win_set_title(&win, buf, n);
-		title_dirty = false;
-	}
+	open_title();
 	win_draw(&win);
 	reset_timeout(redraw);
 	reset_cursor();
@@ -722,7 +728,7 @@ static void on_buttonpress(const XButtonEvent *bev)
 
 static void run(void)
 {
-	enum { FD_X, FD_INFO, FD_ARL, FD_CNT };
+	enum { FD_X, FD_INFO, FD_TITLE, FD_ARL, FD_CNT };
 	struct pollfd pfd[FD_CNT];
 	int timeout = 0;
 	const struct timespec ten_ms = {0, 10000000};
@@ -755,13 +761,16 @@ static void run(void)
 			} else {
 				pfd[FD_X].fd = ConnectionNumber(win.env.dpy);
 				pfd[FD_INFO].fd = info.fd;
+				pfd[FD_TITLE].fd = wintitle.fd;
 				pfd[FD_ARL].fd = arl.fd;
-				pfd[FD_X].events = pfd[FD_INFO].events = pfd[FD_ARL].events = POLLIN;
+				pfd[FD_X].events = pfd[FD_INFO].events = pfd[FD_TITLE].events = pfd[FD_ARL].events = POLLIN;
 
 				if (poll(pfd, ARRLEN(pfd), to_set ? timeout : -1) < 0)
 					continue;
 				if (pfd[FD_INFO].revents & POLLIN)
 					read_info();
+				if (pfd[FD_TITLE].revents & POLLIN)
+					read_title();
 				if (pfd[FD_ARL].revents & POLLIN) {
 					if (arl_handle(&arl)) {
 						/* when too fast, imlib2 can't load the image */
@@ -922,7 +931,7 @@ int main(int argc, char *argv[])
 	} else {
 		error(0, 0, "Exec directory not found");
 	}
-	info.fd = -1;
+	wintitle.fd = info.fd = -1;
 
 	if (options->thumb_mode) {
 		mode = MODE_THUMB;
