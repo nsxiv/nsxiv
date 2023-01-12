@@ -42,7 +42,8 @@ jobs:
       - name: dep
         run: |
           brew update
-          brew install imlib2 libx11 libxft libexif giflib webp
+          # see: https://github.com/actions/setup-python/issues/577
+          brew install imlib2 libx11 libxft libexif giflib webp || true
       - name: build
         run: |
           # libinotify-kqueue isn't available on homebrew
