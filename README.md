@@ -73,7 +73,7 @@ nsxiv requires the following software to be installed:
 
 The following dependencies are optional.
 
-  * `inotify`<sup>ℹ</sup>: Used for auto-reloading images on change.
+  * `inotify`<sup>\*</sup>: Used for auto-reloading images on change.
     Disabled via `HAVE_INOTIFY=0`.
   * `libXft`, `freetype2`, `fontconfig`: Used for the status bar.
     Disabled via `HAVE_LIBFONTS=0`.
@@ -89,7 +89,7 @@ Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development
 packages (e.g. \*-dev on Debian).
 
-\[ℹ]: [inotify][] is a Linux-specific API for monitoring filesystem changes.
+\* [inotify][] is a Linux-specific API for monitoring filesystem changes.
   It's not natively available on `*BSD` systems but can be enabed via installing
   and linking against [libinotify-kqueue][].
 
