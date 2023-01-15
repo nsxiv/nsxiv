@@ -46,19 +46,6 @@ void print_usage(void)
 	       "[-z ZOOM] FILES...\n", progname);
 }
 
-static void title_deprecation_notice(void)
-{
-	error(EXIT_FAILURE, 0, "\n"
-	      "################################################################\n"
-	      "#                      DEPRECATION NOTICE                      #\n"
-	      "################################################################\n"
-	      "# `-T` option has been deprecated in favour of `win-title`.    #\n"
-	      "# Please read the `WINDOW TITLE` section of the manpage for    #\n"
-	      "# more info.                                                   #\n"
-	      "################################################################"
-	);
-}
-
 static void print_version(void)
 {
 	printf("%s %s\n", progname, VERSION);
@@ -93,7 +80,6 @@ void parse_options(int argc, char **argv)
 		{ "recursive",      'r',     OPTPARSE_NONE },
 		{ "ss-delay",       'S',     OPTPARSE_REQUIRED },
 		{ "scale-mode",     's',     OPTPARSE_REQUIRED },
-		{ NULL,             'T',     OPTPARSE_REQUIRED },
 		{ "thumbnail",      't',     OPTPARSE_NONE },
 		{ "version",        'v',     OPTPARSE_NONE },
 		{ "zoom-100",       'Z',     OPTPARSE_NONE },
@@ -225,9 +211,6 @@ void parse_options(int argc, char **argv)
 			if (s == NULL || *s == '\0' || strlen(op.optarg) != 1)
 				error(EXIT_FAILURE, 0, "Invalid scale mode: %s", op.optarg);
 			_options.scalemode = s - scalemodes;
-			break;
-		case 'T':
-			title_deprecation_notice(); /* TODO(v31): remove this option */
 			break;
 		case 't':
 			_options.thumb_mode = true;
