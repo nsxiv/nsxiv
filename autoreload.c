@@ -1,5 +1,5 @@
 /* Copyright 2017 Max Voit, Bert Muennich
- * Copyright 2022 nsxiv contributors
+ * Copyright 2022-2023 nsxiv contributors
  *
  * This file is a part of nsxiv.
  *
