@@ -8,6 +8,54 @@ there may be more changes. Please use `git log` to view them.
 
 - - -
 
+**[v31](https://codeberg.org/nsxiv/nsxiv/archive/v31.tar.gz)**
+*(January 28, 2023)*
+
+* Changes:
+
+  * Uncritical files moved to `etc/`. [#350]
+  * Empty Xresource entry will now be ignored. [#340]
+  * `win-title` will be read in a non-blocking manner. [#314]
+
+* Added:
+
+  * Support for multi-frame images via `Imlib2`. [#373]
+  * Support for long-opts. [#332]
+  * Cli flag `--anti-alias` to enable/disable anti-aliasing. [#361]
+  * Cli flag `--alpha-layer` to enable/disable checkerboard background. [#408]
+  * Accept directory via stdin (-i) [#383]
+  * Support for modifying brightness and contrast [#396]
+
+* Fixes:
+
+  * Build failure when `_SC_PHYS_PAGES` is not defined. [#334]
+  * Various statusbar issues. [#353],[#341]
+  * Crashes due to faulty signal-handler. [#411]
+  * Potential memory leak in `r_readdir()`. [#319]
+  * Potentially printing incorrect error message. [#321]
+  * Wrong slideshow length on animated webp. [#381]
+  * Document missing <kbd>Ctrl+6</kbd> binding in the manpage. [#347]
+
+[#314]: https://codeberg.org/nsxiv/nsxiv/pulls/314
+[#319]: https://codeberg.org/nsxiv/nsxiv/pulls/319
+[#321]: https://codeberg.org/nsxiv/nsxiv/pulls/321
+[#332]: https://codeberg.org/nsxiv/nsxiv/pulls/332
+[#334]: https://codeberg.org/nsxiv/nsxiv/pulls/334
+[#340]: https://codeberg.org/nsxiv/nsxiv/pulls/340
+[#341]: https://codeberg.org/nsxiv/nsxiv/pulls/341
+[#347]: https://codeberg.org/nsxiv/nsxiv/pulls/347
+[#350]: https://codeberg.org/nsxiv/nsxiv/pulls/350
+[#353]: https://codeberg.org/nsxiv/nsxiv/pulls/353
+[#361]: https://codeberg.org/nsxiv/nsxiv/pulls/361
+[#373]: https://codeberg.org/nsxiv/nsxiv/pulls/373
+[#381]: https://codeberg.org/nsxiv/nsxiv/pulls/381
+[#383]: https://codeberg.org/nsxiv/nsxiv/pulls/383
+[#396]: https://codeberg.org/nsxiv/nsxiv/pulls/396
+[#408]: https://codeberg.org/nsxiv/nsxiv/pulls/408
+[#411]: https://codeberg.org/nsxiv/nsxiv/pulls/411
+
+- - -
+
 ***SPECIAL NOTE***: Due to [this incident](https://codeberg.org/nsxiv/nsxiv-tmp/issues/1)
 we have moved development over to [CodeBerg](https://codeberg.org/nsxiv/nsxiv).
 
