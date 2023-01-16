@@ -8,7 +8,7 @@
 **Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
 --------------------------------------------------------------------
 
-nsxiv is a fork of the now-unmaintained [sxiv](https://github.com/muennich/sxiv)
+nsxiv is a fork of the now-unmaintained [sxiv](https://github.com/xyb3rt/sxiv)
 with the purpose of being a (mostly) drop-in replacement for sxiv, maintaining its
 interface and adding simple, sensible features. nsxiv is free software licensed
 under GPLv2 and aims to be easy to modify and customize.
