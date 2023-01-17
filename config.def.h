@@ -45,11 +45,6 @@ static const double CONTRAST_MAX    = 4.0;
 /* command i_scroll pans image 1/PAN_FRACTION of screen width/height */
 static const int PAN_FRACTION = 5;
 
-/* if true, use a checkerboard background for alpha layer,
- * toggled with 'A' key binding
- */
-static const bool ALPHA_LAYER = false;
-
 /* percentage of memory to use for imlib2's cache size.
  *   3 means use 3% of total memory which is about 245MiB on 8GiB machine.
  *   0 or less means disable cache.
@@ -69,6 +64,11 @@ static const int CACHE_SIZE_FALLBACK = 32 * 1024 * 1024; /* fallback to 32MiB if
  * toggled with 'a' key binding (overwritten via `--anti-alias` option)
  */
 static const bool ANTI_ALIAS = true;
+
+/* if true, use a checkerboard background for alpha layer,
+ * toggled with 'A' key binding (overwritten via `--alpha-layer` option)
+ */
+static const bool ALPHA_LAYER = false;
 
 #endif
 #ifdef INCLUDE_THUMBS_CONFIG

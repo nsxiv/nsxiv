@@ -91,7 +91,7 @@ void img_init(img_t *img, win_t *win)
 	img->checkpan = false;
 	img->dirty = false;
 	img->anti_alias = options->anti_alias;
-	img->alpha = ALPHA_LAYER;
+	img->alpha = options->alpha_layer;
 	img->multi.cap = img->multi.cnt = 0;
 	img->multi.animate = options->animate;
 	img->multi.framedelay = options->framerate > 0 ? 1000 / options->framerate : 0;

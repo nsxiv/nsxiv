@@ -66,8 +66,13 @@ static void print_version(void)
 
 void parse_options(int argc, char **argv)
 {
-	enum { /* ensure these can't be represented in a single byte */
-		OPT_AA = UCHAR_MAX + 1
+	enum {
+		/* ensure these can't be represented in a single byte in order
+		 * to avoid conflicts with short opts
+		 */
+		OPT_START = UCHAR_MAX,
+		OPT_AA,
+		OPT_AL
 	};
 	static const struct optparse_long longopts[] = {
 		{ "framerate",      'A',     OPTPARSE_REQUIRED },
@@ -95,6 +100,7 @@ void parse_options(int argc, char **argv)
 		{ "zoom",           'z',     OPTPARSE_REQUIRED },
 		{ "null",           '0',     OPTPARSE_NONE },
 		{ "anti-alias",    OPT_AA,   OPTPARSE_OPTIONAL },
+		{ "alpha-layer",   OPT_AL,   OPTPARSE_OPTIONAL },
 		{ 0 }, /* end */
 	};
 
@@ -115,6 +121,7 @@ void parse_options(int argc, char **argv)
 	_options.scalemode = SCALE_DOWN;
 	_options.zoom = 1.0;
 	_options.anti_alias = ANTI_ALIAS;
+	_options.alpha_layer = ALPHA_LAYER;
 	_options.animate = false;
 	_options.gamma = 0;
 	_options.slideshow = 0;
@@ -246,6 +253,11 @@ void parse_options(int argc, char **argv)
 			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
 				error(EXIT_FAILURE, 0, "Invalid argument for option --anti-alias: %s", op.optarg);
 			_options.anti_alias = op.optarg == NULL;
+			break;
+		case OPT_AL:
+			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
+				error(EXIT_FAILURE, 0, "Invalid argument for option --alpha-layer: %s", op.optarg);
+			_options.alpha_layer = op.optarg == NULL;
 			break;
 		}
 	}

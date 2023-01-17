@@ -241,6 +241,7 @@ struct opt {
 	float zoom;
 	bool animate;
 	bool anti_alias;
+	bool alpha_layer;
 	int gamma;
 	unsigned int slideshow;
 	int framerate;
