@@ -190,7 +190,7 @@ struct img {
 	bool checkpan;
 	bool dirty;
 	bool anti_alias;
-	bool alpha;
+	bool alpha_layer;
 
 	struct {
 		bool on;

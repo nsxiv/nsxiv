@@ -91,7 +91,7 @@ void img_init(img_t *img, win_t *win)
 	img->checkpan = false;
 	img->dirty = false;
 	img->anti_alias = options->anti_alias;
-	img->alpha = options->alpha_layer;
+	img->alpha_layer = options->alpha_layer;
 	img->multi.cap = img->multi.cnt = 0;
 	img->multi.animate = options->animate;
 	img->multi.framedelay = options->framerate > 0 ? 1000 / options->framerate : 0;
@@ -763,7 +763,7 @@ void img_render(img_t *img)
 		imlib_context_set_image(bg);
 		imlib_image_set_has_alpha(0);
 
-		if (img->alpha) {
+		if (img->alpha_layer) {
 			int i, c, r;
 			uint32_t col[2] = { 0xFF666666, 0xFF999999 };
 			uint32_t *data = imlib_image_get_data();

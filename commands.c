@@ -385,7 +385,7 @@ bool ci_toggle_antialias(arg_t _)
 
 bool ci_toggle_alpha(arg_t _)
 {
-	img.alpha = !img.alpha;
+	img.alpha_layer = !img.alpha_layer;
 	img.dirty = true;
 	return true;
 }
