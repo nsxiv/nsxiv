@@ -843,19 +843,14 @@ static void run(void)
 	}
 }
 
-static void sigchld(int sig)
-{
-	while (waitpid(-1, NULL, WNOHANG) > 0);
-}
-
-static void setup_signal(int sig, void (*handler)(int sig))
+static void setup_signal(int sig, void (*handler)(int sig), int flags)
 {
 	struct sigaction sa;
 
 	sa.sa_handler = handler;
 	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART | SA_NOCLDSTOP;
-	if (sigaction(sig, &sa, 0) == -1)
+	sa.sa_flags = flags;
+	if (sigaction(sig, &sa, NULL) < 0)
 		error(EXIT_FAILURE, errno, "signal %d", sig);
 }
 
@@ -865,8 +860,8 @@ int main(int argc, char *argv[])
 	size_t n;
 	const char *homedir, *dsuffix = "";
 
-	setup_signal(SIGCHLD, sigchld);
-	setup_signal(SIGPIPE, SIG_IGN);
+	setup_signal(SIGCHLD, SIG_DFL, SA_RESTART|SA_NOCLDSTOP|SA_NOCLDWAIT);
+	setup_signal(SIGPIPE, SIG_IGN, 0);
 
 	setlocale(LC_COLLATE, "");
 
