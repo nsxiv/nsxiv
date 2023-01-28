@@ -22,6 +22,7 @@
 #include "config.h"
 #include "icon/data.h"
 
+#include <assert.h>
 #include <locale.h>
 #include <stdlib.h>
 #include <string.h>
@@ -450,10 +451,10 @@ static void win_draw_bar(win_t *win)
 	win_bar_t *l, *r;
 	XftDraw *d;
 
-	if ((l = &win->bar.l)->buf == NULL || (r = &win->bar.r)->buf == NULL)
-		return;
-
 	e = &win->env;
+	l = &win->bar.l;
+	r = &win->bar.r;
+	assert(l->buf != NULL && r->buf != NULL);
 	y = (win->bar.top ? 0 : win->h) + font->ascent + V_TEXT_PAD;
 	w = win->w - 2*H_TEXT_PAD;
 	d = XftDrawCreate(e->dpy, win->buf.pm, e->vis, e->cmap);

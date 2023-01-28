@@ -21,6 +21,7 @@
 #define INCLUDE_THUMBS_CONFIG
 #include "config.h"
 
+#include <assert.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,8 +41,7 @@ static char* tns_cache_filepath(const char *filepath)
 	size_t len;
 	char *cfile = NULL;
 
-	if (*filepath != '/')
-		return NULL;
+	assert(*filepath == '/' && "filepath should be result of realpath(3)");
 
 	if (strncmp(filepath, cache_dir, strlen(cache_dir)) != 0) {
 		/* don't cache images inside the cache directory! */
@@ -355,9 +355,7 @@ void tns_unload(tns_t *tns, int n)
 {
 	thumb_t *t;
 
-	if (n < 0 || n >= *tns->cnt)
-		return;
-
+	assert(n >= 0 && n < *tns->cnt);
 	t = &tns->thumbs[n];
 
 	if (t->im != NULL) {
@@ -371,9 +369,7 @@ static void tns_check_view(tns_t *tns, bool scrolled)
 {
 	int r;
 
-	if (tns == NULL)
-		return;
-
+	assert(tns != NULL);
 	tns->first -= tns->first % tns->cols;
 	r = *tns->sel % tns->cols;
 

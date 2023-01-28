@@ -226,8 +226,7 @@ void construct_argv(char **argv, unsigned int len, ...)
 	for (i = 0; i < len; ++i)
 		argv[i] = va_arg(args, char *);
 	va_end(args);
-	if (argv[len-1] != NULL)
-		error(EXIT_FAILURE, 0, "argv not NULL terminated");
+	assert(argv[len-1] == NULL && "argv should be NULL terminated");
 }
 
 static int mkspawn_pipe(posix_spawn_file_actions_t *fa, const char *cmd, int *pfd, int dupidx)
