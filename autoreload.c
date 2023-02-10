@@ -28,7 +28,10 @@
 #include <sys/inotify.h>
 #include <unistd.h>
 
-static struct { char *buf; size_t len; } scratch;
+static struct {
+	char *buf;
+	size_t len;
+} scratch;
 
 void arl_init(arl_t *arl)
 {
@@ -94,7 +97,10 @@ bool arl_handle(arl_t *arl)
 	char *ptr;
 	const struct inotify_event *e;
 	/* inotify_event aligned buffer */
-	static union { char d[4096]; struct inotify_event e; } buf;
+	static union {
+		char d[4096];
+		struct inotify_event e;
+	} buf;
 
 	while (true) {
 		ssize_t len = read(arl->fd, buf.d, sizeof(buf.d));
@@ -105,7 +111,7 @@ bool arl_handle(arl_t *arl)
 			break;
 		}
 		for (ptr = buf.d; ptr < buf.d + len; ptr += sizeof(*e) + e->len) {
-			e = (const struct inotify_event*) ptr;
+			e = (const struct inotify_event *)ptr;
 			if (e->wd == arl->wd_file && (e->mask & IN_CLOSE_WRITE)) {
 				reload = true;
 			} else if (e->wd == arl->wd_file && (e->mask & IN_DELETE_SELF)) {
@@ -128,18 +134,18 @@ void arl_init(arl_t *arl)
 
 void arl_cleanup(arl_t *arl)
 {
-	(void) arl;
+	(void)arl;
 }
 
 void arl_add(arl_t *arl, const char *filepath)
 {
-	(void) arl;
-	(void) filepath;
+	(void)arl;
+	(void)filepath;
 }
 
 bool arl_handle(arl_t *arl)
 {
-	(void) arl;
+	(void)arl;
 	return false;
 }
 

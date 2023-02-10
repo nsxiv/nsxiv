@@ -45,10 +45,11 @@
 
 #define TV_DIFF(t1,t2) (((t1)->tv_sec  - (t2)->tv_sec ) * 1000 + \
                         ((t1)->tv_usec - (t2)->tv_usec) / 1000)
-#define TV_ADD_MSEC(tv,t) do {             \
-  (tv)->tv_sec  += (t) / 1000;          \
-  (tv)->tv_usec += (t) % 1000 * 1000;   \
-} while (0)
+#define TV_ADD_MSEC(tv, t)                          \
+	do {                                        \
+		(tv)->tv_sec  += (t) / 1000;        \
+		(tv)->tv_usec += (t) % 1000 * 1000; \
+	} while (0)
 
 typedef struct {
 	int err;
@@ -112,8 +113,8 @@ static void cleanup(void)
 static bool xgetline(char **lineptr, size_t *n)
 {
 	ssize_t len = getdelim(lineptr, n, options->using_null ? '\0' : '\n', stdin);
-	if (!options->using_null && len > 0 && (*lineptr)[len-1] == '\n')
-		(*lineptr)[len-1] = '\0';
+	if (!options->using_null && len > 0 && (*lineptr)[len - 1] == '\n')
+		(*lineptr)[len - 1] = '\0';
 	return len > 0;
 }
 
@@ -140,7 +141,7 @@ static void check_add_file(const char *filename, bool given)
 	if (fileidx == filecnt) {
 		filecnt *= 2;
 		files = erealloc(files, filecnt * sizeof(*files));
-		memset(&files[filecnt/2], 0, filecnt/2 * sizeof(*files));
+		memset(&files[filecnt / 2], 0, filecnt / 2 * sizeof(*files));
 	}
 
 	files[fileidx].name = estrdup(filename);
@@ -193,8 +194,8 @@ void remove_file(int n, bool manual)
 		markcnt--;
 
 	if (files[n].path != files[n].name)
-		free((void*) files[n].path);
-	free((void*) files[n].name);
+		free((void *)files[n].path);
+	free((void *)files[n].name);
 	if (tns.thumbs != NULL)
 		tns_unload(&tns, n);
 
@@ -287,7 +288,7 @@ static void read_title(void)
 	ssize_t n;
 	char buf[512];
 
-	if ((n = read(wintitle.fd, buf, sizeof(buf)-1)) > 0) {
+	if ((n = read(wintitle.fd, buf, sizeof(buf) - 1)) > 0) {
 		buf[n] = '\0';
 		win_set_title(&win, buf, n);
 	}
@@ -308,7 +309,7 @@ static void open_title(void)
 		snprintf(h, ARRLEN(h), "%d", img.h);
 		snprintf(z, ARRLEN(z), "%d", (int)(img.zoom * 100));
 	}
-	snprintf(fidx, ARRLEN(fidx), "%d", fileidx+1);
+	snprintf(fidx, ARRLEN(fidx), "%d", fileidx + 1);
 	snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
 	construct_argv(argv, ARRLEN(argv), wintitle.f.cmd, files[fileidx].path,
 	               fidx, fcnt, w, h, z, NULL);
@@ -426,7 +427,8 @@ static void update_info(void)
 	/* update bar contents */
 	if (win.bar.h == 0 || extprefix)
 		return;
-	for (fw = 0, i = filecnt; i > 0; fw++, i /= 10);
+	for (fw = 0, i = filecnt; i > 0; fw++, i /= 10)
+		;
 	mark = files[fileidx].flags & FF_MARK ? "* " : "";
 	l->p = l->buf;
 	r->p = r->buf;
@@ -452,9 +454,10 @@ static void update_info(void)
 			bar_put(r, "B%+d" BAR_SEP, img.brightness);
 		if (img.contrast)
 			bar_put(r, "C%+d" BAR_SEP, img.contrast);
-		bar_put(r, "%3d%%" BAR_SEP, (int) (img.zoom * 100.0));
+		bar_put(r, "%3d%%" BAR_SEP, (int)(img.zoom * 100.0));
 		if (img.multi.cnt > 0) {
-			for (fn = 0, i = img.multi.cnt; i > 0; fn++, i /= 10);
+			for (fn = 0, i = img.multi.cnt; i > 0; fn++, i /= 10)
+				;
 			bar_put(r, "%0*d/%d" BAR_SEP, fn, img.multi.sel + 1, img.multi.cnt);
 		}
 		bar_put(r, "%0*d/%d", fw, fileidx + 1, filecnt);
@@ -623,7 +626,8 @@ static bool run_key_handler(const char *key, unsigned int mask)
 		}
 	}
 	fclose(pfs);
-	while (waitpid(pid, NULL, 0) == -1 && errno == EINTR);
+	while (waitpid(pid, NULL, 0) == -1 && errno == EINTR)
+		;
 
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
@@ -640,7 +644,8 @@ static bool run_key_handler(const char *key, unsigned int mask)
 		}
 	}
 	/* drop user input events that occurred while running the key handler */
-	while (XCheckIfEvent(win.env.dpy, &dump, is_input_ev, NULL));
+	while (XCheckIfEvent(win.env.dpy, &dump, is_input_ev, NULL))
+		;
 
 	if (mode == MODE_IMAGE && changed) {
 		img_close(&img, true);
@@ -699,7 +704,7 @@ static void on_keypress(XKeyEvent *kev)
 			handle_key_handler(false);
 	} else if (key >= '0' && key <= '9') {
 		/* number prefix for commands */
-		prefix = prefix * 10 + (int) (key - '0');
+		prefix = prefix * 10 + (int)(key - '0');
 		return;
 	} else {
 		dirty = process_bindings(keys, ARRLEN(keys), ksym, kev->state, sh);
@@ -730,7 +735,7 @@ static void run(void)
 	enum { FD_X, FD_INFO, FD_TITLE, FD_ARL, FD_CNT };
 	struct pollfd pfd[FD_CNT];
 	int timeout = 0;
-	const struct timespec ten_ms = {0, 10000000};
+	const struct timespec ten_ms = { 0, 10000000 };
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
 
@@ -795,7 +800,7 @@ static void run(void)
 					break;
 				case KeyPress:
 					discard = (nextev.type == KeyPress || nextev.type == KeyRelease) &&
-					           ev.xkey.keycode == nextev.xkey.keycode;
+					          ev.xkey.keycode == nextev.xkey.keycode;
 					break;
 				}
 			}
@@ -806,7 +811,7 @@ static void run(void)
 			on_buttonpress(&ev.xbutton);
 			break;
 		case ClientMessage:
-			if ((Atom) ev.xclient.data.l[0] == atoms[ATOM_WM_DELETE_WINDOW])
+			if ((Atom)ev.xclient.data.l[0] == atoms[ATOM_WM_DELETE_WINDOW])
 				cg_quit(EXIT_SUCCESS);
 			break;
 		case DestroyNotify:
@@ -859,7 +864,7 @@ int main(int argc, char *argv[])
 	size_t n;
 	const char *homedir, *dsuffix = "";
 
-	setup_signal(SIGCHLD, SIG_DFL, SA_RESTART|SA_NOCLDSTOP|SA_NOCLDWAIT);
+	setup_signal(SIGCHLD, SIG_DFL, SA_RESTART | SA_NOCLDSTOP | SA_NOCLDWAIT);
 	setup_signal(SIGPIPE, SIG_IGN, 0);
 
 	setlocale(LC_COLLATE, "");

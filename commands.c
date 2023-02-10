@@ -326,10 +326,10 @@ bool ci_drag(arg_t drag_mode)
 
 	while (true) {
 		if (drag_mode == DRAG_ABSOLUTE) {
-			px = MIN(MAX(0.0, x - win.w*0.1), win.w*0.8) /
-			     (win.w*0.8) * (win.w - img.w * img.zoom);
-			py = MIN(MAX(0.0, y - win.h*0.1), win.h*0.8) /
-			     (win.h*0.8) * (win.h - img.h * img.zoom);
+			px = MIN(MAX(0.0, x - win.w * 0.1), win.w * 0.8) /
+			     (win.w * 0.8) * (win.w - img.w * img.zoom);
+			py = MIN(MAX(0.0, y - win.h * 0.1), win.h * 0.8) /
+			     (win.h * 0.8) * (win.h - img.h * img.zoom);
 		} else {
 			px = img.x + x - ox;
 			py = img.y + y - oy;
@@ -343,7 +343,8 @@ bool ci_drag(arg_t drag_mode)
 		           ButtonPressMask | ButtonReleaseMask | PointerMotionMask, &e);
 		if (e.type == ButtonPress || e.type == ButtonRelease)
 			break;
-		while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e));
+		while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e))
+			;
 		ox = x;
 		oy = y;
 		x = e.xmotion.x;
@@ -443,7 +444,8 @@ bool ct_drag_mark_image(arg_t _)
 			           ButtonPressMask | ButtonReleaseMask | PointerMotionMask, &e);
 			if (e.type == ButtonPress || e.type == ButtonRelease)
 				break;
-			while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e));
+			while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e))
+				;
 			sel = tns_translate(&tns, e.xbutton.x, e.xbutton.y);
 		}
 	}

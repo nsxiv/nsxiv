@@ -55,7 +55,7 @@ enum { DEF_WEBP_DELAY = 75 };
 #endif
 
 #define ZOOM_MIN (zoom_levels[0] / 100)
-#define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels)-1] / 100)
+#define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels) - 1] / 100)
 
 static int calc_cache_size(void)
 {
@@ -69,7 +69,7 @@ static int calc_cache_size(void)
 #endif
 	if (pages < 0 || page_size < 0)
 		return CACHE_SIZE_FALLBACK;
-	cache = (pages/100) * CACHE_SIZE_MEM_PERCENTAGE;
+	cache = (pages / 100) * CACHE_SIZE_MEM_PERCENTAGE;
 	cache *= page_size;
 
 	return MIN(cache, CACHE_SIZE_LIMIT);
@@ -234,12 +234,12 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 			while (ext) {
 				if (ext_code == GRAPHICS_EXT_FUNC_CODE) {
 					if (ext[1] & 1)
-						transp = (int) ext[4];
+						transp = (int)ext[4];
 					else
 						transp = -1;
 
-					delay = 10 * ((unsigned int) ext[3] << 8 | (unsigned int) ext[2]);
-					disposal = (unsigned int) ext[1] >> 2 & 0x7;
+					delay = 10 * ((unsigned int)ext[3] << 8 | (unsigned int)ext[2]);
+					disposal = (unsigned int)ext[1] >> 2 & 0x7;
 				}
 				ext = NULL;
 				DGifGetExtensionNext(gif, &ext);
@@ -280,7 +280,7 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 			for (i = 0; i < sh; i++) {
 				for (j = 0; j < sw; j++) {
 					if (i < y || i >= y + h || j < x || j >= x + w ||
-					    rows[i-y][j-x] == transp)
+					    rows[i - y][j - x] == transp)
 					{
 						if (prev_frame != NULL &&
 						    (prev_disposal != 2 || i < py || i >= py + ph ||
@@ -292,9 +292,9 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 						}
 					} else {
 						assert(cmap != NULL);
-						r = cmap->Colors[rows[i-y][j-x]].Red;
-						g = cmap->Colors[rows[i-y][j-x]].Green;
-						b = cmap->Colors[rows[i-y][j-x]].Blue;
+						r = cmap->Colors[rows[i - y][j - x]].Red;
+						g = cmap->Colors[rows[i - y][j - x]].Green;
+						b = cmap->Colors[rows[i - y][j - x]].Blue;
 						*ptr = 0xffu << 24 | r << 16 | g << 8 | b;
 					}
 					ptr++;
@@ -418,7 +418,7 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 		imlib_context_set_image(im);
 		imlib_image_set_format("webp");
 		/* Get an iterator of this frame - used for frame info (duration, etc.) */
-		WebPDemuxGetFrame(demux, m->cnt+1, &iter);
+		WebPDemuxGetFrame(demux, m->cnt + 1, &iter);
 		imlib_image_set_has_alpha((flags & ALPHA_FLAG) == ALPHA_FLAG);
 		/* Store info for this frame */
 		m->frames[m->cnt].im = im;
@@ -674,8 +674,8 @@ static bool img_fit(img_t *img)
 	if (img->scalemode == SCALE_ZOOM)
 		return false;
 
-	zw = (float) img->win->w / (float) img->w;
-	zh = (float) img->win->h / (float) img->h;
+	zw = (float)img->win->w / (float)img->w;
+	zh = (float)img->win->h / (float)img->h;
 
 	switch (img->scalemode) {
 	case SCALE_FILL:
@@ -693,7 +693,7 @@ static bool img_fit(img_t *img)
 	}
 	z = MIN(z, img->scalemode == SCALE_DOWN ? 1.0 : ZOOM_MAX);
 
-	if (ABS(img->zoom - z) > 1.0/MAX(img->w, img->h)) {
+	if (ABS(img->zoom - z) > 1.0 / MAX(img->w, img->h)) {
 		img->zoom = z;
 		img->dirty = title_dirty = true;
 		return true;
@@ -839,14 +839,14 @@ bool img_zoom_to(img_t *img, float z)
 
 bool img_zoom(img_t *img, int d)
 {
-	int i = d > 0 ? 0 : (int)ARRLEN(zoom_levels)-1;
+	int i = d > 0 ? 0 : (int)ARRLEN(zoom_levels) - 1;
 	while (i >= 0 && i < (int)ARRLEN(zoom_levels) &&
-	       (d > 0 ? zoom_levels[i]/100 <= img->zoom : zoom_levels[i]/100 >= img->zoom))
+	       (d > 0 ? zoom_levels[i] / 100 <= img->zoom : zoom_levels[i] / 100 >= img->zoom))
 	{
 		i += d;
 	}
-	i = MIN(MAX(i, 0), (int)ARRLEN(zoom_levels)-1);
-	return img_zoom_to(img, zoom_levels[i]/100);
+	i = MIN(MAX(i, 0), (int)ARRLEN(zoom_levels) - 1);
+	return img_zoom_to(img, zoom_levels[i] / 100);
 }
 
 bool img_pos(img_t *img, float x, float y)
@@ -883,7 +883,7 @@ bool img_pan(img_t *img, direction_t dir, int d)
 	float x, y;
 
 	if (d > 0) {
-		x = y = MAX(1, (float) d * img->zoom);
+		x = y = MAX(1, (float)d * img->zoom);
 	} else {
 		x = img->win->w / (d < 0 ? 1 : PAN_FRACTION);
 		y = img->win->h / (d < 0 ? 1 : PAN_FRACTION);
