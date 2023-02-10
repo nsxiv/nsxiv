@@ -1,3 +1,6 @@
+# clang-format doesn't dictate the project's code style and can mess up a
+# couple edge cases. However it comes quite close and can be used for fixing
+# most style issues automatically on new changes via `git-clang-format`.
 ---
 
 Standard: c++03

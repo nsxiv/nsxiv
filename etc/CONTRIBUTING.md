@@ -23,7 +23,7 @@ Contribution Guideline
 When contributing, make sure:
 
   * Your contribution falls under nsxiv's scope and aim
-  * You follow the existing code style (see [.editorconfig](../.editorconfig))
+  * You follow the existing code style (see the "Code Style" section below)
   * You open the pull request from a new branch, not from master
   * To avoid using force pushes, especially for bigger patches. Only use them
     when there's merge conflicts.
@@ -42,6 +42,21 @@ to work on. You can also filter the issues via label:
   Might require some experience.
 * [Help wanted](https://codeberg.org/nsxiv/nsxiv/issues?labels=49699):
   (Intermediate/Experienced) Issues where we require some help.
+
+
+Code Style
+----------
+
+`nsxiv` mostly follows the [suckless code-style][sl], with a few exceptions.
+If your editor supports [.editorconfig](../.editorconfig) then you'll already be
+off to a good start without needing much manual intervention. Additionally we
+provide a [clang-format](./.clang-format) configuration for reference, which you
+may use via [`git-clang-format`][cf] to format the changes you've made (please
+do not run it globally on the entire code-base since clang-format gets a decent
+amount of edge cases wrong).
+
+[sl]: https://suckless.org/coding_style/
+[cf]: https://clang.llvm.org/docs/ClangFormat.html#git-integration
 
 
 Development workflow for maintainers
