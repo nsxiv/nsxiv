@@ -195,13 +195,11 @@ void remove_file(int n, bool manual)
 	if (files[n].path != files[n].name)
 		free((void*) files[n].path);
 	free((void*) files[n].name);
+	if (tns.thumbs != NULL)
+		tns_unload(&tns, n);
 
 	if (n + 1 < filecnt) {
 		if (tns.thumbs != NULL) {
-			if (tns.thumbs[n].im != NULL) {
-				imlib_context_set_image(tns.thumbs[n].im);
-				imlib_free_image_and_decache();
-			}
 			memmove(tns.thumbs + n, tns.thumbs + n + 1, (filecnt - n - 1) *
 			        sizeof(*tns.thumbs));
 			memset(tns.thumbs + filecnt - 1, 0, sizeof(*tns.thumbs));
