@@ -116,7 +116,7 @@ references *above* can be found on the new main nsxiv repository on CodeBerg.
 
 * Changes:
 
-  * Window title is now customizeable via `win-title`, cli flag `-T` and related
+  * Window title is now customizable via `win-title`, cli flag `-T` and related
     config.h options are removed. See `WINDOW TITLE` section of the manpage for
     more info. [#213]
   * Imlib2 cache size is now set based on total memory percentage, by default
