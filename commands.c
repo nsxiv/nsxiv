@@ -59,6 +59,13 @@ bool cg_quit(arg_t status)
 	return None; /* silence tcc warning */
 }
 
+bool cg_pick_quit(arg_t status)
+{
+	if (options->to_stdout && markcnt == 0)
+		printf("%s%c", files[fileidx].name, options->using_null ? '\0' : '\n');
+	return cg_quit(status);
+}
+
 bool cg_switch_mode(arg_t _)
 {
 	if (mode == MODE_IMAGE) {
