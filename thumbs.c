@@ -35,6 +35,8 @@
 #endif
 
 static char *cache_dir;
+static char *cache_tmpfile, *cache_tmpfile_base;
+static const char TMP_NAME[] = "/nsxiv-XXXXXX";
 
 static char *tns_cache_filepath(const char *filepath)
 {
@@ -76,6 +78,7 @@ static Imlib_Image tns_cache_load(const char *filepath, bool *outdated)
 static void tns_cache_write(Imlib_Image im, const char *filepath, bool force)
 {
 	char *cfile, *dirend;
+	int tmpfd;
 	struct stat cstats, fstats;
 	struct utimbuf times;
 	Imlib_Load_Error err;
@@ -103,12 +106,17 @@ static void tns_cache_write(Imlib_Image im, const char *filepath, bool force)
 				imlib_image_set_format("jpg");
 				imlib_image_attach_data_value("quality", NULL, 90, NULL);
 			}
-			imlib_save_image_with_error_return(cfile, &err);
-			if (err)
+			memcpy(cache_tmpfile_base, TMP_NAME, sizeof(TMP_NAME));
+			if ((tmpfd = mkstemp(cache_tmpfile)) < 0)
 				goto end;
+			close(tmpfd);
+			/* UPGRADE: Imlib2 v1.11.0: use imlib_save_image_fd() */
+			imlib_save_image_with_error_return(cache_tmpfile, &err);
 			times.actime = fstats.st_atime;
 			times.modtime = fstats.st_mtime;
-			utime(cfile, &times);
+			utime(cache_tmpfile, &times);
+			if (err || rename(cache_tmpfile, cfile) < 0)
+				unlink(cache_tmpfile);
 		}
 end:
 		free(cfile);
@@ -169,6 +177,9 @@ void tns_init(tns_t *tns, fileinfo_t *tns_files, const int *cnt, int *sel, win_t
 		len = strlen(homedir) + strlen(dsuffix) + strlen(s) + 1;
 		cache_dir = emalloc(len);
 		snprintf(cache_dir, len, "%s%s%s", homedir, dsuffix, s);
+		cache_tmpfile = emalloc(len + sizeof(TMP_NAME));
+		memcpy(cache_tmpfile, cache_dir, len - 1);
+		cache_tmpfile_base = cache_tmpfile + len - 1;
 	} else {
 		error(0, 0, "Cache directory not found");
 	}
