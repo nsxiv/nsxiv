@@ -9,6 +9,7 @@ misc-*,android-cloexec-*,llvm-include-order
 -bugprone-implicit-widening-of-multiplication-result,-bugprone-integer-division
 -android-cloexec-fopen,-android-cloexec-pipe,-cert-err33-c
 -bugprone-assignment-in-if-condition
+-bugprone-suspicious-realloc-usage
 
 # false positive warnings
 -clang-analyzer-valist.Uninitialized
