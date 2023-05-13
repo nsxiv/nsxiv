@@ -77,10 +77,14 @@ The following dependencies are optional.
     Disabled via `HAVE_INOTIFY=0`.
   * `libXft`, `freetype2`, `fontconfig`: Used for the status bar.
     Disabled via `HAVE_LIBFONTS=0`.
-  * `giflib`: Used for animated gif playback.
-    Disabled via `HAVE_LIBGIF=0`.
   * `libexif`: Used for auto-orientation and exif thumbnails.
     Disable via `HAVE_LIBEXIF=0`.
+
+The following dependencies are only used if your imlib2 version is lower than
+v1.8.0. If your imlib2 version is v1.8.0 (or above) then the following
+dependencies are unused and won't be built (even if you enable it explicitly).
+
+  * `giflib`: Used for animated gif playback.  Disabled via `HAVE_LIBGIF=0`.
   * `libwebp`: Used for animated webp playback.
     (***NOTE***: animated webp also requires Imlib2 v1.7.5 or above)
     Disabled via `HAVE_LIBWEBP=0`.
