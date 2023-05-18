@@ -506,6 +506,7 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		}
 
 		imlib_context_set_image(frame);
+		imlib_image_set_changes_on_disk(); /* see img_load() for rationale */
 		imlib_image_get_frame_info(&finfo);
 		assert(finfo.frame_count == (int)fcnt);
 		assert(finfo.canvas_w == img->w && finfo.canvas_h == img->h);
@@ -579,6 +580,9 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	if ((img->im = img_open(file)) == NULL)
 		return false;
 
+	/* ensure that the image's timestamp is checked when loading from cache
+	 * to avoid issues like: https://codeberg.org/nsxiv/nsxiv/issues/436
+	 */
 	imlib_image_set_changes_on_disk();
 
 /* since v1.7.5, Imlib2 can parse exif orientation from jpeg files.
