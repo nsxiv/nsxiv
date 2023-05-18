@@ -470,17 +470,17 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		m->frames = erealloc(m->frames, m->cap * sizeof(*m->frames));
 	}
 
-	imlib_context_set_dither(0);
-	imlib_context_set_anti_alias(0);
-	imlib_context_set_color_modifier(NULL);
-	imlib_context_set_operation(IMLIB_OP_COPY);
-
 	if ((blank = imlib_create_image(img->w, img->h)) == NULL) {
 		error(0, 0, "%s: couldn't create image", file->name);
 		return false;
 	}
 	imlib_context_set_image(blank);
 	img_area_clear(0, 0, img->w, img->h);
+
+	imlib_context_set_dither(0);
+	imlib_context_set_anti_alias(0);
+	imlib_context_set_color_modifier(NULL);
+	imlib_context_set_operation(IMLIB_OP_COPY);
 
 	/*
 	 * Imlib2 gives back a "raw frame", we need to blend it on top of the
@@ -548,6 +548,7 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 	imlib_context_set_image(blank);
 	imlib_free_image();
 	img_multiframe_context_set(img);
+	imlib_context_set_color_modifier(img->cmod); /* restore cmod */
 	return m->cnt > 0;
 }
 #endif /* HAVE_IMLIB2_MULTI_FRAME */
