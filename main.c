@@ -434,12 +434,12 @@ static void update_info(void)
 	r->p = r->buf;
 	if (mode == MODE_THUMB) {
 		if (tns.loadnext < tns.end)
-			bar_put(l, "Loading... %0*d", fw, tns.loadnext + 1);
+			bar_put(r, "Loading... %0*d | ", fw, tns.loadnext + 1);
 		else if (tns.initnext < filecnt)
-			bar_put(l, "Caching... %0*d", fw, tns.initnext + 1);
-		else if (info.ft.err)
-			strncpy(l->buf, files[fileidx].name, l->size);
+			bar_put(r, "Caching... %0*d | ", fw, tns.initnext + 1);
 		bar_put(r, "%s%0*d/%d", mark, fw, fileidx + 1, filecnt);
+		if (info.ft.err)
+			strncpy(l->buf, files[fileidx].name, l->size);
 	} else {
 		bar_put(r, "%s", mark);
 		if (img.ss.on) {
