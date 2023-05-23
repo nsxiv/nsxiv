@@ -54,6 +54,10 @@ enum { DEF_GIF_DELAY = 75 };
 enum { DEF_WEBP_DELAY = 75 };
 #endif
 
+#if HAVE_IMLIB2_MULTI_FRAME
+enum { DEF_ANIM_DELAY = 75 };
+#endif
+
 #define ZOOM_MIN (zoom_levels[0] / 100)
 #define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels) - 1] / 100)
 
@@ -539,7 +543,7 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		imlib_context_set_blend(!!(finfo.frame_flags & IMLIB_FRAME_BLEND));
 		imlib_blend_image_onto_image(frame, has_alpha, 0, 0, sw, sh, sx, sy, sw, sh);
 		m->frames[m->cnt].im = canvas;
-		m->frames[m->cnt].delay = finfo.frame_delay;
+		m->frames[m->cnt].delay = finfo.frame_delay ? finfo.frame_delay : DEF_ANIM_DELAY;
 		m->length += m->frames[m->cnt].delay;
 		m->cnt++;
 		imlib_context_set_image(frame);
