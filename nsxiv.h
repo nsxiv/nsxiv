@@ -20,6 +20,10 @@
 #ifndef NSXIV_H
 #define NSXIV_H
 
+#if !defined(DEBUG) && !defined(NDEBUG)
+	#define NDEBUG
+#endif
+
 #include <stdbool.h>
 #include <stddef.h>
 

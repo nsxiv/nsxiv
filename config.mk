@@ -26,7 +26,7 @@ CC = c99
 # CFLAGS, any additional compiler flags goes here
 CFLAGS = -Wall -pedantic -O2 -DNDEBUG
 # Uncomment for a debug build using gcc/clang
-# CFLAGS = -Wall -pedantic -g3 -fsanitize=address,undefined
+# CFLAGS = -Wall -pedantic -DDEBUG -g3 -fsanitize=address,undefined
 # LDFLAGS = $(CFLAGS)
 
 # icons that will be installed via `make icon`
