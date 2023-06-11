@@ -1,3 +1,67 @@
+<<<<<<< HEAD
+=======
+[![nsxiv](https://codeberg.org/nsxiv/pages/raw/branch/master/img/logo.png)](https://codeberg.org/nsxiv/nsxiv)
+
+[![CodeBerg](https://img.shields.io/badge/Hosted_at-Codeberg-%232185D0?style=flat-square&logo=CodeBerg)](https://codeberg.org/nsxiv/nsxiv)
+[![tags](https://img.shields.io/github/v/tag/nsxiv/nsxiv?style=flat-square)](https://codeberg.org/nsxiv/nsxiv/tags)
+[![license](https://img.shields.io/badge/license-GPL--2.0-lightgreen?style=flat-square)](https://codeberg.org/nsxiv/nsxiv/src/branch/master/LICENSE)
+[![loc](https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&style=flat-square)](https://codeberg.org/nsxiv/nsxiv)
+
+**Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
+--------------------------------------------------------------------
+
+nsxiv is a fork of the now-unmaintained [sxiv](https://github.com/xyb3rt/sxiv)
+with the purpose of being a (mostly) drop-in replacement for sxiv, maintaining its
+interface and adding simple, sensible features. nsxiv is free software licensed
+under GPLv2 and aims to be easy to modify and customize.
+
+Please file a bug report if something does not work as documented or expected on
+[Codeberg] after making sure you are using the latest release.  Contributions
+are welcome, see [CONTRIBUTING] to get started.
+
+[Codeberg]: https://codeberg.org/nsxiv/nsxiv/issues/new
+[CONTRIBUTING]: etc/CONTRIBUTING.md#contribution-guideline
+
+
+Features
+--------
+
+* Basic image operations like zooming, panning, rotating
+* Basic support for animated/multi-frame images
+* Thumbnail mode: grid of selectable previews of all images
+* Ability to cache thumbnails for fast re-loading
+* Automatically refreshing modified images
+* Customizable keyboard and mouse mappings via `config.h`
+* Scriptability via `key-handler`
+* Displaying image information in status bar via `image-info` & `thumb-info`
+* Customizable window title via `win-title`
+
+
+Screenshots
+-----------
+
+**Image mode with default colors:**
+
+![Image](https://codeberg.org/nsxiv/pages/raw/branch/master/img/image.png "Image mode")
+
+**Thumbnail mode with custom colors:**
+
+![Thumb](https://codeberg.org/nsxiv/pages/raw/branch/master/img/thumb.png "Thumb mode")
+
+
+Installing via package manager
+------------------------------
+
+<a href="https://repology.org/project/nsxiv/versions">
+  <img align="right" width="192" src="https://repology.org/badge/vertical-allrepos/nsxiv.svg">
+</a>
+
+nsxiv is available on the following distributions/repositories. If you don't see
+your distro listed here, either contact your distro's package maintainer or
+consider packaging it yourself and adding it to the respective community repo.
+
+
+>>>>>>> c03ec39437b473526080f496d6c8564e98bea1d7
 Dependencies
 ------------
 
@@ -12,10 +76,14 @@ The following dependencies are optional.
     Disabled via `HAVE_INOTIFY=0`.
   * `libXft`, `freetype2`, `fontconfig`: Used for the status bar.
     Disabled via `HAVE_LIBFONTS=0`.
-  * `giflib`: Used for animated gif playback.
-    Disabled via `HAVE_LIBGIF=0`.
   * `libexif`: Used for auto-orientation and exif thumbnails.
     Disable via `HAVE_LIBEXIF=0`.
+
+The following dependencies are only used if your imlib2 version is lower than
+v1.8.0. If your imlib2 version is v1.8.0 (or above) then the following
+dependencies are unused and won't be built (even if you enable it explicitly).
+
+  * `giflib`: Used for animated gif playback.  Disabled via `HAVE_LIBGIF=0`.
   * `libwebp`: Used for animated webp playback.
     (***NOTE***: animated webp also requires Imlib2 v1.7.5 or above)
     Disabled via `HAVE_LIBWEBP=0`.

@@ -36,7 +36,7 @@
 
 static char *cache_dir;
 
-static char* tns_cache_filepath(const char *filepath)
+static char *tns_cache_filepath(const char *filepath)
 {
 	size_t len;
 	char *cfile = NULL;
@@ -201,8 +201,8 @@ static Imlib_Image tns_scale_down(Imlib_Image im, int dim)
 	imlib_context_set_image(im);
 	w = imlib_image_get_width();
 	h = imlib_image_get_height();
-	zw = (float) dim / (float) w;
-	zh = (float) dim / (float) h;
+	zw = (float)dim / (float)w;
+	zh = (float)dim / (float)h;
 	z = MIN(zw, zh);
 	z = MIN(z, 1.0);
 
@@ -219,7 +219,7 @@ static Imlib_Image tns_scale_down(Imlib_Image im, int dim)
 
 bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 {
-	int maxwh = thumb_sizes[ARRLEN(thumb_sizes)-1];
+	int maxwh = thumb_sizes[ARRLEN(thumb_sizes) - 1];
 	bool cache_hit = false;
 	char *cfile;
 	thumb_t *t;
@@ -290,8 +290,8 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 						h = imlib_image_get_height();
 
 						if (pw > w && ph > h && (pw - ph >= 0) == (w - h >= 0)) {
-							zw = (float) pw / (float) w;
-							zh = (float) ph / (float) h;
+							zw = (float)pw / (float)w;
+							zh = (float)ph / (float)h;
 							if (zw < zh) {
 								pw /= zh;
 								x = (w - pw) / 2;
@@ -343,10 +343,14 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 	}
 	file->flags |= FF_TN_INIT;
 
-	if (n == tns->initnext)
-		while (++tns->initnext < *tns->cnt && ((++file)->flags & FF_TN_INIT));
-	if (n == tns->loadnext && !cache_only)
-		while (++tns->loadnext < tns->end && (++t)->im != NULL);
+	if (n == tns->initnext) {
+		while (++tns->initnext < *tns->cnt && ((++file)->flags & FF_TN_INIT))
+			;
+	}
+	if (n == tns->loadnext && !cache_only) {
+		while (++tns->loadnext < tns->end && (++t)->im != NULL)
+			;
+	}
 
 	return true;
 }
@@ -557,7 +561,7 @@ bool tns_zoom(tns_t *tns, int d)
 	oldzl = tns->zl;
 	tns->zl += -(d < 0) + (d > 0);
 	tns->zl = MAX(tns->zl, 0);
-	tns->zl = MIN(tns->zl, (int)ARRLEN(thumb_sizes)-1);
+	tns->zl = MIN(tns->zl, (int)ARRLEN(thumb_sizes) - 1);
 
 	tns->bw = ((thumb_sizes[tns->zl] - 1) >> 5) + 1;
 	tns->bw = MIN(tns->bw, 4);

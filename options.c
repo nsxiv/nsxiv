@@ -43,7 +43,8 @@ void print_usage(void)
 {
 	printf("usage: %s [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
 	       "[-g GEOMETRY] [-N NAME] [-n NUM] [-S DELAY] [-s MODE] "
-	       "[-z ZOOM] FILES...\n", progname);
+	       "[-z ZOOM] FILES...\n",
+	       progname);
 }
 
 static void print_version(void)
@@ -227,7 +228,7 @@ void parse_options(int argc, char **argv)
 			if (*end != '\0' || n <= 0)
 				error(EXIT_FAILURE, 0, "Invalid zoom level: %s", op.optarg);
 			_options.scalemode = SCALE_ZOOM;
-			_options.zoom = (float) n / 100.0f;
+			_options.zoom = (float)n / 100.0f;
 			break;
 		case '0':
 			_options.using_null = true;

@@ -1,7 +1,9 @@
 # EditorConfig
+# See this if your editor doesn't have built-in editorconfig support:
+# https://editorconfig.org/#download
 
-# apply to all files
-[*]
+# apply to all .c and .h files
+[*.{c,h}]
 
 # top-most EditorConfig file
 root = true

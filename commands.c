@@ -59,6 +59,13 @@ bool cg_quit(arg_t status)
 	return None; /* silence tcc warning */
 }
 
+bool cg_pick_quit(arg_t status)
+{
+	if (options->to_stdout && markcnt == 0)
+		printf("%s%c", files[fileidx].name, options->using_null ? '\0' : '\n');
+	return cg_quit(status);
+}
+
 bool cg_switch_mode(arg_t _)
 {
 	if (mode == MODE_IMAGE) {
@@ -326,10 +333,10 @@ bool ci_drag(arg_t drag_mode)
 
 	while (true) {
 		if (drag_mode == DRAG_ABSOLUTE) {
-			px = MIN(MAX(0.0, x - win.w*0.1), win.w*0.8) / (win.w*0.8)
-			   * (win.w - img.w * img.zoom);
-			py = MIN(MAX(0.0, y - win.h*0.1), win.h*0.8) / (win.h*0.8)
-			   * (win.h - img.h * img.zoom);
+			px = MIN(MAX(0.0, x - win.w * 0.1), win.w * 0.8) /
+			     (win.w * 0.8) * (win.w - img.w * img.zoom);
+			py = MIN(MAX(0.0, y - win.h * 0.1), win.h * 0.8) /
+			     (win.h * 0.8) * (win.h - img.h * img.zoom);
 		} else {
 			px = img.x + x - ox;
 			py = img.y + y - oy;
@@ -343,7 +350,8 @@ bool ci_drag(arg_t drag_mode)
 		           ButtonPressMask | ButtonReleaseMask | PointerMotionMask, &e);
 		if (e.type == ButtonPress || e.type == ButtonRelease)
 			break;
-		while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e));
+		while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e))
+			;
 		ox = x;
 		oy = y;
 		x = e.xmotion.x;
@@ -443,7 +451,8 @@ bool ct_drag_mark_image(arg_t _)
 			           ButtonPressMask | ButtonReleaseMask | PointerMotionMask, &e);
 			if (e.type == ButtonPress || e.type == ButtonRelease)
 				break;
-			while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e));
+			while (XCheckTypedEvent(win.env.dpy, MotionNotify, &e))
+				;
 			sel = tns_translate(&tns, e.xbutton.x, e.xbutton.y);
 		}
 	}

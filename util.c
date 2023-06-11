@@ -32,7 +32,7 @@
 extern char **environ;
 const char *progname = "nsxiv";
 
-void* emalloc(size_t size)
+void *emalloc(size_t size)
 {
 	void *ptr;
 
@@ -42,7 +42,7 @@ void* emalloc(size_t size)
 	return ptr;
 }
 
-void* ecalloc(size_t nmemb, size_t size)
+void *ecalloc(size_t nmemb, size_t size)
 {
 	void *ptr;
 
@@ -52,7 +52,7 @@ void* ecalloc(size_t nmemb, size_t size)
 	return ptr;
 }
 
-void* erealloc(void *ptr, size_t size)
+void *erealloc(void *ptr, size_t size)
 {
 	ptr = realloc(ptr, size);
 	if (ptr == NULL)
@@ -60,13 +60,13 @@ void* erealloc(void *ptr, size_t size)
 	return ptr;
 }
 
-char* estrdup(const char *s)
+char *estrdup(const char *s)
 {
 	size_t n = strlen(s) + 1;
 	return memcpy(emalloc(n), s, n);
 }
 
-void error(int eval, int err, const char* fmt, ...)
+void error(int eval, int err, const char *fmt, ...)
 {
 	va_list ap;
 
@@ -102,7 +102,7 @@ int r_opendir(r_dir_t *rdir, const char *dirname, bool recursive)
 	rdir->stack = emalloc(rdir->stcap * sizeof(*rdir->stack));
 	rdir->stlen = 0;
 
-	rdir->name = (char*) dirname;
+	rdir->name = (char *)dirname;
 	rdir->d = 0;
 	rdir->recursive = recursive;
 
@@ -133,7 +133,7 @@ int r_closedir(r_dir_t *rdir)
 	return ret;
 }
 
-char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
+char *r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 {
 	size_t len;
 	char *filename;
@@ -154,7 +154,7 @@ char* r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 			len = strlen(rdir->name) + strlen(dentry->d_name) + 2;
 			filename = emalloc(len);
 			snprintf(filename, len, "%s%s%s", rdir->name,
-			         rdir->name[strlen(rdir->name)-1] == '/' ? "" : "/",
+			         rdir->name[strlen(rdir->name) - 1] == '/' ? "" : "/",
 			         dentry->d_name);
 
 			if (stat(filename, &fstats) < 0) {
@@ -203,7 +203,8 @@ int r_mkdir(char *path)
 			s++;
 			continue;
 		}
-		for (; *s != '\0' && *s != '/'; s++);
+		for (; *s != '\0' && *s != '/'; s++)
+			;
 		c = *s;
 		*s = '\0';
 		if (mkdir(path, 0755) == -1) {
@@ -226,7 +227,7 @@ void construct_argv(char **argv, unsigned int len, ...)
 	for (i = 0; i < len; ++i)
 		argv[i] = va_arg(args, char *);
 	va_end(args);
-	assert(argv[len-1] == NULL && "argv should be NULL terminated");
+	assert(argv[len - 1] == NULL && "argv should be NULL terminated");
 }
 
 static int mkspawn_pipe(posix_spawn_file_actions_t *fa, const char *cmd, int *pfd, int dupidx)

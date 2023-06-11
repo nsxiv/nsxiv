@@ -54,8 +54,12 @@ enum { DEF_GIF_DELAY = 75 };
 enum { DEF_WEBP_DELAY = 75 };
 #endif
 
+#if HAVE_IMLIB2_MULTI_FRAME
+enum { DEF_ANIM_DELAY = 75 };
+#endif
+
 #define ZOOM_MIN (zoom_levels[0] / 100)
-#define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels)-1] / 100)
+#define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels) - 1] / 100)
 
 static int calc_cache_size(void)
 {
@@ -69,7 +73,7 @@ static int calc_cache_size(void)
 #endif
 	if (pages < 0 || page_size < 0)
 		return CACHE_SIZE_FALLBACK;
-	cache = (pages/100) * CACHE_SIZE_MEM_PERCENTAGE;
+	cache = (pages / 100) * CACHE_SIZE_MEM_PERCENTAGE;
 	cache *= page_size;
 
 	return MIN(cache, CACHE_SIZE_LIMIT);
@@ -234,12 +238,12 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 			while (ext) {
 				if (ext_code == GRAPHICS_EXT_FUNC_CODE) {
 					if (ext[1] & 1)
-						transp = (int) ext[4];
+						transp = (int)ext[4];
 					else
 						transp = -1;
 
-					delay = 10 * ((unsigned int) ext[3] << 8 | (unsigned int) ext[2]);
-					disposal = (unsigned int) ext[1] >> 2 & 0x7;
+					delay = 10 * ((unsigned int)ext[3] << 8 | (unsigned int)ext[2]);
+					disposal = (unsigned int)ext[1] >> 2 & 0x7;
 				}
 				ext = NULL;
 				DGifGetExtensionNext(gif, &ext);
@@ -280,10 +284,11 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 			for (i = 0; i < sh; i++) {
 				for (j = 0; j < sw; j++) {
 					if (i < y || i >= y + h || j < x || j >= x + w ||
-					    rows[i-y][j-x] == transp)
+					    rows[i - y][j - x] == transp)
 					{
-						if (prev_frame != NULL && (prev_disposal != 2 ||
-						    i < py || i >= py + ph || j < px || j >= px + pw))
+						if (prev_frame != NULL &&
+						    (prev_disposal != 2 || i < py || i >= py + ph ||
+						     j < px || j >= px + pw))
 						{
 							*ptr = prev_frame[i * sw + j];
 						} else {
@@ -291,9 +296,9 @@ static bool img_load_gif(img_t *img, const fileinfo_t *file)
 						}
 					} else {
 						assert(cmap != NULL);
-						r = cmap->Colors[rows[i-y][j-x]].Red;
-						g = cmap->Colors[rows[i-y][j-x]].Green;
-						b = cmap->Colors[rows[i-y][j-x]].Blue;
+						r = cmap->Colors[rows[i - y][j - x]].Red;
+						g = cmap->Colors[rows[i - y][j - x]].Green;
+						b = cmap->Colors[rows[i - y][j - x]].Blue;
 						*ptr = 0xffu << 24 | r << 16 | g << 8 | b;
 					}
 					ptr++;
@@ -412,12 +417,12 @@ static bool img_load_webp(img_t *img, const fileinfo_t *file)
 	/* Load and decode frames (also works on images with only 1 frame) */
 	m->length = m->cnt = m->sel = 0;
 	while (WebPAnimDecoderGetNext(dec, &buf, &ts)) {
-		im = imlib_create_image_using_copied_data(
-		     info.canvas_width, info.canvas_height, (uint32_t *)buf);
+		im = imlib_create_image_using_copied_data(info.canvas_width, info.canvas_height,
+		                                          (uint32_t *)buf);
 		imlib_context_set_image(im);
 		imlib_image_set_format("webp");
 		/* Get an iterator of this frame - used for frame info (duration, etc.) */
-		WebPDemuxGetFrame(demux, m->cnt+1, &iter);
+		WebPDemuxGetFrame(demux, m->cnt + 1, &iter);
 		imlib_image_set_has_alpha((flags & ALPHA_FLAG) == ALPHA_FLAG);
 		/* Store info for this frame */
 		m->frames[m->cnt].im = im;
@@ -469,17 +474,17 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		m->frames = erealloc(m->frames, m->cap * sizeof(*m->frames));
 	}
 
-	imlib_context_set_dither(0);
-	imlib_context_set_anti_alias(0);
-	imlib_context_set_color_modifier(NULL);
-	imlib_context_set_operation(IMLIB_OP_COPY);
-
 	if ((blank = imlib_create_image(img->w, img->h)) == NULL) {
 		error(0, 0, "%s: couldn't create image", file->name);
 		return false;
 	}
 	imlib_context_set_image(blank);
 	img_area_clear(0, 0, img->w, img->h);
+
+	imlib_context_set_dither(0);
+	imlib_context_set_anti_alias(0);
+	imlib_context_set_color_modifier(NULL);
+	imlib_context_set_operation(IMLIB_OP_COPY);
 
 	/*
 	 * Imlib2 gives back a "raw frame", we need to blend it on top of the
@@ -505,6 +510,7 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		}
 
 		imlib_context_set_image(frame);
+		imlib_image_set_changes_on_disk(); /* see img_load() for rationale */
 		imlib_image_get_frame_info(&finfo);
 		assert(finfo.frame_count == (int)fcnt);
 		assert(finfo.canvas_w == img->w && finfo.canvas_h == img->h);
@@ -537,7 +543,7 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		imlib_context_set_blend(!!(finfo.frame_flags & IMLIB_FRAME_BLEND));
 		imlib_blend_image_onto_image(frame, has_alpha, 0, 0, sw, sh, sx, sy, sw, sh);
 		m->frames[m->cnt].im = canvas;
-		m->frames[m->cnt].delay = finfo.frame_delay;
+		m->frames[m->cnt].delay = finfo.frame_delay ? finfo.frame_delay : DEF_ANIM_DELAY;
 		m->length += m->frames[m->cnt].delay;
 		m->cnt++;
 		imlib_context_set_image(frame);
@@ -546,6 +552,7 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 	imlib_context_set_image(blank);
 	imlib_free_image();
 	img_multiframe_context_set(img);
+	imlib_context_set_color_modifier(img->cmod); /* restore cmod */
 	return m->cnt > 0;
 }
 #endif /* HAVE_IMLIB2_MULTI_FRAME */
@@ -578,6 +585,9 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	if ((img->im = img_open(file)) == NULL)
 		return false;
 
+	/* ensure that the image's timestamp is checked when loading from cache
+	 * to avoid issues like: https://codeberg.org/nsxiv/nsxiv/issues/436
+	 */
 	imlib_image_set_changes_on_disk();
 
 /* since v1.7.5, Imlib2 can parse exif orientation from jpeg files.
@@ -673,8 +683,8 @@ static bool img_fit(img_t *img)
 	if (img->scalemode == SCALE_ZOOM)
 		return false;
 
-	zw = (float) img->win->w / (float) img->w;
-	zh = (float) img->win->h / (float) img->h;
+	zw = (float)img->win->w / (float)img->w;
+	zh = (float)img->win->h / (float)img->h;
 
 	switch (img->scalemode) {
 	case SCALE_FILL:
@@ -692,7 +702,7 @@ static bool img_fit(img_t *img)
 	}
 	z = MIN(z, img->scalemode == SCALE_DOWN ? 1.0 : ZOOM_MAX);
 
-	if (ABS(img->zoom - z) > 1.0/MAX(img->w, img->h)) {
+	if (ABS(img->zoom - z) > 1.0 / MAX(img->w, img->h)) {
 		img->zoom = z;
 		img->dirty = title_dirty = true;
 		return true;
@@ -838,14 +848,14 @@ bool img_zoom_to(img_t *img, float z)
 
 bool img_zoom(img_t *img, int d)
 {
-	int i = d > 0 ? 0 : (int)ARRLEN(zoom_levels)-1;
+	int i = d > 0 ? 0 : (int)ARRLEN(zoom_levels) - 1;
 	while (i >= 0 && i < (int)ARRLEN(zoom_levels) &&
-	       (d > 0 ? zoom_levels[i]/100 <= img->zoom : zoom_levels[i]/100 >= img->zoom))
+	       (d > 0 ? zoom_levels[i] / 100 <= img->zoom : zoom_levels[i] / 100 >= img->zoom))
 	{
 		i += d;
 	}
-	i = MIN(MAX(i, 0), (int)ARRLEN(zoom_levels)-1);
-	return img_zoom_to(img, zoom_levels[i]/100);
+	i = MIN(MAX(i, 0), (int)ARRLEN(zoom_levels) - 1);
+	return img_zoom_to(img, zoom_levels[i] / 100);
 }
 
 bool img_pos(img_t *img, float x, float y)
@@ -882,7 +892,7 @@ bool img_pan(img_t *img, direction_t dir, int d)
 	float x, y;
 
 	if (d > 0) {
-		x = y = MAX(1, (float) d * img->zoom);
+		x = y = MAX(1, (float)d * img->zoom);
 	} else {
 		x = img->win->w / (d < 0 ? 1 : PAN_FRACTION);
 		y = img->win->h / (d < 0 ? 1 : PAN_FRACTION);

@@ -12,6 +12,7 @@ bool cg_n_or_last(arg_t);
 bool cg_navigate_marked(arg_t);
 bool cg_prefix_external(arg_t);
 bool cg_quit(arg_t);
+bool cg_pick_quit(arg_t);
 bool cg_reload_image(arg_t);
 bool cg_remove_image(arg_t);
 bool cg_reverse_marks(arg_t);
@@ -57,6 +58,7 @@ bool ct_select(arg_t);
 #define g_navigate_marked { cg_navigate_marked, MODE_ALL }
 #define g_prefix_external { cg_prefix_external, MODE_ALL }
 #define g_quit { cg_quit, MODE_ALL }
+#define g_pick_quit { cg_pick_quit, MODE_ALL }
 #define g_reload_image { cg_reload_image, MODE_ALL }
 #define g_remove_image { cg_remove_image, MODE_ALL }
 #define g_reverse_marks { cg_reverse_marks, MODE_ALL }

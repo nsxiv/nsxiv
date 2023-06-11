@@ -1,0 +1,82 @@
+# clang-format doesn't dictate the project's code style and can mess up a
+# couple edge cases. However it comes quite close and can be used for fixing
+# most style issues automatically on new changes via `git-clang-format`.
+---
+
+Standard: c++03
+
+ColumnLimit: 0
+
+AccessModifierOffset: -8
+ConstructorInitializerIndentWidth: 8
+ContinuationIndentWidth: 8
+IndentCaseLabels: false
+IndentGotoLabels: false
+IndentPPDirectives: None
+IndentWidth: 8
+IndentWrappedFunctionNames: false
+NamespaceIndentation: None
+TabWidth: 8
+UseTab: AlignWithSpaces
+
+AlignAfterOpenBracket: true
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignEscapedNewlines: false
+AlignOperands: true
+AlignTrailingComments: false
+DerivePointerAlignment: true
+PointerAlignment: true
+
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: false
+
+BinPackArguments: true
+BinPackParameters: true
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: MultiLine
+  AfterEnum: false
+  AfterExternBlock: false
+  AfterFunction: true
+  AfterStruct: false
+  AfterUnion: false
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+
+BreakBeforeBinaryOperators: None
+BreakBeforeInheritanceComma: false
+BreakBeforeTernaryOperators: false
+BreakConstructorInitializers: BeforeComma
+BreakConstructorInitializersBeforeComma: false
+BreakStringLiterals: true
+
+Cpp11BracedListStyle: false
+MaxEmptyLinesToKeep: 1
+
+ReflowComments: false
+
+SortIncludes: true
+
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+...

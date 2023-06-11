@@ -135,6 +135,10 @@ Prefix the next command with a number (denoted via
 .B q
 Quit nsxiv.
 .TP
+.B Q
+Quit nsxiv, but additionally print the current filename when \-o is active and
+no files have been marked.
+.TP
 .B Return
 Switch to thumbnail mode / open selected image in image mode.
 .TP
@@ -457,6 +461,9 @@ Color of the bar foreground. Defaults to window.foreground
 Color of the mark foreground. Defaults to window.foreground
 .TP
 Please see xrdb(1) on how to change them.
+.LP
+An X resources entry with an empty value means the default
+(defined in config.h) will be used.
 .SH WINDOW TITLE
 The window title can be replaced with the output of a user-provided script,
 which is called by nsxiv whenever any of the relevant information changes.
@@ -562,11 +569,6 @@ TAAPArthur             <taaparthur at gmail.com>
 eylles                 <ed.ylles1997 at gmail.com>
 Stein Gunnar Bakkeby   <bakkeby at gmail.com>
 explosion-mental       <explosion0mental at gmail.com>
-mamg22                 <marcomonizg at gmail.com>
-LuXu
-Guilherme Freire
-Sam Whitehead
-Kian Kasad             <kian at kasad.com>
 .EE
 .SH CONTRIBUTORS
 .EX

@@ -23,8 +23,11 @@ HAVE_LIBWEBP  = $(OPT_DEP_DEFAULT)
 
 # Compiler and linker
 CC = c99
-# CFLAGS, any optimization flags goes here
-CFLAGS = -Wall -pedantic
+# CFLAGS, any additional compiler flags goes here
+CFLAGS = -Wall -pedantic -O2 -DNDEBUG
+# Uncomment for a debug build using gcc/clang
+# CFLAGS = -Wall -pedantic -DDEBUG -g3 -fsanitize=address,undefined
+# LDFLAGS = $(CFLAGS)
 
 # icons that will be installed via `make icon`
 ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
