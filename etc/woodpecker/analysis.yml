@@ -4,7 +4,7 @@ pipeline:
   analysis:
     image: alpine
     commands: |
-      apk add --no-cache build-base cppcheck clang-extra-tools \
+      apk add --no-cache build-base cppcheck clang-extra-tools git \
           imlib2-dev xorgproto \
           libxft-dev libexif-dev giflib-dev libwebp-dev >/dev/null
       make config.h version.h

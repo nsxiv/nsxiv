@@ -16,7 +16,7 @@ jobs:
         sudo apt-get install libimlib2 libimlib2-dev xserver-xorg-core xserver-xorg-dev \
                              libxft2 libxft-dev libexif12 libexif-dev \
                              gcc clang git bc
-        TCC_SHA="027b8fb9b88fe137447fb8bb1b61079be9702472"
+        TCC_SHA="29ae3ed4d5b83eec43598d6cd7949bccb41c8083"
         wget "https://github.com/TinyCC/tinycc/archive/${TCC_SHA}.tar.gz" && tar xzf "${TCC_SHA}.tar.gz"
         ( cd "tinycc-$TCC_SHA" && ./configure && make -j"$(nproc)" && sudo make install; )
     - name: build
