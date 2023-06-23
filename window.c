@@ -141,8 +141,8 @@ void win_init(win_t *win)
 	res_man = XResourceManagerString(e->dpy);
 	db = res_man == NULL ? NULL : XrmGetStringDatabase(res_man);
 
-	win_bg = win_res(db, WIN_BG[0], WIN_BG[1]);
-	win_fg = win_res(db, WIN_FG[0], WIN_FG[1]);
+	win_bg = win_res(db, WIN_BG[0], WIN_BG[1] ? WIN_BG[1] : "white");
+	win_fg = win_res(db, WIN_FG[0], WIN_FG[1] ? WIN_FG[1] : "black");
 	mrk_fg = win_res(db, MARK_FG[0], MARK_FG[1] ? MARK_FG[1] : win_fg);
 	win_alloc_color(e, win_bg, &win->win_bg);
 	win_alloc_color(e, win_fg, &win->win_fg);
@@ -154,7 +154,7 @@ void win_init(win_t *win)
 	xft_alloc_color(e, bar_bg, &win->bar_bg);
 	xft_alloc_color(e, bar_fg, &win->bar_fg);
 
-	f = win_res(db, BAR_FONT[0], BAR_FONT[1]);
+	f = win_res(db, BAR_FONT[0], BAR_FONT[1] ? BAR_FONT[1] : "monospace-8");
 	win_init_font(e, f);
 
 	win->bar.l.buf = lbuf;
