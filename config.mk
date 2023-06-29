@@ -35,8 +35,8 @@ ICONS = 16x16.png 32x32.png 48x48.png 64x64.png 128x128.png
 # Uncomment on OpenBSD
 # HAVE_INOTIFY = 0
 # lib_fonts_bsd_0 =
-# lib_fonts_bsd_1 = -lfreetype
+# lib_fonts_bsd_1 = -lfreetype -L/usr/X11R6/lib/freetype2
 # inc_fonts_bsd_0 =
 # inc_fonts_bsd_1 = -I/usr/X11R6/include/freetype2
-# LDLIBS = -lz -L/usr/local/lib -L/usr/X11R6/lib $(lib_fonts_bsd_$(HAVE_LIBFONTS))
-# CPPFLAGS = -I/usr/local/include -I/usr/X11R6/include $(inc_fonts_bsd_$(HAVE_LIBFONTS))
+# CPPFLAGS = -I/usr/X11R6/include -I/usr/local/include $(inc_fonts_bsd_$(HAVE_LIBFONTS))
+# LDLIBS = -L/usr/X11R6/lib -L/usr/local/lib $(lib_fonts_bsd_$(HAVE_LIBFONTS))
