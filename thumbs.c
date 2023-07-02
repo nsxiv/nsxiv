@@ -179,12 +179,8 @@ CLEANUP void tns_free(tns_t *tns)
 	int i;
 
 	if (tns->thumbs != NULL) {
-		for (i = 0; i < *tns->cnt; i++) {
-			if (tns->thumbs[i].im != NULL) {
-				imlib_context_set_image(tns->thumbs[i].im);
-				imlib_free_image();
-			}
-		}
+		for (i = 0; i < *tns->cnt; i++)
+			img_free(tns->thumbs[i].im, false);
 		free(tns->thumbs);
 		tns->thumbs = NULL;
 	}
@@ -233,12 +229,8 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 		return false;
 
 	t = &tns->thumbs[n];
-
-	if (t->im != NULL) {
-		imlib_context_set_image(t->im);
-		imlib_free_image();
-		t->im = NULL;
-	}
+	img_free(t->im, false);
+	t->im = NULL;
 
 	if (!force) {
 		if ((im = tns_cache_load(file->path, &force)) != NULL) {
@@ -363,11 +355,8 @@ void tns_unload(tns_t *tns, int n)
 	assert(n >= 0 && n < *tns->cnt);
 	t = &tns->thumbs[n];
 
-	if (t->im != NULL) {
-		imlib_context_set_image(t->im);
-		imlib_free_image();
-		t->im = NULL;
-	}
+	img_free(t->im, false);
+	t->im = NULL;
 }
 
 static void tns_check_view(tns_t *tns, bool scrolled)

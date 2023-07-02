@@ -148,12 +148,10 @@ void exif_auto_orientate(const fileinfo_t *file)
 static void img_multiframe_context_set(img_t *img)
 {
 	if (img->multi.cnt > 1) {
-		imlib_context_set_image(img->im);
-		imlib_free_image();
+		img_free(img->im, false);
 		img->im = img->multi.frames[0].im;
 	} else if (img->multi.cnt == 1) {
-		imlib_context_set_image(img->multi.frames[0].im);
-		imlib_free_image();
+		img_free(img->multi.frames[0].im, false);
 		img->multi.cnt = 0;
 	}
 
@@ -502,14 +500,8 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		if (canvas == NULL || frame == NULL || finfo.frame_count != (int)fcnt ||
 		    finfo.canvas_w != img->w || finfo.canvas_h != img->h)
 		{
-			if (frame != NULL) {
-				imlib_context_set_image(frame);
-				imlib_free_image();
-			}
-			if (canvas != NULL) {
-				imlib_context_set_image(canvas);
-				imlib_free_image();
-			}
+			img_free(frame, false);
+			img_free(canvas, false);
 			error(0, 0, "%s: failed to load frame %d", file->name, n);
 			break;
 		}
@@ -546,11 +538,9 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		m->frames[m->cnt].delay = finfo.frame_delay ? finfo.frame_delay : DEF_ANIM_DELAY;
 		m->length += m->frames[m->cnt].delay;
 		m->cnt++;
-		imlib_context_set_image(frame);
-		imlib_free_image();
+		img_free(frame, false);
 	}
-	imlib_context_set_image(blank);
-	imlib_free_image();
+	img_free(blank, false);
 	img_multiframe_context_set(img);
 	imlib_context_set_color_modifier(img->cmod); /* restore cmod */
 	return m->cnt > 0;
@@ -632,21 +622,25 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	return true;
 }
 
+CLEANUP void img_free(Imlib_Image im, bool decache)
+{
+	if (im != NULL) {
+		imlib_context_set_image(im);
+		decache ? imlib_free_image_and_decache() : imlib_free_image();
+	}
+}
+
 CLEANUP void img_close(img_t *img, bool decache)
 {
 	unsigned int i;
-	void (*free_img)(void) = decache ? imlib_free_image_and_decache : imlib_free_image;
 
 	if (img->multi.cnt > 0) {
-		for (i = 0; i < img->multi.cnt; i++) {
-			imlib_context_set_image(img->multi.frames[i].im);
-			free_img();
-		}
+		for (i = 0; i < img->multi.cnt; i++)
+			img_free(img->multi.frames[i].im, decache);
 		img->multi.cnt = 0;
 		img->im = NULL;
 	} else if (img->im != NULL) {
-		imlib_context_set_image(img->im);
-		free_img();
+		img_free(img->im, decache);
 		img->im = NULL;
 	}
 }

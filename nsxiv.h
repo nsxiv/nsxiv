@@ -217,6 +217,7 @@ struct img {
 
 void img_init(img_t*, win_t*);
 bool img_load(img_t*, const fileinfo_t*);
+CLEANUP void img_free(Imlib_Image, bool);
 CLEANUP void img_close(img_t*, bool);
 void img_render(img_t*);
 bool img_fit_win(img_t*, scalemode_t);
