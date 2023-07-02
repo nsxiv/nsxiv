@@ -490,9 +490,22 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		bool has_alpha;
 
 		imlib_context_set_image(m->cnt < 1 ? blank : m->frames[m->cnt - 1].im);
-		if ((canvas = imlib_clone_image()) == NULL ||
-		    (frame = imlib_load_image_frame(file->path, n)) == NULL)
+		canvas = imlib_clone_image();
+		if ((frame = imlib_load_image_frame(file->path, n)) != NULL) {
+			imlib_context_set_image(frame);
+			imlib_image_set_changes_on_disk(); /* see img_load() for rationale */
+			imlib_image_get_frame_info(&finfo);
+		}
+		/* NOTE: the underlying file can end up changing during load.
+		 * so check if frame_count, w, h are all still the same or not.
+		 */
+		if (canvas == NULL || frame == NULL || finfo.frame_count != (int)fcnt ||
+		    finfo.canvas_w != img->w || finfo.canvas_h != img->h)
 		{
+			if (frame != NULL) {
+				imlib_context_set_image(frame);
+				imlib_free_image();
+			}
 			if (canvas != NULL) {
 				imlib_context_set_image(canvas);
 				imlib_free_image();
@@ -501,11 +514,6 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 			break;
 		}
 
-		imlib_context_set_image(frame);
-		imlib_image_set_changes_on_disk(); /* see img_load() for rationale */
-		imlib_image_get_frame_info(&finfo);
-		assert(finfo.frame_count == (int)fcnt);
-		assert(finfo.canvas_w == img->w && finfo.canvas_h == img->h);
 		sx = finfo.frame_x;
 		sy = finfo.frame_y;
 		sw = finfo.frame_w;
