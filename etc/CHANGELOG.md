@@ -8,6 +8,60 @@ there may be more changes. Please use `git log` to view them.
 
 - - -
 
+**[v32](https://codeberg.org/nsxiv/nsxiv/archive/v32.tar.gz)**
+*(October 01, 2023)*
+
+* Changes:
+
+  * Removed legacy multi-frame loaders. Animated image support now requires
+    Imlib2 v1.8.0 or above.
+  * Move loading/caching messages to right side bar [#446]
+  * Set a default delay if delay is 0 in a multi-frame image [#445]
+  * `config.mk`: default to `-O2` [#435]
+  * `config.mk` no longer explicitly sets `CC` to `c99` [#455]
+  * Assertions are now opt-in and requires explicitly defining `DEBUG` [#447]
+
+* Added:
+
+  * Added a pick-quit key-binding [#432]
+  * Ability to configure Xresources class name in `config.h` [#427]
+  * `--version` output now also includes compiled-in feature list [#462]
+  * Document handling of empty X resources values [#428]
+  * Experimental flag `--bg-cache` to generate thumbnail cache in a background
+    process [#438]
+
+* Fixes:
+
+  * Changing brightness/contrast on multi-frame images [#440]
+  * Brightness keybindings on manpage [#467]
+  * Various autoreload bugs [#437], [#459], [#460]
+  * `*-info` scripts not updating when selecting thumbnail with mouse [#477]
+  * Updated openbsd configuration in `config.mk` [#453]
+  * Memory leak in `win_draw_bar` [#444]
+  * Thumbnail leak when removing the last file [#423]
+
+[#423]: https://codeberg.org/nsxiv/nsxiv/pulls/423
+[#427]: https://codeberg.org/nsxiv/nsxiv/pulls/427
+[#428]: https://codeberg.org/nsxiv/nsxiv/pulls/428
+[#432]: https://codeberg.org/nsxiv/nsxiv/pulls/432
+[#435]: https://codeberg.org/nsxiv/nsxiv/pulls/435
+[#437]: https://codeberg.org/nsxiv/nsxiv/pulls/437
+[#438]: https://codeberg.org/nsxiv/nsxiv/pulls/438
+[#440]: https://codeberg.org/nsxiv/nsxiv/pulls/440
+[#444]: https://codeberg.org/nsxiv/nsxiv/pulls/444
+[#445]: https://codeberg.org/nsxiv/nsxiv/pulls/445
+[#446]: https://codeberg.org/nsxiv/nsxiv/pulls/446
+[#447]: https://codeberg.org/nsxiv/nsxiv/pulls/447
+[#453]: https://codeberg.org/nsxiv/nsxiv/pulls/453
+[#455]: https://codeberg.org/nsxiv/nsxiv/pulls/455
+[#459]: https://codeberg.org/nsxiv/nsxiv/pulls/459
+[#460]: https://codeberg.org/nsxiv/nsxiv/pulls/460
+[#462]: https://codeberg.org/nsxiv/nsxiv/pulls/462
+[#467]: https://codeberg.org/nsxiv/nsxiv/pulls/467
+[#477]: https://codeberg.org/nsxiv/nsxiv/pulls/477
+
+- - -
+
 **[v31](https://codeberg.org/nsxiv/nsxiv/archive/v31.tar.gz)**
 *(January 28, 2023)*
 
