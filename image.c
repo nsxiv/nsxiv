@@ -637,6 +637,22 @@ CLEANUP void img_close(img_t *img, bool decache)
 	if (img->multi.cnt > 0) {
 		for (i = 0; i < img->multi.cnt; i++)
 			img_free(img->multi.frames[i].im, decache);
+		/* NOTE: the above only decaches the "composed frames",
+		 * and not the "raw frame" that's associated with the file.
+		 * which leads to issues like: https://codeberg.org/nsxiv/nsxiv/issues/456
+		 */
+#if HAVE_IMLIB2_MULTI_FRAME
+	#if IMLIB2_VERSION >= IMLIB2_VERSION_(1, 12, 0)
+		if (decache)
+			imlib_image_decache_file(files[fileidx].path);
+	#else /* UPGRADE: Imlib2 v1.12.0: remove this hack */
+		/* HACK: try to reload all the frames and forcefully decache them
+		 * if imlib_image_decache_file() isn't available.
+		 */
+		for (i = 0; decache && i < img->multi.cnt; i++)
+			img_free(imlib_load_image_frame(files[fileidx].path, i + 1), true);
+	#endif
+#endif
 		img->multi.cnt = 0;
 		img->im = NULL;
 	} else if (img->im != NULL) {
