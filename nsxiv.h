@@ -159,6 +159,15 @@ typedef keymap_t button_t;
 
 /* image.c */
 
+#ifdef IMLIB2_VERSION
+	#if IMLIB2_VERSION >= IMLIB2_VERSION_(1, 8, 0)
+		#define HAVE_IMLIB2_MULTI_FRAME 1
+	#endif
+#endif
+#ifndef HAVE_IMLIB2_MULTI_FRAME
+	#define HAVE_IMLIB2_MULTI_FRAME 0
+#endif
+
 typedef struct {
 	Imlib_Image im;
 	unsigned int delay;

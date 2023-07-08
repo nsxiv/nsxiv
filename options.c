@@ -50,6 +50,27 @@ void print_usage(void)
 static void print_version(void)
 {
 	printf("%s %s\n", progname, VERSION);
+	fputs("features: "
+#if HAVE_INOTIFY
+		"+inotify "
+#endif
+#if HAVE_LIBFONTS
+		"+statusbar "
+#endif
+#if HAVE_LIBEXIF
+		"+exif "
+#endif
+#if HAVE_IMLIB2_MULTI_FRAME
+		"+multiframe "
+#else
+	#if HAVE_LIBGIF
+		"+giflib "
+	#endif
+	#if HAVE_LIBWEBP
+		"+libwebp "
+	#endif
+#endif
+		"\n", stdout);
 }
 
 void parse_options(int argc, char **argv)

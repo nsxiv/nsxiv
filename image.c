@@ -33,15 +33,6 @@
 #include <libexif/exif-data.h>
 #endif
 
-#ifdef IMLIB2_VERSION
-	#if IMLIB2_VERSION >= IMLIB2_VERSION_(1, 8, 0)
-		#define HAVE_IMLIB2_MULTI_FRAME 1
-	#endif
-#endif
-#ifndef HAVE_IMLIB2_MULTI_FRAME
-	#define HAVE_IMLIB2_MULTI_FRAME 0
-#endif
-
 #if HAVE_LIBGIF && !HAVE_IMLIB2_MULTI_FRAME
 #include <gif_lib.h>
 enum { DEF_GIF_DELAY = 75 };
