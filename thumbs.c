@@ -268,6 +268,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 			char tmppath[] = "/tmp/nsxiv-XXXXXX";
 			Imlib_Image tmpim;
 
+			/* UPGRADE: Imlib2 v1.10.0: avoid tempfile and use imlib_load_image_mem() */
 			if ((ed = exif_data_new_from_file(file->path)) != NULL) {
 				if (ed->data != NULL && ed->size > 0 &&
 				    (tmpfd = mkstemp(tmppath)) >= 0)

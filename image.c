@@ -563,6 +563,8 @@ Imlib_Image img_open(const fileinfo_t *file)
 	{
 		imlib_context_set_image(im);
 	}
+	/* UPGRADE: Imlib2 v1.10.0: better error reporting with
+	 * imlib_get_error() + imlib_strerror() */
 	if (im == NULL && (file->flags & FF_WARN))
 		error(0, 0, "%s: Error opening image", file->name);
 	return im;
@@ -581,6 +583,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	 */
 	imlib_image_set_changes_on_disk();
 
+/* UPGRADE: Imlib2 v1.7.5: remove these exif related ifdefs */
 /* since v1.7.5, Imlib2 can parse exif orientation from jpeg files.
  * this version also happens to be the first one which defines the
  * IMLIB2_VERSION macro.

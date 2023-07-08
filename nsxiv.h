@@ -159,7 +159,7 @@ typedef keymap_t button_t;
 
 /* image.c */
 
-#ifdef IMLIB2_VERSION
+#ifdef IMLIB2_VERSION /* UPGRADE: Imlib2 v1.8.0: remove all HAVE_IMLIB2_MULTI_FRAME ifdefs */
 	#if IMLIB2_VERSION >= IMLIB2_VERSION_(1, 8, 0)
 		#define HAVE_IMLIB2_MULTI_FRAME 1
 	#endif
