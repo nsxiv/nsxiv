@@ -47,7 +47,7 @@ jobs:
       - name: build
         run: |
           # libinotify-kqueue isn't available on homebrew
-          make clean && make -s CC=gcc OPT_DEP_DEFAULT=1 HAVE_INOTIFY=0
+          make clean && make -s OPT_DEP_DEFAULT=1 HAVE_INOTIFY=0
           # force uninstallation with --ignore-dependencies
           brew uninstall --ignore-dependencies libxft libexif giflib webp
-          make clean && make -s CC=gcc OPT_DEP_DEFAULT=0
+          make clean && make -s OPT_DEP_DEFAULT=0

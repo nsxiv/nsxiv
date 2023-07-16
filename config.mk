@@ -21,8 +21,6 @@ HAVE_LIBEXIF  = $(OPT_DEP_DEFAULT)
 HAVE_LIBGIF   = $(OPT_DEP_DEFAULT)
 HAVE_LIBWEBP  = $(OPT_DEP_DEFAULT)
 
-# Compiler and linker
-CC = c99
 # CFLAGS, any additional compiler flags goes here
 CFLAGS = -Wall -pedantic -O2 -DNDEBUG
 # Uncomment for a debug build using gcc/clang
