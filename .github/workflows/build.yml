@@ -43,11 +43,11 @@ jobs:
         run: |
           brew update
           # see: https://github.com/actions/setup-python/issues/577
-          brew install imlib2 libx11 libxft libexif giflib webp || true
+          brew install imlib2 libx11 libxft libexif || true
       - name: build
         run: |
           # libinotify-kqueue isn't available on homebrew
           make clean && make -s OPT_DEP_DEFAULT=1 HAVE_INOTIFY=0
           # force uninstallation with --ignore-dependencies
-          brew uninstall --ignore-dependencies libxft libexif giflib webp
+          brew uninstall --ignore-dependencies libxft libexif
           make clean && make -s OPT_DEP_DEFAULT=0

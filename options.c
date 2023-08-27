@@ -62,13 +62,6 @@ static void print_version(void)
 #endif
 #if HAVE_IMLIB2_MULTI_FRAME
 		"+multiframe "
-#else
-	#if HAVE_LIBGIF
-		"+giflib "
-	#endif
-	#if HAVE_LIBWEBP
-		"+libwebp "
-	#endif
 #endif
 		"\n", stdout);
 }

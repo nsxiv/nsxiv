@@ -25,7 +25,7 @@ Features
 --------
 
 * Basic image operations like zooming, panning, rotating
-* Basic support for animated/multi-frame images
+* Basic support for animated/multi-frame images (**requires Imlib2 v1.8.0 or above**)
 * Thumbnail mode: grid of selectable previews of all images
 * Ability to cache thumbnails for fast re-loading
 * Automatically refreshing modified images
@@ -75,15 +75,6 @@ The following dependencies are optional:
     Disabled via `HAVE_LIBFONTS=0`.
   * `libexif`: Used for auto-orientation and exif thumbnails.
     Disable via `HAVE_LIBEXIF=0`.
-
-The following dependencies are only used if your imlib2 version is lower than
-v1.8.0. If your imlib2 version is v1.8.0 (or above) then the following
-dependencies are unused and won't be built (even if you enable it explicitly).
-
-  * `giflib`: Used for animated gif playback.  Disabled via `HAVE_LIBGIF=0`.
-  * `libwebp`: Used for animated webp playback.
-    (***NOTE***: animated webp also requires Imlib2 v1.7.5 or above)
-    Disabled via `HAVE_LIBWEBP=0`.
 
 Please make sure to install the corresponding development packages in case that
 you want to build nsxiv on a distribution with separate runtime and development

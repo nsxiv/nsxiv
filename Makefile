@@ -8,20 +8,14 @@ lib_fonts_0 =
 lib_fonts_1 = -lXft -lfontconfig
 lib_exif_0 =
 lib_exif_1 = -lexif
-lib_gif_0 =
-lib_gif_1 = -lgif
-lib_webp_0 =
-lib_webp_1 = -lwebpdemux -lwebp
 
 nsxiv_cppflags = -D_XOPEN_SOURCE=700 \
-  -DHAVE_LIBGIF=$(HAVE_LIBGIF) -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) \
-  -DHAVE_LIBWEBP=$(HAVE_LIBWEBP) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
+  -DHAVE_LIBEXIF=$(HAVE_LIBEXIF) -DHAVE_LIBFONTS=$(HAVE_LIBFONTS) \
   -DHAVE_INOTIFY=$(HAVE_INOTIFY) $(inc_fonts_$(HAVE_LIBFONTS)) \
   $(CPPFLAGS)
 
 nsxiv_ldlibs = -lImlib2 -lX11 \
-  $(lib_exif_$(HAVE_LIBEXIF)) $(lib_gif_$(HAVE_LIBGIF)) \
-  $(lib_webp_$(HAVE_LIBWEBP)) $(lib_fonts_$(HAVE_LIBFONTS)) \
+  $(lib_exif_$(HAVE_LIBEXIF)) $(lib_fonts_$(HAVE_LIBFONTS)) \
   $(LDLIBS)
 
 objs = autoreload.o commands.o image.o main.o options.o \
