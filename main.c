@@ -22,6 +22,7 @@
 #include "commands.h"
 #include "config.h"
 
+#include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <locale.h>
@@ -72,6 +73,8 @@ int prefix;
 bool title_dirty;
 const XButtonEvent *xbutton_ev;
 
+static void autoreload(void);
+
 static bool extprefix;
 static bool resized = false;
 
@@ -91,6 +94,7 @@ static struct {
 	struct timeval when;
 	bool active;
 } timeouts[] = {
+	{ autoreload   },
 	{ redraw       },
 	{ reset_cursor },
 	{ slideshow    },
@@ -269,6 +273,18 @@ static bool check_timeouts(int *t)
 	return tmin > 0;
 }
 
+static void autoreload(void)
+{
+	if (img.autoreload_pending) {
+		img_close(&img, true);
+		/* load_image() sets autoreload_pending to false */
+		load_image(fileidx);
+		redraw();
+	} else {
+		assert(!"unreachable");
+	}
+}
+
 static void kill_close(pid_t pid, int *fd)
 {
 	if (fd != NULL && *fd != -1) {
@@ -367,10 +383,13 @@ void load_image(int new)
 
 	if (win.xwin != None)
 		win_set_cursor(&win, CURSOR_WATCH);
+	reset_timeout(autoreload);
 	reset_timeout(slideshow);
 
-	if (new != current)
+	if (new != current) {
 		alternate = current;
+		img.autoreload_pending = false;
+	}
 
 	img_close(&img, false);
 	while (!img_load(&img, &files[new])) {
@@ -735,7 +754,6 @@ static void run(void)
 	enum { FD_X, FD_INFO, FD_TITLE, FD_ARL, FD_CNT };
 	struct pollfd pfd[FD_CNT];
 	int timeout = 0;
-	const struct timespec ten_ms = { 0, 10000000 };
 	bool discard, init_thumb, load_thumb, to_set;
 	XEvent ev, nextev;
 
@@ -775,14 +793,9 @@ static void run(void)
 					read_info();
 				if (pfd[FD_TITLE].revents & POLLIN)
 					read_title();
-				if (pfd[FD_ARL].revents & POLLIN) {
-					if (arl_handle(&arl)) {
-						/* when too fast, imlib2 can't load the image */
-						nanosleep(&ten_ms, NULL);
-						img_close(&img, true);
-						load_image(fileidx);
-						redraw();
-					}
+				if ((pfd[FD_ARL].revents & POLLIN) && arl_handle(&arl)) {
+					img.autoreload_pending = true;
+					set_timeout(autoreload, TO_AUTORELOAD, true);
 				}
 			}
 			continue;

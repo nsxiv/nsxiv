@@ -107,6 +107,7 @@ typedef struct {
 
 /* timeouts in milliseconds: */
 enum {
+	TO_AUTORELOAD    = 128,
 	TO_REDRAW_RESIZE = 75,
 	TO_REDRAW_THUMBS = 200,
 	TO_CURSOR_HIDE   = 1200,
@@ -204,6 +205,7 @@ struct img {
 	bool dirty;
 	bool anti_alias;
 	bool alpha_layer;
+	bool autoreload_pending;
 
 	struct {
 		bool on;
