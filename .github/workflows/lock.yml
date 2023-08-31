@@ -15,7 +15,7 @@ jobs:
         with:
           pr-comment: >
             Hi, thanks for the Pull-Request.
-            However this repository is a read-only mirror, main development of nsxiv happens over at [CodeBerg](https://codeberg.org/nsxiv/nsxiv).
-            Please open your Pull-Request over on the CodeBerg Repo.
+            However this repository is a read-only mirror, main development of nsxiv happens over at [Codeberg](https://codeberg.org/nsxiv/nsxiv).
+            Please open your Pull-Request over on the Codeberg Repo.
             Otherwise you may also e-mail the patch (obtained via `git format-patch`) to any of the [active maintainers](https://nsxiv.codeberg.page/man/#CURRENT%20MAINTAINERS) instead.
 

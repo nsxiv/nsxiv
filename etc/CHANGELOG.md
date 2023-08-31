@@ -57,11 +57,11 @@ there may be more changes. Please use `git log` to view them.
 - - -
 
 ***SPECIAL NOTE***: Due to [this incident](https://codeberg.org/nsxiv/nsxiv-tmp/issues/1)
-we have moved development over to [CodeBerg](https://codeberg.org/nsxiv/nsxiv).
+we have moved development over to [Codeberg](https://codeberg.org/nsxiv/nsxiv).
 
 A lot of the references *below* may now be 404 on GitHub. Any threads which
 survived the wipe have been migrated over to [nsxiv-record]. All of the
-references *above* can be found on the new main nsxiv repository on CodeBerg.
+references *above* can be found on the new main nsxiv repository on Codeberg.
 
 [nsxiv-record]: https://codeberg.org/nsxiv/nsxiv-record/
 

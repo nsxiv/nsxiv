@@ -1,8 +1,8 @@
 [![nsxiv](https://codeberg.org/nsxiv/pages/raw/branch/master/img/logo.png)](https://codeberg.org/nsxiv/nsxiv)
 
-[![CodeBerg](https://img.shields.io/badge/Hosted_at-Codeberg-%232185D0?style=flat-square&logo=CodeBerg)](https://codeberg.org/nsxiv/nsxiv)
+[![Codeberg](https://img.shields.io/badge/Hosted_at-Codeberg-%232185D0?style=flat-square&logo=CodeBerg)](https://codeberg.org/nsxiv/nsxiv)
 [![tags](https://img.shields.io/github/v/tag/nsxiv/nsxiv?style=flat-square)](https://codeberg.org/nsxiv/nsxiv/tags)
-[![license](https://img.shields.io/badge/license-GPL--2.0-lightgreen?style=flat-square)](https://codeberg.org/nsxiv/nsxiv/src/branch/master/LICENSE)
+[![license](https://img.shields.io/badge/license-GPL--2.0%2B-lightgreen?style=flat-square)](https://codeberg.org/nsxiv/nsxiv/src/branch/master/LICENSE)
 [![loc](https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&style=flat-square)](https://codeberg.org/nsxiv/nsxiv)
 
 **Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
@@ -11,10 +11,10 @@
 nsxiv is a fork of the now-unmaintained [sxiv](https://github.com/xyb3rt/sxiv)
 with the purpose of being a (mostly) drop-in replacement for sxiv, maintaining its
 interface and adding simple, sensible features. nsxiv is free software licensed
-under GPLv2 and aims to be easy to modify and customize.
+under GPL-2.0-or-later and aims to be easy to modify and customize.
 
 Please file a bug report if something does not work as documented or expected on
-[Codeberg] after making sure you are using the latest release.  Contributions
+[Codeberg] after making sure you are using the latest release. Contributions
 are welcome, see [CONTRIBUTING] to get started.
 
 [Codeberg]: https://codeberg.org/nsxiv/nsxiv/issues/new
@@ -64,10 +64,10 @@ Dependencies
 
 nsxiv requires the following software to be installed:
 
-  * Imlib2
   * X11
+  * Imlib2 (built with X11 support)
 
-The following dependencies are optional.
+The following dependencies are optional:
 
   * `inotify`<sup>\*</sup>: Used for auto-reloading images on change.
     Disabled via `HAVE_INOTIFY=0`.
@@ -206,7 +206,7 @@ Download
 --------
 
 You can [browse](https://codeberg.org/nsxiv/nsxiv) the source code repository
-on CodeBerg or get a copy using git with the following command:
+on Codeberg or get a copy using git with the following command:
 
     $ git clone https://codeberg.org/nsxiv/nsxiv.git
 
