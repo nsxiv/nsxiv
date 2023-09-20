@@ -133,19 +133,6 @@ void exif_auto_orientate(const fileinfo_t *file)
 #endif
 
 #if HAVE_IMLIB2_MULTI_FRAME
-static void img_multiframe_context_set(img_t *img)
-{
-	if (img->multi.cnt > 1) {
-		img_free(img->im, false);
-		img->im = img->multi.frames[0].im;
-	} else if (img->multi.cnt == 1) {
-		img_free(img->multi.frames[0].im, false);
-		img->multi.cnt = 0;
-	}
-
-	imlib_context_set_image(img->im);
-}
-
 static void img_area_clear(int x, int y, int w, int h)
 {
 	assert(x >= 0 && y >= 0);
@@ -253,8 +240,16 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 		img_free(frame, false);
 	}
 	img_free(blank, false);
-	img_multiframe_context_set(img);
 	imlib_context_set_color_modifier(img->cmod); /* restore cmod */
+
+	if (m->cnt > 1) {
+		img_free(img->im, false);
+		img->im = m->frames[0].im;
+	} else if (m->cnt == 1) {
+		img_free(m->frames[0].im, false);
+		m->cnt = 0;
+	}
+	imlib_context_set_image(img->im);
 	return m->cnt > 0;
 }
 #endif /* HAVE_IMLIB2_MULTI_FRAME */
@@ -307,12 +302,13 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	animated = img_load_multiframe(img, file);
 #endif
 
-	if ((fmt = imlib_image_format()) != NULL) { /* NOLINT: fmt might be unused, not worth fixing */
+	(void)fmt; /* maybe unused */
 #if HAVE_LIBEXIF && defined(IMLIB2_VERSION)
+	if ((fmt = imlib_image_format()) != NULL) {
 		if (!STREQ(fmt, "jpeg") && !STREQ(fmt, "jpg"))
 			exif_auto_orientate(file);
-#endif
 	}
+#endif
 	/* for animated images, we want the _canvas_ width/height, which
 	 * img_load_multiframe() sets already.
 	 */
