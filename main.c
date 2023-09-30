@@ -70,7 +70,6 @@ int alternate;
 int markcnt;
 int markidx;
 int prefix;
-bool title_dirty;
 const XButtonEvent *xbutton_ev;
 
 static void autoreload(void);
@@ -316,7 +315,7 @@ static void open_title(void)
 	char *argv[8];
 	char w[12] = "", h[12] = "", z[12] = "", fidx[12], fcnt[12];
 
-	if (wintitle.f.err || !title_dirty)
+	if (wintitle.f.err)
 		return;
 
 	close_title();
@@ -331,7 +330,6 @@ static void open_title(void)
 	               fidx, fcnt, w, h, z, NULL);
 	if ((wintitle.pid = spawn(&wintitle.fd, NULL, argv)) > 0)
 		fcntl(wintitle.fd, F_SETFL, O_NONBLOCK);
-	title_dirty = false;
 }
 
 void close_info(void)
@@ -402,10 +400,7 @@ void load_image(int new)
 	files[new].flags &= ~FF_WARN;
 	fileidx = current = new;
 
-	close_info();
-	open_info();
 	arl_add(&arl, files[fileidx].path);
-	title_dirty = true;
 
 	if (img.multi.cnt > 0 && img.multi.animate)
 		set_timeout(animate, img.multi.frames[img.multi.sel].delay, true);
@@ -443,9 +438,33 @@ static void update_info(void)
 	const char *mark;
 	win_bar_t *l = &win.bar.l, *r = &win.bar.r;
 
+	static struct {
+		const char *filepath;
+		int fileidx;
+		float zoom;
+		appmode_t mode;
+	} prev;
+
+	if (prev.fileidx != fileidx || prev.mode != mode ||
+	    (prev.filepath == NULL || !STREQ(prev.filepath, files[fileidx].path)))
+	{
+		close_info();
+		open_info();
+		open_title();
+	} else if (mode == MODE_IMAGE && prev.zoom != img.zoom) {
+		open_title();
+	}
+
 	/* update bar contents */
 	if (win.bar.h == 0 || extprefix)
 		return;
+
+	free((char *)prev.filepath);
+	prev.filepath = estrdup(files[fileidx].path);
+	prev.fileidx = fileidx;
+	prev.zoom = img.zoom;
+	prev.mode = mode;
+
 	for (fw = 0, i = filecnt; i > 0; fw++, i /= 10)
 		;
 	mark = files[fileidx].flags & FF_MARK ? "* " : "";
@@ -520,7 +539,6 @@ void redraw(void)
 		tns_render(&tns);
 	}
 	update_info();
-	open_title();
 	win_draw(&win);
 	reset_timeout(redraw);
 	reset_cursor();
@@ -669,8 +687,6 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	if (mode == MODE_IMAGE && changed) {
 		img_close(&img, true);
 		load_image(fileidx);
-	} else {
-		open_info();
 	}
 	free(oldst);
 	reset_cursor();

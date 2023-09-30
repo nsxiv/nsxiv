@@ -468,6 +468,5 @@ extern int alternate;
 extern int markcnt;
 extern int markidx;
 extern int prefix;
-extern bool title_dirty;
 
 #endif /* NSXIV_H */

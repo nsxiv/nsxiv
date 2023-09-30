@@ -447,7 +447,6 @@ void tns_render(tns_t *tns)
 	}
 	tns->dirty = false;
 	tns_highlight(tns, *tns->sel, true);
-	title_dirty = true;
 }
 
 void tns_mark(tns_t *tns, int n, bool mark)
@@ -516,7 +515,6 @@ bool tns_move_selection(tns_t *tns, direction_t dir, int cnt)
 		tns_check_view(tns, false);
 		if (!tns->dirty)
 			tns_highlight(tns, *tns->sel, true);
-		title_dirty = true;
 	}
 	return *tns->sel != old;
 }
