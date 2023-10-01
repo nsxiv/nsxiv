@@ -81,7 +81,8 @@ void parse_options(int argc, char **argv)
 		 */
 		OPT_START = UCHAR_MAX,
 		OPT_AA,
-		OPT_AL
+		OPT_AL,
+		OPT_BG
 	};
 	static const struct optparse_long longopts[] = {
 		{ "framerate",      'A',     OPTPARSE_REQUIRED },
@@ -109,6 +110,8 @@ void parse_options(int argc, char **argv)
 		{ "null",           '0',     OPTPARSE_NONE },
 		{ "anti-alias",    OPT_AA,   OPTPARSE_OPTIONAL },
 		{ "alpha-layer",   OPT_AL,   OPTPARSE_OPTIONAL },
+		/* TODO: document this when it's stable */
+		{ "bg-cache",      OPT_BG,   OPTPARSE_OPTIONAL },
 		{ 0 }, /* end */
 	};
 
@@ -145,6 +148,7 @@ void parse_options(int argc, char **argv)
 	_options.thumb_mode = false;
 	_options.clean_cache = false;
 	_options.private_mode = false;
+	_options.background_cache = false;
 
 	if (argc > 0) {
 		s = strrchr(argv[0], '/');
@@ -263,6 +267,11 @@ void parse_options(int argc, char **argv)
 			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
 				error(EXIT_FAILURE, 0, "Invalid argument for option --alpha-layer: %s", op.optarg);
 			_options.alpha_layer = op.optarg == NULL;
+			break;
+		case OPT_BG:
+			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
+				error(EXIT_FAILURE, 0, "Invalid argument for option --bg-cache: %s", op.optarg);
+			_options.background_cache = op.optarg == NULL;
 			break;
 		}
 	}
