@@ -1,6 +1,7 @@
-branches: master
+when:
+  branch: master
 
-pipeline:
+steps:
   analysis:
     image: alpine
     commands: |

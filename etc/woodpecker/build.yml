@@ -1,7 +1,8 @@
-branches: master
+when:
+  branch: master
 
 # NOTE: "stable" tcc is too old and fails at linking. instead fetching a recent known working commit.
-pipeline:
+steps:
   build:
     image: alpine
     environment:

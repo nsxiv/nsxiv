@@ -1,10 +1,13 @@
-branches: master
+when:
+  branch: master
 
-# NOTE: codespell not available on stable alpine, use edge
-pipeline:
+# NOTE: codespell not available on stable alpine, grab it from pip
+steps:
   spell-check:
     image: alpine:edge
     commands: |
       apk add --no-cache python3 py3-pip git
+      python3 -m venv ~/py3-venv
+      . ~/py3-venv/bin/activate
       pip install codespell
       git ls-files | sed '/\.png$/d' | xargs codespell
