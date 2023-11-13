@@ -601,12 +601,10 @@ void handle_key_handler(bool init)
 	if (win.bar.h == 0)
 		return;
 	if (init) {
-		close_info();
-		snprintf(win.bar.l.buf, win.bar.l.size,
+		snprintf(win.bar.r.buf, win.bar.r.size,
 		         "Getting key handler input (%s to abort)...",
 		         XKeysymToString(KEYHANDLER_ABORT));
 	} else { /* abort */
-		open_info();
 		update_info();
 	}
 	win_draw(&win);
@@ -635,8 +633,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	if (key == NULL)
 		return false;
 
-	close_info();
-	strncpy(win.bar.l.buf, "Running key handler...", win.bar.l.size);
+	strncpy(win.bar.r.buf, "Running key handler...", win.bar.r.size);
 	win_draw(&win);
 	win_set_cursor(&win, CURSOR_WATCH);
 	setenv("NSXIV_USING_NULL", options->using_null ? "1" : "0", 1);
@@ -687,6 +684,8 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	if (mode == MODE_IMAGE && changed) {
 		img_close(&img, true);
 		load_image(fileidx);
+	} else {
+		update_info();
 	}
 	free(oldst);
 	reset_cursor();
