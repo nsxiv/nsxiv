@@ -4,13 +4,13 @@ misc-*,android-cloexec-*,llvm-include-order
 -readability-*,readability-duplicate-include,readability-misleading-indentation
 
 # silence
--misc-unused-parameters
+-misc-unused-parameters,-misc-include-cleaner,-misc-no-recursion
 -bugprone-easily-swappable-parameters,-bugprone-narrowing-conversions,-bugprone-incorrect-roundings
 -bugprone-implicit-widening-of-multiplication-result,-bugprone-integer-division
 -android-cloexec-fopen,-android-cloexec-pipe,-cert-err33-c
 -bugprone-assignment-in-if-condition
 -bugprone-suspicious-realloc-usage
+-bugprone-switch-missing-default-case
 
 # false positive warnings
 -clang-analyzer-valist.Uninitialized
--misc-no-recursion
