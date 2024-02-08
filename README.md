@@ -81,8 +81,8 @@ you want to build nsxiv on a distribution with separate runtime and development
 packages (e.g. \*-dev on Debian).
 
 \* [inotify][] is a Linux-specific API for monitoring filesystem changes.
-  It's not natively available on `*BSD` systems but can be enabed via installing
-  and linking against [libinotify-kqueue][].
+  It's not natively available on `*BSD` systems but can be enabled via
+  installing and linking against [libinotify-kqueue][].
 
 [inotify]: https://www.man7.org/linux/man-pages/man7/inotify.7.html
 [libinotify-kqueue]: https://github.com/libinotify-kqueue/libinotify-kqueue
