@@ -198,6 +198,8 @@ CLEANUP void tns_free(tns_t *tns)
 
 	free(cache_dir);
 	cache_dir = NULL;
+	free(cache_tmpfile);
+	cache_tmpfile = cache_tmpfile_base = NULL;
 }
 
 static Imlib_Image tns_scale_down(Imlib_Image im, int dim)
