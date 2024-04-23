@@ -676,8 +676,8 @@ void img_rotate(img_t *img, degree_t d)
 		ox = d == DEGREE_90  ? img->x : img->win->w - img->x - img->w * img->zoom;
 		oy = d == DEGREE_270 ? img->y : img->win->h - img->y - img->h * img->zoom;
 
-		img->x = oy + (img->win->w - img->win->h) / 2;
-		img->y = ox + (img->win->h - img->win->w) / 2;
+		img->x = oy + (int)(img->win->w - img->win->h) / 2;
+		img->y = ox + (int)(img->win->h - img->win->w) / 2;
 
 		tmp = img->w;
 		img->w = img->h;
