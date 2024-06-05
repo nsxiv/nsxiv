@@ -356,7 +356,7 @@ int r_closedir(r_dir_t*);
 char* r_readdir(r_dir_t*, bool);
 int r_mkdir(char*);
 void construct_argv(char**, unsigned int, ...);
-pid_t spawn(int*, int*, char *const []);
+pid_t spawn(int*, int*, int, char *const []);
 
 
 /* window.c */

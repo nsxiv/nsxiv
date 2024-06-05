@@ -334,8 +334,7 @@ static void open_title(void)
 	snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
 	construct_argv(argv, ARRLEN(argv), wintitle.f.cmd, files[fileidx].path,
 	               fidx, fcnt, w, h, z, NULL);
-	if ((wintitle.pid = spawn(&wintitle.fd, NULL, argv)) > 0)
-		fcntl(wintitle.fd, F_SETFL, O_NONBLOCK);
+	wintitle.pid = spawn(&wintitle.fd, NULL, O_NONBLOCK, argv);
 }
 
 void close_info(void)
@@ -358,8 +357,7 @@ void open_info(void)
 	}
 	construct_argv(argv, ARRLEN(argv), cmd, files[fileidx].name, w, h,
 	               files[fileidx].path, NULL);
-	if ((info.pid = spawn(&info.fd, NULL, argv)) > 0)
-		fcntl(info.fd, F_SETFL, O_NONBLOCK);
+	info.pid = spawn(&info.fd, NULL, O_NONBLOCK, argv);
 }
 
 static void read_info(void)
@@ -649,7 +647,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	         mask & Mod1Mask    ? "M-" : "",
 	         mask & ShiftMask   ? "S-" : "", key);
 	construct_argv(argv, ARRLEN(argv), keyhandler.f.cmd, kstr, NULL);
-	if ((pid = spawn(NULL, &writefd, argv)) < 0)
+	if ((pid = spawn(NULL, &writefd, 0x0, argv)) < 0)
 		return false;
 	if ((pfs = fdopen(writefd, "w")) == NULL) {
 		error(0, errno, "open pipe");
@@ -806,13 +804,15 @@ static void run(void)
 				pfd[FD_INFO].fd = info.fd;
 				pfd[FD_TITLE].fd = wintitle.fd;
 				pfd[FD_ARL].fd = arl.fd;
-				pfd[FD_X].events = pfd[FD_INFO].events = pfd[FD_TITLE].events = pfd[FD_ARL].events = POLLIN;
+
+				pfd[FD_X].events = pfd[FD_ARL].events = POLLIN;
+				pfd[FD_INFO].events = pfd[FD_TITLE].events = 0;
 
 				if (poll(pfd, ARRLEN(pfd), to_set ? timeout : -1) < 0)
 					continue;
-				if (pfd[FD_INFO].revents & POLLIN)
+				if (pfd[FD_INFO].revents & POLLHUP)
 					read_info();
-				if (pfd[FD_TITLE].revents & POLLIN)
+				if (pfd[FD_TITLE].revents & POLLHUP)
 					read_title();
 				if ((pfd[FD_ARL].revents & POLLIN) && arl_handle(&arl)) {
 					img.autoreload_pending = true;

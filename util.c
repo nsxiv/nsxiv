@@ -21,6 +21,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <spawn.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -230,25 +231,27 @@ void construct_argv(char **argv, unsigned int len, ...)
 	assert(argv[len - 1] == NULL && "argv should be NULL terminated");
 }
 
-static int mkspawn_pipe(posix_spawn_file_actions_t *fa, const char *cmd, int *pfd, int dupidx)
+static int mkspawn_pipe(posix_spawn_file_actions_t *fa, const char *cmd, int *pfd, int dupidx, int pipeflags)
 {
-	int err;
+	int err = 0;
 	if (pipe(pfd) < 0) {
 		error(0, errno, "pipe: %s", cmd);
 		return -1;
 	}
-	err = posix_spawn_file_actions_adddup2(fa, pfd[dupidx], dupidx);
+	if (pipeflags && (fcntl(pfd[0], F_SETFL, pipeflags) < 0 || fcntl(pfd[1], F_SETFL, pipeflags) < 0))
+		err = errno;
+	err = err ? err : posix_spawn_file_actions_adddup2(fa, pfd[dupidx], dupidx);
 	err = err ? err : posix_spawn_file_actions_addclose(fa, pfd[0]);
 	err = err ? err : posix_spawn_file_actions_addclose(fa, pfd[1]);
 	if (err) {
-		error(0, err, "posix_spawn_file_actions: %s", cmd);
+		error(0, err, "mkspawn_pipe: %s", cmd);
 		close(pfd[0]);
 		close(pfd[1]);
 	}
 	return err ? -1 : 0;
 }
 
-pid_t spawn(int *readfd, int *writefd, char *const argv[])
+pid_t spawn(int *readfd, int *writefd, int pipeflags, char *const argv[])
 {
 	pid_t pid = -1;
 	const char *cmd;
@@ -263,9 +266,9 @@ pid_t spawn(int *readfd, int *writefd, char *const argv[])
 		return pid;
 	}
 
-	if (readfd != NULL && mkspawn_pipe(&fa, cmd, pfd_read, 1) < 0)
+	if (readfd != NULL && mkspawn_pipe(&fa, cmd, pfd_read, 1, pipeflags) < 0)
 		goto err_destroy_fa;
-	if (writefd != NULL && mkspawn_pipe(&fa, cmd, pfd_write, 0) < 0)
+	if (writefd != NULL && mkspawn_pipe(&fa, cmd, pfd_write, 0, pipeflags) < 0)
 		goto err_close_readfd;
 
 	if ((err = posix_spawnp(&pid, cmd, &fa, NULL, argv, environ)) != 0) {
