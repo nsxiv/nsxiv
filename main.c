@@ -249,10 +249,10 @@ void reset_timeout(timeout_f handler)
 
 static bool check_timeouts(int *t)
 {
-	int i = 0, tdiff, tmin = -1;
+	int i = 0, tdiff, tmin;
 	struct timeval now;
 
-	while (i < (int)ARRLEN(timeouts)) {
+	for (i = 0; i < (int)ARRLEN(timeouts); ++i) {
 		if (timeouts[i].active) {
 			gettimeofday(&now, 0);
 			tdiff = TV_DIFF(&timeouts[i].when, &now);
@@ -260,16 +260,22 @@ static bool check_timeouts(int *t)
 				timeouts[i].active = false;
 				if (timeouts[i].handler != NULL)
 					timeouts[i].handler();
-				i = tmin = -1;
-			} else if (tmin < 0 || tdiff < tmin) {
-				tmin = tdiff;
 			}
 		}
-		i++;
 	}
-	if (tmin > 0 && t != NULL)
-		*t = tmin;
-	return tmin > 0;
+
+	tmin = INT_MAX;
+	gettimeofday(&now, 0);
+	for (i = 0; i < (int)ARRLEN(timeouts); ++i) {
+		if (timeouts[i].active) {
+			tdiff = TV_DIFF(&timeouts[i].when, &now);
+			tmin = MIN(tmin, tdiff);
+		}
+	}
+
+	if (tmin != INT_MAX && t != NULL)
+		*t = MAX(tmin, 0);
+	return tmin != INT_MAX;
 }
 
 static void autoreload(void)
