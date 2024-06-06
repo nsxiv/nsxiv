@@ -47,7 +47,11 @@ jobs:
       - name: build
         run: |
           # libinotify-kqueue isn't available on homebrew
-          make clean && make -s OPT_DEP_DEFAULT=1 HAVE_INOTIFY=0
+          make clean && make -s OPT_DEP_DEFAULT=1 HAVE_INOTIFY=0 \
+              CPPFLAGS="-I/opt/homebrew/include -I/opt/homebrew/include/freetype2" \
+              LDLIBS="-L/opt/homebrew/lib"
           # force uninstallation with --ignore-dependencies
           brew uninstall --ignore-dependencies libxft libexif
-          make clean && make -s OPT_DEP_DEFAULT=0
+          make clean && make -s OPT_DEP_DEFAULT=0 \
+              CPPFLAGS="-I/opt/homebrew/include" \
+              LDLIBS="-L/opt/homebrew/lib"
