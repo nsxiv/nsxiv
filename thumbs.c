@@ -181,7 +181,7 @@ void tns_init(tns_t *tns, fileinfo_t *tns_files, const int *cnt, int *sel, win_t
 		memcpy(cache_tmpfile, cache_dir, len - 1);
 		cache_tmpfile_base = cache_tmpfile + len - 1;
 	} else {
-		error(0, 0, "Cache directory not found");
+		error(EXIT_FAILURE, 0, "Cache directory not found");
 	}
 }
 
