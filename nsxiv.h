@@ -101,7 +101,7 @@ typedef enum {
 
 typedef struct {
 	const char *name; /* as given by user */
-	const char *path; /* always absolute */
+	const char *path; /* always absolute, result of realpath(3) */
 	fileflags_t flags;
 } fileinfo_t;
 
@@ -265,7 +265,7 @@ struct opt {
 	/* window: */
 	bool fullscreen;
 	bool hide_bar;
-	Window embed; /* unsigned long */
+	Window embed;
 	char *geometry;
 	char *res_name;
 

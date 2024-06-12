@@ -43,7 +43,7 @@ static char *tns_cache_filepath(const char *filepath)
 	size_t len;
 	char *cfile = NULL;
 
-	assert(*filepath == '/' && "filepath should be result of realpath(3)");
+	assert(*filepath == '/' && "filepath must be result of realpath(3)");
 
 	if (strncmp(filepath, cache_dir, strlen(cache_dir)) != 0) {
 		/* don't cache images inside the cache directory! */

@@ -85,7 +85,7 @@ void arl_add(arl_t *arl, const char *filepath)
 	add_watch(arl->fd, &arl->wd_file, filepath, IN_CLOSE_WRITE | IN_DELETE_SELF);
 
 	base = strrchr(filepath, '/');
-	assert(base != NULL); /* filepath must be result of `realpath(3)` */
+	assert(base != NULL && "filepath must be result of realpath(3)");
 	dir = arl_scratch_push(filepath, MAX(base - filepath, 1));
 	add_watch(arl->fd, &arl->wd_dir, dir, IN_CREATE | IN_MOVED_TO);
 	arl->filename = arl_scratch_push(base + 1, strlen(base + 1));

@@ -460,7 +460,6 @@ static void update_info(void)
 		open_title();
 	}
 
-	/* update bar contents */
 	if (win.bar.h == 0 || extprefix)
 		return;
 
@@ -841,7 +840,7 @@ static void run(void)
 			}
 		} while (discard);
 
-		switch (ev.type) { /* handle events */
+		switch (ev.type) {
 		case ButtonPress:
 			on_buttonpress(&ev.xbutton);
 			break;
