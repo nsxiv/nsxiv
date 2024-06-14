@@ -171,10 +171,11 @@ void parse_options(int argc, char **argv)
 			exit(EXIT_FAILURE);
 		case 'A':
 			n = strtol(op.optarg, &end, 0);
-			if (*end != '\0' || n <= 0 || n > INT_MAX)
+			if (*end != '\0' || n < 0 || n > INT_MAX)
 				error(EXIT_FAILURE, 0, "Invalid framerate: %s", op.optarg);
 			_options.framerate = n;
-			/* fall through */
+			_options.animate = n > 0;
+			break;
 		case 'a':
 			_options.animate = true;
 			break;
