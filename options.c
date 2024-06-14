@@ -67,6 +67,13 @@ static void print_version(void)
 		"\n", stdout);
 }
 
+static bool parse_optional_no(const char *flag, const char *arg)
+{
+	if (arg != NULL && !STREQ(arg, "no"))
+		error(EXIT_FAILURE, 0, "Invalid argument for option --%s: %s", flag, arg);
+	return arg == NULL;
+}
+
 void parse_options(int argc, char **argv)
 {
 	enum {
@@ -265,24 +272,16 @@ void parse_options(int argc, char **argv)
 			_options.using_null = true;
 			break;
 		case OPT_AA:
-			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
-				error(EXIT_FAILURE, 0, "Invalid argument for option --anti-alias: %s", op.optarg);
-			_options.anti_alias = op.optarg == NULL;
+			_options.anti_alias = parse_optional_no("anti-alias", op.optarg);
 			break;
 		case OPT_AL:
-			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
-				error(EXIT_FAILURE, 0, "Invalid argument for option --alpha-layer: %s", op.optarg);
-			_options.alpha_layer = op.optarg == NULL;
+			_options.alpha_layer = parse_optional_no("alpha-layer", op.optarg);
 			break;
 		case OPT_THUMB:
-			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
-				error(EXIT_FAILURE, 0, "Invalid argument for option --thumbnail: %s", op.optarg);
-			_options.thumb_mode = op.optarg == NULL;
+			_options.thumb_mode = parse_optional_no("thumbnail", op.optarg);
 			break;
 		case OPT_BG:
-			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
-				error(EXIT_FAILURE, 0, "Invalid argument for option --bg-cache: %s", op.optarg);
-			_options.background_cache = op.optarg == NULL;
+			_options.background_cache = parse_optional_no("bg-cache", op.optarg);
 			break;
 		case OPT_CA: case OPT_CD:
 			_options.tns_filters = op.optarg;
