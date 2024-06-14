@@ -77,6 +77,7 @@ void parse_options(int argc, char **argv)
 		OPT_AA,
 		OPT_AL,
 		OPT_THUMB,
+		OPT_BAR,
 		OPT_BG,
 		OPT_CA,
 		OPT_CD
@@ -85,6 +86,7 @@ void parse_options(int argc, char **argv)
 		{ "framerate",      'A',     OPTPARSE_REQUIRED },
 		{ "animate",        'a',     OPTPARSE_NONE },
 		{ "no-bar",         'b',     OPTPARSE_NONE },
+		{ "bar",          OPT_BAR,   OPTPARSE_NONE },
 		{ "clean-cache",    'c',     OPTPARSE_NONE },
 		{ "embed",          'e',     OPTPARSE_REQUIRED },
 		{ "fullscreen",     'f',     OPTPARSE_NONE },
@@ -179,8 +181,8 @@ void parse_options(int argc, char **argv)
 		case 'a':
 			_options.animate = true;
 			break;
-		case 'b':
-			_options.hide_bar = true;
+		case 'b': case OPT_BAR:
+			_options.hide_bar = (opt == 'b');
 			break;
 		case 'c':
 			_options.clean_cache = true;
