@@ -76,6 +76,7 @@ void parse_options(int argc, char **argv)
 		OPT_START = UCHAR_MAX,
 		OPT_AA,
 		OPT_AL,
+		OPT_THUMB,
 		OPT_BG,
 		OPT_CA,
 		OPT_CD
@@ -99,7 +100,9 @@ void parse_options(int argc, char **argv)
 		{ "recursive",      'r',     OPTPARSE_NONE },
 		{ "ss-delay",       'S',     OPTPARSE_REQUIRED },
 		{ "scale-mode",     's',     OPTPARSE_REQUIRED },
-		{ "thumbnail",      't',     OPTPARSE_NONE },
+		/* short opt `-t` doesn't accept optional arg for backwards compatibility reasons */
+		{ NULL,             't',     OPTPARSE_NONE },
+		{ "thumbnail",   OPT_THUMB,  OPTPARSE_OPTIONAL },
 		{ "version",        'v',     OPTPARSE_NONE },
 		{ "zoom-100",       'Z',     OPTPARSE_NONE },
 		{ "zoom",           'z',     OPTPARSE_REQUIRED },
@@ -267,6 +270,11 @@ void parse_options(int argc, char **argv)
 			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
 				error(EXIT_FAILURE, 0, "Invalid argument for option --alpha-layer: %s", op.optarg);
 			_options.alpha_layer = op.optarg == NULL;
+			break;
+		case OPT_THUMB:
+			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
+				error(EXIT_FAILURE, 0, "Invalid argument for option --thumbnail: %s", op.optarg);
+			_options.thumb_mode = op.optarg == NULL;
 			break;
 		case OPT_BG:
 			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
