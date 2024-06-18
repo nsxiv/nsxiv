@@ -180,7 +180,7 @@ typedef struct {
 	unsigned int cnt;
 	unsigned int sel;
 	bool animate;
-	unsigned int framedelay;
+	int framedelay;
 	int length;
 } multi_img_t;
 
