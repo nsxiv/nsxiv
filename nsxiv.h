@@ -270,6 +270,8 @@ struct opt {
 	char *res_name;
 
 	/* misc flags: */
+	const char *tns_filters;
+	bool tns_filters_is_blacklist;
 	bool quiet;
 	bool thumb_mode;
 	bool clean_cache;
@@ -293,6 +295,12 @@ typedef struct {
 	int y;
 } thumb_t;
 
+typedef struct {
+	const char *path;
+	int  len;
+	bool recursive;
+} thumb_filter_t;
+
 struct tns {
 	fileinfo_t *files;
 	thumb_t *thumbs;
@@ -312,7 +320,11 @@ struct tns {
 	int bw;
 	int dim;
 
+	thumb_filter_t *filters;
+	int filters_cnt;
+
 	bool dirty;
+	bool filters_is_blacklist;
 };
 
 void tns_clean_cache(void);

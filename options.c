@@ -75,7 +75,9 @@ void parse_options(int argc, char **argv)
 		OPT_START = UCHAR_MAX,
 		OPT_AA,
 		OPT_AL,
-		OPT_BG
+		OPT_BG,
+		OPT_CA,
+		OPT_CD
 	};
 	static const struct optparse_long longopts[] = {
 		{ "framerate",      'A',     OPTPARSE_REQUIRED },
@@ -105,6 +107,8 @@ void parse_options(int argc, char **argv)
 		{ "alpha-layer",   OPT_AL,   OPTPARSE_OPTIONAL },
 		/* TODO: document this when it's stable */
 		{ "bg-cache",      OPT_BG,   OPTPARSE_OPTIONAL },
+		{ "cache-allow",   OPT_CA,   OPTPARSE_REQUIRED },
+		{ "cache-deny",    OPT_CD,   OPTPARSE_REQUIRED },
 		{ 0 }, /* end */
 	};
 
@@ -137,6 +141,8 @@ void parse_options(int argc, char **argv)
 	_options.geometry = NULL;
 	_options.res_name = NULL;
 
+	_options.tns_filters = TNS_FILTERS;
+	_options.tns_filters_is_blacklist = TNS_FILTERS_IS_BLACKLIST;
 	_options.quiet = false;
 	_options.thumb_mode = false;
 	_options.clean_cache = false;
@@ -265,6 +271,10 @@ void parse_options(int argc, char **argv)
 			if (op.optarg != NULL && !STREQ(op.optarg, "no"))
 				error(EXIT_FAILURE, 0, "Invalid argument for option --bg-cache: %s", op.optarg);
 			_options.background_cache = op.optarg == NULL;
+			break;
+		case OPT_CA: case OPT_CD:
+			_options.tns_filters = op.optarg;
+			_options.tns_filters_is_blacklist = (opt == OPT_CD);
 			break;
 		}
 	}

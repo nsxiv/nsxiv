@@ -70,6 +70,14 @@ static const bool ANTI_ALIAS = true;
  */
 static const bool ALPHA_LAYER = false;
 
+/* list of whitelisted/blacklisted directory for thumbnail cache
+ * (overwritten via --cache-{allow,deny} option).
+ * see THUMBNAIL CACHING section in nsxiv(1) manpage for more details.
+ */
+static const char TNS_FILTERS[] = "";
+/* set to true to treat `TNS_FILTERS` as a blacklist instead */
+static const bool TNS_FILTERS_IS_BLACKLIST = false;
+
 #endif
 #ifdef INCLUDE_THUMBS_CONFIG
 

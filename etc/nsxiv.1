@@ -124,6 +124,14 @@ as an argument, disables it instead.
 Enables checkerboard background for alpha layer, when given
 .I no
 as an argument, disables it instead.
+.TP
+.BI "\-\-cache\-allow, \-\-cache\-deny " "CACHE\-PATHS"
+List of directories to whitelist or blacklist for thumbnail caching.
+See
+.I "THUMBNAIL CACHING"
+section for more information on the argument format.
+These options are mutually exclusive, if they are specified more than once then
+only the final one takes effect.
 .SH KEYBOARD COMMANDS
 .SS General
 The following keyboard commands are available in both image and thumbnail modes:
@@ -559,6 +567,24 @@ afterwards inside the cache directory to remove empty subdirectories:
 .RS
 find . \-depth \-type d \-empty ! \-name '.' \-exec rmdir {} \\;
 .RE
+.P
+The option
+.BR "\-\-cache\-allow " or " \-\-cache\-deny"
+may be used to whitelists or blacklist certain directories from being cached.
+The argument is a
+.B :
+separated list of paths. A
+.B *
+at the beginning of the path indicates that path should be matched recursively.
+.P
+For example:
+.B \-\-cache\-allow \(dq/user/pictures:*/media/pictures\(dq
+whitelists \(dq/user/pictures\(dq directory non-recursively and \(dq/media/pictures\(dq
+directory recursively. Nothing outside these two directories will be cached.
+And
+.B \-\-cache\-deny \(dq*/secret\(dq
+will enable blacklist mode and will not cache anything inside \(dq/secret\(dq
+or it's subdirectories.
 .SH ORIGINAL AUTHOR
 .EX
 Bert Muennich          <ber.t at posteo.de>
