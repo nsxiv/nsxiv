@@ -121,6 +121,7 @@ static void tns_cache_write(tns_t *tns, Imlib_Image im, const char *filepath, bo
 			imlib_context_set_image(im);
 			if (imlib_image_has_alpha()) {
 				imlib_image_set_format("png");
+				imlib_image_attach_data_value("compression", NULL, 8, NULL);
 			} else {
 				imlib_image_set_format("jpg");
 				imlib_image_attach_data_value("quality", NULL, 90, NULL);
