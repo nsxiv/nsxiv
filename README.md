@@ -14,11 +14,13 @@ interface and adding simple, sensible features. nsxiv is free software licensed
 under GPL-2.0-or-later and aims to be easy to modify and customize.
 
 Please file a bug report if something does not work as documented or expected on
-[Codeberg] after making sure you are using the latest release. Contributions
-are welcome, see [CONTRIBUTING] to get started.
+[Codeberg] after making sure you are using the latest release. If you're looking
+to migrate from `sxiv`, see [MIGRATION]. Contributions are welcome, see
+[CONTRIBUTING] to get started.
 
 [Codeberg]: https://codeberg.org/nsxiv/nsxiv/issues/new
 [CONTRIBUTING]: etc/CONTRIBUTING.md#contribution-guideline
+[MIGRATION]: etc/MIGRATION.md
 
 
 Features
