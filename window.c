@@ -67,6 +67,11 @@ static struct {
 #if HAVE_LIBFONTS
 static XftFont *font;
 static double fontsize;
+/* utf8 ellipsis "…". the buffer must be at least 4 bytes for utf8_decode() */
+enum { ELLIPSIS_LEN = 3 };
+static const unsigned char ellipsis[4] = { 0xe2, 0x80, 0xa6, 0x0 };
+static int ellipsis_w;
+static int win_draw_text(win_t *, XftDraw *, const XftColor *, int, int, char *, int, int);
 #endif
 
 #if HAVE_LIBFONTS
@@ -156,6 +161,7 @@ void win_init(win_t *win)
 
 	f = win_res(db, BAR_FONT[0], BAR_FONT[1] ? BAR_FONT[1] : "monospace-8");
 	win_init_font(e, f);
+	ellipsis_w = TEXTWIDTH(win, (char *)ellipsis, ELLIPSIS_LEN);
 
 	win->bar.l.buf = lbuf;
 	win->bar.r.buf = rbuf;
@@ -410,7 +416,7 @@ void win_clear(win_t *win)
 static int win_draw_text(win_t *win, XftDraw *d, const XftColor *color,
                          int x, int y, char *text, int len, int w)
 {
-	int err, tw = 0, warned = 0;
+	int err, tw = 0, warned = 0, danger_zone = w - ellipsis_w;
 	char *t, *next;
 	uint32_t rune;
 	XftFont *f;
@@ -437,6 +443,21 @@ static int win_draw_text(win_t *win, XftDraw *d, const XftColor *color,
 			FcCharSetDestroy(fccharset);
 		}
 		XftTextExtentsUtf8(win->env.dpy, f, (XftChar8 *)t, next - t, &ext);
+		if (d != NULL && tw + ext.xOff >= danger_zone) {
+			int remaining_width = TEXTWIDTH(win, t, (text + len) - t);
+			if (tw + remaining_width > w) { /* overflow, print ellipsis */
+				if (tw + ellipsis_w <= w) {
+					win_draw_text(win, d, color, x, y, (char *)ellipsis,
+					              ELLIPSIS_LEN, ellipsis_w);
+					tw += ellipsis_w;
+				}
+				if (f != font)
+					XftFontClose(win->env.dpy, f);
+				return tw;
+			}
+			/* text will fit, no need to check again on next iterations */
+			danger_zone = INT_MAX;
+		}
 		tw += ext.xOff;
 		if (tw <= w) {
 			XftDrawStringUtf8(d, color, f, x, y, (XftChar8 *)t, next - t);
