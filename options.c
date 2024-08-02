@@ -39,12 +39,13 @@
 
 const opt_t *options;
 
-void print_usage(void)
+void print_usage(FILE *stream)
 {
-	printf("usage: %s [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
-	       "[-g GEOMETRY] [-N NAME] [-n NUM] [-S DELAY] [-s MODE] "
-	       "[-z ZOOM] FILES...\n",
-	       progname);
+	fprintf(stream,
+	        "usage: %s [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+	        "[-g GEOMETRY] [-N NAME] [-n NUM] [-S DELAY] [-s MODE] "
+	        "[-z ZOOM] FILES...\n",
+	        progname);
 }
 
 static void print_version(void)
@@ -163,7 +164,7 @@ void parse_options(int argc, char **argv)
 		switch (opt) {
 		case '?':
 			fprintf(stderr, "%s\n", op.errmsg);
-			print_usage();
+			print_usage(stderr);
 			exit(EXIT_FAILURE);
 		case 'A':
 			n = strtol(op.optarg, &end, 0);
@@ -199,7 +200,7 @@ void parse_options(int argc, char **argv)
 			_options.geometry = op.optarg;
 			break;
 		case 'h':
-			print_usage();
+			print_usage(stdout);
 			exit(EXIT_SUCCESS);
 		case 'i':
 			_options.from_stdin = true;

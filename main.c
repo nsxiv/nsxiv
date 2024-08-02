@@ -912,7 +912,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (options->filecnt == 0 && !options->from_stdin) {
-		print_usage();
+		print_usage(stderr);
 		exit(EXIT_FAILURE);
 	}
 

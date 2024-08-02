@@ -26,6 +26,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 
 #include <Imlib2.h>
 #include <X11/Xlib.h>
@@ -281,7 +282,7 @@ struct opt {
 
 extern const opt_t *options;
 
-void print_usage(void);
+void print_usage(FILE *stream);
 void parse_options(int, char**);
 
 
