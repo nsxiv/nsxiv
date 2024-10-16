@@ -633,8 +633,10 @@ bool tns_zoom(tns_t *tns, int d)
 int tns_translate(tns_t *tns, int x, int y)
 {
 	int n;
+	int x_max = tns->x + tns->dim * tns->cols;
+	int y_max = tns->y + tns->dim * tns->rows;
 
-	if (x < tns->x || y < tns->y)
+	if (x < tns->x || y < tns->y || x > x_max || y > y_max)
 		return -1;
 
 	n = tns->first + (y - tns->y) / tns->dim * tns->cols +
