@@ -8,24 +8,26 @@
 # the handler terminates. It then checks which images have been modified and
 # reloads them.
 
-# By default nsxiv(1) will send one image per-line to stdin, however when using
-# -0 the image list will be NULL separated and the environment variable
-# "$NSXIV_USING_NULL" will be set to 1.
-
 # The key combo argument has the following form: "[C-][M-][S-]KEY",
 # where C/M/S indicate Ctrl/Meta(Alt)/Shift modifier states and KEY is the X
 # keysym as listed in /usr/include/X11/keysymdef.h without the "XK_" prefix.
 # If KEY has an uppercase equivalent, S-KEY is resolved into it. For instance,
 # K replaces S-k and Scedilla replaces S-scedilla, but S-Delete is sent as-is.
 
+# By default nsxiv(1) will send one image per-line to stdin, however when using
+# -0 the image list will be NULL separated and the environment variable
+# "$NSXIV_USING_NULL" will be set to 1.
+
+[ "$NSXIV_USING_NULL" = 1 ] && DELIM='\0' || DELIM='\n'
+
 rotate() {
-	degree="$1"
-	tr '\n' '\0' | xargs -0 realpath | sort | uniq | while read file; do
-		case "$(file -b -i "$file")" in
-		image/jpeg*) jpegtran -rotate "$degree" -copy all -outfile "$file" "$file" ;;
-		*)           mogrify  -rotate "$degree" "$file" ;;
+	tr "$DELIM" '\0' | xargs -0 realpath -z | sort -z -u | xargs -0 -I {} sh -c '
+		degree="$1"
+		case "$(file -b -i "{}")" in
+		image/jpeg*) jpegtran -rotate "$degree" -copy all -outfile "{}" "{}" ;;
+		*)           mogrify  -rotate "$degree" "{}" ;;
 		esac
-	done
+	' -- "$1"
 }
 
 case "$1" in
