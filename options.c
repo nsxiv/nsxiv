@@ -87,7 +87,8 @@ void parse_options(int argc, char **argv)
 		OPT_BAR,
 		OPT_BG,
 		OPT_CA,
-		OPT_CD
+		OPT_CD,
+		OPT_CLASS
 	};
 	static const struct optparse_long longopts[] = {
 		{ "framerate",      'A',     OPTPARSE_REQUIRED },
@@ -101,7 +102,8 @@ void parse_options(int argc, char **argv)
 		{ "geometry",       'g',     OPTPARSE_REQUIRED },
 		{ "help",           'h',     OPTPARSE_NONE },
 		{ "stdin",          'i',     OPTPARSE_NONE },
-		{ "class",          'N',     OPTPARSE_REQUIRED },
+		{ "name",           'N',     OPTPARSE_REQUIRED },
+		{ "class",       OPT_CLASS,  OPTPARSE_REQUIRED },
 		{ "start-at",       'n',     OPTPARSE_REQUIRED },
 		{ "stdout",         'o',     OPTPARSE_NONE },
 		{ "private",        'p',     OPTPARSE_NONE },
@@ -224,6 +226,9 @@ void parse_options(int argc, char **argv)
 				error(EXIT_FAILURE, 0, "Invalid starting number: %s", op.optarg);
 			_options.startnum = n - 1;
 			break;
+		case OPT_CLASS:
+			error(0, 0, "--class is deprecated, use --name instead");
+			/* fallthrough */
 		case 'N':
 			_options.res_name = op.optarg;
 			break;
