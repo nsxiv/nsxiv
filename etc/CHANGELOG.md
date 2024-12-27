@@ -8,6 +8,54 @@ there may be more changes. Please use `git log` to view them.
 
 - - -
 
+**[v33](https://codeberg.org/nsxiv/nsxiv/archive/v33.tar.gz)**
+*(January 26, 2025)*
+
+* Changes:
+
+  * Moved key-handler prompts to the right side bar [#481][]
+  * Rename `--class` to `--name` [#515][]
+  * Print usage output to `stderr` on usage error [#510][]
+
+* Added:
+
+  * Added cli flags `--cache-{allow,deny}` to white/black list directories from
+    thumbnail caching [#461][]
+  * Print ellipsis when text is truncated in the statusbar [#501][]
+  * Allow disabling thumbnail mode via `--thumbnail=no` [#502][]
+  * Allow disabling animation playback via `-A 0` [#502][]
+  * Add `--bar` to enable statusbar [#502][]
+  * Updated `rotate()` in key-handler example to support `nsxiv -0` [#521][]
+
+* Fixes:
+
+  * Unresponsive UI when animation is too fast [#489][]
+  * Fixed image placement when rotating [#493][]
+  * More reliable reading of various script output [#490][]
+  * Statusbar getting stuck at "Running key-handler..." [#481][]
+  * Fixed autoreload when directory is root [#498][]
+  * Fixed `-A` not working [#503][]
+  * Selecting incorrect thumbnail when clicking outside
+    the thumbnail area [#517][]
+  * Fix exiv2 argument order in key-handler example [#518][]
+
+[#461]: https://codeberg.org/nsxiv/nsxiv/pulls/461
+[#481]: https://codeberg.org/nsxiv/nsxiv/pulls/481
+[#489]: https://codeberg.org/nsxiv/nsxiv/pulls/489
+[#490]: https://codeberg.org/nsxiv/nsxiv/pulls/490
+[#493]: https://codeberg.org/nsxiv/nsxiv/pulls/493
+[#498]: https://codeberg.org/nsxiv/nsxiv/pulls/498
+[#501]: https://codeberg.org/nsxiv/nsxiv/pulls/501
+[#502]: https://codeberg.org/nsxiv/nsxiv/pulls/502
+[#503]: https://codeberg.org/nsxiv/nsxiv/pulls/503
+[#510]: https://codeberg.org/nsxiv/nsxiv/pulls/510
+[#515]: https://codeberg.org/nsxiv/nsxiv/pulls/515
+[#517]: https://codeberg.org/nsxiv/nsxiv/pulls/517
+[#518]: https://codeberg.org/nsxiv/nsxiv/pulls/518
+[#521]: https://codeberg.org/nsxiv/nsxiv/pulls/521
+
+- - -
+
 **[v32](https://codeberg.org/nsxiv/nsxiv/archive/v32.tar.gz)**
 *(October 01, 2023)*
 
