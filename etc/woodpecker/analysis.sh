@@ -8,6 +8,7 @@ run_cppcheck() {
     cppcheck --std="$std" --enable=performance,portability \
         --force --quiet --inline-suppr --error-exitcode=1 \
         --max-ctu-depth=8 -j"$NProc" \
+        --check-level=exhaustive \
         $(make OPT_DEP_DEFAULT="$1" dump_cppflags) -DDEBUG \
         --suppress=varFuncNullUB --suppress=uninitvar \
         $(git ls-files *.c)

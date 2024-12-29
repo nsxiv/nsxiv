@@ -11,6 +11,7 @@ misc-*,android-cloexec-*,llvm-include-order
 -bugprone-assignment-in-if-condition
 -bugprone-suspicious-realloc-usage
 -bugprone-switch-missing-default-case
+-bugprone-multi-level-implicit-pointer-conversion
 
 # false positive warnings
 -clang-analyzer-valist.Uninitialized
