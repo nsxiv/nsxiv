@@ -1,12 +1,13 @@
 when:
-  branch: master
+  - branch: master
+    event: [push, pull_request]
 
 # NOTE: "stable" tcc is too old and fails at linking. instead fetching a recent known working commit.
 steps:
   build:
     image: alpine
     environment:
-      - TCC_SHA=29ae3ed4d5b83eec43598d6cd7949bccb41c8083
+      TCC_SHA: 29ae3ed4d5b83eec43598d6cd7949bccb41c8083
     commands: |
       apk add --no-cache \
           imlib2 imlib2-dev xorgproto \

@@ -1,5 +1,6 @@
 when:
-  branch: master
+  - branch: master
+    event: [push, pull_request]
 
 # NOTE: codespell not available on stable alpine, grab it from pip
 steps:
