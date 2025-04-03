@@ -87,7 +87,8 @@ void parse_options(int argc, char **argv)
 		OPT_BAR,
 		OPT_CLASS,
 		OPT_CA,
-		OPT_CD
+		OPT_CD,
+		OPT_UC
 	};
 	static const struct optparse_long longopts[] = {
 		{ "framerate",      'A',     OPTPARSE_REQUIRED },
@@ -121,6 +122,7 @@ void parse_options(int argc, char **argv)
 		{ "alpha-layer",   OPT_AL,   OPTPARSE_OPTIONAL },
 		{ "cache-allow",   OPT_CA,   OPTPARSE_REQUIRED },
 		{ "cache-deny",    OPT_CD,   OPTPARSE_REQUIRED },
+		{ "update-cache",  OPT_UC,   OPTPARSE_NONE },
 		{ 0 }, /* end */
 	};
 
@@ -158,6 +160,7 @@ void parse_options(int argc, char **argv)
 	_options.quiet = false;
 	_options.thumb_mode = false;
 	_options.clean_cache = false;
+	_options.update_cache = false;
 	_options.private_mode = false;
 
 	if (argc > 0) {
@@ -284,6 +287,9 @@ void parse_options(int argc, char **argv)
 		case OPT_CA: case OPT_CD:
 			_options.tns_filters = op.optarg;
 			_options.tns_filters_is_blacklist = (opt == OPT_CD);
+			break;
+		case OPT_UC:
+			_options.update_cache = true;
 			break;
 		}
 	}

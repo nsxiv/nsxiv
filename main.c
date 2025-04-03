@@ -908,7 +908,8 @@ int main(int argc, char *argv[])
 	if (options->clean_cache) {
 		tns_init(&tns, NULL, NULL, NULL, NULL);
 		tns_clean_cache();
-		exit(EXIT_SUCCESS);
+		if (!options->update_cache)
+			exit(EXIT_SUCCESS);
 	}
 
 	if (options->filecnt == 0 && !options->from_stdin) {
@@ -940,6 +941,20 @@ int main(int argc, char *argv[])
 
 	filecnt = fileidx;
 	fileidx = options->startnum < filecnt ? options->startnum : 0;
+
+	if (options->update_cache) {
+		if (options->private_mode) {
+			error(0, 0, "private mode was enabled, not caching anything");
+			exit(EXIT_SUCCESS);
+		}
+		tns_free(&tns);
+		tns_init(&tns, files, &filecnt, &fileidx, NULL);
+		while (filecnt > 0) {
+			tns_load(&tns, filecnt - 1, false, true);
+			remove_file(filecnt - 1, true);
+		}
+		assert(0 && "unreachable");
+	}
 
 	win_init(&win);
 	img_init(&img, &win);

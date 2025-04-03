@@ -276,6 +276,7 @@ struct opt {
 	bool quiet;
 	bool thumb_mode;
 	bool clean_cache;
+	bool update_cache;
 	bool private_mode;
 };
 
