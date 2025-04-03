@@ -941,23 +941,6 @@ int main(int argc, char *argv[])
 	filecnt = fileidx;
 	fileidx = options->startnum < filecnt ? options->startnum : 0;
 
-	if (options->background_cache && !options->private_mode) {
-		pid_t ppid = getpid(); /* to check if parent is still alive or not */
-		switch (fork()) {
-		case 0:
-			tns_init(&tns, files, &filecnt, &fileidx, NULL);
-			while (filecnt > 0 && getppid() == ppid) {
-				tns_load(&tns, filecnt - 1, false, true);
-				remove_file(filecnt - 1, true);
-			}
-			exit(0);
-			break;
-		case -1:
-			error(0, errno, "fork failed");
-			break;
-		}
-	}
-
 	win_init(&win);
 	img_init(&img, &win);
 	arl_init(&arl);
