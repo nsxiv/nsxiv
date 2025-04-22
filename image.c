@@ -262,10 +262,15 @@ Imlib_Image img_open(const fileinfo_t *file)
 	{
 		imlib_context_set_image(im);
 	}
-	/* UPGRADE: Imlib2 v1.10.0: better error reporting with
-	 * imlib_get_error() + imlib_strerror() */
-	if (im == NULL && (file->flags & FF_WARN))
-		error(0, 0, "%s: Error opening image", file->name);
+	if (im == NULL && (file->flags & FF_WARN)) {
+		int e = imlib_get_error();
+		const char *errmsg = imlib_strerror(e);
+		const char skip_prefix[] = "Imlib2: ";
+
+		if (strncmp(errmsg, skip_prefix, sizeof(skip_prefix) - 1) == 0)
+			errmsg += sizeof(skip_prefix) - 1;
+		error(0, 0, "%s: Error opening image: %s", file->name, errmsg);
+	}
 	return im;
 }
 
