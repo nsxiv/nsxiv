@@ -316,25 +316,17 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 #if HAVE_LIBEXIF
 		} else if (!force && !options->private_mode) {
 			int pw = 0, ph = 0, w, h, x = 0, y = 0;
-			bool err;
 			float zw, zh;
 			ExifData *ed;
 			ExifEntry *entry;
 			ExifContent *ifd;
 			ExifByteOrder byte_order;
-			int tmpfd;
-			char tmppath[] = "/tmp/nsxiv-XXXXXX";
 			Imlib_Image tmpim;
 
-			/* UPGRADE: Imlib2 v1.10.0: avoid tempfile and use imlib_load_image_mem() */
 			if ((ed = exif_data_new_from_file(file->path)) != NULL) {
-				if (ed->data != NULL && ed->size > 0 &&
-				    (tmpfd = mkstemp(tmppath)) >= 0)
-				{
-					err = write(tmpfd, ed->data, ed->size) != ed->size;
-					close(tmpfd);
-
-					if (!err && (tmpim = imlib_load_image(tmppath)) != NULL) {
+				if (ed->data != NULL && ed->size > 0) {
+					tmpim = imlib_load_image_mem("", ed->data, ed->size);
+					if (tmpim != NULL) {
 						byte_order = exif_data_get_byte_order(ed);
 						ifd = ed->ifd[EXIF_IFD_EXIF];
 						entry = exif_content_get_entry(ifd, EXIF_TAG_PIXEL_X_DIMENSION);
@@ -367,7 +359,6 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 						}
 						imlib_free_image_and_decache();
 					}
-					unlink(tmppath);
 				}
 				exif_data_unref(ed);
 			}
