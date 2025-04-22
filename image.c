@@ -282,19 +282,13 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	 */
 	imlib_image_set_changes_on_disk();
 
-/* UPGRADE: Imlib2 v1.7.5: remove these exif related ifdefs */
-/* since v1.7.5, Imlib2 can parse exif orientation from jpeg files.
- * this version also happens to be the first one which defines the
- * IMLIB2_VERSION macro.
- */
-#if HAVE_LIBEXIF && !defined(IMLIB2_VERSION)
-	exif_auto_orientate(file);
-#endif
-
 	animated = img_load_multiframe(img, file);
 
 	(void)fmt; /* maybe unused */
-#if HAVE_LIBEXIF && defined(IMLIB2_VERSION)
+#if HAVE_LIBEXIF
+	/* since v1.7.5, Imlib2 can parse exif orientation from jpeg files.
+	 * so skip jpeg files to avoid double rotating.
+	 */
 	if ((fmt = imlib_image_format()) != NULL) {
 		if (!STREQ(fmt, "jpeg") && !STREQ(fmt, "jpg"))
 			exif_auto_orientate(file);
