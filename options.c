@@ -61,9 +61,7 @@ static void print_version(void)
 #if HAVE_LIBEXIF
 		"+exif "
 #endif
-#if HAVE_IMLIB2_MULTI_FRAME
 		"+multiframe "
-#endif
 		"\n", stdout);
 }
 

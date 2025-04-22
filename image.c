@@ -33,9 +33,7 @@
 #include <libexif/exif-data.h>
 #endif
 
-#if HAVE_IMLIB2_MULTI_FRAME
 enum { DEF_ANIM_DELAY = 75 };
-#endif
 
 #define ZOOM_MIN (zoom_levels[0] / 100)
 #define ZOOM_MAX (zoom_levels[ARRLEN(zoom_levels) - 1] / 100)
@@ -132,7 +130,6 @@ void exif_auto_orientate(const fileinfo_t *file)
 }
 #endif
 
-#if HAVE_IMLIB2_MULTI_FRAME
 static void img_area_clear(int x, int y, int w, int h)
 {
 	assert(x >= 0 && y >= 0);
@@ -253,7 +250,6 @@ static bool img_load_multiframe(img_t *img, const fileinfo_t *file)
 	imlib_context_set_image(img->im);
 	return m->cnt > 0;
 }
-#endif /* HAVE_IMLIB2_MULTI_FRAME */
 
 Imlib_Image img_open(const fileinfo_t *file)
 {
@@ -262,11 +258,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 
 	if (access(file->path, R_OK) == 0 &&
 	    stat(file->path, &st) == 0 && S_ISREG(st.st_mode) &&
-#if HAVE_IMLIB2_MULTI_FRAME
 	    (im = imlib_load_image_frame(file->path, 1)) != NULL)
-#else
-	    (im = imlib_load_image_immediately(file->path)) != NULL)
-#endif
 	{
 		imlib_context_set_image(im);
 	}
@@ -299,9 +291,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	exif_auto_orientate(file);
 #endif
 
-#if HAVE_IMLIB2_MULTI_FRAME
 	animated = img_load_multiframe(img, file);
-#endif
 
 	(void)fmt; /* maybe unused */
 #if HAVE_LIBEXIF && defined(IMLIB2_VERSION)
@@ -342,7 +332,6 @@ CLEANUP void img_close(img_t *img, bool decache)
 		 * and not the "raw frame" that's associated with the file.
 		 * which leads to issues like: https://codeberg.org/nsxiv/nsxiv/issues/456
 		 */
-#if HAVE_IMLIB2_MULTI_FRAME
 	#if IMLIB2_VERSION >= IMLIB2_VERSION_(1, 12, 0)
 		if (decache)
 			imlib_image_decache_file(files[fileidx].path);
@@ -353,7 +342,6 @@ CLEANUP void img_close(img_t *img, bool decache)
 		for (i = 0; decache && i < img->multi.cnt; i++)
 			img_free(imlib_load_image_frame(files[fileidx].path, i + 1), true);
 	#endif
-#endif
 		img->multi.cnt = 0;
 		img->im = NULL;
 	} else if (img->im != NULL) {

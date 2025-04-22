@@ -34,7 +34,6 @@
 #if !defined(IMLIB2_VERSION) || IMLIB2_VERSION < 11100
 	#error "Imlib2 version too old, at least v1.11.0 required"
 #endif
-#define HAVE_IMLIB2_MULTI_FRAME 1
 
 /*
  * Annotation for functions called in cleanup().
