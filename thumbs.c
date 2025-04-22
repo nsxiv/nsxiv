@@ -129,9 +129,8 @@ static void tns_cache_write(tns_t *tns, Imlib_Image im, const char *filepath, bo
 			memcpy(cache_tmpfile_base, TMP_NAME, sizeof(TMP_NAME));
 			if ((tmpfd = mkstemp(cache_tmpfile)) < 0)
 				goto end;
-			close(tmpfd);
-			/* UPGRADE: Imlib2 v1.11.0: use imlib_save_image_fd() */
-			imlib_save_image_with_error_return(cache_tmpfile, &err);
+			imlib_save_image_fd(tmpfd, ""); /* NOTE: closes `tmpfd` */
+			err = imlib_get_error();
 			times.actime = fstats.st_atime;
 			times.modtime = fstats.st_mtime;
 			utime(cache_tmpfile, &times);
