@@ -234,64 +234,49 @@ void construct_argv(char **argv, unsigned int len, ...)
 static int mkspawn_pipe(posix_spawn_file_actions_t *fa, const char *cmd, int *pfd, int dupidx, int pipeflags)
 {
 	int err = 0;
-	if (pipe(pfd) < 0) {
-		error(0, errno, "pipe: %s", cmd);
-		return -1;
-	}
+	if (pipe(pfd) < 0)
+		return errno;
 	if (pipeflags && (fcntl(pfd[0], F_SETFL, pipeflags) < 0 || fcntl(pfd[1], F_SETFL, pipeflags) < 0))
 		err = errno;
 	err = err ? err : posix_spawn_file_actions_adddup2(fa, pfd[dupidx], dupidx);
 	err = err ? err : posix_spawn_file_actions_addclose(fa, pfd[0]);
 	err = err ? err : posix_spawn_file_actions_addclose(fa, pfd[1]);
-	if (err) {
-		error(0, err, "mkspawn_pipe: %s", cmd);
-		close(pfd[0]);
-		close(pfd[1]);
-	}
-	return err ? -1 : 0;
+	return err;
 }
 
 pid_t spawn(int *readfd, int *writefd, int pipeflags, char *const argv[])
 {
 	pid_t pid = -1;
 	const char *cmd;
-	int err, pfd_read[2], pfd_write[2];
+	int pfd_read[2] = {-1, -1}, pfd_write[2] = {-1, -1};
+	int err = 0;
+	bool fa_initialized = false;
 	posix_spawn_file_actions_t fa;
 
 	assert(argv != NULL && argv[0] != NULL);
 	cmd = argv[0];
 
-	if ((err = posix_spawn_file_actions_init(&fa)) != 0) {
-		error(0, err, "spawn: %s", cmd);
-		return pid;
-	}
+	fa_initialized = !err && (err = posix_spawn_file_actions_init(&fa)) == 0;
 
-	if (readfd != NULL && mkspawn_pipe(&fa, cmd, pfd_read, 1, pipeflags) < 0)
-		goto err_destroy_fa;
-	if (writefd != NULL && mkspawn_pipe(&fa, cmd, pfd_write, 0, pipeflags) < 0)
-		goto err_close_readfd;
+	if (!err && readfd != NULL)
+		err = mkspawn_pipe(&fa, cmd, pfd_read, 1, pipeflags);
+	if (!err && writefd != NULL)
+		err = mkspawn_pipe(&fa, cmd, pfd_write, 0, pipeflags);
 
-	if ((err = posix_spawnp(&pid, cmd, &fa, NULL, argv, environ)) != 0) {
-		error(0, err, "spawn: %s", cmd);
-	} else {
-		if (readfd != NULL)
-			*readfd = pfd_read[0];
-		if (writefd != NULL)
-			*writefd = pfd_write[1];
-	}
+	err = err ? err : posix_spawnp(&pid, cmd, &fa, NULL, argv, environ);
 
-	if (writefd != NULL) {
-		close(pfd_write[0]);
-		if (pid < 0)
-			close(pfd_write[1]);
-	}
-err_close_readfd:
-	if (readfd != NULL) {
-		if (pid < 0)
-			close(pfd_read[0]);
+	if (pfd_read[0] >= 0) {
+		*readfd = err ? (close(pfd_read[0]), -1) : pfd_read[0];
 		close(pfd_read[1]);
 	}
-err_destroy_fa:
-	posix_spawn_file_actions_destroy(&fa);
-	return pid;
+	if (pfd_write[0] >= 0) {
+		close(pfd_write[0]);
+		*writefd = err ? (close(pfd_write[1]), -1) : pfd_write[1];
+	}
+	if (fa_initialized)
+		posix_spawn_file_actions_destroy(&fa);
+
+	if (err)
+		error(0, err, "spawn: %s", cmd);
+	return err ? -1 : pid;
 }
