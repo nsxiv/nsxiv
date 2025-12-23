@@ -132,12 +132,6 @@ static void check_add_file(const char *filename, bool given)
 	if (*filename == '\0')
 		return;
 
-	if (access(filename, R_OK) < 0) {
-		if (given)
-			error(0, errno, "%s", filename);
-		return;
-	}
-
 	if (fileidx == filecnt) {
 		filecnt *= 2;
 		files = erealloc(files, filecnt * sizeof(*files));
