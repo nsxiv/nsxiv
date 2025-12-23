@@ -106,9 +106,11 @@ typedef enum {
 
 typedef struct {
 	const char *name; /* as given by user */
-	const char *path; /* always absolute, result of realpath(3) */
+	const char *path; /* lazily resolved absolute path, generally should be accessed via file_realpath() */
 	fileflags_t flags;
 } fileinfo_t;
+
+const char *file_realpath(const fileinfo_t*);
 
 /* timeouts in milliseconds: */
 enum {

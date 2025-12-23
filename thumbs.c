@@ -287,11 +287,12 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 	thumb_t *t;
 	fileinfo_t *file;
 	Imlib_Image im = NULL;
+	const char *filepath;
 
 	if (n < 0 || n >= *tns->cnt)
 		return false;
 	file = &tns->files[n];
-	if (file->name == NULL || file->path == NULL)
+	if (file->name == NULL || (filepath = file_realpath(file)) == NULL)
 		return false;
 
 	t = &tns->thumbs[n];
@@ -299,12 +300,12 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 	t->im = NULL;
 
 	if (!force) {
-		if ((im = tns_cache_load(file->path, &force)) != NULL) {
+		if ((im = tns_cache_load(filepath, &force)) != NULL) {
 			imlib_context_set_image(im);
 			if (imlib_image_get_width() < maxwh &&
 			    imlib_image_get_height() < maxwh)
 			{
-				if ((cfile = tns_cache_filepath(file->path)) != NULL) {
+				if ((cfile = tns_cache_filepath(filepath)) != NULL) {
 					unlink(cfile);
 					free(cfile);
 				}
@@ -323,7 +324,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 			ExifByteOrder byte_order;
 			Imlib_Image tmpim;
 
-			if ((ed = exif_data_new_from_file(file->path)) != NULL) {
+			if ((ed = exif_data_new_from_file(filepath)) != NULL) {
 				if (ed->data != NULL && ed->size > 0) {
 					tmpim = imlib_load_image_mem("", ed->data, ed->size);
 					if (tmpim != NULL) {
@@ -379,7 +380,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 		im = tns_scale_down(im, maxwh);
 		imlib_context_set_image(im);
 		if (imlib_image_get_width() == maxwh || imlib_image_get_height() == maxwh)
-			tns_cache_write(tns, im, file->path, true);
+			tns_cache_write(tns, im, filepath, true);
 	}
 
 	if (cache_only) {

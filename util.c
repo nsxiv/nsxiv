@@ -88,6 +88,19 @@ void error(int eval, int err, const char *fmt, ...)
 		exit(eval);
 }
 
+const char *file_realpath(const fileinfo_t *file)
+{
+	assert(file != NULL);
+	if (file->path == NULL) {
+		fileinfo_t *mutable = (fileinfo_t *)file; /* avoids cast on caller's side */
+		if ((mutable->path = realpath(file->name, NULL)) == NULL) {
+			if (file->flags & FF_WARN)
+				error(0, errno, "%s", file->name);
+		}
+	}
+	return file->path;
+}
+
 int r_opendir(r_dir_t *rdir, const char *dirname, bool recursive)
 {
 	if (*dirname == '\0')
