@@ -152,6 +152,11 @@ static void add_entry(const char *entry_name)
 	struct stat fstats;
 	r_dir_t dir;
 
+	if (options->assume_files) {
+		check_add_file(entry_name, true);
+		return;
+	}
+
 	if (stat(entry_name, &fstats) < 0) {
 		error(0, errno, "%s", entry_name);
 		return;

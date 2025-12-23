@@ -139,6 +139,11 @@ Enables checkerboard background for alpha layer, when given
 .I no
 as an argument, disables it instead.
 .TP
+.B "\-\-assume\-files"
+Skip directory traversal, intended to be used when the list is known to contain
+only files. This avoids some initial disk operations and may reduce startup
+time on slow disks.
+.TP
 .BI "\-\-cache\-allow, \-\-cache\-deny " "CACHE\-PATHS"
 List of directories to whitelist or blacklist for thumbnail caching.
 See

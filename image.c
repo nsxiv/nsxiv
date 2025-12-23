@@ -259,18 +259,22 @@ Imlib_Image img_open(const fileinfo_t *file)
 	struct stat st;
 	Imlib_Image im = NULL;
 	const char *path;
+	bool is_dir = false;
 
 	if ((path = file_realpath(file)) == NULL)
 		return NULL;
 
-	if (access(path, R_OK) == 0 &&
-	    stat(path, &st) == 0 && S_ISREG(st.st_mode) &&
-	    (im = imlib_load_image_frame(path, 1)) != NULL)
-	{
-		imlib_context_set_image(im);
+	if (access(path, R_OK) == 0 && stat(path, &st) == 0) {
+		/* This must be --assume-files mode with a directory present. Imlib2 leaves errno
+		 * untouched here, detect it so that users don't see the dreaded "error: Success".
+		 */
+		if (S_ISDIR(st.st_mode))
+			is_dir = true;
+		else if ((im = imlib_load_image_frame(path, 1)) != NULL)
+			imlib_context_set_image(im);
 	}
 	if (im == NULL && (file->flags & FF_WARN)) {
-		int e = imlib_get_error();
+		int e = is_dir ? EISDIR : imlib_get_error();
 		const char *errmsg = imlib_strerror(e);
 		const char skip_prefix[] = "Imlib2: ";
 
