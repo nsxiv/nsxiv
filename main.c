@@ -661,7 +661,8 @@ static bool run_key_handler(const char *key, unsigned int mask)
 			const char *filepath = file_realpath(&files[i]);
 			if (filepath == NULL)
 				filepath = files[i].name;
-			stat(filepath, &oldst[f]);
+			if (stat(filepath, &oldst[f]) != 0)
+				memset(&oldst[f], 0, sizeof(oldst[f]));
 			fprintf(pfs, "%s%c", files[i].name, options->using_null ? '\0' : '\n');
 			f++;
 		}
