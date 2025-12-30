@@ -174,7 +174,7 @@ static void add_entry(const char *entry_name)
 			return;
 		}
 		start = fileidx;
-		while ((filename = r_readdir(&dir, true)) != NULL) {
+		while ((filename = r_readdir(&dir, options->include_hidden)) != NULL) {
 			check_add_file(filename, false);
 			free(filename);
 		}

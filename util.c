@@ -134,7 +134,7 @@ int r_closedir(r_dir_t *rdir)
 	return ret;
 }
 
-char *r_readdir(r_dir_t *rdir, bool skip_dotfiles)
+char *r_readdir(r_dir_t *rdir, bool include_hidden)
 {
 	size_t len;
 	char *filename;
@@ -144,7 +144,7 @@ char *r_readdir(r_dir_t *rdir, bool skip_dotfiles)
 	while (true) {
 		if (rdir->dir != NULL && (dentry = readdir(rdir->dir)) != NULL) {
 			if (dentry->d_name[0] == '.') {
-				if (skip_dotfiles)
+				if (!include_hidden)
 					continue;
 				if (dentry->d_name[1] == '\0')
 					continue;

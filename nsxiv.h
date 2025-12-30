@@ -245,6 +245,7 @@ struct opt {
 	bool to_stdout;
 	bool using_null;
 	bool recursive;
+	bool include_hidden;
 	int filecnt;
 	int startnum;
 

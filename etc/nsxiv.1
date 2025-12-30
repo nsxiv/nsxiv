@@ -3,7 +3,7 @@
 nsxiv \- Neo Simple X Image Viewer
 .SH SYNOPSIS
 .B nsxiv
-.RB [ \-abcfhiopqrtvZ0 ]
+.RB [ \-abcfHhiopqrtvZ0 ]
 .RB [ \-A
 .IR FRAMERATE ]
 .RB [ \-e
@@ -69,6 +69,10 @@ Set image gamma to GAMMA (\-32..32).
 .BI "\-g, \-\-geometry " GEOMETRY
 Set window position and size. See section GEOMETRY SPECIFICATIONS of X(7) for
 more information on GEOMETRY argument.
+.TP
+.BR "\-H, \-\-hidden" [=no]
+Include hidden files and directories.
+The long option accepts an optional "no" to disable it.
 .TP
 .B "\-h, \-\-help"
 Print brief usage information to standard output and exit.

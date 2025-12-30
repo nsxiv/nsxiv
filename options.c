@@ -42,7 +42,7 @@ const opt_t *options;
 void print_usage(FILE *stream)
 {
 	fprintf(stream,
-	        "usage: %s [-abcfhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
+	        "usage: %s [-abcfHhiopqrtvZ0] [-A FRAMERATE] [-e WID] [-G GAMMA] "
 	        "[-g GEOMETRY] [-N NAME] [-n NUM] [-S DELAY] [-s MODE] "
 	        "[-z ZOOM] FILES...\n",
 	        progname);
@@ -86,7 +86,8 @@ void parse_options(int argc, char **argv)
 		OPT_CLASS,
 		OPT_CA,
 		OPT_CD,
-		OPT_UC
+		OPT_UC,
+		OPT_HIDDEN
 	};
 	static const struct optparse_long longopts[] = {
 		{ "framerate",      'A',     OPTPARSE_REQUIRED },
@@ -98,6 +99,9 @@ void parse_options(int argc, char **argv)
 		{ "fullscreen",     'f',     OPTPARSE_NONE },
 		{ "gamma",          'G',     OPTPARSE_REQUIRED },
 		{ "geometry",       'g',     OPTPARSE_REQUIRED },
+		/* short opt `-H` doesn't accept optional arg to allow chaining (e.g `-Hr`) */
+		{ NULL,             'H',     OPTPARSE_NONE },
+		{ "hidden",      OPT_HIDDEN, OPTPARSE_OPTIONAL },
 		{ "help",           'h',     OPTPARSE_NONE },
 		{ "stdin",          'i',     OPTPARSE_NONE },
 		{ "name",           'N',     OPTPARSE_REQUIRED },
@@ -136,6 +140,7 @@ void parse_options(int argc, char **argv)
 	_options.to_stdout = false;
 	_options.using_null = false;
 	_options.recursive = false;
+	_options.include_hidden = false;
 	_options.startnum = 0;
 
 	_options.scalemode = SCALE_DOWN;
@@ -210,6 +215,9 @@ void parse_options(int argc, char **argv)
 			break;
 		case 'g':
 			_options.geometry = op.optarg;
+			break;
+		case 'H': case OPT_HIDDEN:
+			_options.include_hidden = (opt == 'H') || parse_optional_no("hidden", op.optarg);
 			break;
 		case 'h':
 			print_usage(stdout);

@@ -155,7 +155,7 @@ void tns_clean_cache(void)
 
 	dirlen = strlen(cache_dir);
 
-	while ((cfile = r_readdir(&dir, false)) != NULL) {
+	while ((cfile = r_readdir(&dir, true)) != NULL) {
 		filename = cfile + dirlen;
 		if (access(filename, F_OK) < 0) {
 			if (unlink(cfile) < 0)
