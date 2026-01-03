@@ -8,6 +8,35 @@ there may be more changes. Please use `git log` to view them.
 
 - - -
 
+**[v34](https://codeberg.org/nsxiv/nsxiv/archive/v34.tar.gz)**
+*(February 04, 2026)*
+
+* Changes:
+
+  * Minimum Imlib2 version requirement is now `v1.11.0` [#536][]
+
+* Added:
+
+  * New cli flag `--update-cache` [#532][]
+  * New cli flag `-H`, `--hidden` to include hidden files and directories [#575][]
+  * More descriptive error message when failing to load an image [#536][], [#585][]
+  * New cli flag `--assume-files` to bypass directory traversal. Intended to be
+    used when the list is known to contain only files. This avoids some initial
+    disk operations and may reduce startup time on slow disks. [#580][]
+
+* Fixes:
+
+  * Fix rebuilding `options.o` every time on non-git sources [#581][]
+
+[#532]: https://codeberg.org/nsxiv/nsxiv/pulls/532
+[#536]: https://codeberg.org/nsxiv/nsxiv/pulls/536
+[#575]: https://codeberg.org/nsxiv/nsxiv/pulls/575
+[#580]: https://codeberg.org/nsxiv/nsxiv/pulls/580
+[#581]: https://codeberg.org/nsxiv/nsxiv/pulls/581
+[#585]: https://codeberg.org/nsxiv/nsxiv/pulls/585
+
+- - -
+
 **[v33](https://codeberg.org/nsxiv/nsxiv/archive/v33.tar.gz)**
 *(January 26, 2025)*
 

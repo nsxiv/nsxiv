@@ -1,5 +1,5 @@
 # nsxiv version
-VERSION = 33
+VERSION = 34
 
 # PREFIX for install
 PREFIX = /usr/local
