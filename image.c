@@ -258,27 +258,26 @@ Imlib_Image img_open(const fileinfo_t *file)
 {
 	struct stat st;
 	Imlib_Image im = NULL;
-	const char *path;
-	bool non_reg = false;
+	const char *path, *errmsg;
 
 	if ((path = file_realpath(file)) == NULL)
 		return NULL;
 
-	if (access(path, R_OK) == 0 && stat(path, &st) == 0) {
-		if (!S_ISREG(st.st_mode))
-			non_reg = true;
-		else if ((im = imlib_load_image_frame(path, 1)) != NULL)
-			imlib_context_set_image(im);
-	}
-	if (im == NULL && (file->flags & FF_WARN)) {
-		int e = imlib_get_error();
-		const char *errmsg = non_reg ? "Not a regular file" : imlib_strerror(e);
+	if (access(path, R_OK) < 0 || stat(path, &st) < 0) {
+		errmsg = strerror(errno);
+	} else if (!S_ISREG(st.st_mode)) {
+		errmsg = "Not a regular file";
+	} else if ((im = imlib_load_image_frame(path, 1)) == NULL) {
 		const char skip_prefix[] = "Imlib2: ";
-
+		int e = imlib_get_error();
+		errmsg = imlib_strerror(e);
 		if (strncmp(errmsg, skip_prefix, sizeof(skip_prefix) - 1) == 0)
 			errmsg += sizeof(skip_prefix) - 1;
-		error(0, 0, "%s: Error opening image: %s", file->name, errmsg);
+	} else {
+		imlib_context_set_image(im);
 	}
+	if (im == NULL && (file->flags & FF_WARN))
+		error(0, 0, "%s: Error opening image: %s", file->name, errmsg);
 	return im;
 }
 
