@@ -22,6 +22,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <signal.h>
 #include <spawn.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -263,20 +264,28 @@ pid_t spawn(int *readfd, int *writefd, int pipeflags, char *const argv[])
 	const char *cmd;
 	int pfd_read[2] = {-1, -1}, pfd_write[2] = {-1, -1};
 	int err = 0;
-	bool fa_initialized = false;
+	bool fa_initialized = false, attr_initialized = false;
 	posix_spawn_file_actions_t fa;
+	sigset_t sigset;
+	posix_spawnattr_t attr;
 
 	assert(argv != NULL && argv[0] != NULL);
 	cmd = argv[0];
 
 	fa_initialized = !err && (err = posix_spawn_file_actions_init(&fa)) == 0;
+	if (!err && !(err = posix_spawnattr_init(&attr))) {
+		attr_initialized = true;
+		sigfillset(&sigset);
+		err = posix_spawnattr_setflags(&attr, POSIX_SPAWN_SETSIGDEF);
+		err = err ? err : posix_spawnattr_setsigdefault(&attr, &sigset);
+	}
 
 	if (!err && readfd != NULL)
 		err = mkspawn_pipe(&fa, cmd, pfd_read, 1, pipeflags);
 	if (!err && writefd != NULL)
 		err = mkspawn_pipe(&fa, cmd, pfd_write, 0, pipeflags);
 
-	err = err ? err : posix_spawnp(&pid, cmd, &fa, NULL, argv, environ);
+	err = err ? err : posix_spawnp(&pid, cmd, &fa, &attr, argv, environ);
 
 	if (pfd_read[0] >= 0) {
 		*readfd = err ? (close(pfd_read[0]), -1) : pfd_read[0];
@@ -286,6 +295,8 @@ pid_t spawn(int *readfd, int *writefd, int pipeflags, char *const argv[])
 		close(pfd_write[0]);
 		*writefd = err ? (close(pfd_write[1]), -1) : pfd_write[1];
 	}
+	if (attr_initialized)
+		posix_spawnattr_destroy(&attr);
 	if (fa_initialized)
 		posix_spawn_file_actions_destroy(&fa);
 
