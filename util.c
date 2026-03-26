@@ -68,6 +68,14 @@ char *estrdup(const char *s)
 	return memcpy(emalloc(n), s, n);
 }
 
+char *estrndup(const char *s, size_t n)
+{
+	char *ptr = strndup(s, n);
+	if (ptr == NULL)
+		error(EXIT_FAILURE, errno, NULL);
+	return ptr;
+}
+
 void error(int eval, int err, const char *fmt, ...)
 {
 	va_list ap;

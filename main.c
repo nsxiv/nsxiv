@@ -407,7 +407,7 @@ void load_image(int new)
 	files[new].flags &= ~FF_WARN;
 	fileidx = current = new;
 
-	arl_add(&arl, files[fileidx].path);
+	arl_add(&arl, &files[fileidx]);
 
 	if (img.multi.cnt > 0 && img.multi.animate)
 		set_timeout(animate, img.multi.frames[img.multi.sel].delay, true);

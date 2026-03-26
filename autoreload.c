@@ -28,15 +28,11 @@
 #include <sys/inotify.h>
 #include <unistd.h>
 
-static struct {
-	char *buf;
-	size_t len;
-} scratch;
-
 void arl_init(arl_t *arl)
 {
 	arl->fd = inotify_init1(IN_CLOEXEC | IN_NONBLOCK);
-	arl->wd_dir = arl->wd_file = -1;
+	arl->wd_dir = arl->wd_file = arl->wd_link = arl->wd_link_dir = -1;
+	arl->filename = arl->linkname = NULL;
 	if (arl->fd == -1)
 		error(0, 0, "Could not initialize inotify, no automatic image reloading");
 }
@@ -45,7 +41,8 @@ CLEANUP void arl_cleanup(arl_t *arl)
 {
 	if (arl->fd != -1)
 		close(arl->fd);
-	free(scratch.buf);
+	free(arl->filename);
+	free(arl->linkname);
 }
 
 static void rm_watch(int fd, int *wd)
@@ -63,32 +60,37 @@ static void add_watch(int fd, int *wd, const char *path, uint32_t mask)
 		error(0, errno, "inotify: %s", path);
 }
 
-static char *arl_scratch_push(const char *filepath, size_t len)
+static char *arl_watch_basedir(int fd, int *wd_dir_fd, const char *path)
 {
-	if (scratch.len < len + 1) {
-		scratch.len = len + 1;
-		scratch.buf = erealloc(scratch.buf, scratch.len);
-	}
-	scratch.buf[len] = '\0';
-	return memcpy(scratch.buf, filepath, len);
+	char dot[] = ".", *base = strrchr(path, '/');
+	char *dir = base != NULL ? estrndup(path, MAX(base - path, 1)) : dot;
+	add_watch(fd, wd_dir_fd, dir, IN_CREATE | IN_MOVED_TO);
+	if (dir != dot)
+		free(dir);
+	return estrdup(base != NULL ? base + 1 : path);
 }
 
-void arl_add(arl_t *arl, const char *filepath)
+void arl_add(arl_t *arl, const fileinfo_t *file)
 {
-	char *base, *dir;
-
 	if (arl->fd == -1)
 		return;
 
 	rm_watch(arl->fd, &arl->wd_dir);
 	rm_watch(arl->fd, &arl->wd_file);
-	add_watch(arl->fd, &arl->wd_file, filepath, IN_CLOSE_WRITE | IN_DELETE_SELF);
+	rm_watch(arl->fd, &arl->wd_link);
+	rm_watch(arl->fd, &arl->wd_link_dir);
+	free(arl->filename);
+	arl->filename = NULL;
+	free(arl->linkname);
+	arl->linkname = NULL;
 
-	base = strrchr(filepath, '/');
-	assert(base != NULL && "filepath must be result of realpath(3)");
-	dir = arl_scratch_push(filepath, MAX(base - filepath, 1));
-	add_watch(arl->fd, &arl->wd_dir, dir, IN_CREATE | IN_MOVED_TO);
-	arl->filename = arl_scratch_push(base + 1, strlen(base + 1));
+	add_watch(arl->fd, &arl->wd_file, file->path, IN_CLOSE_WRITE | IN_DELETE_SELF);
+	arl->filename = arl_watch_basedir(arl->fd, &arl->wd_dir, file->path);
+	if (file->flags & FF_SYMLINK) {
+		add_watch(arl->fd, &arl->wd_link, file->name,
+		          IN_DELETE_SELF | IN_MOVE_SELF | IN_DONT_FOLLOW);
+		arl->linkname = arl_watch_basedir(arl->fd, &arl->wd_link_dir, file->name);
+	}
 }
 
 bool arl_handle(arl_t *arl)
@@ -116,6 +118,11 @@ bool arl_handle(arl_t *arl)
 				reload = true;
 			} else if (e->wd == arl->wd_file && (e->mask & IN_DELETE_SELF)) {
 				rm_watch(arl->fd, &arl->wd_file);
+			} else if (e->wd == arl->wd_link && (e->mask & (IN_DELETE_SELF | IN_MOVE_SELF))) {
+				rm_watch(arl->fd, &arl->wd_link);
+			} else if (e->wd == arl->wd_link_dir && (e->mask & (IN_CREATE | IN_MOVED_TO))) {
+				if (STREQ(e->name, arl->linkname))
+					reload = true;
 			} else if (e->wd == arl->wd_dir && (e->mask & (IN_CREATE | IN_MOVED_TO))) {
 				if (STREQ(e->name, arl->filename))
 					reload = true;
@@ -137,10 +144,10 @@ void arl_cleanup(arl_t *arl)
 	(void)arl;
 }
 
-void arl_add(arl_t *arl, const char *filepath)
+void arl_add(arl_t *arl, const fileinfo_t *file)
 {
 	(void)arl;
-	(void)filepath;
+	(void)file;
 }
 
 bool arl_handle(arl_t *arl)

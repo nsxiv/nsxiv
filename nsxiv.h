@@ -138,12 +138,15 @@ struct arl {
 	int fd;
 	int wd_dir;
 	int wd_file;
-	const char *filename;
+	int wd_link;
+	int wd_link_dir;
+	char *filename;
+	char *linkname;
 };
 
 void arl_init(arl_t*);
 void arl_cleanup(arl_t*);
-void arl_add(arl_t*, const char* /* result of realpath(3) */);
+void arl_add(arl_t*, const fileinfo_t *);
 bool arl_handle(arl_t*);
 
 
@@ -364,6 +367,7 @@ void* emalloc(size_t);
 void* ecalloc(size_t, size_t);
 void* erealloc(void*, size_t);
 char* estrdup(const char*);
+char* estrndup(const char*, size_t);
 void error(int, int, const char*, ...);
 int r_opendir(r_dir_t*, const char*, bool);
 int r_closedir(r_dir_t*);
