@@ -260,7 +260,7 @@ Imlib_Image img_open(const fileinfo_t *file)
 	Imlib_Image im = NULL;
 	const char *path, *errmsg;
 
-	if ((path = file_realpath(file)) == NULL)
+	if ((path = file_realpath(file, 1)) == NULL)
 		return NULL;
 
 	if (access(path, R_OK) < 0 || stat(path, &st) < 0) {

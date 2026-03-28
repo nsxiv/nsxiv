@@ -323,7 +323,7 @@ static void open_title(void)
 	char w[12] = "", h[12] = "", z[12] = "", fidx[12], fcnt[12];
 	const char *filepath;
 
-	if (wintitle.f.err || (filepath = file_realpath(&files[fileidx])) == NULL)
+	if (wintitle.f.err || (filepath = file_realpath(&files[fileidx], 0)) == NULL)
 		return;
 
 	close_title();
@@ -349,7 +349,7 @@ void open_info(void)
 	char *argv[6], w[12] = "", h[12] = "";
 	char *cmd = mode == MODE_IMAGE ? info.f.cmd : info.ft.cmd;
 	bool ferr = mode == MODE_IMAGE ? info.f.err : info.ft.err;
-	const char *filepath = file_realpath(&files[fileidx]);
+	const char *filepath = file_realpath(&files[fileidx], 0);
 
 	if (ferr || info.fd >= 0 || win.bar.h == 0 || filepath == NULL)
 		return;
@@ -453,7 +453,7 @@ static void update_info(void)
 		appmode_t mode;
 	} prev;
 
-	filepath = file_realpath(&files[fileidx]);
+	filepath = file_realpath(&files[fileidx], 0);
 	cmp_path = filepath != NULL ? filepath : files[fileidx].name;
 
 	if (prev.fileidx != fileidx || prev.mode != mode ||
@@ -664,7 +664,7 @@ static bool run_key_handler(const char *key, unsigned int mask)
 	oldst = emalloc(fcnt * sizeof(*oldst));
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
-			const char *filepath = file_realpath(&files[i]);
+			const char *filepath = file_realpath(&files[i], 0);
 			if (filepath == NULL)
 				filepath = files[i].name;
 			if (stat(filepath, &oldst[f]) != 0)
@@ -679,16 +679,17 @@ static bool run_key_handler(const char *key, unsigned int mask)
 
 	for (f = i = 0; f < fcnt; i++) {
 		if ((marked && (files[i].flags & FF_MARK)) || (!marked && i == fileidx)) {
-			const char *filepath = file_realpath(&files[i]);
+			const char *filepath = file_realpath(&files[i], 1);
 			if (filepath == NULL)
 				filepath = files[i].name;
-			if (stat(filepath, &st) != 0 ||
+			if ((files[i].flags & FF_TN_NEEDS_UPDATE) || stat(filepath, &st) != 0 ||
 			    memcmp(&oldst[f].st_mtime, &st.st_mtime, sizeof(st.st_mtime)) != 0)
 			{
 				if (tns.thumbs != NULL) {
 					tns_unload(&tns, i);
 					tns.loadnext = MIN(tns.loadnext, i);
 				}
+				files[i].flags &= ~FF_TN_NEEDS_UPDATE;
 				changed = true;
 			}
 			f++;

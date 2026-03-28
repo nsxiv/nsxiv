@@ -292,7 +292,7 @@ bool tns_load(tns_t *tns, int n, bool force, bool cache_only)
 	if (n < 0 || n >= *tns->cnt)
 		return false;
 	file = &tns->files[n];
-	if (file->name == NULL || (filepath = file_realpath(file)) == NULL)
+	if (file->name == NULL || (filepath = file_realpath(file, 0)) == NULL)
 		return false;
 
 	t = &tns->thumbs[n];
@@ -486,7 +486,8 @@ void tns_render(tns_t *tns)
 
 	for (i = tns->first; i < tns->end; i++) {
 		t = &tns->thumbs[i];
-		if (t->im != NULL) {
+		(void)file_realpath(&tns->files[i], 1);
+		if (t->im != NULL && !(tns->files[i].flags & FF_TN_NEEDS_UPDATE)) {
 			t->x = x + (thumb_sizes[tns->zl] - t->w) / 2;
 			t->y = y + (thumb_sizes[tns->zl] - t->h) / 2;
 			imlib_context_set_image(t->im);
@@ -494,7 +495,9 @@ void tns_render(tns_t *tns)
 			if (tns->files[i].flags & FF_MARK)
 				tns_mark(tns, i, true);
 		} else {
+			tns_unload(tns, i);
 			tns->loadnext = MIN(tns->loadnext, i);
+			tns->files[i].flags &= ~FF_TN_NEEDS_UPDATE;
 		}
 		if ((i + 1) % tns->cols == 0) {
 			x = tns->x;

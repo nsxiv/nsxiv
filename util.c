@@ -89,14 +89,38 @@ void error(int eval, int err, const char *fmt, ...)
 		exit(eval);
 }
 
-const char *file_realpath(const fileinfo_t *file)
+const char *file_realpath(const fileinfo_t *file, bool invalidate_symlinks)
 {
+	bool use_cached, need_refresh = false;
+	fileinfo_t *mutable = (fileinfo_t *)file; /* avoids cast on caller's side */
+
 	assert(file != NULL);
-	if (file->path == NULL) {
-		fileinfo_t *mutable = (fileinfo_t *)file; /* avoids cast on caller's side */
-		if ((mutable->path = realpath(file->name, NULL)) == NULL) {
+
+	use_cached = file->path != NULL && !invalidate_symlinks;
+	if (!use_cached) {
+		struct stat lst;
+		bool was_symlink = file->flags & FF_SYMLINK;
+		if (lstat(file->name, &lst) == 0 && S_ISLNK(lst.st_mode))
+			mutable->flags |= FF_SYMLINK;
+		else
+			mutable->flags &= ~FF_SYMLINK;
+		need_refresh = file->path == NULL ||
+		               (invalidate_symlinks && (was_symlink || (file->flags & FF_SYMLINK)));
+	}
+	if (need_refresh) {
+		char *newpath = realpath(file->name, NULL);
+		if (newpath == NULL) {
 			if (file->flags & FF_WARN)
 				error(0, errno, "%s", file->name);
+		}
+		if (newpath == NULL || file->path == NULL || !STREQ(newpath, file->path)) {
+			if (invalidate_symlinks && file->path != NULL) {
+				mutable->flags |= FF_TN_NEEDS_UPDATE;
+			}
+			free((void *)mutable->path);
+			mutable->path = newpath;
+		} else {
+			free(newpath);
 		}
 	}
 	return file->path;

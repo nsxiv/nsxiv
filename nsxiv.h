@@ -101,7 +101,9 @@ typedef enum {
 typedef enum {
 	FF_WARN    = 1,
 	FF_MARK    = 2,
-	FF_TN_INIT = 4
+	FF_TN_INIT = 4,
+	FF_SYMLINK = 8,
+	FF_TN_NEEDS_UPDATE = 16
 } fileflags_t;
 
 typedef struct {
@@ -110,7 +112,7 @@ typedef struct {
 	fileflags_t flags;
 } fileinfo_t;
 
-const char *file_realpath(const fileinfo_t*);
+const char *file_realpath(const fileinfo_t*, bool);
 
 /* timeouts in milliseconds: */
 enum {
