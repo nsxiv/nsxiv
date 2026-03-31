@@ -122,6 +122,12 @@ static bool xgetline(char **lineptr, size_t *n)
 	return len > 0;
 }
 
+static int zoom_to_percent(float zoom)
+{
+	float round = 0.5f;
+	return (int)(zoom * 100.0f + round);
+}
+
 static int fncmp(const void *a, const void *b)
 {
 	return strcoll(((fileinfo_t *)a)->name, ((fileinfo_t *)b)->name);
@@ -324,7 +330,7 @@ static void open_title(void)
 	if (mode == MODE_IMAGE) {
 		snprintf(w, ARRLEN(w), "%d", img.w);
 		snprintf(h, ARRLEN(h), "%d", img.h);
-		snprintf(z, ARRLEN(z), "%d", (int)(img.zoom * 100));
+		snprintf(z, ARRLEN(z), "%d", zoom_to_percent(img.zoom));
 	}
 	snprintf(fidx, ARRLEN(fidx), "%d", fileidx + 1);
 	snprintf(fcnt, ARRLEN(fcnt), "%d", filecnt);
@@ -496,7 +502,7 @@ static void update_info(void)
 			bar_put(r, "B%+d" BAR_SEP, img.brightness);
 		if (img.contrast)
 			bar_put(r, "C%+d" BAR_SEP, img.contrast);
-		bar_put(r, "%3d%%" BAR_SEP, (int)(img.zoom * 100.0));
+		bar_put(r, "%3d%%" BAR_SEP, zoom_to_percent(img.zoom));
 		if (img.multi.cnt > 0) {
 			for (fn = 0, i = img.multi.cnt; i > 0; fn++, i /= 10)
 				;
