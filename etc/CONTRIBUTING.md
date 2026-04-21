@@ -59,6 +59,20 @@ amount of edge cases wrong).
 [cf]: https://clang.llvm.org/docs/ClangFormat.html#git-integration
 
 
+AI Policy
+---------
+
+Using LLM ("AI") assistance is allowed within the following criteria:
+
+1. You must be capable of reviewing the changes yourself without any LLM
+   assistance, and personally perform that review before submitting a
+   non-draft pull request.
+2. Do NOT use LLMs to write commit message, issue/pull-request description or
+   comments. These are mediums for humans to communicate with other humans.
+
+Note: The first rule is more relaxed for the `nsxiv-extra` repo.
+
+
 Development workflow for maintainers
 ------------------------------------
 
