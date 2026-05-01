@@ -3,7 +3,7 @@
 [![Codeberg](https://img.shields.io/badge/Hosted_at-Codeberg-%232185D0?style=flat-square&logo=CodeBerg)](https://codeberg.org/nsxiv/nsxiv)
 [![tags](https://img.shields.io/github/v/tag/nsxiv/nsxiv?style=flat-square)](https://codeberg.org/nsxiv/nsxiv/tags)
 [![license](https://img.shields.io/badge/license-GPL--2.0%2B-lightgreen?style=flat-square)](https://codeberg.org/nsxiv/nsxiv/src/branch/master/LICENSE)
-[![loc](https://img.shields.io/tokei/lines/github/nsxiv/nsxiv?color=red&style=flat-square)](https://codeberg.org/nsxiv/nsxiv)
+[![loc](https://img.shields.io/endpoint?url=https://ghloc.vercel.app/api/nsxiv/nsxiv/badge?filter=.c$,.h$&color=red&style=flat-square&label=Lines%20of%20Code)](https://codeberg.org/nsxiv/nsxiv)
 
 **Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer**
 --------------------------------------------------------------------
