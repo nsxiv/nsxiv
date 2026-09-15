@@ -269,9 +269,10 @@ static Imlib_Image tns_scale_down(Imlib_Image im, int dim)
 	z = MIN(z, 1.0);
 
 	if (z < 1.0) {
+		const float round = 0.5f;
 		imlib_context_set_anti_alias(1);
-		im = imlib_create_cropped_scaled_image(0, 0, w, h,
-		                                       MAX(z * w, 1), MAX(z * h, 1));
+		im = imlib_create_cropped_scaled_image(0, 0, w, h, MAX(z * w + round, 1),
+		                                       MAX(z * h + round, 1));
 		if (im == NULL)
 			error(EXIT_FAILURE, ENOMEM, NULL);
 		imlib_free_image_and_decache();
