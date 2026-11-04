@@ -32,6 +32,7 @@
 #include <X11/Xlib.h>
 
 #if !defined(IMLIB2_VERSION) || IMLIB2_VERSION < 11100
+	/* cppcheck-suppress preprocessorErrorDirective */
 	#error "Imlib2 version too old, at least v1.11.0 required"
 #endif
 

@@ -12,6 +12,7 @@ misc-*,android-cloexec-*,llvm-include-order
 -bugprone-suspicious-realloc-usage
 -bugprone-switch-missing-default-case
 -bugprone-multi-level-implicit-pointer-conversion
+-clang-analyzer-optin.performance.Padding
 
 # false positive warnings
 -clang-analyzer-valist.Uninitialized

@@ -58,11 +58,13 @@ typedef struct {
 	char *cmd;
 } extcmd_t;
 
+/* NOLINTBEGIN(misc-use-internal-linkage) */
 /* these are not declared in nsxiv.h, as it causes too many -Wshadow warnings */
 arl_t arl;
 img_t img;
 tns_t tns;
 win_t win;
+/* NOLINTEND(misc-use-internal-linkage) */
 
 appmode_t mode;
 fileinfo_t *files;

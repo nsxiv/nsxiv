@@ -17,8 +17,9 @@ run_cppcheck() {
 run_tidy() {
     checks="$(sed '/^#/d' etc/woodpecker/clang-tidy-checks | paste -d ',' -s)"
     git ls-files *.c | xargs -P"$NProc" -I{} clang-tidy --quiet \
-        --warnings-as-errors="*" --checks="$checks" {} \
-        -- -std="$std" $(make OPT_DEP_DEFAULT="$1" dump_cppflags) -DDEBUG
+        --warnings-as-errors="*" --checks="$checks" \
+        --header-filter='.*' --exclude-header-filter='optparse.h|utf8.h' \
+        {} -- -std="$std" $(make OPT_DEP_DEFAULT="$1" dump_cppflags) -DDEBUG
 }
 
 run_cppcheck "0" & run_cppcheck "1" & run_tidy "0" & run_tidy "1";
