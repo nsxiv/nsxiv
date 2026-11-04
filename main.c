@@ -756,7 +756,7 @@ static void on_keypress(XKeyEvent *kev)
 			handle_key_handler(false);
 	} else if (key >= '0' && key <= '9') {
 		/* number prefix for commands */
-		prefix = prefix * 10 + (int)(key - '0');
+		prefix = prefix * 10 + (key - '0');
 		return;
 	} else {
 		dirty = process_bindings(keys, ARRLEN(keys), ksym, kev->state, sh);
