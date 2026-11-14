@@ -453,13 +453,15 @@ static void update_info(void)
 		int fileidx;
 		float zoom;
 		appmode_t mode;
+		unsigned int load_gen;
 	} prev;
 
 	filepath = file_realpath(&files[fileidx], 0);
 	cmp_path = filepath != NULL ? filepath : files[fileidx].name;
 
 	if (prev.fileidx != fileidx || prev.mode != mode ||
-	    (prev.filepath == NULL || !STREQ(prev.filepath, cmp_path)))
+	    (prev.filepath == NULL || !STREQ(prev.filepath, cmp_path)) ||
+	    (mode == MODE_IMAGE && prev.load_gen != img.load_gen))
 	{
 		close_info();
 		open_info();
@@ -476,6 +478,7 @@ static void update_info(void)
 	prev.fileidx = fileidx;
 	prev.zoom = img.zoom;
 	prev.mode = mode;
+	prev.load_gen = img.load_gen;
 
 	for (fw = 0, i = filecnt; i > 0; fw++, i /= 10)
 		;

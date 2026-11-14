@@ -315,6 +315,7 @@ bool img_load(img_t *img, const fileinfo_t *file)
 	}
 	img->checkpan = true;
 	img->dirty = true;
+	img->load_gen++;
 
 	return true;
 }
