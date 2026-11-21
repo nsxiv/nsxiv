@@ -296,16 +296,19 @@ bool img_load(img_t *img, const fileinfo_t *file)
 
 	animated = img_load_multiframe(img, file);
 
-	(void)fmt; /* maybe unused */
-#if HAVE_LIBEXIF
 	/* since v1.7.5, Imlib2 can parse exif orientation from jpeg files.
 	 * so skip jpeg files to avoid double rotating.
+	 * animated images are also skipped, see: https://codeberg.org/nsxiv/nsxiv/issues/474
 	 */
-	if ((fmt = imlib_image_format()) != NULL) {
-		if (!STREQ(fmt, "jpeg") && !STREQ(fmt, "jpg"))
-			exif_auto_orientate(file);
+#if HAVE_LIBEXIF
+	if ((fmt = imlib_image_format()) != NULL && !animated &&
+	    !STREQ(fmt, "jpeg") && !STREQ(fmt, "jpg"))
+	{
+		exif_auto_orientate(file);
 	}
 #endif
+	(void)fmt; /* maybe unused */
+
 	/* for animated images, we want the _canvas_ width/height, which
 	 * img_load_multiframe() sets already.
 	 */
