@@ -326,13 +326,19 @@ void win_open(win_t *win)
 
 	win->h -= win->bar.h;
 
-	win->buf.w = e->scrw;
-	win->buf.h = e->scrh;
-	win->buf.pm = XCreatePixmap(e->dpy, win->xwin, win->buf.w, win->buf.h, e->depth);
+	win->bufs[0].w = win->bufs[1].w = e->scrw;
+	win->bufs[0].h = win->bufs[1].h = e->scrh;
+	win->bufs[0].pm = XCreatePixmap(e->dpy, win->xwin,
+	                                win->bufs[0].w, win->bufs[0].h, e->depth);
+	win->bufs[1].pm = XCreatePixmap(e->dpy, win->xwin,
+	                                win->bufs[1].w, win->bufs[1].h, e->depth);
+	win->freshidx = 0;
+	win->fresh = false;
 
 	XSetForeground(e->dpy, gc, win->win_bg.pixel);
-	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
-	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->buf.pm);
+	XFillRectangle(e->dpy, win->bufs[0].pm, gc, 0, 0, win->bufs[0].w, win->bufs[0].h);
+	XFillRectangle(e->dpy, win->bufs[1].pm, gc, 0, 0, win->bufs[1].w, win->bufs[1].h);
+	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->bufs[1].pm);
 	XMapWindow(e->dpy, win->xwin);
 	XFlush(e->dpy);
 }
@@ -400,16 +406,17 @@ void win_toggle_bar(win_t *win)
 void win_clear(win_t *win)
 {
 	win_env_t *e = &win->env;
+	struct pixmap_buffer *bp = win->bufs + win->freshidx;
 
-	if (win->w > win->buf.w || win->h + win->bar.h > win->buf.h) {
-		XFreePixmap(e->dpy, win->buf.pm);
-		win->buf.w = MAX(win->buf.w, win->w);
-		win->buf.h = MAX(win->buf.h, win->h + win->bar.h);
-		win->buf.pm = XCreatePixmap(e->dpy, win->xwin,
-		                            win->buf.w, win->buf.h, e->depth);
+	if (win->w > bp->w || win->h + win->bar.h > bp->h) {
+		XFreePixmap(e->dpy, bp->pm);
+		bp->w = MAX(bp->w, win->w);
+		bp->h = MAX(bp->h, win->h + win->bar.h);
+		bp->pm = XCreatePixmap(e->dpy, win->xwin, bp->w, bp->h, e->depth);
 	}
 	XSetForeground(e->dpy, gc, win->win_bg.pixel);
-	XFillRectangle(e->dpy, win->buf.pm, gc, 0, 0, win->buf.w, win->buf.h);
+	XFillRectangle(e->dpy, bp->pm, gc, 0, 0, bp->w, bp->h);
+	win->fresh = true;
 }
 
 #if HAVE_LIBFONTS
@@ -469,12 +476,13 @@ static int win_draw_text(win_t *win, XftDraw *d, const XftColor *color,
 	return tw;
 }
 
-static void win_draw_bar(win_t *win)
+static void win_draw_bar(win_t *win, int drawidx)
 {
 	int len, x, y, w, tw;
 	win_env_t *e;
 	win_bar_t *l, *r;
 	XftDraw *d;
+	Pixmap pm = win->bufs[drawidx].pm;
 
 	e = &win->env;
 	l = &win->bar.l;
@@ -482,10 +490,10 @@ static void win_draw_bar(win_t *win)
 	assert(l->buf != NULL && r->buf != NULL);
 	y = (win->bar.top ? 0 : win->h) + font->ascent + V_TEXT_PAD;
 	w = win->w - 2 * H_TEXT_PAD;
-	d = XftDrawCreate(e->dpy, win->buf.pm, e->vis, e->cmap);
+	d = XftDrawCreate(e->dpy, pm, e->vis, e->cmap);
 
 	XSetForeground(e->dpy, gc, win->bar_bg.pixel);
-	XFillRectangle(e->dpy, win->buf.pm, gc, 0, win->bar.top ? 0 : win->h, win->w, win->bar.h);
+	XFillRectangle(e->dpy, pm, gc, 0, win->bar.top ? 0 : win->h, win->w, win->bar.h);
 
 	XSetForeground(e->dpy, gc, win->win_bg.pixel);
 	XSetBackground(e->dpy, gc, win->bar_bg.pixel);
@@ -505,35 +513,42 @@ static void win_draw_bar(win_t *win)
 	XftDrawDestroy(d);
 }
 #else
-static void win_draw_bar(win_t *win)
+static void win_draw_bar(win_t *win, int drawidx)
 {
 	(void)win;
+	(void)drawidx;
 }
 #endif /* HAVE_LIBFONTS */
 
 void win_draw(win_t *win)
 {
-	if (win->bar.h > 0)
-		win_draw_bar(win);
+	win_env_t *e = &win->env;
+	int idx = win->fresh ? win->freshidx : win->freshidx ^ 1;
 
-	XSetWindowBackgroundPixmap(win->env.dpy, win->xwin, win->buf.pm);
-	XClearWindow(win->env.dpy, win->xwin);
-	XFlush(win->env.dpy);
+	if (win->bar.h > 0)
+		win_draw_bar(win, idx);
+
+	XSetWindowBackgroundPixmap(e->dpy, win->xwin, win->bufs[idx].pm);
+	XClearWindow(e->dpy, win->xwin);
+	XFlush(e->dpy);
+
+	win->freshidx = idx ^ 1;
+	win->fresh = false;
 }
 
 void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
                    unsigned long col)
 {
+	Pixmap pm = win->bufs[win->fresh ? win->freshidx : win->freshidx ^ 1].pm;
 	XGCValues gcval;
-
 	gcval.line_width = lw;
 	gcval.foreground = col;
 	XChangeGC(win->env.dpy, gc, GCForeground | GCLineWidth, &gcval);
 
 	if (fill)
-		XFillRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
+		XFillRectangle(win->env.dpy, pm, gc, x, y, w, h);
 	else
-		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
+		XDrawRectangle(win->env.dpy, pm, gc, x, y, w, h);
 }
 
 void win_set_title(win_t *win, const char *title, size_t len)

@@ -455,7 +455,7 @@ void tns_render(tns_t *tns)
 
 	win = tns->win;
 	win_clear(win);
-	imlib_context_set_drawable(win->buf.pm);
+	imlib_context_set_drawable(win->bufs[win->freshidx].pm);
 
 	tns->cols = MAX(1, win->w / tns->dim);
 	tns->rows = MAX(1, win->h / tns->dim);

@@ -433,11 +433,13 @@ struct win {
 	unsigned int h; /* = win height - bar height */
 	unsigned int bw;
 
-	struct {
+	struct pixmap_buffer {
 		unsigned int w;
 		unsigned int h;
 		Pixmap pm;
-	} buf;
+	} bufs[2];
+	int freshidx; /* draw buffer */
+	bool fresh; /* bufs[freshidx] holds an unpublished frame */
 
 	struct {
 		unsigned int h;

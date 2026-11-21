@@ -474,7 +474,7 @@ void img_render(img_t *img)
 
 	imlib_context_set_image(img->im);
 	imlib_context_set_anti_alias(img->anti_alias);
-	imlib_context_set_drawable(win->buf.pm);
+	imlib_context_set_drawable(win->bufs[win->freshidx].pm);
 
 	/* manual blending, for performance reasons.
 	 * see https://phab.enlightenment.org/T8969#156167 for more details.
